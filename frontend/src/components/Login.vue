@@ -1,42 +1,56 @@
 <template>
     <div>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <img src="https://img.freepik.com/free-vector/creator-adding-information-website-flat-vector-illustration-back-view-man-publishing-content-data-online-developing-blog-internet-making-digital-content-technology-occupation-concept_74855-24061.jpg?w=2000"
-                        style="height: 300px;">
-                </div>
-                <div class="col">
-                    <q-form @submit="onSubmit" class="q-gutter-md">
-                        <h2>Login</h2>
-                        <q-input color="positive" filled v-model="form.email" label="Correo Electrónico" type="email"
-                            lazy-rules :rules="[val => val && val.length > 0 || 'Este campo es obligatorio']">
-                            <template v-slot:prepend>
-                                <q-icon name="person" />
-                            </template>
-                        </q-input>
-
-                        <q-input color="positive" filled type="password" v-model="form.password1" label="Contraseña"
-                            lazy-rules :rules="[
-                                val => val !== null && val !== '' || 'Este campo es obligatorio',
-
-                            ]">
-                            <template v-slot:prepend>
-                                <q-icon name="lock" />
-                            </template>
-                        </q-input>
-
-                        <!-- <router-link to="/header">
-                            <q-btn class="full-width" label="Submit" type="submit" color="primary" />
-
-                        </router-link> -->
+        <div class="row" style="margin-top: 110px;">
+            <div class="col-4"></div>
+            <div class="col-4">
+                <q-card white bordered class="my-card" style="width: 430px;">
+                    <q-card-section>
                         <div class="row">
-                            <q-btn class="full-width" label="Ingresar" type="submit" color="positive" />
+                            <div class="col-3">
+                                <img id="img"
+                                    src='https://senasofiapluss.com/wp-content/uploads/2022/10/logo-del-sena-verde-1024x1024.jpg'>
+                            </div>
+                            <div class="col-9">
+                                <div id="titulo" class="text-h6" style="text-align: center;">Login</div>
+                            </div>
                         </div>
+                    </q-card-section>
+                    <q-separator inset class="text-black" />
+                    <q-card-section>
+                        <q-form @submit="onSubmit" class="q-gutter-md">
 
-                    </q-form>
-                </div>
+                            <q-input color="positive" filled v-model="form.email" label="Correo Electrónico" type="email"
+                                lazy-rules :rules="[val => val && val.length > 0 || 'Este campo es obligatorio']">
+                                <template v-slot:prepend>
+                                    <q-icon name="person" />
+                                </template>
+                            </q-input>
+
+                            <q-input color="positive" filled type="password" v-model="form.password1" label="Contraseña"
+                                lazy-rules :rules="[
+                                    val => val !== null && val !== '' || 'Este campo es obligatorio',
+
+                                ]">
+                                <template v-slot:prepend>
+                                    <q-icon name="lock" />
+                                </template>
+                            </q-input>
+
+                            <div class="row">
+                                <router-link class="full-width" to="/header">
+                                    <q-btn style="color: white;" color="positive" class="full-width" label="Ingresar"
+                                        type="submit" />
+
+                                </router-link>
+                                <!-- type="submit"  -->
+                                <!-- <q-btn style="background-color: green; color: white;" class="full-width" label="Ingresar" /> -->
+                            </div>
+                        </q-form>
+                    </q-card-section>
+                </q-card>
+
             </div>
+            <div class="col-4"></div>
         </div>
     </div>
 </template>
@@ -46,6 +60,7 @@ import { ref } from 'vue';
 const email = ref('');
 const password1 = ref('');
 const password2 = ref('');
+
 
 const form = ref({
     email: '',
@@ -62,16 +77,22 @@ function onSubmit() {
     password2.value = '';
 }
 
+
 </script>
 
 <style scoped>
-.container{
-    margin: 20px auto;
-    padding: 10px;
-    width: 60%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: white;
-    text-align: center;
+#img {
+    height: 80px;
+    width: 80px;
+}
+
+.text-black {
+    color: black;
+}
+
+#titulo {
+    margin-top: 26px;
+    font-size: 30px;
+    font-family: 'Times New Roman', Times, serif;
 }
 </style>
