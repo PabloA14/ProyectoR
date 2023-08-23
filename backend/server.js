@@ -1,6 +1,5 @@
 import express from "express"
 import pruebas from "./routes/prueba.js"
-
 import mongoose from "mongoose"
 import cors from "cors"
 
