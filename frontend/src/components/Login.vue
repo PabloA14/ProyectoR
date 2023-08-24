@@ -1,11 +1,6 @@
 <template>
     <div>
-<<<<<<< HEAD
-        <h2>Login</h2>
-        <router-link to="/header">
-            <button>Header</button>
-        </router-link>
-=======
+
         <div class="container">
             <q-card white bordered class="my-card" style="width: 430px">
                 <q-img :src="url" :ratio="16 / 8" />
@@ -45,6 +40,7 @@
                             <router-link class="full-width" to="/header">
                                 <q-btn style="color: white;" color="positive" class="full-width" label="Ingresar"
                                     type="submit" />
+                                    
 
                             </router-link>
                             <!-- type="submit"  -->
@@ -54,7 +50,6 @@
                 </q-card-section>
             </q-card>
         </div>
->>>>>>> 4dd565d0a46db7d82c95c2ea5fa0bfe277754b8b
     </div>
 </template>
 

@@ -45,7 +45,35 @@ const httpInstructor = {
     getInstructores : async (req,res) =>{
             const instructores= await Instructor.find()
             res.status(200).json({instructores})
+    },
+    putInstructor : async (req,res) =>{
+        const { cedula, nombre, apellidos, telefono, experiencia, redConocimiento } = req.body;
+
+        try {
+            const updatedInstructor = await Instructor.findOneAndUpdate(
+                { cedula: cedula },
+                {
+                    $set: {
+                        nombre,
+                        apellidos,
+                        telefono,
+                        experiencia,
+                        redConocimiento
+                    }
+                },
+                { new: true } 
+            );
+
+            if (!updatedInstructor) {
+                return res.status(404).json({ msg: 'Instructor no encontrado' });
+            }
+            res.status(200).json({ msg: 'Instructor actualizado exitosamente', instructor: updatedInstructor });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error en el servidor' });
+        }
     }
+    
 };
 
 export default httpInstructor;
