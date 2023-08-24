@@ -9,7 +9,7 @@
                     <q-avatar>
                         <img src="https://tramiteinformativo.com/wp-content/uploads/2022/08/Logo-sena-blanco-sin-fondo.png">
                     </q-avatar>
-                    Repositorio SENA
+                    <!-- Repositorio SENA -->
                 </q-toolbar-title>
             </q-toolbar>
         </q-header>
