@@ -39,7 +39,7 @@
                         </q-input>
 
                         <div class="row">
-                            <router-link class="full-width" to="/header">
+                            <router-link class="full-width" to="/Opciones">
                                 <q-btn style="color: white;" color="positive" class="full-width" label="Ingresar"
                                     type="submit" />
                                     
