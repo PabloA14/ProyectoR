@@ -2,7 +2,7 @@
     <div>
 
         <div class="container">
-            <q-card white bordered class="my-card" style="width: 430px">
+            <q-card white bordered class="my-card" style="width: 450px">
                 <q-img :src="url" :ratio="16 / 8" />
                 <q-card-section>
                     <div class="row">
@@ -18,11 +18,13 @@
                 <q-separator inset class="text-black" />
                 <q-card-section>
                     <q-form @submit="onSubmit" class="q-gutter-md">
+                        <q-input color="positive" filled type="text" v-model="form.user" label="Usuario" lazy-rules
+                            :rules="[
+                                val => val !== null && val !== '' || 'Este campo es obligatorio',
 
-                        <q-input color="positive" filled v-model="form.email" label="Correo Electrónico" type="email"
-                            lazy-rules :rules="[val => val && val.length > 0 || 'Este campo es obligatorio']">
+                            ]">
                             <template v-slot:prepend>
-                                <q-icon name="person" />
+                                <q-icon name="lock" />
                             </template>
                         </q-input>
 
@@ -61,9 +63,8 @@ const password2 = ref('');
 const url = 'https://static.vecteezy.com/system/resources/previews/002/744/896/non_2x/file-management-illustration-vector.jpg'
 
 const form = ref({
-    email: '',
+    user: '',
     password1: '',
-    password2: '',
     conditions: false,
     error: false
 })

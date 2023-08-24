@@ -21,21 +21,21 @@
                 <q-list padding>
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
-                            <q-icon name="inbox" />
+                            <q-icon name="fa-solid fa-house"/>
                         </q-item-section>
 
                         <q-item-section>
-                            Inbox
+                            Inicio
                         </q-item-section>
                     </q-item>
 
                     <q-item active clickable v-ripple>
                         <q-item-section avatar>
-                            <q-icon name="star" />
+                            <q-icon name="fa-solid fa-users" />
                         </q-item-section>
 
                         <q-item-section>
-                            Star
+                            Usuarios
                         </q-item-section>
                     </q-item>
 
