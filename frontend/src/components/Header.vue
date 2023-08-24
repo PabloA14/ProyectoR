@@ -1,27 +1,27 @@
 <template>
     <q-layout view="hHh lpR fFf">
 
-        <q-header elevated class="text-white" style="background-color: rgb(13, 150, 13);">
+        <q-header elevated class="text-white" style="background-color: rgb(57, 169, 0);">
             <q-toolbar>
-                <q-btn dense flat round icon="menu" @click="drawer = !drawer"  />
+                <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
 
                 <q-toolbar-title>
                     <q-avatar>
                         <img src="https://tramiteinformativo.com/wp-content/uploads/2022/08/Logo-sena-blanco-sin-fondo.png">
                     </q-avatar>
-                    <!-- Repositorio SENA -->
+                    Repositorio SENA
                 </q-toolbar-title>
             </q-toolbar>
         </q-header>
 
         <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false"
-            @mouseout="miniState = true" :width="200" :breakpoint="500" bordered
+            @mouseout="miniState = true" :width="200" :breakpoint="500" bordered mini-to-overlay
             :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
-                            <q-icon name="fa-solid fa-house"/>
+                            <q-icon name="fa-solid fa-house" />
                         </q-item-section>
 
                         <q-item-section>
@@ -66,7 +66,7 @@
 
         <q-page-container>
             <router-view />
-            
+
         </q-page-container>
 
     </q-layout>
