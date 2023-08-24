@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <div class="container">
             <q-card white bordered class="my-card" style="width: 450px">
                 <q-img :src="url" :ratio="16 / 8" />
@@ -41,6 +42,7 @@
                             <router-link class="full-width" to="/header">
                                 <q-btn style="color: white;" color="positive" class="full-width" label="Ingresar"
                                     type="submit" />
+                                    
 
                             </router-link>
                             <!-- type="submit"  -->
