@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 const httpRedes = new mongoose.Schema({
    codigo: { type: String, require: true },
    nombre: { type: String, require: true },
-
    createdAt: { type: Date, default: Date.now },
 
 })
