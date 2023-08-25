@@ -15,39 +15,33 @@
         </q-header>
 
         <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false"
-            @mouseout="miniState = true" :width="200" :breakpoint="500" bordered mini-to-overlay
+            @mouseout="miniState = true" :width="300" :breakpoint="500" bordered mini-to-overlay
             :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
-                            <q-icon name="fa-solid fa-house" />
+                            <q-icon class="fa-solid fa-book-open" />
                         </q-item-section>
 
                         <q-item-section>
-                            Inicio
+                            Programas de formación
                         </q-item-section>
                     </q-item>
 
-                    <q-item active clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon name="fa-solid fa-users" />
-                        </q-item-section>
-
-                        <q-item-section>
-                            Usuarios
-                        </q-item-section>
-                    </q-item>
-
+                    <router-link to="Instructores">
                     <q-item clickable v-ripple>
+                        
                         <q-item-section avatar>
-                            <q-icon name="send" />
+                            <q-icon class="fa-solid fa-chalkboard-user" />
                         </q-item-section>
 
                         <q-item-section>
-                            Send
+                            Instructores
                         </q-item-section>
                     </q-item>
+                </router-link>
+
 
                     <q-separator />
 

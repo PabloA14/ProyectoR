@@ -2,7 +2,7 @@ import Instructor from "../models/instructores.js";
 
 const httpInstructor = {
     posInstructor: async (req, res) => {
-        const { cedula, nombre, apellidos, telefono, clave, experiencia, fechaNacimiento, redConocimiento, hojaDeVida, estado } = req.body;
+        const { cedula, nombre, apellidos, telefono, clave, correo, fechaNacimiento, redConocimiento, hojaDeVida, perfilProfesional, estado } = req.body;
 
         try {
             const instructor = new Instructor({
@@ -11,10 +11,11 @@ const httpInstructor = {
                 apellidos,
                 telefono,
                 clave,
-                experiencia,
+                correo,
                 fechaNacimiento,
                 redConocimiento,
                 hojaDeVida,
+                perfilProfesional,
                 estado
             });
             const buscar = await Instructor.findOne({ cedula: cedula });
@@ -47,7 +48,7 @@ const httpInstructor = {
             res.status(200).json({instructores})
     },
     putInstructor : async (req,res) =>{
-        const { cedula, nombre, apellidos, telefono, experiencia, redConocimiento } = req.body;
+        const { cedula, nombre, apellidos, telefono, experiencia, redConocimiento,perfilProfesional } = req.body;
 
         try {
             const updatedInstructor = await Instructor.findOneAndUpdate(
@@ -58,7 +59,8 @@ const httpInstructor = {
                         apellidos,
                         telefono,
                         experiencia,
-                        redConocimiento
+                        redConocimiento,
+                        perfilProfesional
                     }
                 },
                 { new: true } 
