@@ -8,7 +8,7 @@
                     <div class="row">
                         <div class="col-3">
                             <img id="img"
-                                src='https://senasofiapluss.com/wp-content/uploads/2022/10/logo-del-sena-verde-1024x1024.jpg'>
+                                src='../imagenes/logosena.png'>
                         </div>
                         <div class="col-9">
                             <div id="titulo" class="text-h6" style="text-align: center;">Login</div>
@@ -24,7 +24,7 @@
 
                             ]">
                             <template v-slot:prepend>
-                                <q-icon name="lock" />
+                                <q-icon name="person" />
                             </template>
                         </q-input>
 

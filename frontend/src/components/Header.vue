@@ -7,9 +7,9 @@
 
                 <q-toolbar-title>
                     <q-avatar>
-                        <!-- <img src="https://tramiteinformativo.com/wp-content/uploads/2022/08/Logo-sena-blanco-sin-fondo.png"> -->
+                        <img src="../imagenes/Logo-sena-blanco-sin-fondo.png">
                     </q-avatar>
-                    <!-- Repositorio SENA -->
+                    Repositorio
                 </q-toolbar-title>
             </q-toolbar>
         </q-header>
