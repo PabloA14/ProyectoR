@@ -44,8 +44,7 @@
                         </q-item-section>
                     </q-item>
                 </router-link>
-
-
+                
                     <q-separator />
 
                     <q-item clickable v-ripple>
@@ -63,7 +62,6 @@
 
         <q-page-container>
             <router-view />
-
         </q-page-container>
 
     </q-layout>
