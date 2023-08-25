@@ -1,19 +1,21 @@
 <template>
     <div>
       <q-page class="q-pa-md">
-        <div class="text-h6 text-center q-mb-md">Instructores</div>
-        <q-btn color="secondary" label="Agregar Instructor" class="q-mb-md" @click="agregar = true" />
+        <div class="text-h6 text-center q-mb-md">Programas de Formación</div>
+        <q-btn color="secondary" label="Agregar Programa " class="q-mb-md" @click="agregar = true" />
   
         <q-separator />
         <q-layout row wrap>
-          <q-card v-for="(x, index) in instructores" :key="index" class="q-mb-md" style="width: 100%;" id="card">
+          <q-card v-for="(x, index) in programas" :key="index" class="q-mb-md" style="width: 100%;" id="card">
             <q-card-section>
+              <span>Codigo :</span>
+              <q-item-label lines="1" class="text-small">{{ x.codigo }}</q-item-label>
               <span>Nombre :</span>
               <q-item-label lines="1" class="text-small">{{ x.nombre }}</q-item-label>
-              <span>Apellidos:</span>
-              <q-item-label lines="1" class="text-small">{{ x.apellidos }}</q-item-label>
-              <span>Estado:</span>
-              <q-item-label lines="1" class="text-small">{{ x.estado }}</q-item-label>
+              <span>Denominacion:</span>
+              <q-item-label lines="1" class="text-small">{{ x.denominacionPrograma }}</q-item-label>
+              <span>Duracion:</span>
+              <q-item-label lines="1" class="text-small">{{ x.duracion }}</q-item-label>
               <span>Correo:</span>
               <q-item-label lines="1" class="text-small">{{ x.correo }}</q-item-label>
             </q-card-section>
@@ -91,30 +93,15 @@
     </div>
   </template>
   
-  <script setup>
-  import { ref } from 'vue';
-  import { useInstructorStore } from "../stores/InstructorInv.js";
-  const useInstructor = useInstructorStore();
-  let agregar = ref(false);
-  
-  let instructores = ref([]);
-  
-  async function Registrar() {
-    
-  }
 
-  async function buscar() {
-    instructores.value = await useInstructor.buscarInstructores();
-  }
-  
-  buscar();
-  </script>
-  
-  <style>
-  #card span {
-    font-weight: bold;
-  }
+<script setup>
+import {ref} from 'vue'
+import {UseProgramasFormacion} from "../stores/ProgramasFormacion.js"
+const useProgramas = UseProgramasFormacion()
+let programas =ref('')
 
- 
-  </style>
-  
+async function buscarProgramas() {
+    programas.value = await useProgramas.getProgramas()
+}
+buscarProgramas()
+</script>

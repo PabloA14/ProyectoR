@@ -7,9 +7,9 @@
 
                 <q-toolbar-title>
                     <q-avatar>
-                        <img src="https://tramiteinformativo.com/wp-content/uploads/2022/08/Logo-sena-blanco-sin-fondo.png">
+                        <!-- <img src="https://tramiteinformativo.com/wp-content/uploads/2022/08/Logo-sena-blanco-sin-fondo.png"> -->
                     </q-avatar>
-                    Repositorio SENA
+                    <!-- Repositorio SENA -->
                 </q-toolbar-title>
             </q-toolbar>
         </q-header>
@@ -19,7 +19,9 @@
             :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
+                    <router-link to="programas">
                     <q-item clickable v-ripple>
+                        
                         <q-item-section avatar>
                             <q-icon class="fa-solid fa-book-open" />
                         </q-item-section>
@@ -28,6 +30,7 @@
                             Programas de formación
                         </q-item-section>
                     </q-item>
+                </router-link>
 
                     <router-link to="Instructores">
                     <q-item clickable v-ripple>
