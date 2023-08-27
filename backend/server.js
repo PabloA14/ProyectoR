@@ -1,9 +1,10 @@
 import express from "express"
-import instructores from "./routes/instructores.js"
+import usuarios from "./routes/ususarios.js"
 import programasFormacion from "./routes/programasFormacion.js"
 import redes from "./routes/redesConocimiento.js"
 import mongoose from "mongoose"
 import cors from "cors"
+
 
 
 class Server {
@@ -16,7 +17,7 @@ class Server {
     }
 
     routes() {
-        this.app.use('/api/instructor', instructores)
+        this.app.use('/api/usuario', usuarios)
         this.app.use('/api/programasFormacion',programasFormacion )
         this.app.use('/api/redes' , redes)
     }
