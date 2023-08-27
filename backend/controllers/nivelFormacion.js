@@ -4,7 +4,7 @@ const httpnivelFormacion = {
 
     postnivelFormacion: async (req, res) => {
         const { tipo, nombre } = req.body;
-        
+
         try {
             const nivelformacion = new NivelFormacion({ tipo, nombre });
             await nivelformacion.save();

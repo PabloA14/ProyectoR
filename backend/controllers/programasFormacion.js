@@ -21,26 +21,26 @@ const httpprogramas = {
             res.status(500).json({ mensaje: 'Hubo un error al agregar el programa de formacion.' });
         }
     },
-    getProgramaCod : async (req,res) =>{
-        const {codigo} =req.body
-        try{
-            const cod = await Programa.find({codigo : codigo})
-            if ( cod.length ===0) {
-                res.status(400).json({ sms :  `sin coincidencias para ${codigo}`})
-            }else{
-                res.status(200).json({cod})
+    getProgramaCod: async (req, res) => {
+        const { codigo } = req.body
+        try {
+            const cod = await Programa.find({ codigo: codigo })
+            if (cod.length === 0) {
+                res.status(400).json({ sms: `sin coincidencias para ${codigo}` })
+            } else {
+                res.status(200).json({ cod })
 
             }
-        }catch (error){
-            res.json({error})
+        } catch (error) {
+            res.json({ error })
         }
     },
-    getProgramas : async (req,res) =>{
-        const programas= await Programa.find()
-        res.status(200).json({programas})
+    getProgramas: async (req, res) => {
+        const programas = await Programa.find()
+        res.status(200).json({ programas })
     },
-    putProgramas : async (req,res) =>{
-        const {codigo,nombre,observacion, duracion}=req.body
+    putProgramas: async (req, res) => {
+        const { codigo, nombre, observacion, duracion } = req.body
 
         try {
             const updatedProgramas = await Programa.findOneAndUpdate(
@@ -52,7 +52,7 @@ const httpprogramas = {
                         duracion
                     }
                 },
-                { new: true } 
+                { new: true }
             );
 
             if (!updatedProgramas) {

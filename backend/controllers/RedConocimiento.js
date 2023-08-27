@@ -3,9 +3,9 @@ import redesConocimiento from "../models/redesConocimiento.js";
 
 const httpredes = {
 
-    postRedes :async (req,res) =>{
-        const {Codigo , Denominacion , Estado} =req.body
-        try{
+    postRedes: async (req, res) => {
+        const { Codigo, Denominacion, Estado } = req.body
+        try {
             const redes = new redesConocimiento({
                 Codigo,
                 Denominacion,
@@ -14,50 +14,50 @@ const httpredes = {
             const cod = await redesConocimiento.findOne({ Codigo: Codigo });
             console.log(cod);
             if (cod) {
-                return res.status(400).json({ msg: 'La red de conocimiento ya se encuenta registrada' , cod });
-            }else{
+                return res.status(400).json({ msg: 'La red de conocimiento ya se encuenta registrada', cod });
+            } else {
                 await redes.save()
-                return res.status(200).json({ msg: 'Registro exitoso' , redes });
+                return res.status(200).json({ msg: 'Registro exitoso', redes });
             }
-        }catch (error) {
+        } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
         }
     },
-    getRedes : async (req,res) =>{
-        const redes= await redesConocimiento.find()
-        res.status(200).json({redes})
+    getRedes: async (req, res) => {
+        const redes = await redesConocimiento.find()
+        res.status(200).json({ redes })
     },
-    getCodigo : async (req,res) =>{
+    getCodigo: async (req, res) => {
         const Codigo = req.params.Codigo
-        try{
-            const cod = await redesConocimiento.find({Codigo : Codigo})
-            if (cod.length ===0) {
-                res.status(400).json({ sms :  `sin coincidencias para ${Codigo}`})
-            }else{
+        try {
+            const cod = await redesConocimiento.find({ Codigo: Codigo })
+            if (cod.length === 0) {
+                res.status(400).json({ sms: `sin coincidencias para ${Codigo}` })
+            } else {
                 res.status(200).json({ cod })
             }
-        }catch (error){
-            res.json({error})
+        } catch (error) {
+            res.json({ error })
             console.log(error);
         }
     },
 
-    putRedes : async (req,res) =>{
+    putRedes: async (req, res) => {
         const Codigo = req.params.codigo;
 
         try {
             const updatedRed = await redesConocimiento.findOneAndUpdate(
-                { Codigo: Codigo }, 
+                { Codigo: Codigo },
                 {
                     $set: {
                         Denominacion: req.body.Denominacion,
-                        Estado : req.body.Estado
+                        Estado: req.body.Estado
                     }
                 },
-                { new: true } 
+                { new: true }
             );
-            
+
             if (!updatedRed) {
                 return res.status(404).json({ msg: 'Red no encontrado' });
             }

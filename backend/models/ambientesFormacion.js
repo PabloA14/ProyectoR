@@ -6,7 +6,9 @@ const ambienteSchema = new mongoose.Schema({
     tipo: { type: String, required: true },
     centroFormacion: { type: String, required: true },
     descripcion: { type: String, required: true },
-    //archivo: { type: String, required: true },
+    archivo: { type: String, required: false },
+    estado: { type: Number, default: 1, required: true },
+    createdAt: { type: Date, default: Date.now },
 })
 
 export default mongoose.model("Ambiente", ambienteSchema) 
