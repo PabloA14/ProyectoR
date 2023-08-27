@@ -4,11 +4,12 @@ import redesConocimiento from "../models/redesConocimiento.js";
 const httpredes = {
 
     postRedes :async (req,res) =>{
-        const {Codigo , Denominacion} =req.body
+        const {Codigo , Denominacion , Estado} =req.body
         try{
             const redes = new redesConocimiento({
                 Codigo,
-                Denominacion
+                Denominacion,
+                Estado
             });
             const cod = await redesConocimiento.findOne({ Codigo: Codigo });
             console.log(cod);
@@ -28,11 +29,11 @@ const httpredes = {
         res.status(200).json({redes})
     },
     getCodigo : async (req,res) =>{
-        const {Codigo} = req.params
+        const Codigo = req.params.Codigo
         try{
             const cod = await redesConocimiento.find({Codigo : Codigo})
             if (cod.length ===0) {
-                res.status(400).json({ sms :  `sin coincidencias para ${cod}`})
+                res.status(400).json({ sms :  `sin coincidencias para ${Codigo}`})
             }else{
                 res.status(200).json({ cod })
             }
@@ -50,7 +51,8 @@ const httpredes = {
                 { Codigo: Codigo }, 
                 {
                     $set: {
-                        Denominacion: req.body.Denominacion
+                        Denominacion: req.body.Denominacion,
+                        Estado : req.body.Estado
                     }
                 },
                 { new: true } 

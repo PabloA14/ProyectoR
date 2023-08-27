@@ -2,6 +2,7 @@ import express from "express"
 import usuarios from "./routes/ususarios.js"
 import programasFormacion from "./routes/programasFormacion.js"
 import redes from "./routes/redesConocimiento.js"
+import roles from "./routes/rolesUsuario.js"
 import mongoose from "mongoose"
 import cors from "cors"
 
@@ -20,6 +21,8 @@ class Server {
         this.app.use('/api/usuario', usuarios)
         this.app.use('/api/programasFormacion',programasFormacion )
         this.app.use('/api/redes' , redes)
+        this.app.use('/api/roles' , roles)
+
     }
 
     middlewares() {

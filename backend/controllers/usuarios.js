@@ -1,5 +1,5 @@
 import Usuario from "../models/usuarios.js";
-
+//USUARIOS
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
