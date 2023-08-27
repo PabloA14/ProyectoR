@@ -3,7 +3,6 @@ import Instructor from "../models/instructores.js";
 const httpInstructor = {
     posInstructor: async (req, res) => {
         const { cedula, nombre, apellidos, telefono, clave, correo, fechaNacimiento, redConocimiento, hojaDeVida, perfilProfesional, estado } = req.body;
-
         try {
             const instructor = new Instructor({
                 cedula,
