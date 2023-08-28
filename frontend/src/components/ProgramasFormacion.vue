@@ -2,106 +2,117 @@
   <div>
     <q-page class="q-pa-md">
       <div class="text-h6 text-center q-mb-md">Programas de Formación</div>
-      <q-btn color="secondary" label="Agregar Programa " class="q-mb-md" @click="agregar = true" />
 
-      <q-separator />
-      <q-layout row wrap>
-        <q-card v-for="(x, index) in programas" :key="index" class="q-mb-md" style="width: 100%;" id="card">
-          <q-card-section>
-            <span>Codigo :</span>
-            <q-item-label lines="1" class="text-small">{{ x.codigo }}</q-item-label>
-            <span>Nombre :</span>
-            <q-item-label lines="1" class="text-small">{{ x.nombre }}</q-item-label>
-            <span>Denominacion:</span>
-            <q-item-label lines="1" class="text-small">{{ x.denominacionPrograma }}</q-item-label>
-            <span>Duracion:</span>
-            <q-item-label lines="1" class="text-small">{{ x.duracion }}</q-item-label>
-            <span>Correo:</span>
-            <q-item-label lines="1" class="text-small">{{ x.correo }}</q-item-label>
-          </q-card-section>
-        </q-card>
-      </q-layout>
+      <q-btn icon="add" style="background-color: rgb(57, 169, 0); color: white;" label="Agregar Programa " class="q-mb-md"
+        @click="agregar = true" />
+
+      <table>
+        <thead>
+          <tr>
+            <th>código</th>
+            <th>denominación</th>
+            <th>nivel de formación</th>
+            <th>versión</th>
+            <th>estado</th>
+            <th>opciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(x, index) in programas" :key="index">
+            <td>{{ x.codigo }}</td>
+            <td>{{ x.denominacionPrograma }}</td>
+            <td>{{ x.nivelFormacion }}</td>
+            <td>{{ x.version }}</td>
+            <td :style="{ color: x.estado === 1 ? 'green' : 'red' }">{{ x.estado === 1 ? 'Activo' : 'Inactivo'
+            }}</td>
+            <td>
+              <div>
+                <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                  style="margin-right: 10px;cursor: pointer;" />
+                <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                  style="margin-left: 10px;cursor: pointer;" />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
     </q-page>
 
     <q-dialog v-model="agregar">
-      <q-card>
-        <q-card-section>
-          <div class="text-h6">Agregar Instructor</div>
+      <q-card style="width: 32%;height: fit-content;">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">Agregar Programa de Formación</div>
+          <q-space />
+          <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator />
-        <q-card-section style="max-height: 50vh ;" class="scroll" id="agregar">
+        <q-separator inset style="height: 5px;margin-top: 5px;background-color: rgb(57, 169, 0);" />
+
+        <q-card-section style="max-height: 65vh ;" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <label for="cedula">Cédula</label>
-            <q-input outlined v-model="cedula" id="cedula" />
+            <q-input label="Código" color="positive" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
-            <label for="nombre">Nombre</label>
-            <q-input outlined v-model="nombre" id="nombre" />
+            <q-input label="Nivel de Formación" color="positive" v-model="nivelFormacion" />
           </div>
 
           <div class="q-mb-md">
-            <label for="apellido">Apellido</label>
-            <q-input outlined v-model="apellido" id="apellido" />
+            <q-input label="Denominación" color="positive" v-model="denominacion" />
           </div>
 
           <div class="q-mb-md">
-            <label for="telefono">Teléfono</label>
-            <q-input outlined v-model="telefono" id="telefono" />
+            <q-input label="Versión del Programa" color="positive" v-model="version" />
           </div>
 
-          <div class="q-mb-md">
-            <label for="clave">Clave</label>
-            <q-input outlined v-model="clave" id="clave" />
-          </div>
-
-          <div class="q-mb-md">
-            <label for="correo">Correo</label>
-            <q-input outlined v-model="correo" id="correo" />
-          </div>
-
-          <div class="q-mb-md">
-            <label for="fecNa">Fecha de nacimiento</label>
-            <q-input outlined v-model="fecNa" id="fecNa" />
-          </div>
-
-          <div class="q-mb-md">
-            <label for="red">Red Conocimiento</label>
-            <q-input outlined v-model="red" id="red" />
-          </div>
-
-          <div class="q-mb-md">
-            <label for="cv">Hoja de vida</label>
-            <q-input outlined v-model="cv" id="cv" />
-          </div>
-
-          <div class="q-mb-md">
-            <label for="perfilProfesional">Perfil Profesional</label>
-            <q-input outlined v-model="perfilProfesional" id="perfilProfesional" />
-          </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn flat label="Decline" color="primary" v-close-popup />
-          <q-btn flat label="Accept" color="primary" v-close-popup />
+          <q-btn label="Agregar" icon="add" style="background-color: rgb(57, 169, 0); color: white;" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
   </div>
 </template>
   
-
 <script setup>
 import { ref } from 'vue'
 import { UseProgramasFormacion } from "../stores/ProgramasFormacion.js"
+
 const useProgramas = UseProgramasFormacion()
-let programas = ref('')
+let programas = ref([])
+let agregar = ref(false);
+let codigo = ref('')
+let denominacion = ref('')
+let nivelFormacion = ref('')
+let version = ref('')
+
+buscarProgramas()
 
 async function buscarProgramas() {
   programas.value = await useProgramas.getProgramas()
+  console.log(programas);
 }
-buscarProgramas()
 </script>
+
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2;
+}
+</style>
