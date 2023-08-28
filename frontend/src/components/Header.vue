@@ -11,6 +11,7 @@
                     </q-avatar>
                     Repositorio
                 </q-toolbar-title>
+                <q-icon name="logout" size="30px" />
             </q-toolbar>
         </q-header>
 
@@ -20,31 +21,31 @@
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
                     <router-link to="programas">
-                    <q-item clickable v-ripple>
-                        
-                        <q-item-section avatar>
-                            <q-icon class="fa-solid fa-book-open" />
-                        </q-item-section>
+                        <q-item clickable v-ripple>
 
-                        <q-item-section>
-                            Programas de formación
-                        </q-item-section>
-                    </q-item>
-                </router-link>
+                            <q-item-section avatar>
+                                <q-icon class="fa-solid fa-book-open" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Programas de formación
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
 
                     <router-link to="Instructores">
-                    <q-item clickable v-ripple>
-                        
-                        <q-item-section avatar>
-                            <q-icon class="fa-solid fa-chalkboard-user" />
-                        </q-item-section>
+                        <q-item clickable v-ripple>
 
-                        <q-item-section>
-                            Instructores
-                        </q-item-section>
-                    </q-item>
-                </router-link>
-                
+                            <q-item-section avatar>
+                                <q-icon class="fa-solid fa-chalkboard-user" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Instructores
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
                     <q-separator />
 
                     <q-item clickable v-ripple>
