@@ -2,9 +2,9 @@ import Programa from '../models/programasFormacion.js'
 
 
 const httpprogramas = {
-    // vero
+    // aca van las peticiones
     postPrograma: async (req, res) => {
-        const { codigo, nombre, denominacionPrograma, duracion, observacion } = req.body;
+        const { codigo, denominacionPrograma, nivelFormacion, version } = req.body;
 
         try {
             const programaExistente = await Programa.findOne({ codigo });
@@ -13,7 +13,7 @@ const httpprogramas = {
                 return res.status(400).json({ mensaje: 'El codigo ya está registrado.' });
             }
 
-            const programa = new Programa({ codigo, nombre, denominacionPrograma, duracion, observacion });
+            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version });
             await programa.save();
             res.json({ programa });
         } catch (error) {
@@ -40,16 +40,16 @@ const httpprogramas = {
         res.status(200).json({ programas })
     },
     putProgramas: async (req, res) => {
-        const { codigo, nombre, observacion, duracion } = req.body
+        const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
 
         try {
             const updatedProgramas = await Programa.findOneAndUpdate(
                 { codigo: codigo },
                 {
                     $set: {
-                        nombre,
-                        observacion,
-                        duracion
+                        denominacionPrograma,
+                        nivelFormacion,
+                        version
                     }
                 },
                 { new: true }
@@ -64,8 +64,6 @@ const httpprogramas = {
             res.status(500).json({ msg: 'Error en el servidor' });
         }
     }
-
-
 }
 
 export default httpprogramas
