@@ -8,6 +8,7 @@ import ambientesFormacion from "./routes/ambientesFormacion.js"
 import desarrolloCurricular from "./routes/desarrolloCurricular.js"
 import guias from "./routes/guias.js"
 import instrumentos from "./routes/instrumentos.js"
+import centrosFormacion from "./routes/centrosFormacion.js"
 import mongoose from "mongoose"
 import cors from "cors"
 
@@ -32,6 +33,7 @@ class Server {
         this.app.use('/api/desarrollo', desarrolloCurricular)
         this.app.use("/api/guia", guias)
         this.app.use("/api/instrumentos", instrumentos)
+        this.app.use("/api/centrosF", centrosFormacion)
 
 
     }
