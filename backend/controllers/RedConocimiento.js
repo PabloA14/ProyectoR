@@ -2,6 +2,7 @@ import redesConocimiento from "../models/redesConocimiento.js";
 
 
 const httpredes = {
+    //vero
 
     postRedes: async (req, res) => {
         const { Codigo, Denominacion, Estado } = req.body

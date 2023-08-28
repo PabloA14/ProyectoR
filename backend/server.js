@@ -5,6 +5,7 @@ import redes from "./routes/redesConocimiento.js"
 import roles from "./routes/rolesUsuario.js"
 import ciudades from "./routes/ciudades.js"
 import ambientesFormacion from "./routes/ambientesFormacion.js"
+import desarrolloCurricular from "./routes/desarrolloCurricular.js"
 import mongoose from "mongoose"
 import cors from "cors"
 
@@ -26,6 +27,7 @@ class Server {
         this.app.use('/api/roles', roles)
         this.app.use('/api/ciudades', ciudades)
         this.app.use('/api/ambientes', ambientesFormacion)
+        this.app.use('/api/desarrollo', desarrolloCurricular)
 
     }
 

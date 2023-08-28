@@ -2,7 +2,7 @@ import Programa from '../models/programasFormacion.js'
 
 
 const httpprogramas = {
-    // aca van las peticiones
+    // vero
     postPrograma: async (req, res) => {
         const { codigo, nombre, denominacionPrograma, duracion, observacion } = req.body;
 

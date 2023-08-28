@@ -2,7 +2,7 @@ import rolesUsuario from "../models/rolesUsuario.js";
 
 
 const httpredes = {
-
+    //vero
     postRoles: async (req, res) => {
         const { Codigo, Denominacion, Estado } = req.body
         try {
