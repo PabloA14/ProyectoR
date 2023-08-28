@@ -63,7 +63,7 @@ const httpDesarrolloC = {
             if (!updatedCodigo) {
                 return res.status(404).json({ msg: 'Red no encontrado' });
             }
-            res.status(200).json({ msg: 'Ciudad actualizada exitosamente', red: updatedCodigo });
+            res.status(200).json({ msg: 'Desarrollo c actualizado exitosamente', red: updatedCodigo });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
