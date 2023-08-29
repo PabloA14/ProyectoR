@@ -13,6 +13,7 @@ const httpDesarrolloC = {
                return res.status(400).json({ sms : "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre})
 
             }else{
+                
                 await guiasAp.save()
                 return res.status(200).json({ msg: 'Guia de aprendizaje registrada correctamente', guiasAp });
 

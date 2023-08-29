@@ -2,8 +2,6 @@ import Instrumentos from "../models/instrumentos.js"
 
 const httpDesarrolloC = {
 
-
-
     postInstrumentos : async (req,res) =>{
         const {codigo ,nombre ,documento} =req.body
         try{
