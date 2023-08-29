@@ -18,7 +18,7 @@ const httpProyectos = {
             codigo, nombre, descripcion, fecha, version, documento, programa: programaEncontrado
           });
     
-          const cod = await Proyectos.findOne({ codigo: codigo });
+          const cod = await Proyectos.findOne({ codigo: codigo })
     
           if (cod) {
             return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
@@ -34,6 +34,7 @@ const httpProyectos = {
 
     getProyecto: async (req, res) => {
         const guia = await Proyectos.find()
+        .populate("programa")
         res.status(200).json({ guia })
     },
 
@@ -41,6 +42,7 @@ const httpProyectos = {
         const Codigo = req.params.Codigo
         try {
             const cod = await Proyectos.find({ codigo: Codigo })
+            .populate("programa")
             console.log(cod);
             if (cod.length === 0) {
                 res.status(400).json({ sms: `sin coincidencias para elProyecto con el codigo de   ${Codigo}` })
