@@ -8,7 +8,7 @@ import Programas from "../components/ProgramasFormacion.vue"
 export const routes = [
     { path: "/", component: Login },
     {
-        component: Header, children: [
+        path: "/header", component: Header, children: [
             { path: "/opciones", component: Opciones },
             { path: "/usuarios", component: Usuarios },
             { path: "/Instructores", component: instructorInvitado },
