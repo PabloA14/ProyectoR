@@ -11,7 +11,7 @@
                     </q-avatar>
                     Repositorio
                 </q-toolbar-title>
-                <q-icon name="logout" size="30px" />
+                <q-icon name="logout" size="30px" style="cursor: pointer;" />
             </q-toolbar>
         </q-header>
 
@@ -20,11 +20,11 @@
             :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
-                    <router-link to="programas">
+                    <router-link to="programas" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple >
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-book-open"  color="secondary"/>
+                                <q-icon class="fa-solid fa-book-open"/>
                             </q-item-section>
 
                             <q-item-section>
@@ -33,11 +33,11 @@
                         </q-item>
                     </router-link>
 
-                    <router-link to="Instructores">
+                    <router-link to="Instructores" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-chalkboard-user"  color="secondary"/>
+                                <q-icon class="fa-solid fa-chalkboard-user"/>
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">

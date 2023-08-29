@@ -11,7 +11,6 @@
         <thead>
           <tr>
             <th>Instructor</th>
-            <th>Estado</th>
             <th>Correo Electronico</th>
             <th>Telefono</th>
             <th>Estado</th>
@@ -21,7 +20,6 @@
         <tbody>
           <tr v-for="(x, index) in usuarioFiltrado" :key="index">
             <td>{{ x.nombre }}</td>
-            <td>{{ x.estado }}</td>
             <td>{{ x.correo }}</td>
             <td>{{ x.telefono }}</td>
             <td :style="{ color: x.estado === 1 ? 'green' : 'red' }">{{ x.estado === 1 ? 'Activo' : 'Inactivo'
