@@ -66,7 +66,7 @@ const httpUsuario = {
             // Check if the new cedula is already registered
             const existingUser = await Usuario.findOne({ cedula: cedula });
             if (existingUser && existingUser._id.toString() !== usuarioId) {
-                return res.status(400).json({ msg: 'La cedula ya está registrada para otro usuario' });
+                return res.status(400).json({ msg: 'La cédula ya está registrada para otro usuario' });
             }
 
             const updatedFields = {

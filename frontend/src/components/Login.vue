@@ -117,8 +117,8 @@ function openModal() {
 }
 
 #img {
-    height: 80px;
-    width: 80px;
+    height:75px;
+    width: 75px;
 }
 
 .text-black {
