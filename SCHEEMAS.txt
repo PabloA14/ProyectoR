@@ -1,0 +1,139 @@
+Redes de conocimiento -------------- 	LISTO
+- id
+- denominacion
+codigo
+
+
+PROGRAMAS DE FORMACION------------ LISTO
+id
+denominacion
+codigo
+idNivelFormacion(alguna agregacion)
+Estado
+version
+idRedConocimiento(llave foranea)
+Diseño curricular
+idDesarrolloCurricular (llave foranea)
+idinstructores
+idambiente formacion
+idmaterialesformacion
+registrocalificado
+
+
+REGISTRO CALIFICADO(HAY QUE EDITARLO Y TERMINARLO)
+titulo
+lugadesarrollo
+metodologia
+creditos
+odigosnies
+fecha
+documento
+
+
+DESARROLLO CURRICULAR ----LISTO
+id
+idGuias (relacion)
+matrizcorrelacion
+ProyectoFormativo
+PlaneacionPedagogica
+
+
+USUARIOS -----LISTO EL ESQUEMA
+id
+nombre
+apellidos
+numero id
+telefono
+email
+contrasena
+perfilProfesional
+curriculum
+Estado
+idRolusuarii
+idRedConocimiento
+
+ROLES DE USUARIO ---------------LISTO
+id
+Denominacion
+
+NIVELES DE FORMACION ------------ LISTO
+codigo
+denominacion
+
+INVESTIGACIONES --PENDIENTE
+codigo
+denominacion
+descripcion
+fecha
+documentos
+idPRograma
+
+
+AMBIENTES DE FORMACION -----------------LISTO
+codigo
+nombre
+tipo
+descripcion
+documentos
+idcentroformacion
+
+MATERIALES DE FORMACION -----listo
+codigo
+nombre
+descripcion
+tipo
+documentacion
+
+PROYECTOS  ----listo (estamos lista)
+codigo
+nombre
+descripcion
+fecha
+version
+documeto
+idPrograma
+
+RETROALIMENTACION DE RED ----PENDIENTE
+codigo
+nombre
+codigoFicha
+descripcion
+decha
+documentos
+idPrograma
+
+CENTROS DE FORMACION ------------LISTO EL ESQUEMA 
+codigo
+nombre 
+direccion
+idCiudad
+
+
+CIUDADES ----LISTO EL ESQUEMA
+codigo
+nombre
+codigoDaneCiudad
+Region
+Departamento
+CodigoDaneDepartamento
+
+
+GUIAS DE APRENDIZAJE------------LISTO EL ESQUMA 
+codigo
+nombre
+fase
+documento
+idInstrumentosEvaluacion
+IDmaterialAPoyo
+
+INSTRUMENTOS DE EVALUACION ------------listo EL ESQUEMA
+codigo
+nombre
+documento
+
+MATERIALES DE APOYO ---------en prueba de peticiones
+codigo
+nombre
+documento
+
+
