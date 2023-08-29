@@ -34,9 +34,7 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <router-link class="full-width" to="/Opciones">
-                                <q-btn id="verde" class="full-width" label="Ingresar" type="submit" />
-                            </router-link>
+                            <q-btn id="verde" class="full-width" label="Ingresar" @click="iniciarSesion()" type="submit" />
                         </div><br>
                     </q-form>
                 </q-card-section>
@@ -80,13 +78,78 @@
 
 <script setup>
 import { ref } from 'vue';
-const documento = ref('');
-const contrasena = ref('')
+import { useRouter } from "vue-router";
+
+import axios from "axios";
+import { useLoginStore } from "../stores/login.js"
+import { useQuasar } from 'quasar'
+
+let useLogin = useLoginStore()
+let router = useRouter();
+let ruta = ref("")
+const $q = useQuasar()
+
+
+let documento = ref('');
+let contrasena = ref('')
 const modalVisible = ref(false);
+
 
 function openModal() {
     modalVisible.value = true;
 }
+
+function validar() {
+    if (documento.value === "" && contrasena.value === "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+async function iniciarSesion() {
+    useLogin.logeo(documento.value, contrasena.value)
+        .then((res) => {
+            const token = res.data.token;
+            sessionStorage.setItem('token', token);
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+            ruta.value = "/Opciones";
+            router.push(ruta.value);
+            console.log(token);
+
+        }).catch((error) => {
+            if (error.response && error.response.data.errors && validar() === true) {
+
+                const camposVacios = error.response.data.errors[0].msg
+
+                $q.notify({
+                    message: camposVacios,
+                    color: 'negative',
+                    icon: 'warning',
+                    position: 'top',
+                    timeout: Math.random() * 3000
+                })
+            } else if (error.response && error.response.data.msg) {
+                const credencialesInvalidas = error.response.data.msg
+
+                $q.notify({
+                    message: credencialesInvalidas,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: Math.random() * 3000
+                })
+
+            } else {
+                console.log(error);
+            }
+        })
+}
+
 
 </script>
 
@@ -117,7 +180,7 @@ function openModal() {
 }
 
 #img {
-    height:75px;
+    height: 75px;
     width: 75px;
 }
 

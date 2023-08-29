@@ -6,7 +6,7 @@
       <q-btn color="secondary" icon="add" label="Agregar Instructor" class="q-mb-md" @click="agregar = true" />
 
       <q-separator />
-      
+
       <table>
         <thead>
           <tr>
@@ -117,20 +117,20 @@
   
 <script setup>
 import { ref } from 'vue';
-import { useUsuario } from "../stores/InstructorInv.js";
+import { useUsuarioStore } from "../stores/InstructorInv.js";
 let agregar = ref(false);
-let cedula =ref('')
-let nombre =ref('')
-let apellido =ref('')
-let telefono =ref('')
-let clave =ref('')
-let correo =ref('')
+let cedula = ref('')
+let nombre = ref('')
+let apellido = ref('')
+let telefono = ref('')
+let clave = ref('')
+let correo = ref('')
 let red = ref('')
-let cv =ref('')
-let rol =ref('')
-let perfilProfesional=ref('')
-let usuarioFiltrado =ref([])
-const useUsuari = useUsuario();
+let cv = ref('')
+let rol = ref('')
+let perfilProfesional = ref('')
+let usuarioFiltrado = ref([])
+const useUsuari = useUsuarioStore();
 
 
 async function buscar() {
@@ -139,20 +139,20 @@ async function buscar() {
 }
 buscar();
 
-async function  agregarU() {
+async function agregarU() {
   console.log("entro a agregar");
   useUsuari.agregarUsuario(
     {
-      cedula : cedula.value,
-      nombre : nombre.value,
-      apellidos : apellido.value,
-      telefono :telefono.value ,
-      correo : correo.value,
-      clave : clave.value,
-      redConocimiento : red.value,
-      hojaDeVida : cv.value,
-      rol : rol.value,
-      perfilProfesional : perfilProfesional.value
+      cedula: cedula.value,
+      nombre: nombre.value,
+      apellidos: apellido.value,
+      telefono: telefono.value,
+      correo: correo.value,
+      clave: clave.value,
+      redConocimiento: red.value,
+      hojaDeVida: cv.value,
+      rol: rol.value,
+      perfilProfesional: perfilProfesional.value
     }
   )
 

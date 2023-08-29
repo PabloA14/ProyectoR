@@ -22,7 +22,7 @@ const iniciarSesion = {
             // Generate a JWT token
             const token = jwt.sign({ userId: user._id }, process.env.CLAVE_SECRETA, { expiresIn: '1h' });
 
-            res.status(200).json({ msg: 'Inicio de sesión exitoso', token });
+            res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
