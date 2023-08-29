@@ -4,7 +4,7 @@ import { createRouter, createWebHashHistory } from "vue-router"
 import App from './App.vue'
 import { routes } from "./routes/routes.js"
 import { Quasar, Notify } from 'quasar'
-
+import './style.css'
 import '@quasar/extras/roboto-font/roboto-font.css'
 import '@quasar/extras/material-icons/material-icons.css'
 import '@quasar/extras/material-icons-outlined/material-icons-outlined.css'

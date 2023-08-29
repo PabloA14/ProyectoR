@@ -21,10 +21,10 @@
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
                     <router-link to="programas">
-                        <q-item clickable v-ripple>
+                        <q-item clickable v-ripple >
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-book-open" />
+                                <q-icon class="fa-solid fa-book-open"  color="secondary"/>
                             </q-item-section>
 
                             <q-item-section>
@@ -37,10 +37,10 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-chalkboard-user" />
+                                <q-icon class="fa-solid fa-chalkboard-user"  color="secondary"/>
                             </q-item-section>
 
-                            <q-item-section>
+                            <q-item-section style="color: black; text-decoration: none;">
                                 Instructores
                             </q-item-section>
                         </q-item>
