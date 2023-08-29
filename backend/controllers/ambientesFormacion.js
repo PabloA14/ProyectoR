@@ -1,7 +1,6 @@
 import Ambiente from "../models/ambientesFormacion.js"
 
 const httpAmbiente = {
-    //vero
 
     postambiente: async (req, res) => {
         const { codigo, nombre, tipo, centroFormacion, descripcion, archivo } = req.body;

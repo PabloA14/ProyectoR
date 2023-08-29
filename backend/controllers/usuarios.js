@@ -1,7 +1,7 @@
 import Usuario from "../models/usuarios.js";
 import bcrypt from "bcrypt"
 
-//USUARIOS 
+
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
