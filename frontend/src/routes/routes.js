@@ -12,7 +12,7 @@ export const routes = [
             { path: "/opciones", component: Opciones },
             { path: "/usuarios", component: Usuarios },
             { path: "/Instructores", component: instructorInvitado },
-            {path : "/programas" , component : Programas}
+            { path: "/programas", component: Programas }
         ]
     },
 ]

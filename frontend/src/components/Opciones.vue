@@ -1,43 +1,20 @@
 <template>
-    <q-page>
-      <q-container>
-        <router-link to="Instructores">
-            <q-card>
-          <q-card-section>
-            <q-card-title>Usuarios</q-card-title>
-          </q-card-section>
-        </q-card>
-
-        </router-link>
-        
-  
-        <q-card>
-          <q-card-section>
-            <q-card-title>Redes</q-card-title>
-          </q-card-section>
-        </q-card>
-  
-        <q-card>
-          <q-card-section>
-            <q-card-title>Programas</q-card-title>
-          </q-card-section>
-        </q-card>
-  
-        <q-card>
-          <q-card-section>
-            <q-card-title>Perfil</q-card-title>
-          </q-card-section>
-        </q-card>
-  
-        <q-card>
-          <q-card-section>
-            <q-card-title>Ana</q-card-title>
-          </q-card-section>
-        </q-card>
-      </q-container>
-    </q-page>
-  </template>
+  <q-page class="pagina">
+    <div>
+      <img src="../imagenes/logoSenaGris.png" class="centrada">
+    </div>
+    
+  </q-page>
+</template>
   
 <script setup>
 </script>
-  
+
+<style scoped>
+.centrada {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+</style>
