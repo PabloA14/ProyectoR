@@ -55,11 +55,11 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Nivel de Formación" color="positive" v-model="nivelFormacion" />
+            <q-input label="Denominación" color="positive" v-model="denominacion" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Denominación" color="positive" v-model="denominacion" />
+            <q-input label="Nivel de Formación" color="positive" v-model="nivelFormacion" />
           </div>
 
           <div class="q-mb-md">
@@ -71,7 +71,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn label="Agregar" icon="add" style="background-color: rgb(57, 169, 0); color: white;" v-close-popup />
+          <q-btn label="Agregar" icon="add" @click="agregarPrograma()"
+            style="background-color: rgb(57, 169, 0); color: white;" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -95,6 +96,20 @@ buscarProgramas()
 async function buscarProgramas() {
   programas.value = await useProgramas.getProgramas()
   console.log(programas);
+  programas.value.reverse()
+}
+
+async function agregarPrograma() {
+  console.log("entro a agregar");
+  useProgramas.agregarProgramaFormacion(
+    {
+      codigo: codigo.value,
+      denominacionPrograma: denominacion.value,
+      nivelFormacion: nivelFormacion.value,
+      version: version.value
+    }
+  )
+  
 }
 </script>
 

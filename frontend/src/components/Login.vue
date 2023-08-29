@@ -22,10 +22,17 @@
                             </template>
                         </q-input>
 
-                        <q-input color="positive" filled type="password" v-model="contrasena" label="Contraseña">
+                        <q-input color="positive" filled :type="mostrarContrasena ? 'text' : 'password'"
+                            v-model="contrasena" label="Contraseña">
                             <template v-slot:prepend>
                                 <q-icon name="lock" />
                             </template>
+                            <template v-slot:append>
+                                <i @click="mostrarContrasena = !mostrarContrasena" style="cursor: pointer;" class="fa-solid"
+                                    :class="mostrarContrasena ? 'fa-eye' : 'fa-eye-slash'"></i>
+                            </template>
+
+
                         </q-input><br>
                         <!-- <p class="q-mt-sm">¿olvido su contraseña?</p> -->
                         <p @click="openModal" class="q-mt-sm" style="cursor: pointer; color: rgb(5, 13, 255);">
@@ -94,7 +101,11 @@ let documento = ref('');
 let contrasena = ref('')
 const modalVisible = ref(false);
 
+let mostrarContrasena = ref(false);
 
+function mostrar() {
+    mostrarContrasena.value = !mostrarContrasena.value;
+}
 function openModal() {
     modalVisible.value = true;
 }
