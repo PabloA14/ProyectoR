@@ -1,12 +1,13 @@
 import mongoose from "mongoose";
 
 const resgistroSchema = new mongoose.Schema({
-    snies: { type: String, required: true },
-    nombrePrograma: { type: String, required: true },
-    tituloOtorgado: { type: String, required: true },
-    fechaOferta: { type: String, required: true },
-    metodilogia: { type: String, required: true },
-    fechaResolucion: { type: String, required: true },
+    titulo: { type: String, required: true },
+    lugadesarrollo: { type: String, required: true },
+    metodologia: { type: String, required: true },
+    creditos: { type: String, required: true },
+    codigosnies: { type: String, required: true },
+    fecha: { type: String, required: true },
+    documento: { type: String, required: true },
     estado: { type: Number, default: 1, required: true },
     createdAt: { type: Date, default: Date.now },
 })

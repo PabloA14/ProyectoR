@@ -25,7 +25,7 @@ titulo
 lugadesarrollo
 metodologia
 creditos
-odigosnies
+codigosnies
 fecha
 documento
 
