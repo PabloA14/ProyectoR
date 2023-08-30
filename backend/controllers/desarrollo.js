@@ -2,23 +2,23 @@ import DesarrolloC from "../models/desarrollo.js"
 
 const httpDesarrolloC = {
 
-    postDesarrollo : async (req,res) =>{
-        const {codigo ,matrizcorrelacion ,proyectoFormativo ,planeacionPedagogica} =req.body
-        try{
+    postDesarrollo: async (req, res) => {
+        const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica } = req.body
+        try {
             const desarrolloCurricular = new DesarrolloC({
-                codigo ,matrizcorrelacion ,proyectoFormativo ,planeacionPedagogica
+                codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica
             })
-            const cod = await DesarrolloC.findOne({codigo :codigo})
+            const cod = await DesarrolloC.findOne({ codigo: codigo })
             if (cod) {
-               return res.status(400).json({ sms : "El desarrollo curricular ya existente", cod, nombre})
+                return res.status(400).json({ sms: "El desarrollo curricular ya existente", cod, nombre })
 
-            }else{
+            } else {
                 await desarrolloCurricular.save()
                 return res.status(200).json({ msg: 'El registro de la Desarrollo ha sido exitoso', desarrolloCurricular });
 
             }
 
-        }catch (error){
+        } catch (error) {
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de inserat" })
         }
     },

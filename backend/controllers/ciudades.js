@@ -21,7 +21,7 @@ const httpredes = {
                     const ciudades = new Ciudad({
                         codigoCiudad, nombre, region, departamento, codDepartamento
                     });
-        
+
                     const cod = await Ciudad.findOne({ codigoCiudad: codigoCiudad });
                     console.log(cod);
                     if (cod) {
@@ -30,11 +30,12 @@ const httpredes = {
                         await ciudades.save()
                         return res.status(200).json({ msg: 'El registro de la ciudad ha sido exitoso', ciudades });
                     }
-        
+
                 } catch (error) {
                     console.error(error);
                     res.status(500).json({ msg: 'Error en el servidor , agregar ciudades' });
-                }            }
+                }
+            }
 
         } catch (error) {
             console.error(error);

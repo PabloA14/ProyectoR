@@ -5,36 +5,36 @@ import Programa from "../models/programasFormacion.js"
 const httpProyectos = {
     postProyecto: async (req, res) => {
         const { codigo, nombre, descripcion, fecha, version, documento, programa } = req.body;
-        
+
         try {
-          const programaEncontrado = await Programa.findOne({ codigo: programa });
-          
-          
-          if (!programaEncontrado) {
-            return res.status(400).json({ msg: "Programa no encontrado con el código proporcionado" });
-          }
-    
-          const proyecto = new Proyectos({
-            codigo, nombre, descripcion, fecha, version, documento, programa: programaEncontrado
-          });
-    
-          const cod = await Proyectos.findOne({ codigo: codigo })
-    
-          if (cod) {
-            return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
-          } else {
-            await proyecto.save();
-            return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto });
-          }
+            const programaEncontrado = await Programa.findOne({ codigo: programa });
+
+
+            if (!programaEncontrado) {
+                return res.status(400).json({ msg: "Programa no encontrado con el código proporcionado" });
+            }
+
+            const proyecto = new Proyectos({
+                codigo, nombre, descripcion, fecha, version, documento, programa: programaEncontrado
+            });
+
+            const cod = await Proyectos.findOne({ codigo: codigo })
+
+            if (cod) {
+                return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
+            } else {
+                await proyecto.save();
+                return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto });
+            }
         } catch (error) {
-          console.log(error);
-          return res.status(500).json({ msg: "Ha ocurrido un error en el servidor al momento de crear el proyecto" });
+            console.log(error);
+            return res.status(500).json({ msg: "Ha ocurrido un error en el servidor al momento de crear el proyecto" });
         }
-      },
+    },
 
     getProyecto: async (req, res) => {
         const guia = await Proyectos.find()
-        .populate("programa")
+            .populate("programa")
         res.status(200).json({ guia })
     },
 
@@ -42,7 +42,7 @@ const httpProyectos = {
         const Codigo = req.params.Codigo
         try {
             const cod = await Proyectos.find({ codigo: Codigo })
-            .populate("programa")
+                .populate("programa")
             console.log(cod);
             if (cod.length === 0) {
                 res.status(400).json({ sms: `sin coincidencias para elProyecto con el codigo de   ${Codigo}` })
@@ -65,7 +65,7 @@ const httpProyectos = {
                         nombre: req.body.nombre,
                         descripcion: req.body.descripcion,
                         version: req.body.version,
-                        programa :req.body.programa
+                        programa: req.body.programa
                     }
                 },
                 { new: true }

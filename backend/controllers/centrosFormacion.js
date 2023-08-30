@@ -2,23 +2,23 @@ import CentrosF from "../models/centrosFormacion.js"
 
 const httpCentros = {
 
-    postCentro : async (req,res) =>{
-        const {codigo ,nombre ,direccion} =req.body
-        try{
+    postCentro: async (req, res) => {
+        const { codigo, nombre, direccion } = req.body
+        try {
             const centro = new CentrosF({
-                codigo ,nombre ,direccion
+                codigo, nombre, direccion
             })
-            const cod = await CentrosF.findOne({codigo :codigo})
+            const cod = await CentrosF.findOne({ codigo: codigo })
             if (cod) {
-               return res.status(400).json({ sms : "El centro de formacion ya se encuentra registrado", cod, nombre})
+                return res.status(400).json({ sms: "El centro de formacion ya se encuentra registrado", cod, nombre })
 
-            }else{
+            } else {
                 await centro.save()
-                return res.status(200).json({ msg: 'Centro de formacion registrado correctamente', centro});
+                return res.status(200).json({ msg: 'Centro de formacion registrado correctamente', centro });
 
             }
 
-        }catch (error){
+        } catch (error) {
             console.log(error);
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
         }
@@ -53,7 +53,7 @@ const httpCentros = {
                 {
                     $set: {
                         nombre: req.body.nombre,
-                        direccion : req.body.direccion
+                        direccion: req.body.direccion
                     }
                 },
                 { new: true }

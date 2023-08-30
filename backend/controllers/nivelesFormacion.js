@@ -51,32 +51,32 @@ const httpNivelFormacion = {
         }
     },
 
-    putPasajero: async (req, res) => {
-        const nivelId = req.params.id;
-        const newData = req.body;
+    putnivelFormacion: async (req, res) => {
+        const Codigo = req.params.codigo;
 
         try {
-            const nivelExistente = await NivelFormacion.findOne({ codigo: newData.codigo });
+            const updateniveles = await NivelFormacion.findOneAndUpdate(
+                //codigo unico / params
+                { codigo: Codigo },
+                {
+                    $set: {
+                        codigo: req.body.codigo,
+                        denominacion: req.body.denominacion,
+                        esado:  req.body.esado
+                    }
+                },
+                { new: true }
+            );
 
-            if (nivelExistente && nivelExistente._id.toString() !== nivelId) {
-                return res.status(400).json({ mensaje: 'El codigo ya está registrada.' });
+            if (!updateniveles) {
+                return res.status(404).json({ msg: 'Red no encontrado' });
             }
-
-            const nivelEncontrado = await NivelFormacion.findById(nivelId);
-            if (!nivelEncontrado) {
-                return res.status(404).json({ mensaje: 'No se encontró el NivelFormacion con el ID proporcionado.' });
-            }
-
-            await NivelFormacion.findByIdAndUpdate(nivelId, newData);
-
-            const nivelActualizado = await NivelFormacion.findById(nivelId);
-            res.json({ pasajero: nivelActualizado });
-
+            res.status(200).json({ msg: 'Ciudad actualizada exitosamente', red: updateniveles });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'Error al actualizar el nivel de formacion.' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
         }
-    },
+    }
 
 }
 

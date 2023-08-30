@@ -2,24 +2,24 @@ import Guias from "../models/guias.js"
 
 const httpDesarrolloC = {
 
-    postGuia : async (req,res) =>{
-        const {codigo ,nombre ,fase ,documento} =req.body
-        try{
+    postGuia: async (req, res) => {
+        const { codigo, nombre, fase, documento } = req.body
+        try {
             const guiasAp = new Guias({
-                codigo ,nombre ,fase ,documento
+                codigo, nombre, fase, documento
             })
-            const cod = await Guias.findOne({codigo :codigo})
+            const cod = await Guias.findOne({ codigo: codigo })
             if (cod) {
-               return res.status(400).json({ sms : "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre})
+                return res.status(400).json({ sms: "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
 
-            }else{
-                
+            } else {
+
                 await guiasAp.save()
                 return res.status(200).json({ msg: 'Guia de aprendizaje registrada correctamente', guiasAp });
 
             }
 
-        }catch (error){
+        } catch (error) {
             console.log(error);
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
         }

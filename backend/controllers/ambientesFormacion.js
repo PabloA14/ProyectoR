@@ -42,29 +42,31 @@ const httpAmbiente = {
     },
 
     putAmbiente: async (req, res) => {
-        const ambienteId = req.params.id;
-        const newData = req.body;
-
+        const Codigo = req.params.codigo;
         try {
-            const ambienteExistente = await Ambiente.findOne({  codigo: newData.codigo });
+            const updatedAmbiente = await Ambiente.findOneAndUpdate(
+                { codigo: Codigo },
+                {
+                    $set: {
+                        codigo: req.body.codigo,
+                        nombre: req.body.nombre,
+                        tipo: req.body.tipo,
+                        centroFormacion: req.body.centroFormacion,
+                        descripcion: req.body.descripcion,
+                        archivo: req.body.archivo,
+                        estado: req.body.estado
+                    }
+                },
+                { new: true }
+            );
 
-            if (ambienteExistente && ambienteExistente._id.toString() !== ambienteId) {
-                return res.status(400).json({ mensaje: 'El código ya está registrado.' });
+            if (!updatedAmbiente) {
+                return res.status(404).json({ msg: 'ambiente no encontrada' });
             }
-            
-            const ambienteEncontrado = await Ambiente.findById(ambienteId);
-            if (!ambienteEncontrado) {
-                return res.status(404).json({ mensaje: 'No se encontró el ambiente con el ID proporcionado.' });
-            }
-
-            await Ambiente.findByIdAndUpdate(ambienteId, newData);
-
-            const ambienteActualizado = await Ambiente.findById(ambienteId);
-            res.json({ ambiente: ambienteActualizado });
-
+            res.status(200).json({ msg: 'Guia actualizada exitosamente', red: updatedAmbiente });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ error: 'Error al actualizar el ambiente.' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
         }
     },
 

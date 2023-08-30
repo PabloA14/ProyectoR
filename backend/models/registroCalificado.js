@@ -12,4 +12,4 @@ const resgistroSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now },
 })
 
-export default mongoose.model("Resgistro", resgistroSchema)
+export default mongoose.model("Registro", resgistroSchema)

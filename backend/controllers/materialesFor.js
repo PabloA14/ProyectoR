@@ -2,24 +2,24 @@ import Material from "../models/materialesFor.js"
 
 const httpMateriales = {
 
-    postMaterial : async (req,res) =>{
-        const {codigo ,nombre ,descripcion, tipo ,documentacion} =req.body
-        try{
+    postMaterial: async (req, res) => {
+        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        try {
             const material = new Material({
-                codigo ,nombre ,descripcion, tipo ,documentacion
+                codigo, nombre, descripcion, tipo, documentacion
             })
 
-            const cod = await Material.findOne({codigo :codigo})
+            const cod = await Material.findOne({ codigo: codigo })
             if (cod) {
-               return res.status(400).json({ sms : "el material de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre})
+                return res.status(400).json({ sms: "el material de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
 
-            }else{
+            } else {
                 await material.save()
                 return res.status(200).json({ msg: 'El material de aprendizaje registrado con exito', material });
 
             }
 
-        }catch (error){
+        } catch (error) {
             console.log(error);
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
         }
