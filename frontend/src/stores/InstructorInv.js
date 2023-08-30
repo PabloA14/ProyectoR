@@ -6,7 +6,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
 
     const buscarUsuarios = async () => {
         try {
-            const buscar = await axios.get(`${LinkBD} /api/usuario/todos`)
+            const buscar = await axios.get(`${LinkBD}/api/usuario/todos`)
             return buscar.data.usuarios
         } catch (error) {
             console.log(error.response);
@@ -15,7 +15,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
     const agregarUsuario = async (info) => {
         try {
-            const newU = await axios.post(`${LinkBD} /api/usuario/`, info)
+            const newU = await axios.post(`${LinkBD}/api/usuario/`, info)
             return newU
 
         } catch (error) {

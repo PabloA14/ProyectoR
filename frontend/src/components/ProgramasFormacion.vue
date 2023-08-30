@@ -96,7 +96,6 @@ buscarProgramas()
 async function buscarProgramas() {
   programas.value = await useProgramas.getProgramas()
   console.log(programas);
-  programas.value.reverse()
 }
 
 async function agregarPrograma() {

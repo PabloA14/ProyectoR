@@ -6,7 +6,8 @@ export const UseProgramasFormacion = defineStore("Programas", () => {
 
     const getProgramas = async () => {
         try {
-            const programas = await axios.get(`${LinkBD} /api/programasFormacion/traer/todos`)
+            const programas = await axios.get(`${LinkBD}/api/programasFormacion/traer/todos`)
+            // programas.reverse()
             return programas.data.programas
 
         } catch (error) {
@@ -17,7 +18,7 @@ export const UseProgramasFormacion = defineStore("Programas", () => {
 
     const agregarProgramaFormacion = async (info) => {
         try {
-            let datos = await axios.post(`${LinkBD} /api/programasFormacion`, info)
+            let datos = await axios.post(`${LinkBD}/api/programasFormacion`, info)
             return datos
 
         } catch (error) {

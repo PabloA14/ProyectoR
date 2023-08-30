@@ -9,13 +9,14 @@ export const useLoginStore = defineStore("login", () => {
     const logeo = async (cedula, clave) => {
         try {
             //loading.value = true
-            let datos = await axios.post(`${LinkBD} /api/login`,
+            let datos = await axios.post(`${LinkBD}/api/login`,
                 { cedula: cedula, clave: clave });
             //console.log(datos);
             return datos;
         } catch (error) {
             //loading.value = true
             console.log(error);
+            console.log(LinkBD);
             throw error
         } finally {
             //loading.value = false
