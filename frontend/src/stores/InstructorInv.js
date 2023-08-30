@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
+import { LinkBD } from "../routes/variables.js";
 
 export const useUsuarioStore = defineStore("usuario", () => {
 
     const buscarUsuarios = async () => {
         try {
-            const buscar = await axios.get(`http://localhost:4508/api/usuario/todos`)
+            const buscar = await axios.get(`${LinkBD} /api/usuario/todos`)
             return buscar.data.usuarios
         } catch (error) {
             console.log(error.response);
@@ -14,7 +15,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
     const agregarUsuario = async (info) => {
         try {
-            const newU = await axios.post(`http://localhost:4508/api/usuario/`, info)
+            const newU = await axios.post(`${LinkBD} /api/usuario/`, info)
             return newU
 
         } catch (error) {

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import { LinkBD } from "../routes/variables.js";
 //import { ref } from "vue"
 
 export const useLoginStore = defineStore("login", () => {
@@ -8,7 +9,7 @@ export const useLoginStore = defineStore("login", () => {
     const logeo = async (cedula, clave) => {
         try {
             //loading.value = true
-            let datos = await axios.post("http://localhost:4508/api/login",
+            let datos = await axios.post(`${LinkBD} /api/login`,
                 { cedula: cedula, clave: clave });
             //console.log(datos);
             return datos;
