@@ -46,6 +46,32 @@
                         </q-item>
                     </router-link>
 
+                    <router-link to="redes" style="text-decoration: none;color: black;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <i class="fa-solid fa-globe fa-xl"></i>
+                            </q-item-section>
+
+                            <q-item-section style="color: black; text-decoration: none;">
+                                Redes de conocimiento
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
+                    <router-link to="centroF" style="text-decoration: none;color: black;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <i class="fa-solid fa-city fa-xl"></i>
+                            </q-item-section>
+
+                            <q-item-section style="color: black; text-decoration: none;">
+                                Centros de  Formación
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
                     <q-separator />
 
                     <q-item clickable v-ripple>

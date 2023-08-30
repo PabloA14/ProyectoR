@@ -4,6 +4,8 @@ import Opciones from "../components/Opciones.vue"
 import Usuarios from "../components/Usuarios.vue"
 import instructorInvitado from "../components/Instructorinv.vue"
 import Programas from "../components/ProgramasFormacion.vue"
+import redes from "../components/redes.vue"
+import centros from "../components/centros.vue"
 
 export const routes = [
     { path: "/", component: Login },
@@ -12,7 +14,11 @@ export const routes = [
             { path: "/opciones", component: Opciones },
             { path: "/usuarios", component: Usuarios },
             { path: "/Instructores", component: instructorInvitado },
-            { path: "/programas", component: Programas }
+            { path: "/programas", component: Programas },
+            { path: "/redes", component: redes },
+            { path: "/centroF", component: centros }
+
+
         ]
     },
 ]
