@@ -1,3 +1,3 @@
 <template>
-    <h1>Centros de formación</h1>
+    <h1>Centros de formación pruebas</h1>
 </template>

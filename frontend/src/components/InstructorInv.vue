@@ -18,7 +18,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(x, index) in usuarioFiltrado" :key="index">
+          <tr v-for="(x, index) in usuarios" :key="index">
             <td>{{ x.nombre }}</td>
             <td>{{ x.correo }}</td>
             <td>{{ x.telefono }}</td>
@@ -76,10 +76,7 @@
             <q-input outlined v-model="correo" id="correo" />
           </div>
 
-          <div class="q-mb-md">
-            <label for="fecNa">Fecha de nacimiento</label>
-            <q-input outlined v-model="fecNa" id="fecNa" />
-          </div>
+
 
           <div class="q-mb-md">
             <label for="red">Red Conocimiento</label>
@@ -126,20 +123,22 @@ let correo = ref('')
 let red = ref('')
 let cv = ref('')
 let rol = ref('')
+let usuarios =ref([])
 let perfilProfesional = ref('')
 let usuarioFiltrado = ref([])
 const useUsuari = useUsuarioStore();
 
 
 async function buscar() {
-  const usuarios = await useUsuari.buscarUsuarios();
-  usuarioFiltrado.value = usuarios.filter(x => x.rol === 'Instructor')
+   usuarios.value = await useUsuari.buscarUsuarios();
+   console.log(usuarios.value);
+  // usuarioFiltrado.value = usuarios.filter(x => x.rol === 'Instructor')
 }
 buscar();
 
 async function agregarU() {
   console.log("entro a agregar");
-  useUsuari.agregarUsuario(
+  await useUsuari.agregarUsuario(
     {
       cedula: cedula.value,
       nombre: nombre.value,
@@ -153,7 +152,6 @@ async function agregarU() {
       perfilProfesional: perfilProfesional.value
     }
   )
-
   buscar()
 }
 </script>

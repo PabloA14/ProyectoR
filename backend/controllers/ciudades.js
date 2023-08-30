@@ -68,6 +68,7 @@ const httpredes = {
 
         try {
             const updatedCiudad = await Ciudad.findOneAndUpdate(
+                //codigo unico / params
                 { codigoCiudad: Codigo },
                 {
                     $set: {

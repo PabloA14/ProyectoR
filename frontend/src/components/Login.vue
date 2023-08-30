@@ -41,7 +41,7 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <q-btn id="verde" class="full-width" label="Ingresar" @click="iniciarSesion()"/>
+                            <q-btn id="verde" class="full-width" label="Ingresar" @click.prevent="iniciarSesion()"/>
                         </div><br>
                     </q-form>
                 </q-card-section>
@@ -86,7 +86,6 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
-
 import axios from "axios";
 import { useLoginStore } from "../stores/login.js"
 import { useQuasar } from 'quasar'
