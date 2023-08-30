@@ -41,7 +41,7 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <q-btn id="verde" class="full-width" label="Ingresar" @click="iniciarSesion()" type="submit" />
+                            <q-btn id="verde" class="full-width" label="Ingresar" @click="iniciarSesion()"/>
                         </div><br>
                     </q-form>
                 </q-card-section>
