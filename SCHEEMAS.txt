@@ -20,7 +20,7 @@ idmaterialesformacion
 registrocalificado
 
 
-REGISTRO CALIFICADO(HAY QUE EDITARLO Y TERMINARLO)
+REGISTRO CALIFICADO(listo)
 titulo
 lugadesarrollo
 metodologia
