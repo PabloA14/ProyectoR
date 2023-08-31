@@ -1,10 +1,10 @@
-Redes de conocimiento -------------- 	LISTO
+Redes de conocimiento -------------- 	LISTO VERIFI
 - id
 - denominacion
 codigo
 
 
-PROGRAMAS DE FORMACION------------ LISTO
+PROGRAMAS DE FORMACION------------ LISTO VERIFI
 id
 denominacion
 codigo
@@ -17,10 +17,10 @@ idDesarrolloCurricular (llave foranea)
 idinstructores
 idambiente formacion
 idmaterialesformacion
-registrocalificado
+idregistrocalificado
 
 
-REGISTRO CALIFICADO(HAY QUE EDITARLO Y TERMINARLO)
+REGISTRO CALIFICADO-------------------- LISTI VERIFI
 titulo
 lugadesarrollo
 metodologia
@@ -30,7 +30,7 @@ fecha
 documento
 
 
-DESARROLLO CURRICULAR ----LISTO
+DESARROLLO CURRICULAR ----LISTO VERIFI
 id
 idGuias (relacion)
 matrizcorrelacion
@@ -38,7 +38,7 @@ ProyectoFormativo
 PlaneacionPedagogica
 
 
-USUARIOS -----LISTO EL ESQUEMA
+USUARIOS -----LISTO VERIFI
 id
 nombre
 apellidos
@@ -49,18 +49,18 @@ contrasena
 perfilProfesional
 curriculum
 Estado
-idRolusuarii
+rol
 idRedConocimiento
 
-ROLES DE USUARIO ---------------LISTO
+ROLES DE USUARIO ---------------LISTO VERIFI
 id
 Denominacion
 
-NIVELES DE FORMACION ------------ LISTO
+NIVELES DE FORMACION ------------ LISTO VERIFI
 codigo
 denominacion
 
-INVESTIGACIONES --PENDIENTE
+INVESTIGACIONES --PENDIENTE--------------------------------------------
 codigo
 denominacion
 descripcion
@@ -69,7 +69,7 @@ documentos
 idPRograma
 
 
-AMBIENTES DE FORMACION -----------------LISTO
+AMBIENTES DE FORMACION -----------------LISTO VERIFI
 codigo
 nombre
 tipo
@@ -77,14 +77,14 @@ descripcion
 documentos
 idcentroformacion
 
-MATERIALES DE FORMACION -----listo
+MATERIALES DE FORMACION -----listo VERIFI
 codigo
 nombre
 descripcion
 tipo
 documentacion
 
-PROYECTOS  ----listo (estamos lista)
+PROYECTOS  ----listo VERIFI
 codigo
 nombre
 descripcion
@@ -93,7 +93,7 @@ version
 documeto
 idPrograma
 
-RETROALIMENTACION DE RED ----PENDIENTE
+RETROALIMENTACION DE RED ----PENDIENTE -------------------------------------------------------------------------
 codigo
 nombre
 codigoFicha
@@ -102,14 +102,14 @@ decha
 documentos
 idPrograma
 
-CENTROS DE FORMACION ------------LISTO EL ESQUEMA 
+CENTROS DE FORMACION ------------LISTO VERIFI
 codigo
 nombre 
 direccion
 idCiudad
 
 
-CIUDADES ----LISTO EL ESQUEMA
+CIUDADES --------------  LISTO VERIFI -----------------
 codigo
 nombre
 codigoDaneCiudad
@@ -118,7 +118,7 @@ Departamento
 CodigoDaneDepartamento
 
 
-GUIAS DE APRENDIZAJE------------LISTO EL ESQUMA 
+GUIAS DE APRENDIZAJE------------LISTO VERIFI 
 codigo
 nombre
 fase
@@ -126,12 +126,12 @@ documento
 idInstrumentosEvaluacion
 IDmaterialAPoyo
 
-INSTRUMENTOS DE EVALUACION ------------listo EL ESQUEMA
+INSTRUMENTOS DE EVALUACION ------------listo VERIFI
 codigo
 nombre
 documento
 
-MATERIALES DE APOYO ---------en prueba de peticiones
+MATERIALES DE APOYO --------- LISTO VERIFI
 codigo
 nombre
 documento

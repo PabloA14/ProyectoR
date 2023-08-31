@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 const iniciarSesion = {
     loginUsuario: async (req, res) => {
         const { cedula, clave } = req.body;
-
         try {
             const user = await Usuario.findOne({ cedula: cedula });
 
@@ -18,7 +17,6 @@ const iniciarSesion = {
             if (!passwordMatch) {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });
             }
-
             // Generate a JWT token
             const token = jwt.sign({ userId: user._id }, process.env.CLAVE_SECRETA, { expiresIn: '1h' });
 
@@ -27,7 +25,7 @@ const iniciarSesion = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
         }
-    },
+    }
 };
 
 export default iniciarSesion;
