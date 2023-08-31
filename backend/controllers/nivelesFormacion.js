@@ -37,20 +37,6 @@ const httpNivelFormacion = {
     },
 
 
-    getCodigo: async (req, res) => {
-        try {
-            const ambienteBuscado = req.params.codigo;
-            const ambienteEncontrado = await NivelFormacion.findOne({ codigo: ambienteBuscado });
-            if (!ambienteEncontrado) {
-                return res.status(404).json({ mensaje: 'No se encontró el ambiente con el codigo proporcionado' });
-            }
-            res.json(ambienteEncontrado);
-        } catch (error) {
-            console.error('Error al buscar el ambiente:', error);
-            res.status(500).json({ mensaje: 'Hubo un error al buscar el ambiente' });
-        }
-    },
-
     putnivelFormacion: async (req, res) => {
         const Codigo = req.params.codigo;
 
