@@ -28,8 +28,31 @@ export const UseProgramasFormacion = defineStore("Programas", () => {
     }
 
 
+    const actualizarProgramaFormacion = async (
+        id,
+        codigo,
+        denominacionPrograma,
+        nivelFormacion,
+        version
+
+    ) => {
+        try {
+            let datos = await axios.put(`${LinkBD}/api/programasFormacion/${id}`, {
+                codigo,
+                denominacionPrograma,
+                nivelFormacion,
+                version
+            });
+            return datos;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    }
+
     return {
         getProgramas,
-        agregarProgramaFormacion
+        agregarProgramaFormacion,
+        actualizarProgramaFormacion
     }
 }) 

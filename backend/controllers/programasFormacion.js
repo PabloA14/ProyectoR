@@ -40,17 +40,21 @@ const httpprogramas = {
         res.status(200).json({ programas })
     },
     putProgramas: async (req, res) => {
+        const ProgramaId = req.params.id;
         const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
 
         try {
+            const updatedFields = {
+                codigo,
+                denominacionPrograma,
+                nivelFormacion,
+                version
+            };
             const updatedProgramas = await Programa.findOneAndUpdate(
-                { codigo: codigo },
+                { _id: ProgramaId },
                 {
-                    $set: {
-                        denominacionPrograma,
-                        nivelFormacion,
-                        version
-                    }
+                    $set: updatedFields
+
                 },
                 { new: true }
             );

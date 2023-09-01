@@ -49,8 +49,6 @@ const httpUsuario = {
         }
     },
 
-
-
     putUsuario: async (req, res) => {
         const usuarioId = req.params.id;
         const {
@@ -94,7 +92,7 @@ const httpUsuario = {
             const updatedUsuario = await Usuario.findOneAndUpdate(
                 { _id: usuarioId },
                 {
-                    $set: updatedFields,
+                    $set: updatedFields
                 },
                 { new: true }
             );
@@ -113,19 +111,19 @@ const httpUsuario = {
         const cedula = req.params.id;
         const { estado } = req.body;
         try {
-          const usuary = await Usuario.findById(cedula);
-          if (usuary) {
-            usuary.estado = estado;
-            await usuary.save();
-            res.json(usuary);
-          } else {
-          return  res.status(404).json({ msg: `usuario no encotrado con id: ${id} ` });
-          }
+            const usuary = await Usuario.findById(cedula);
+            if (usuary) {
+                usuary.estado = estado;
+                await usuary.save();
+                res.json(usuary);
+            } else {
+                return res.status(404).json({ msg: `usuario no encotrado con id: ${id} ` });
+            }
         } catch (error) {
             console.log(error);
-         return res.status(500).json({ msg: "Error interno del servidor" });
+            return res.status(500).json({ msg: "Error interno del servidor" });
         }
-      }
+    }
 
 };
 

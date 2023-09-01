@@ -6,30 +6,30 @@
       <q-btn
         icon="add"
         style="background-color: rgb(57, 169, 0); color: white"
-        label="Agregar Programa "
+        label="Agregar Programa"
         class="q-mb-md"
-        @click="agregar = true"
+        @click="nuevoPrograma(),agregar=true"
       />
 
       <table>
         <thead>
           <tr>
-            <th>código</th>
-            <th>denominación</th>
-            <th>nivel de formación</th>
-            <th>versión</th>
-            <th>estado</th>
-            <th>opciones</th>
+            <th>Código</th>
+            <th>Denominación</th>
+            <th>Nivel de Formación</th>
+            <th>Versión</th>
+            <th>Estado</th>
+            <th>Opciones</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(x, index) in programas" :key="index">
-            <td>{{ x.codigo }}</td>
-            <td>{{ x.denominacionPrograma }}</td>
-            <td>{{ x.nivelFormacion }}</td>
-            <td>{{ x.version }}</td>
-            <td :style="{ color: x.estado === 1 ? 'green' : 'red' }">
-              {{ x.estado === 1 ? "Activo" : "Inactivo" }}
+          <tr v-for="(programa, index) in programas" :key="index">
+            <td>{{ programa.codigo }}</td>
+            <td>{{ programa.denominacionPrograma }}</td>
+            <td>{{ programa.nivelFormacion }}</td>
+            <td>{{ programa.version }}</td>
+            <td :style="{ color: programa.estado === 1 ? 'green' : 'red' }">
+              {{ programa.estado === 1 ? "Activo" : "Inactivo" }}
             </td>
             <td>
               <div>
@@ -38,6 +38,7 @@
                   name="fa-solid fa-pen-to-square fa-xl"
                   size="20px"
                   style="margin-right: 10px; cursor: pointer"
+                  @click="editarPrograma(programa)"
                 />
                 <q-icon
                   color="green"
@@ -55,7 +56,13 @@
     <q-dialog v-model="agregar">
       <q-card style="width: 32%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Nuevo Programa de Formación</div>
+          <div class="text-h6">
+            {{
+              bd === 0
+                ? "Editar Programa de Formación"
+                : "Nuevo Programa de Formación"
+            }}
+          </div>
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
@@ -103,9 +110,18 @@
 
         <q-card-actions align="right">
           <q-btn
+            v-if="bd === 1"
             label="Agregar"
             icon="add"
             @click="agregarPrograma()"
+            style="background-color: rgb(57, 169, 0); color: white"
+            v-close-popup
+          />
+
+          <q-btn
+            v-else
+            label="Actualizar"
+            @click="actualizarPrograma()"
             style="background-color: rgb(57, 169, 0); color: white"
             v-close-popup
           />
@@ -114,7 +130,7 @@
     </q-dialog>
   </div>
 </template>
-  
+
 <script setup>
 import { ref } from "vue";
 import { UseProgramasFormacion } from "../stores/ProgramasFormacion.js";
@@ -125,24 +141,59 @@ let agregar = ref(false);
 let codigo = ref("");
 let denominacion = ref("");
 let nivelFormacion = ref("");
+let id = ref("");
 let version = ref("");
+let bd = ref("");
 
 buscarProgramas();
 
 async function buscarProgramas() {
   programas.value = await useProgramas.getProgramas();
-  console.log(programas);
   programas.value.reverse();
+  console.log(programas);
+}
+
+function nuevoPrograma() {
+  bd.value = 1;
+  vaciarCampos();
+}
+
+function vaciarCampos() {
+  codigo.value = "";
+  denominacion.value = "";
+  nivelFormacion.value = "";
+  version.value = "";
 }
 
 async function agregarPrograma() {
-  console.log("entro a agregar");
+  console.log("Entro a agregar programa");
   await useProgramas.agregarProgramaFormacion({
     codigo: codigo.value,
     denominacionPrograma: denominacion.value,
     nivelFormacion: nivelFormacion.value,
     version: version.value,
   });
+  buscarProgramas();
+}
+
+function editarPrograma(programa) {
+  bd.value = 0;
+  id.value = programa._id;
+  codigo.value = programa.codigo;
+  denominacion.value = programa.denominacionPrograma;
+  nivelFormacion.value = programa.nivelFormacion;
+  version.value = programa.version;
+  agregar.value = true;
+}
+
+async function actualizarPrograma() {
+  await useProgramas.actualizarProgramaFormacion(
+    id.value,
+    codigo.value,
+    denominacion.value,
+    nivelFormacion.value,
+    version.value
+  );
   buscarProgramas();
 }
 </script>
