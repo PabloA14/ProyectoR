@@ -93,7 +93,7 @@ version
 documeto
 idPrograma
 
-RETROALIMENTACION DE RED ----PENDIENTE -------------------------------------------------------------------------
+RETROALIMENTACION DE RED ---- esta listo -------------------------------------------------------------------------
 codigo
 nombre
 codigoFicha

@@ -4,9 +4,11 @@ import { Router } from "express";
 const router = Router()
 
 router.post("/", httpUsuario.posUsuario)
-router.get("/traer", httpUsuario.getUsusarios)
 router.get("/todos", httpUsuario.getUsusarios)
+router.get("/:codigo", httpUsuario.getUsuarioCodigo)
 router.put("/:id", httpUsuario.putUsuario)
+router.patch("/:id",httpUsuario.patchUsuario)
+
 
 
 export default router
