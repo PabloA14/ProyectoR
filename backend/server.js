@@ -15,6 +15,7 @@ import nivelesFormacion from "./routes/nivelesFormacion.js"
 import registroCalificado from "./routes/registroCalificado.js"
 import proyectos from "./routes/proyectos.js"
 import retroalimentacionRed from "./routes/retroalimentacion.js"
+import investigaciones from "./routes/investigaciones.js"
 import mongoose from "mongoose"
 import cors from "cors"
 
@@ -46,7 +47,7 @@ class Server {
         this.app.use("/api/nivelesFormacion", nivelesFormacion )
         this.app.use("/api/registroCalificado", registroCalificado)
         this.app.use("/api/retroalimentacion", retroalimentacionRed)
-
+        this.app.use('/api/investigaciones', investigaciones )
     }
 
     middlewares() {

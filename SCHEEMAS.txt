@@ -20,7 +20,11 @@ idmaterialesformacion
 idregistrocalificado
 
 
+<<<<<<< HEAD
+REGISTRO CALIFICADO(listo)
+=======
 REGISTRO CALIFICADO-------------------- LISTI VERIFI
+>>>>>>> b60697e3ba2629448331a5ba41e01d5d1538d689
 titulo
 lugadesarrollo
 metodologia
