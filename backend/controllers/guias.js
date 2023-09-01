@@ -3,10 +3,10 @@ import Guias from "../models/guias.js"
 const httpDesarrolloC = {
 
     postGuia: async (req, res) => {
-        const { codigo, nombre, fase, documento } = req.body
+        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body
         try {
             const guiasAp = new Guias({
-                codigo, nombre, fase, documento
+                codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
             })
             const cod = await Guias.findOne({ codigo: codigo })
             if (cod) {
@@ -27,6 +27,8 @@ const httpDesarrolloC = {
 
     getGuias: async (req, res) => {
         const guia = await Guias.find()
+        .populate("materialAPoyo")
+        .populate("instrumentosEvaluacion")
         res.status(200).json({ guia })
     },
 
@@ -55,7 +57,9 @@ const httpDesarrolloC = {
                     $set: {
                         nombre: req.body.nombre,
                         fase: req.body.matriz,
-                        documento: req.body.proyecto
+                        documento: req.body.documento,
+                        instrumentosEvaluacion: req.body.instrumentosEvaluacion,
+                        materialAPoyo: req.body.materialAPoyo
                     }
                 },
                 { new: true }

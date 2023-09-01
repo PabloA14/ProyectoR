@@ -25,7 +25,7 @@ const httpCentros = {
     },
 
     getCentros: async (req, res) => {
-        const centros = await CentrosF.find()
+        const centros = await CentrosF.find().populate("direccion")
         res.status(200).json({ centros })
     },
 
