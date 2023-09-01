@@ -20,7 +20,7 @@ idmaterialesformacion
 idregistrocalificado
 
 
-<<<<<<< HEAD
+
 REGISTRO CALIFICADO(listo)
 =======
 REGISTRO CALIFICADO-------------------- LISTI VERIFI
