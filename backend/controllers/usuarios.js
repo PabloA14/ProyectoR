@@ -51,26 +51,13 @@ const httpUsuario = {
 
     putUsuario: async (req, res) => {
         const usuarioId = req.params.id;
-        const {
-            cedula,
-            nombre,
-            apellidos,
-            telefono,
-            clave,
-            correo,
-            redConocimiento,
-            hojaDeVida,
-            rol,
-            perfilProfesional,
-            estado,
-        } = req.body;
+        const {cedula,nombre,apellidos,telefono,clave,correo,redConocimiento,hojaDeVida,rol,perfilProfesional,estado} = req.body;
 
         try {
             const existingUser = await Usuario.findOne({ cedula: cedula });
             if (existingUser && existingUser._id.toString() !== usuarioId) {
                 return res.status(400).json({ msg: 'La cédula ya está registrada para otro usuario' });
             }
-
             const updatedFields = {
                 nombre,
                 apellidos,
@@ -84,7 +71,6 @@ const httpUsuario = {
             };
 
             if (clave) {
-                // If a new password is provided, hash it
                 const hashedPassword = await bcrypt.hash(clave, 10);
                 updatedFields.clave = hashedPassword;
             }
@@ -101,30 +87,31 @@ const httpUsuario = {
                 return res.status(404).json({ msg: 'Usuario no encontrado' });
             }
 
-            res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });
+            res.status(200).json({ msg: 'Usuario actualizado exitosamente eeee', usuario: updatedUsuario });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
         }
     },
     patchUsuario: async (req, res) => {
-        const cedula = req.params.id;
+        const id = req.params.id;
         const { estado } = req.body;
         try {
-            const usuary = await Usuario.findById(cedula);
-            if (usuary) {
-                usuary.estado = estado;
-                await usuary.save();
-                res.json(usuary);
-            } else {
-                return res.status(404).json({ msg: `usuario no encotrado con id: ${id} ` });
-            }
+          const usuario = await Usuario.findById(id);
+          if (usuario) {
+            usuario.estado = estado;
+            await usuario.save();
+            res.json(usuario);
+            console.log(usuario);
+          } else {
+            console.log(`id: ${id} no encontrado`);
+            res.status(404).json({ mensaje: `usuario con id: ${id} no encontrado` });
+          }
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({ msg: "Error interno del servidor" });
+          console.log(`Error al actualizar el usuario: ${error}`);
+          res.status(500).json({ error: "Error interno del servidor" });
         }
-    }
-
+      }
 };
 
 export default httpUsuario;

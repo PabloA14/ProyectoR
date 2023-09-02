@@ -49,7 +49,7 @@
                   color="green"
                   name="fa-solid fa-check fa-xl"
                   size="20px"
-                  style="margin-left: 10px; cursor: pointer"
+                  style="margin-left: 10px; cursor: pointer" @click="editarEstado(x)"
                 />
               </div>
             </td>
@@ -181,17 +181,17 @@ let rol = ref("");
 let usuarios = ref([]);
 let id = ref("");
 let perfilProfesional = ref("");
-//let usuarioFiltrado = ref([])
 let bd = ref("");
 const useUsuari = useUsuarioStore();
 
-buscar();
+
 
 async function buscar() {
   usuarios.value = await useUsuari.buscarUsuarios();
   console.log(usuarios.value);
   // usuarioFiltrado.value = usuarios.filter(x => x.rol === 'Instructor')
 }
+buscar();
 
 function nuevo() {
   bd.value = 1;
@@ -241,12 +241,11 @@ function editarUsuario(x) {
   cv.value = x.hojaDeVida;
   rol.value = x.rol;
   perfilProfesional.value = x.perfilProfesional;
-
   agregar.value = true;
 }
-
 async function actualizar() {
-  await useUsuari.actualizarUsuario(
+  try{
+    await useUsuari.actualizarUsuario(
     id.value,
     cedula.value,
     nombre.value,
@@ -260,6 +259,27 @@ async function actualizar() {
     perfilProfesional.value
   );
   buscar();
+  }catch (error){
+    console.log(error);
+  }
+  
+}
+
+async function editarEstado(x) {
+  console.log("entre a editar estado");
+  try{
+    if (x.estado ===1) {
+       x.estado =2
+    }else {
+      x.estado=1
+    }
+    const res = await useUsuari.cambiarEstado(x._id , x.estado)
+    buscar()
+  }catch (error){
+    console.log(error);
+  }
+
+  
 }
 </script>
 

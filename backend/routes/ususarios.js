@@ -7,7 +7,7 @@ router.post("/", httpUsuario.posUsuario)
 router.get("/todos", httpUsuario.getUsusarios)
 router.get("/:codigo", httpUsuario.getUsuarioCodigo)
 router.put("/:id", httpUsuario.putUsuario)
-router.patch("/:id",httpUsuario.patchUsuario)
+router.patch("/:id",httpUsuario.putUsuario)
 
 
 
