@@ -29,6 +29,8 @@ const httpUsuario = {
 
     getUsusarios: async (req, res) => {
         const usuarios = await Usuario.find()
+            .populate("rol")
+            .populate("redConocimiento")
         res.status(200).json({ usuarios })
     },
 

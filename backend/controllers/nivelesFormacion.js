@@ -48,7 +48,7 @@ const httpNivelFormacion = {
                     $set: {
                         codigo: req.body.codigo,
                         denominacion: req.body.denominacion,
-                        esado:  req.body.esado
+                        esado: req.body.esado
                     }
                 },
                 { new: true }
