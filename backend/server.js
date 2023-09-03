@@ -44,10 +44,10 @@ class Server {
         this.app.use("/api/materiales", materialesFor)
         this.app.use("/api/login", login)
         this.app.use("/api/proyecto", proyectos)
-        this.app.use("/api/nivelesFormacion", nivelesFormacion )
+        this.app.use("/api/nivelesFormacion", nivelesFormacion)
         this.app.use("/api/registroCalificado", registroCalificado)
         this.app.use("/api/retroalimentacion", retroalimentacionRed)
-        this.app.use('/api/investigaciones', investigaciones )
+        this.app.use('/api/investigaciones', investigaciones)
     }
 
     middlewares() {

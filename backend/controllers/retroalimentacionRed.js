@@ -4,7 +4,7 @@ import Programa from "../models/programasFormacion.js"
 
 const httpProyectos = {
     postRetroalimentacion: async (req, res) => {
-        const {   codigo,nombre,descripcion,fecha,documentos,programa} = req.body;
+        const { codigo, nombre, descripcion, fecha, documentos, programa } = req.body;
 
         try {
             const programaEncontrado = await Programa.findOne({ codigo: programa });
@@ -15,7 +15,8 @@ const httpProyectos = {
             }
 
             const retroalimentacion_red = new Retroalimentacion({
-                codigo,nombre,descripcion,fecha,documentos, programa: programaEncontrado});
+                codigo, nombre, descripcion, fecha, documentos, programa: programaEncontrado
+            });
 
             const cod = await Retroalimentacion.findOne({ codigo: codigo })
 
@@ -65,7 +66,7 @@ const httpProyectos = {
                         descripcion: req.body.descripcion,
                         fecha: req.body.fecha,
                         documentos: req.body.documentos,
-                        programa : req.body.programa
+                        programa: req.body.programa
                     }
                 },
                 { new: true }

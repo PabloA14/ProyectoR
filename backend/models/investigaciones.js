@@ -7,7 +7,7 @@ const investigacionSchema = new mongoose.Schema(
         descripcion: { type: String, required: true },
         fecha: { type: String, required: true },
         documentos: { type: String, required: true },
-        idPRograma: { type: String, required: true },
+        idPrograma: { type: mongoose.Schema.Types.ObjectId, ref: 'Programa', required: true },
         estado: { type: Number, default: 1, required: true },
         createdAt: { type: Date, default: Date.now },
     }

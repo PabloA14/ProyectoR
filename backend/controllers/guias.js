@@ -27,8 +27,8 @@ const httpDesarrolloC = {
 
     getGuias: async (req, res) => {
         const guia = await Guias.find()
-        .populate("materialAPoyo")
-        .populate("instrumentosEvaluacion")
+            .populate("materialAPoyo")
+            .populate("instrumentosEvaluacion")
         res.status(200).json({ guia })
     },
 

@@ -3,10 +3,10 @@ import Investigacion from "../models/investigaciones.js"
 const httpInvestigaciones = {
 
     postinveestigacion: async (req, res) => {
-        const { codigo, denominacion, descripcion, fecha, documentos, idPRograma } = req.body;
+        const { codigo, denominacion, descripcion, fecha, documentos, idPrograma } = req.body;
 
         try {
-            const investigacion = new Investigacion({ codigo, denominacion, descripcion, fecha, documentos, idPRograma });
+            const investigacion = new Investigacion({ codigo, denominacion, descripcion, fecha, documentos, idPrograma });
             await investigacion.save();
             res.json({ investigacion });
         } catch (error) {
@@ -16,7 +16,7 @@ const httpInvestigaciones = {
     },
 
     getinvestigaciones: async (req, res) => {
-        const investigacion = await Investigacion.find()
+        const investigacion = await Investigacion.find().populate("idPrograma")
         res.json({ investigacion })
     },
 
@@ -47,7 +47,7 @@ const httpInvestigaciones = {
                     $set: {
                         codigo: req.body.codigo,
                         denominacion: req.body.denominacion,
-                        descripcion : req.body.descripcion,
+                        descripcion: req.body.descripcion,
                         fecha: req.body.fecha,
                         documentos: req.body.documentos,
                         idPRograma: req.body.idPRograma,

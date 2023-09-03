@@ -3,10 +3,10 @@ import DesarrolloC from "../models/desarrollo.js"
 const httpDesarrolloC = {
 
     postDesarrollo: async (req, res) => {
-        const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica } = req.body
+        const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias } = req.body
         try {
             const desarrolloCurricular = new DesarrolloC({
-                codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica
+                codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias
             })
             const cod = await DesarrolloC.findOne({ codigo: codigo })
             if (cod) {
@@ -24,7 +24,7 @@ const httpDesarrolloC = {
     },
 
     getDesarrollosTodo: async (req, res) => {
-        const desarrollo = await DesarrolloC.find()
+        const desarrollo = await DesarrolloC.find().populate("idGuias")
         res.status(200).json({ desarrollo })
     },
 
@@ -54,7 +54,8 @@ const httpDesarrolloC = {
                         nombre: req.body.nombre,
                         matrizcorrelacion: req.body.matriz,
                         proyectoFormativo: req.body.proyecto,
-                        planeacionPedagogica: req.body.planeacion
+                        planeacionPedagogica: req.body.planeacion,
+                        idGuias: req.body.idGuias
                     }
                 },
                 { new: true }
