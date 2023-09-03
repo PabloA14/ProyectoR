@@ -34,16 +34,13 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
   };
   const cambiarEstado = async (id, estado) => {
-    console.log(id, estado);
     try {
       let res = await axios.patch(`${LinkBD}/api/usuario/${id}`, {
         estado: estado,
       });
       return res.data;
     } catch (error) {
-      throw new Error(
-        `Error al cambiar el estado del usuario: ${error.message}`
-      );
+      console.log(error);
     }
   };
 

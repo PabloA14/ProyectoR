@@ -1,14 +1,12 @@
 <template>
   <div>
     <q-page class="q-pa-md">
-      <div class="text-h6 text-center q-mb-md">Usuarios</div>
+      <div class="text-h4 text-center q-mb-md">Usuarios</div>
 
       <q-btn color="secondary" icon="add" label="Agregar Usuario" class="q-mb-md" @click="
         agregar = true;
       nuevo();
       " />
-
-      <q-separator />
 
       <table>
         <thead>
@@ -34,9 +32,11 @@
             </td>
             <td>
               <div>
-                <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                <q-icon color="orange" name="fa-solid fa-pen-to-square" size="20px"
                   style="margin-right: 10px; cursor: pointer" @click="editarUsuario(x)" />
-                <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                <q-icon v-if="x.estado === 1" color="red" name="fa-solid fa-x" size="20px"
+                  style="margin-left: 10px; cursor: pointer" @click="editarEstado(x)" />
+                <q-icon v-else color="green" name="fa-solid fa-check" size="20px"
                   style="margin-left: 10px; cursor: pointer" @click="editarEstado(x)" />
               </div>
             </td>
@@ -230,7 +230,7 @@ async function editarEstado(x) {
   console.log("entre a editar estado");
   try {
     if (x.estado === 1) {
-      x.estado = 2
+      x.estado = 0
     } else {
       x.estado = 1
     }
@@ -242,8 +242,21 @@ async function editarEstado(x) {
 }
 </script>
 
-<style>
-#card span {
-  font-weight: bold;
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+th,
+td {
+  padding: 10px;
+  border: 1px solid #ccc;
+}
+
+th {
+  background-color: #f2f2f2;
 }
 </style>

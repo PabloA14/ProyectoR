@@ -7,7 +7,6 @@ export const UseProgramasFormacion = defineStore("Programas", () => {
     const getProgramas = async () => {
         try {
             const programas = await axios.get(`${LinkBD}/api/programasFormacion/traer/todos`)
-            // programas.reverse()
             return programas.data.programas
 
         } catch (error) {

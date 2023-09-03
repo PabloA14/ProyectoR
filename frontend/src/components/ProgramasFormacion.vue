@@ -5,7 +5,7 @@
 
       <q-btn
         icon="add"
-        style="background-color: rgb(57, 169, 0); color: white"
+        color="secondary"
         label="Agregar Programa"
         class="q-mb-md"
         @click="nuevoPrograma(),agregar=true"
@@ -69,10 +69,10 @@
 
         <q-separator
           inset
+          color="secondary"
           style="
             height: 5px;
             margin-top: 5px;
-            background-color: rgb(57, 169, 0);
           "
         />
 
@@ -113,16 +113,16 @@
             v-if="bd === 1"
             label="Agregar"
             icon="add"
+            color="secondary"
             @click="agregarPrograma()"
-            style="background-color: rgb(57, 169, 0); color: white"
             v-close-popup
           />
 
           <q-btn
             v-else
+            color="secondary"
             label="Actualizar"
             @click="actualizarPrograma()"
-            style="background-color: rgb(57, 169, 0); color: white"
             v-close-popup
           />
         </q-card-actions>

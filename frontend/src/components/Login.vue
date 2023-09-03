@@ -124,7 +124,7 @@ async function iniciarSesion() {
             const token = res.data.token;
             sessionStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            ruta.value = "/Opciones";
+            ruta.value = "/home";
             router.push(ruta.value);
             console.log(token);
 

@@ -1,8 +1,8 @@
 <template>
     <q-layout view="hHh lpR fFf">
 
-        <q-header elevated class="text-white" style="background-color: rgb(57, 169, 0);">
-            <q-toolbar>
+        <q-header elevated class="text-white" style="background-color: #39a900;">
+            <q-toolbar >
                 <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
 
                 <q-toolbar-title>
@@ -28,7 +28,7 @@
                             </q-item-section>
 
                             <q-item-section>
-                                Programas de formación
+                                Programas de Formación
                             </q-item-section>
                         </q-item>
                     </router-link>
@@ -37,7 +37,7 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-chalkboard-user"/>
+                                <q-icon class="fa-solid fa-users"/>
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
@@ -50,11 +50,11 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <i class="fa-solid fa-globe fa-xl"></i>
+                                <q-icon class="fa-solid fa-brain" />
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
-                                Redes de conocimiento
+                                Redes de Conocimiento
                             </q-item-section>
                         </q-item>
                     </router-link>
@@ -63,7 +63,7 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <i class="fa-solid fa-city fa-xl"></i>
+                                <q-icon class="fa-solid fa-building-columns" />
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
