@@ -14,10 +14,10 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
 
   const actualizarUsuario = async (
-    id,cedula,nombre,apellidos,telefono,clave,correo,redConocimiento,hojaDeVida,rol,perfilProfesional,estado) => {
+    id, cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional) => {
     try {
       let datos = await axios.put(`${LinkBD}/api/usuario/${id}`, {
-        cedula,nombre,apellidos,telefono,clave,correo,redConocimiento,hojaDeVida,rol,perfilProfesional,estado
+        cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional
       });
       return datos;
     } catch (error) {

@@ -33,7 +33,7 @@
                         </q-item>
                     </router-link>
 
-                    <router-link to="Instructores" style="text-decoration: none;color: black;">
+                    <router-link to="usuarios" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
@@ -41,7 +41,7 @@
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
-                                Instructores
+                                Usuarios
                             </q-item-section>
                         </q-item>
                     </router-link>

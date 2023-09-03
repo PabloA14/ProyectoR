@@ -78,7 +78,7 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Código" color="positive" v-model="codigo" />
+            <q-input label="Código" type="number" color="positive" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">

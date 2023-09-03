@@ -16,13 +16,13 @@
                 <q-separator inset class="text-black" />
                 <q-card-section>
                     <q-form class="q-gutter-md" style="margin: auto;">
-                        <q-input color="positive" filled type="text" v-model="documento" label="No. de Documento">
+                        <q-input color="secondary" filled type="number" v-model="documento" label="No. de Documento">
                             <template v-slot:prepend>
                                 <q-icon name="person" />
                             </template>
                         </q-input>
 
-                        <q-input color="positive" filled :type="mostrarContrasena ? 'text' : 'password'"
+                        <q-input color="secondary" filled :type="mostrarContrasena ? 'text' : 'password'"
                             v-model="contrasena" label="Contraseña">
                             <template v-slot:prepend>
                                 <q-icon name="lock" />
@@ -41,7 +41,7 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <q-btn id="verde" class="full-width" label="Ingresar" @click.prevent="iniciarSesion()"/>
+                            <q-btn color="secondary" class="full-width" label="Ingresar" @click.prevent="iniciarSesion()" />
                         </div><br>
                     </q-form>
                 </q-card-section>
@@ -69,15 +69,15 @@
                         <div class="col-1"></div>
                         <div class="col-10">
 
-                            <q-btn class="full-width" id="verde" label="Restablecer Contraseña" />
+                            <q-btn class="full-width" color="secondary" label="Restablecer Contraseña" />
 
                             <q-btn class="q-mt-md full-width custom-border" color="negative" label="Cancelar"
                                 v-close-popup />
-
                         </div>
                         <div class="col-1"></div>
                     </div>
                 </q-card-actions>
+                <br>
             </q-card>
         </q-dialog>
     </div>
@@ -102,9 +102,6 @@ const modalVisible = ref(false);
 
 let mostrarContrasena = ref(false);
 
-function mostrar() {
-    mostrarContrasena.value = !mostrarContrasena.value;
-}
 function openModal() {
     modalVisible.value = true;
 }
@@ -205,18 +202,11 @@ async function iniciarSesion() {
 
 .custom-border {
     border: 1px solid red;
-    /* Cambia "red" al color de borde que desees */
-}
-
-#verde {
-    background-color: rgb(57, 169, 0);
-    color: white;
 }
 
 .green-line {
     border: none;
     border-top: 5px solid rgb(57, 169, 0);
-    /* Cambia el valor de 4px al grosor que desees */
     width: 100%;
 }
 </style>

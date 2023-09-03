@@ -16,7 +16,7 @@ const httpUsuario = {
             });
             const buscar = await Usuario.findOne({ cedula: cedula });
             if (buscar) {
-                return res.status(400).json({ msg: 'El usuario ya se encuentra registrado', buscar });
+                return res.status(400).json({ msg: 'La cédula ya se encuentra registrada', buscar });
             } else {
                 await usuario.save();
                 res.status(200).json({ msg: 'Registro exitoso', usuario });
@@ -51,7 +51,7 @@ const httpUsuario = {
 
     putUsuario: async (req, res) => {
         const usuarioId = req.params.id;
-        const {cedula,nombre,apellidos,telefono,clave,correo,redConocimiento,hojaDeVida,rol,perfilProfesional,estado} = req.body;
+        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const existingUser = await Usuario.findOne({ cedula: cedula });
@@ -59,15 +59,7 @@ const httpUsuario = {
                 return res.status(400).json({ msg: 'La cédula ya está registrada para otro usuario' });
             }
             const updatedFields = {
-                nombre,
-                apellidos,
-                telefono,
-                correo,
-                redConocimiento,
-                hojaDeVida,
-                perfilProfesional,
-                rol,
-                estado,
+                cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional
             };
 
             if (clave) {
@@ -87,7 +79,7 @@ const httpUsuario = {
                 return res.status(404).json({ msg: 'Usuario no encontrado' });
             }
 
-            res.status(200).json({ msg: 'Usuario actualizado exitosamente eeee', usuario: updatedUsuario });
+            res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
@@ -97,21 +89,21 @@ const httpUsuario = {
         const id = req.params.id;
         const { estado } = req.body;
         try {
-          const usuario = await Usuario.findById(id);
-          if (usuario) {
-            usuario.estado = estado;
-            await usuario.save();
-            res.json(usuario);
-            console.log(usuario);
-          } else {
-            console.log(`id: ${id} no encontrado`);
-            res.status(404).json({ mensaje: `usuario con id: ${id} no encontrado` });
-          }
+            const usuario = await Usuario.findById(id);
+            if (usuario) {
+                usuario.estado = estado;
+                await usuario.save();
+                res.json(usuario);
+                console.log(usuario);
+            } else {
+                console.log(`id: ${id} no encontrado`);
+                res.status(404).json({ mensaje: `usuario con id: ${id} no encontrado` });
+            }
         } catch (error) {
-          console.log(`Error al actualizar el usuario: ${error}`);
-          res.status(500).json({ error: "Error interno del servidor" });
+            console.log(`Error al actualizar el usuario: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
         }
-      }
+    }
 };
 
 export default httpUsuario;
