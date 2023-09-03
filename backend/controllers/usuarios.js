@@ -94,9 +94,7 @@ const httpUsuario = {
                 usuario.estado = estado;
                 await usuario.save();
                 res.json(usuario);
-                console.log(usuario);
             } else {
-                console.log(`id: ${id} no encontrado`);
                 res.status(404).json({ mensaje: `usuario con id: ${id} no encontrado` });
             }
         } catch (error) {
