@@ -3,8 +3,19 @@ import Programa from '../models/programasFormacion.js'
 
 const httpprogramas = {
 
+    getProgramas: async (req, res) => {
+        const programas = await Programa.find()
+            .populate("RedConocimiento")
+            .populate("desarrolloCurricular")
+            .populate("instructores")
+            .populate("ambienteFormacion")
+            .populate("materialesformacion")
+            .populate("registrocalificado")
+        res.status(200).json({ programas })
+    },
+
     postPrograma: async (req, res) => {
-        const { codigo, denominacionPrograma, nivelFormacion, version } = req.body;
+        const { codigo, denominacionPrograma, nivelFormacion, version, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
 
         try {
             const programaExistente = await Programa.findOne({ codigo });
@@ -13,7 +24,7 @@ const httpprogramas = {
                 return res.status(400).json({ mensaje: 'El codigo ya está registrado.' });
             }
 
-            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version });
+            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
             await programa.save();
             res.json({ programa });
         } catch (error) {
@@ -21,6 +32,7 @@ const httpprogramas = {
             res.status(500).json({ mensaje: 'Hubo un error al agregar el programa de formacion.' });
         }
     },
+
     getProgramaCod: async (req, res) => {
         const { codigo } = req.body
         try {
@@ -35,10 +47,8 @@ const httpprogramas = {
             res.json({ error })
         }
     },
-    getProgramas: async (req, res) => {
-        const programas = await Programa.find()
-        res.status(200).json({ programas })
-    },
+
+
     putProgramas: async (req, res) => {
         const ProgramaId = req.params.id;
         const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
