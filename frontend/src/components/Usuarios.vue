@@ -2,54 +2,61 @@
   <div>
     <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
+      <div class="q-pa-md" style="width: 100%;">
+        <q-table :separator="separator" class="my-sticky-header-table" bordered :filter="filter" :rows="usuarios"
+          :columns="columns" row-key="name" rowsPerPage="6">
+          <template v-slot:body-cell-opciones="props">
+            <q-td :props="props">
+              <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                style="margin-right: 10px;cursor: pointer;" @click="editarUsuario(props.row)" />
+              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
+                v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
+              <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
+                @click="editarEstado(props.row)" />
+            </q-td>
+          </template>
 
-      <q-btn color="secondary" icon="add" label="Agregar Usuario" class="q-mb-md" @click="
-        agregar = true;
-      nuevo();
-      " />
+          <template v-slot:body-cell-estado="props">
+            <q-td :props="props">
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
+              <span class="text-red" v-else>Inactivo</span>
+            </q-td>
+          </template>
 
-      <table>
-        <thead>
-          <tr>
-            <th>Cédula</th>
-            <th>Nombre</th>
-            <th>Apellidos</th>
-            <th>Rol</th>
-            <th>Red de Conocimiento</th>
-            <th>Estado</th>
-            <th>Opciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(x, index) in usuarios" :key="index">
-            <td>{{ x.cedula }}</td>
-            <td>{{ x.nombre }}</td>
-            <td>{{ x.apellidos }}</td>
-            <td>{{ x.rol }}</td>
-            <td>{{ x.redConocimiento }}</td>
-            <td :style="{ color: x.estado === 1 ? 'green' : 'red' }">
-              {{ x.estado === 1 ? "Activo" : "Inactivo" }}
-            </td>
-            <td>
-              <div>
-                <q-icon color="orange" name="fa-solid fa-pen-to-square" size="20px"
-                  style="margin-right: 10px; cursor: pointer" @click="editarUsuario(x)" />
-                <q-icon v-if="x.estado === 1" color="red" name="fa-solid fa-x" size="20px"
-                  style="margin-left: 10px; cursor: pointer" @click="editarEstado(x)" />
-                <q-icon v-else color="green" name="fa-solid fa-check" size="20px"
-                  style="margin-left: 10px; cursor: pointer" @click="editarEstado(x)" />
-              </div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          <template v-slot:body-cell-redConocimiento="props">
+            <q-td :props="props">
+              <span>{{ props.row.redConocimiento.Denominacion }}</span>
+            </q-td>
+          </template>
+
+          <template v-slot:body-cell-rol="props">
+            <q-td :props="props">
+              <span>{{ props.row.rol.Denominacion }}</span>
+            </q-td>
+          </template>
+
+          <template v-slot:top-right>
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:top-left>
+            <q-btn color="secondary" icon="add" label="Agregar Usuario" class="q-mb-md" @click="
+              agregar = true;
+            nuevo();
+            " />
+          </template>
+        </q-table>
+      </div>
     </q-page>
 
     <q-dialog v-model="agregar">
       <q-card style="width: 32%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
-            {{ bd === 0 ? "Editar Usuario" : "Registrar Usuario" }}
+            {{ bd === 0 ? "Editar Usuario" : "Agregar Usuario" }}
           </div>
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
@@ -77,7 +84,7 @@
             <q-input label="Teléfono" type="number" color="secondary" v-model="telefono" />
           </div>
 
-          <div class="q-mb-md">
+          <div class="q-mb-md" v-if="bd == 1">
             <q-input label="Contraseña" type="password" color="secondary" v-model="clave" />
           </div>
 
@@ -86,7 +93,9 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Red de Conocimiento" color="secondary" v-model="red" />
+            <q-select label="Red de Conocimiento" color="secondary" v-model="red"
+              :options="redes.map(red => ({ label: red.Denominacion, value: red._id }))" emit-value map-options>
+            </q-select>
           </div>
 
           <div class="q-mb-md">
@@ -94,7 +103,9 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Rol de Usuario" color="secondary" v-model="rol" />
+            <q-select label="Rol" color="secondary" v-model="rol"
+              :options="roles.map(rol => ({ label: rol.Denominacion, value: rol._id }))" emit-value map-options>
+            </q-select>
           </div>
 
           <div class="q-mb-md">
@@ -106,7 +117,6 @@
 
         <q-card-actions align="right">
           <q-btn v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" v-close-popup />
-
           <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" v-close-popup />
         </q-card-actions>
       </q-card>
@@ -117,6 +127,8 @@
 <script setup>
 import { ref } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useRolStore } from "../stores/Roles.js"
+import { useRedStore } from "../stores/Redes.js"
 import { useQuasar } from 'quasar'
 
 let agregar = ref(false);
@@ -130,20 +142,50 @@ let red = ref("");
 let cv = ref("");
 let rol = ref("");
 let usuarios = ref([]);
+let roles = ref([])
+let redes = ref([])
+let separator = ref('cell')
 let id = ref("");
 let perfilProfesional = ref("");
+
 let bd = ref("");
-const $q = useQuasar()
-
 const useUsuari = useUsuarioStore();
+const useRol = useRolStore()
+const useRed = useRedStore()
+const $q = useQuasar()
+let filter = ref('')
 
+const columns = [
+  { name: 'cedula', align: 'center', label: 'Cédula', field: 'cedula', sortable: true },
+  { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", format: val => `${val}`, sortable: true },
+  { name: 'apellidos', align: 'center', label: 'Apellidos', field: 'apellidos', sortable: true },
+  { name: 'redConocimiento', align: 'center', label: 'Red de Conocimiento', field: 'redConocimiento' },
+  { name: 'rol', align: 'center', label: 'Rol', field: 'rol' },
+  { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
+  { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+]
+
+buscarRol()
+buscarRed()
+buscar()
 
 async function buscar() {
   usuarios.value = await useUsuari.buscarUsuarios();
   console.log(usuarios.value);
+  usuarios.value.reverse()
   // usuarioFiltrado.value = usuarios.filter(x => x.rol === 'Instructor')
 }
-buscar();
+
+async function buscarRol() {
+  roles.value = await useRol.buscarRoles();
+  console.log(roles.value);
+}
+
+async function buscarRed() {
+  redes.value = await useRed.buscarRedes();
+  console.log(redes.value);
+}
+
 
 function nuevo() {
   bd.value = 1;
@@ -188,6 +230,7 @@ async function agregarU() {
 }
 
 function editarUsuario(x) {
+  console.log("Entró a editar", x);
   bd.value = 0;
   id.value = x._id;
   cedula.value = x.cedula;
@@ -195,10 +238,9 @@ function editarUsuario(x) {
   apellido.value = x.apellidos;
   telefono.value = x.telefono;
   correo.value = x.correo;
-  clave.value = x.clave;
-  red.value = x.redConocimiento;
+  red.value = x.redConocimiento._id;
   cv.value = x.hojaDeVida;
-  rol.value = x.rol;
+  rol.value = x.rol._id;
   perfilProfesional.value = x.perfilProfesional;
   agregar.value = true;
 }
@@ -210,7 +252,6 @@ async function actualizar() {
     apellido.value,
     telefono.value,
     correo.value,
-    clave.value,
     red.value,
     cv.value,
     rol.value,
@@ -227,7 +268,7 @@ async function actualizar() {
 }
 
 async function editarEstado(x) {
-  console.log("entre a editar estado");
+  console.log("entre a editar estado", x.estado);
   try {
     if (x.estado === 1) {
       x.estado = 0
@@ -236,27 +277,16 @@ async function editarEstado(x) {
     }
     const res = await useUsuari.cambiarEstado(x._id, x.estado)
     buscar()
+
   } catch (error) {
     console.log(error);
   }
 }
 </script>
 
-<style scoped>
-table {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: center;
-  text-transform: capitalize;
-}
+<style scoped></style>
 
-th,
-td {
-  padding: 10px;
-  border: 1px solid #ccc;
-}
+<style lang="sass">
 
-th {
-  background-color: #f2f2f2;
-}
 </style>
+
