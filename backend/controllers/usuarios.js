@@ -53,7 +53,7 @@ const httpUsuario = {
 
     putUsuario: async (req, res) => {
         const usuarioId = req.params.id;
-        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
+        const { cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const existingUser = await Usuario.findOne({ cedula: cedula });
@@ -61,13 +61,8 @@ const httpUsuario = {
                 return res.status(400).json({ msg: 'La cédula ya está registrada para otro usuario' });
             }
             const updatedFields = {
-                cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional
+                cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
             };
-
-            if (clave) {
-                const hashedPassword = await bcrypt.hash(clave, 10);
-                updatedFields.clave = hashedPassword;
-            }
 
             const updatedUsuario = await Usuario.findOneAndUpdate(
                 { _id: usuarioId },
