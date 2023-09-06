@@ -164,4 +164,27 @@ async function actualizar() {
     buscar();
 }
 
+async function editarEstado(rol) {
+    console.log("entre a editar estado", rol.estado);
+    try {
+        if (rol.estado === 1) {
+            rol.estado = 0
+        } else {
+            rol.estado = 1
+        }
+        const res = await useRol.cambiarEstado(rol._id, rol.estado)
+        $q.notify({
+            message: 'Estado editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar()
+
+    } catch (error) {
+        console.log(error);
+    } 
+}
+
 </script>

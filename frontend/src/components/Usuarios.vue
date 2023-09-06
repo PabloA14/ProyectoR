@@ -280,6 +280,13 @@ async function editarEstado(x) {
       x.estado = 1
     }
     const res = await useUsuari.cambiarEstado(x._id, x.estado)
+    $q.notify({
+      message: 'Estado editado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'top',
+      timeout: Math.random() * 3000
+    })
     buscar()
 
   } catch (error) {

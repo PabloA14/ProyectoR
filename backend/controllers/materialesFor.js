@@ -46,17 +46,24 @@ const httpMateriales = {
         }
     },
 
-    putCodigo: async (req, res) => {
-        const Codigo = req.params.codigo;
+    putMaterial: async (req, res) => {
+        const materialId = req.params.id
+        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
         try {
+            const existingMaterial = await Material.findOne({ codigo: codigo });
+            if (existingMaterial && existingMaterial._id.toString() !== materialId) {
+                return res.status(400).json({ msg: 'El código ya está registrado para otro material' });
+            }
+
+            const updatedFields = {
+                codigo, nombre, descripcion, tipo, documentacion
+            };
+
             const updatedMaterial = await Material.findOneAndUpdate(
-                { codigo: Codigo },
+                { _id: materialId },
                 {
-                    $set: {
-                        nombre: req.body.nombre,
-                        descripcion: req.body.descripcion,
-                        documento: req.body.proyecto
-                    }
+                    $set: updatedFields
+
                 },
                 { new: true }
             );
@@ -64,7 +71,7 @@ const httpMateriales = {
             if (!updatedMaterial) {
                 return res.status(404).json({ msg: 'material  de formacion no encontrado el la base de datos' });
             }
-            res.status(200).json({ msg: 'material actualizado exitosamente', red: updatedMaterial });
+            res.status(200).json({ msg: 'material actualizado exitosamente', material: updatedMaterial });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  materiales de formacion' });

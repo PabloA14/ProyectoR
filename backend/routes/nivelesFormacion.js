@@ -7,5 +7,7 @@ router.post("/", httpNivelFormacion.postnivelFormacion)
 router.get("/", httpNivelFormacion.getNivelesFormacion)
 router.get("/:codigo", httpNivelFormacion.getCodigonivel)
 router.put("/:id", httpNivelFormacion.putnivelFormacion)
+router.patch("/:id",httpNivelFormacion.patchNiveles)
+
 
 export default router
