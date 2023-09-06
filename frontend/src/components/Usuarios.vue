@@ -104,7 +104,7 @@
 
           <div class="q-mb-md">
             <q-select label="Rol" color="secondary" v-model="rol"
-              :options="roles.map(rol => ({ label: rol.Denominacion, value: rol._id }))" emit-value map-options>
+              :options="roles.map(rol => ({ label: rol.denominacion, value: rol._id }))" emit-value map-options>
             </q-select>
           </div>
 
