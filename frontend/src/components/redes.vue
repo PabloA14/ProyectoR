@@ -3,7 +3,7 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Redes de Conocimiento</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="redCon"
+                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="redes"
                     :columns="columns" row-key="name" :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
@@ -88,7 +88,7 @@ let denominacion = ref("")
 let id = ref("")
 
 const useRed = useRedStore()
-let redCon = ref([])
+let redes = ref([])
 let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')
@@ -118,9 +118,9 @@ function vaciar() {
 }
 
 async function buscar() {
-    redCon.value = await useRed.buscarRedes();
-    console.log(redCon.value);
-    redCon.value.reverse()
+    redes.value = await useRed.buscarRedes();
+    console.log(redes.value);
+    redes.value.reverse()
 }
 
 async function agregarR() {
@@ -173,6 +173,13 @@ async function editarEstado(red) {
             red.estado = 1
         }
         const res = await useRed.cambiarEstado(red._id, red.estado)
+        $q.notify({
+            message: 'Estado editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
         buscar()
 
     } catch (error) {
