@@ -32,21 +32,21 @@ export const useNivelStore = defineStore("niveles", () => {
             throw error;
         }
     };
-    /* const cambiarEstado = async (id, estado) => {
+    const cambiarEstado = async (id, estado) => {
         try {
-            let res = await axios.patch(`${LinkBD}/api/redes/${id}`, {
+            let res = await axios.patch(`${LinkBD}/api/nivelesFormacion/${id}`, {
                 estado: estado
             });
             return res.data;
         } catch (error) {
             console.log(error);
         }
-    }; */
+    };
 
     return {
         buscarNiveles,
         actualizarNiveles,
         agregarNiveles,
-        // cambiarEstado
+        cambiarEstado
     };
 });

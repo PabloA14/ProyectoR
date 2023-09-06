@@ -164,4 +164,27 @@ async function actualizar() {
     buscar();
 }
 
+async function editarEstado(nivel) {
+    console.log("entre a editar estado", nivel.estado);
+    try {
+        if (nivel.estado === 1) {
+            nivel.estado = 0
+        } else {
+            nivel.estado = 1
+        }
+        const res = await useNivel.cambiarEstado(nivel._id, nivel.estado)
+        $q.notify({
+            message: 'Estado editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar()
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 </script>
