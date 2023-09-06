@@ -2,7 +2,7 @@
     <q-layout view="hHh lpR fFf">
 
         <q-header elevated class="text-white" style="background-color: #39a900;">
-            <q-toolbar >
+            <q-toolbar>
                 <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
 
                 <q-toolbar-title>
@@ -21,10 +21,10 @@
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
                     <router-link to="programas" style="text-decoration: none;color: black;">
-                        <q-item clickable v-ripple >
+                        <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-book-open"/>
+                                <q-icon class="fa-solid fa-book-open" />
                             </q-item-section>
 
                             <q-item-section>
@@ -37,7 +37,7 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-users"/>
+                                <q-icon class="fa-solid fa-users" />
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
@@ -50,11 +50,24 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-brain" />
+                                <q-icon class="fi fi-sr-head-side-brain" />
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
                                 Redes de Conocimiento
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
+                    <router-link to="niveles" style="color: black; text-decoration: none;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fi fi-sr-chart-pyramid" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Niveles de Formación
                             </q-item-section>
                         </q-item>
                     </router-link>
@@ -67,7 +80,7 @@
                             </q-item-section>
 
                             <q-item-section style="color: black; text-decoration: none;">
-                                Centros de  Formación
+                                Centros de Formación
                             </q-item-section>
                         </q-item>
                     </router-link>
@@ -107,3 +120,8 @@ export default {
     }
 }
 </script>
+
+<style>
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css')
+
+</style>
