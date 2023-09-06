@@ -3,10 +3,10 @@ import CentrosF from "../models/centrosFormacion.js"
 const httpCentros = {
 
     postCentro: async (req, res) => {
-        const { codigo, nombre, direccion } = req.body
+        const { codigo, nombre, ciudad, direccion  } = req.body
         try {
             const centro = new CentrosF({
-                codigo, nombre, direccion
+                codigo, nombre, ciudad , direccion
             })
             const cod = await CentrosF.findOne({ codigo: codigo })
             if (cod) {
@@ -25,7 +25,7 @@ const httpCentros = {
     },
 
     getCentros: async (req, res) => {
-        const centros = await CentrosF.find().populate("direccion")
+        const centros = await CentrosF.find().populate("ciudad")
         res.status(200).json({ centros })
     },
 
