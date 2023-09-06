@@ -23,7 +23,7 @@ const httpAmbiente = {
     },
 
     getAmbientes: async (req, res) => {
-        const ambiente = await Ambiente.find().populate("centroformacion")
+        const ambiente = await Ambiente.find().populate({path:"centroformacion",populate:{path:"direccion"}})
         res.json({ ambiente })
     },
 
