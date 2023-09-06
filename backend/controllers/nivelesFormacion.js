@@ -38,18 +38,25 @@ const httpNivelFormacion = {
 
 
     putnivelFormacion: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const nivelId = req.params.id
+        const { codigo, denominacion } = req.body;
 
         try {
+
+            const existingNivel = await NivelFormacion.findOne({ codigo: codigo });
+            if (existingNivel && existingNivel._id.toString() !== redId) {
+                return res.status(400).json({ msg: 'El código ya está registrado para otro nivel' });
+            }
+
+
+            const updatedFields = {
+                codigo, denominacion
+            };
+
             const updateniveles = await NivelFormacion.findOneAndUpdate(
-                //codigo unico / params
-                { codigo: Codigo },
+                { _id: nivelId },
                 {
-                    $set: {
-                        codigo: req.body.codigo,
-                        denominacion: req.body.denominacion,
-                        esado: req.body.esado
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
@@ -57,7 +64,7 @@ const httpNivelFormacion = {
             if (!updateniveles) {
                 return res.status(404).json({ msg: 'No encontrado' });
             }
-            res.status(200).json({ msg: 'Nivel de formación actualizad0 exitosamente', red: updateniveles });
+            res.status(200).json({ msg: 'Nivel de formación actualizado exitosamente', nivel: updateniveles });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
