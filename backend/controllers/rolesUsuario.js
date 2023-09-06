@@ -1,19 +1,18 @@
 import rolesUsuario from "../models/rolesUsuario.js";
 
 
-const httpredes = {
+const httpRoles = {
     //vero
     postRoles: async (req, res) => {
-        const { Codigo, Denominacion, Estado } = req.body
+        const { codigo, denominacion } = req.body
         try {
             const roles = new rolesUsuario({
-                Codigo,
-                Denominacion,
-                Estado
+                codigo,
+                denominacion
             });
-            const cod = await rolesUsuario.findOne({ Codigo: Codigo });
+            const cod = await rolesUsuario.findOne({ codigo: codigo });
             if (cod) {
-                return res.status(400).json({ msg: 'El rol ya se encuentra existente', cod, Denominacion });
+                return res.status(400).json({ msg: 'El rol ya se encuentra existente', cod, denominacion });
             } else {
                 await roles.save()
                 return res.status(200).json({ msg: 'Registro exitoso', roles });
@@ -28,12 +27,12 @@ const httpredes = {
         res.status(200).json({ roles })
     },
     getCodigo: async (req, res) => {
-        const Codigo = req.params.Codigo
+        const codigo = req.params.codigo
         try {
-            const cod = await rolesUsuario.find({ Codigo: Codigo })
+            const cod = await rolesUsuario.find({ codigo: codigo })
             console.log(cod);
             if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para el codigo de Rol ${Codigo}` })
+                res.status(400).json({ sms: `sin coincidencias para el codigo de Rol ${codigo}` })
             } else {
                 res.status(200).json({ cod })
             }
@@ -44,21 +43,30 @@ const httpredes = {
     },
 
     putRoles: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const rolId = req.params.id
+        const { codigo, denominacion } = req.body
         try {
-            const updatedRed = await rolesUsuario.findOneAndUpdate(
-                { Codigo: Codigo },
+
+            const existingRol = await rolesUsuario.findOne({ codigo: codigo });
+            if (existingRol && existingRol._id.toString() !== rolId) {
+                return res.status(400).json({ msg: 'El código ya está registrado para otro rol' });
+            }
+
+            const updatedFields = {
+                codigo, denominacion
+            };
+
+            const updatedRol = await rolesUsuario.findOneAndUpdate(
+                { _id: rolId },
                 {
-                    $set: {
-                        Denominacion: req.body.Denominacion,
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
-            if (!updatedRed) {
+            if (!updatedRol) {
                 return res.status(404).json({ msg: 'Rol de usuario no encontrado' });
             }
-            res.status(200).json({ msg: 'Rol de Usuario actualizada exitosamente', red: updatedRed });
+            res.status(200).json({ msg: 'Rol de Usuario actualizado exitosamente', rol: updatedRol });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  Roles' });
@@ -67,4 +75,4 @@ const httpredes = {
 
 }
 
-export default httpredes
+export default httpRoles

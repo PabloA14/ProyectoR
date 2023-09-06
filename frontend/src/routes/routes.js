@@ -6,6 +6,8 @@ import Programas from "../components/ProgramasFormacion.vue"
 import Redes from "../components/Redes.vue"
 import Centros from "../components/Centros.vue"
 import Niveles from "../components/Niveles.vue"
+import Roles from "../components/Roles.vue"
+
 
 export const routes = [
     { path: "/", component: Login },
@@ -17,6 +19,7 @@ export const routes = [
             { path: "/redes", component: Redes },
             { path: "/centroF", component: Centros },
             { path: "/niveles", component: Niveles },
+            { path: "/roles", component: Roles },
         ]
     },
 ]

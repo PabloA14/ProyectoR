@@ -31,7 +31,7 @@
 
           <template v-slot:body-cell-rol="props">
             <q-td :props="props">
-              <span>{{ props.row.rol.Denominacion }}</span>
+              <span>{{ props.row.rol.denominacion }}</span>
             </q-td>
           </template>
 

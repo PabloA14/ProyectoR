@@ -46,6 +46,20 @@
                         </q-item>
                     </router-link>
 
+
+                    <router-link to="roles" style="color: black; text-decoration: none;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fi fi-sr-key" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Roles de Usuario
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
                     <router-link to="redes" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple>
 
@@ -123,5 +137,4 @@ export default {
 
 <style>
 @import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css')
-
 </style>
