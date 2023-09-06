@@ -32,7 +32,7 @@
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn color="secondary" icon="add" label="Agregar Red" class="q-mb-md" @click="
+                        <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
                             agregar = true;
                         nuevo();
                         " />

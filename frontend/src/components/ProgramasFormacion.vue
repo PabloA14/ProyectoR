@@ -3,13 +3,7 @@
     <q-page class="q-pa-md">
       <div class="text-h6 text-center q-mb-md">Programas de Formación</div>
 
-      <q-btn
-        icon="add"
-        color="secondary"
-        label="Agregar Programa"
-        class="q-mb-md"
-        @click="nuevoPrograma(),agregar=true"
-      />
+      <q-btn icon="add" color="secondary" label="Agregar" class="q-mb-md" @click="nuevoPrograma(), agregar = true" />
 
       <table>
         <thead>
@@ -33,19 +27,10 @@
             </td>
             <td>
               <div>
-                <q-icon
-                  color="orange"
-                  name="fa-solid fa-pen-to-square fa-xl"
-                  size="20px"
-                  style="margin-right: 10px; cursor: pointer"
-                  @click="editarPrograma(programa)"
-                />
-                <q-icon
-                  color="green"
-                  name="fa-solid fa-check fa-xl"
-                  size="20px"
-                  style="margin-left: 10px; cursor: pointer"
-                />
+                <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                  style="margin-right: 10px; cursor: pointer" @click="editarPrograma(programa)" />
+                <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                  style="margin-left: 10px; cursor: pointer" />
               </div>
             </td>
           </tr>
@@ -59,22 +44,18 @@
           <div class="text-h6">
             {{
               bd === 0
-                ? "Editar Programa de Formación"
-                : "Nuevo Programa de Formación"
+              ? "Editar Programa de Formación"
+              : "Nuevo Programa de Formación"
             }}
           </div>
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          color="secondary"
-          style="
+        <q-separator inset color="secondary" style="
             height: 5px;
             margin-top: 5px;
-          "
-        />
+          " />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
@@ -82,49 +63,24 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Denominación"
-              color="positive"
-              v-model="denominacion"
-            />
+            <q-input label="Denominación" color="positive" v-model="denominacion" />
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Nivel de Formación"
-              color="positive"
-              v-model="nivelFormacion"
-            />
+            <q-input label="Nivel de Formación" color="positive" v-model="nivelFormacion" />
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Versión del Programa"
-              color="positive"
-              v-model="version"
-            />
+            <q-input label="Versión del Programa" color="positive" v-model="version" />
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            v-if="bd === 1"
-            label="Agregar"
-            icon="add"
-            color="secondary"
-            @click="agregarPrograma()"
-            v-close-popup
-          />
+          <q-btn v-if="bd === 1" label="Agregar" icon="add" color="secondary" @click="agregarPrograma()" v-close-popup />
 
-          <q-btn
-            v-else
-            color="secondary"
-            label="Actualizar"
-            @click="actualizarPrograma()"
-            v-close-popup
-          />
+          <q-btn v-else color="secondary" label="Actualizar" @click="actualizarPrograma()" v-close-popup />
         </q-card-actions>
       </q-card>
     </q-dialog>
