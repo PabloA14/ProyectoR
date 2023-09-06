@@ -2,7 +2,7 @@ import rolesUsuario from "../models/rolesUsuario.js";
 
 
 const httpRoles = {
-    //vero
+
     postRoles: async (req, res) => {
         const { codigo, denominacion } = req.body
         try {
@@ -70,6 +70,23 @@ const httpRoles = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  Roles' });
+        }
+    },
+    patchRoles: async (req, res) => {
+        const id = req.params.id;
+        const { estado } = req.body;
+        try {
+            const rol = await rolesUsuario.findById(id);
+            if (rol) {
+                rol.estado = estado;
+                await rol.save();
+                res.json(usuario);
+            } else {
+                res.status(404).json({ mensaje: `rol con id: ${id} no encontrado` });
+            }
+        } catch (error) {
+            console.log(`Error al actualizar el rol: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
         }
     }
 

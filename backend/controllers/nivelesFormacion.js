@@ -69,7 +69,24 @@ const httpNivelFormacion = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
         }
-    }
+    },
+    patchNiveles: async (req, res) => {
+        const id = req.params.id;
+        const { estado } = req.body;
+        try {
+            const nivel = await NivelFormacion.findById(id);
+            if (nivel) {
+                nivel.estado = estado;
+                await nivel.save();
+                res.json(nivel);
+            } else {
+                res.status(404).json({ mensaje: `nivel con id: ${id} no encontrado` });
+            }
+        } catch (error) {
+            console.log(`Error al actualizar el nivel: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
+    } 
 
 }
 

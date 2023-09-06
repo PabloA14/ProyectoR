@@ -35,10 +35,22 @@ export const useRolStore = defineStore("roles", () => {
     }
   };
 
+  const cambiarEstado = async (id, estado) => {
+    try {
+      let res = await axios.patch(`${LinkBD}/api/roles/${id}`, {
+        estado: estado,
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     buscarRoles,
     actualizarRoles,
-    agregarRoles
+    agregarRoles,
+    cambiarEstado
 
   };
 });
