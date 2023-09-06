@@ -40,7 +40,7 @@
                                 <q-icon class="fa-solid fa-users" />
                             </q-item-section>
 
-                            <q-item-section style="color: black; text-decoration: none;">
+                            <q-item-section>
                                 Usuarios
                             </q-item-section>
                         </q-item>
@@ -67,7 +67,7 @@
                                 <q-icon class="fi fi-sr-head-side-brain" />
                             </q-item-section>
 
-                            <q-item-section style="color: black; text-decoration: none;">
+                            <q-item-section>
                                 Redes de Conocimiento
                             </q-item-section>
                         </q-item>
@@ -93,8 +93,21 @@
                                 <q-icon class="fa-solid fa-building-columns" />
                             </q-item-section>
 
-                            <q-item-section style="color: black; text-decoration: none;">
+                            <q-item-section>
                                 Centros de Formación
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
+                    <router-link to="materiales" style="text-decoration: none;color: black;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fi fi-sr-clip" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Materiales de Formación
                             </q-item-section>
                         </q-item>
                     </router-link>
