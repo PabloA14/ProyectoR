@@ -6,13 +6,13 @@ import bcrypt from "bcrypt"
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
-        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional, estado } = req.body;
+        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
 
             const usuario = new Usuario({
-                cedula, nombre, apellidos, telefono, clave: hashedPassword, correo, redConocimiento, hojaDeVida, rol, perfilProfesional, estado
+                cedula, nombre, apellidos, telefono, clave: hashedPassword, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
             });
             const buscar = await Usuario.findOne({ cedula: cedula });
             if (buscar) {
@@ -71,10 +71,6 @@ const httpUsuario = {
                 },
                 { new: true }
             );
-
-            if (!updatedUsuario) {
-                return res.status(404).json({ msg: 'Usuario no encontrado' });
-            }
 
             res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });
         } catch (error) {

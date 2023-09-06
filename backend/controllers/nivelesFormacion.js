@@ -55,12 +55,12 @@ const httpNivelFormacion = {
             );
 
             if (!updateniveles) {
-                return res.status(404).json({ msg: 'Red no encontrado' });
+                return res.status(404).json({ msg: 'No encontrado' });
             }
-            res.status(200).json({ msg: 'Ciudad actualizada exitosamente', red: updateniveles });
+            res.status(200).json({ msg: 'Nivel de formación actualizad0 exitosamente', red: updateniveles });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
+            res.status(500).json({ msg: 'Error en el servidor' });
         }
     }
 

@@ -3,8 +3,8 @@
     <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
       <div class="q-pa-md" style="width: 100%;">
-        <q-table :separator="separator" class="my-sticky-header-table" bordered :filter="filter" :rows="usuarios"
-          :columns="columns" row-key="name" rowsPerPage="6">
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="usuarios"
+          :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -25,7 +25,7 @@
 
           <template v-slot:body-cell-redConocimiento="props">
             <q-td :props="props">
-              <span>{{ props.row.redConocimiento.Denominacion }}</span>
+              <span>{{ props.row.redConocimiento.denominacion }}</span>
             </q-td>
           </template>
 
@@ -94,7 +94,7 @@
 
           <div class="q-mb-md">
             <q-select label="Red de Conocimiento" color="secondary" v-model="red"
-              :options="redes.map(red => ({ label: red.Denominacion, value: red._id }))" emit-value map-options>
+              :options="redes.map(red => ({ label: red.denominacion, value: red._id }))" emit-value map-options>
             </q-select>
           </div>
 
@@ -164,6 +164,10 @@ const columns = [
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
   { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
+
+const pagination = ref({
+  rowsPerPage: 6
+})
 
 buscarRol()
 buscarRed()
@@ -284,9 +288,37 @@ async function editarEstado(x) {
 }
 </script>
 
-<style scoped></style>
+<style lang="sass" >
+.my-sticky-header-table
+  /* height or max-height is important */
+  max-height: 73vh
 
-<style lang="sass">
+  .q-table__top,
+  .q-table__bottom,
 
+  thead tr:first-child th
+    /* bg color is important for th; just specify one */
+
+  thead tr th
+    position: sticky
+    z-index: 1
+    background-color: white
+    font-weight: bold
+    font-size: 13px /* Font size for table headers */
+    text-align: center /* Center-align text in table headers */
+
+  thead tr:first-child th
+    top: 0
+
+  /* this is when the loading indicator appears */
+  &.q-table--loading thead tr:last-child th
+    /* height of all previous header rows */
+    top: 48px
+
+  /* prevent scrolling behind sticky top row on focus */
+  tbody
+    /* height of all previous header rows */
+    scroll-margin-top: 48px
 </style>
+
 

@@ -16,7 +16,7 @@
                 <q-separator inset class="text-black" />
                 <q-card-section>
                     <q-form class="q-gutter-md" style="margin: auto;">
-                        <q-input color="secondary" filled type="number" v-model="documento" label="No. de Documento">
+                        <q-input color="secondary" filled v-model="documento" label="No. de Documento">
                             <template v-slot:prepend>
                                 <q-icon name="person" />
                             </template>

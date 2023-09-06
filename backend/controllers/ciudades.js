@@ -82,7 +82,7 @@ const httpredes = {
             );
 
             if (!updatedCiudad) {
-                return res.status(404).json({ msg: 'Red no encontrado' });
+                return res.status(404).json({ msg: 'Ciudad no encontrada' });
             }
             res.status(200).json({ msg: 'Ciudad actualizada exitosamente', red: updatedCiudad });
         } catch (error) {

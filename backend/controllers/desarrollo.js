@@ -62,7 +62,7 @@ const httpDesarrolloC = {
             );
 
             if (!updatedCodigo) {
-                return res.status(404).json({ msg: 'Red no encontrado' });
+                return res.status(404).json({ msg: 'Desarrollo no encontrado' });
             }
             res.status(200).json({ msg: 'Desarrollo c actualizado exitosamente', red: updatedCodigo });
         } catch (error) {

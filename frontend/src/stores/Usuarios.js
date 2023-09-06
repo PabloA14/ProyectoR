@@ -47,6 +47,6 @@ export const useUsuarioStore = defineStore("usuario", () => {
     buscarUsuarios,
     agregarUsuario,
     actualizarUsuario,
-    cambiarEstado,
+    cambiarEstado
   };
 });
