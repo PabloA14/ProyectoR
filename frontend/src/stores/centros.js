@@ -12,12 +12,24 @@ export const useCentros = defineStore("Centros", () => {
       console.log(error.response);
     }
   };
-
-  const actualizarCentros = async (
-    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional) => {
+  const buscarCiudad = async () => {
     try {
-      let datos = await axios.put(`${LinkBD}/api/usuario/${id}`, {
-        cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+      const buscar = await axios.get(`${LinkBD}/api/ciudades`);
+      return buscar.data;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  
+
+  const actualizarCentros = async (id,codigo,nombre,direccion) => {
+   
+    try {
+      let datos = await axios.put(`${LinkBD}/api/centrosF/${id}`, {
+        codigo: codigo,
+        nombre:nombre,
+        direccion: direccion
       });
       return datos;
     } catch (error) {
@@ -25,17 +37,20 @@ export const useCentros = defineStore("Centros", () => {
       throw error;
     }
   };
-  const agregarCentro = async (info) => {
+  const agregarCentro = async (codigo,nombre,ciudad,direccion) => {
+    const info = {codigo,nombre,ciudad,direccion}
     try {
-      const newU = await axios.post(`${LinkBD}/api/usuario`, info);
+      console.log(info);
+      const newU = await axios.post(`${LinkBD}/api/centrosF`, info);
       return newU;
     } catch (error) {
       throw error;
     }
   };
+
   const cambiarEstado = async (id, estado) => {
     try {
-      let res = await axios.patch(`${LinkBD}/api/usuario/${id}`, {
+      let res = await axios.patch(`${LinkBD}/api/centrosF/${id}`, {
         estado: estado,
       });
       return res.data;
@@ -48,6 +63,7 @@ export const useCentros = defineStore("Centros", () => {
     buscarCentros,
     agregarCentro,
     actualizarCentros,
-    cambiarEstado
+    cambiarEstado,
+    buscarCiudad
   };
 });
