@@ -45,29 +45,26 @@ const httpDesarrolloC = {
     },
 
     putDesarrollo: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const desarrolloId = req.params.id;
+        const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias } = req.body;
+
         try {
-            const updatedCodigo = await DesarrolloC.findOneAndUpdate(
-                { codigo: Codigo },
+            const updatedFields = {
+                codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias
+            };
+
+            const updatedDesarrollo = await DesarrolloC.findOneAndUpdate(
+                { _id: desarrolloId },
                 {
-                    $set: {
-                        nombre: req.body.nombre,
-                        matrizcorrelacion: req.body.matriz,
-                        proyectoFormativo: req.body.proyecto,
-                        planeacionPedagogica: req.body.planeacion,
-                        idGuias: req.body.idGuias
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedCodigo) {
-                return res.status(404).json({ msg: 'Desarrollo no encontrado' });
-            }
-            res.status(200).json({ msg: 'Desarrollo c actualizado exitosamente', red: updatedCodigo });
+            res.status(200).json({ msg: 'actualizado exitosamente', desarrollo: updatedDesarrollo });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
     }
 

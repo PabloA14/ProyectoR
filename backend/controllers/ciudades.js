@@ -69,7 +69,6 @@ const httpredes = {
         const { codigoCiudad, nombre, region, departamento, codDepartamento } = req.body;
 
         try {
-
             const updatedFields = {
                 codigoCiudad, nombre, region, departamento, codDepartamento
             };
