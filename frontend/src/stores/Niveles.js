@@ -17,6 +17,7 @@ export const useNivelStore = defineStore("niveles", () => {
             let datos = await axios.put(`${LinkBD}/api/nivelesFormacion/${id}`, {
                 codigo, denominacion
             });
+            console.log(datos);
             return datos;
         } catch (error) {
             console.log(error);

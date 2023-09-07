@@ -44,7 +44,7 @@ const httpNivelFormacion = {
         try {
 
             const existingNivel = await NivelFormacion.findOne({ codigo: codigo });
-            if (existingNivel && existingNivel._id.toString() !== redId) {
+            if (existingNivel && existingNivel._id.toString() !== nivelId) {
                 return res.status(400).json({ msg: 'El código ya está registrado para otro nivel' });
             }
 
