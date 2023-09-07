@@ -12,10 +12,10 @@ export const useMaterialStore = defineStore("materiales", () => {
         }
     };
     const actualizarMateriales = async (
-        id, codigo, nombre, descripcion, tipo, documentacion) => {
+        id, codigo, nombre, tipo, descripcion, documentacion) => {
         try {
             let datos = await axios.put(`${LinkBD}/api/materiales/${id}`, {
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, tipo, descripcion, documentacion
             });
             return datos;
         } catch (error) {
@@ -32,11 +32,21 @@ export const useMaterialStore = defineStore("materiales", () => {
             throw error;
         }
     };
+    const cambiarEstado = async (id, estado) => {
+        try {
+            let res = await axios.patch(`${LinkBD}/api/materiales/${id}`, {
+                estado: estado,
+            });
+            return res.data;
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return {
         buscarMateriales,
         actualizarMateriales,
         agregarMateriales,
-
+        cambiarEstado
     };
 });

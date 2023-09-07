@@ -3,10 +3,10 @@ import Material from "../models/materialesFor.js"
 const httpMateriales = {
 
     postMaterial: async (req, res) => {
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, tipo, descripcion, documentacion } = req.body
         try {
             const material = new Material({
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, tipo, descripcion, documentacion
             })
 
             const cod = await Material.findOne({ codigo: codigo })
@@ -48,7 +48,7 @@ const httpMateriales = {
 
     putMaterial: async (req, res) => {
         const materialId = req.params.id
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, tipo, descripcion, documentacion } = req.body
         try {
             const existingMaterial = await Material.findOne({ codigo: codigo });
             if (existingMaterial && existingMaterial._id.toString() !== materialId) {
@@ -75,6 +75,23 @@ const httpMateriales = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  materiales de formacion' });
+        }
+    },
+    patchMaterial: async (req, res) => {
+        const id = req.params.id;
+        const { estado } = req.body;
+        try {
+            const material = await Material.findById(id);
+            if (material) {
+                material.estado = estado;
+                await material.save();
+                res.json(material);
+            } else {
+                res.status(404).json({ mensaje: `material con id: ${id} no encontrado` });
+            }
+        } catch (error) {
+            console.log(`Error al actualizar el material: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
         }
     }
 

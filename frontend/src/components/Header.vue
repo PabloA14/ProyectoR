@@ -148,6 +148,3 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css')
-</style>
