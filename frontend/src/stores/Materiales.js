@@ -12,10 +12,10 @@ export const useMaterialStore = defineStore("materiales", () => {
         }
     };
     const actualizarMateriales = async (
-        id, codigo, nombre, descripcion, tipo, documentacion) => {
+        id, codigo, nombre, tipo, descripcion, documentacion) => {
         try {
             let datos = await axios.put(`${LinkBD}/api/materiales/${id}`, {
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, tipo, descripcion, documentacion
             });
             return datos;
         } catch (error) {
