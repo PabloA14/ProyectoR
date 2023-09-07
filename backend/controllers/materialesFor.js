@@ -76,6 +76,23 @@ const httpMateriales = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  materiales de formacion' });
         }
+    },
+    patchMaterial: async (req, res) => {
+        const id = req.params.id;
+        const { estado } = req.body;
+        try {
+            const material = await Material.findById(id);
+            if (material) {
+                material.estado = estado;
+                await material.save();
+                res.json(material);
+            } else {
+                res.status(404).json({ mensaje: `material con id: ${id} no encontrado` });
+            }
+        } catch (error) {
+            console.log(`Error al actualizar el material: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
+        }
     }
 
 }
