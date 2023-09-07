@@ -24,7 +24,7 @@
                         <q-item clickable v-ripple>
 
                             <q-item-section avatar>
-                                <q-icon class="fa-solid fa-book-open" />
+                                <q-icon class="fi fi-sr-book-open-cover" />
                             </q-item-section>
 
                             <q-item-section>
