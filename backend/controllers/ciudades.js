@@ -64,33 +64,6 @@ const httpredes = {
         }
     },
 
-    putCiudade: async (req, res) => {
-        const Codigo = req.params.codigo;
-
-        try {
-            const updatedCiudad = await Ciudad.findOneAndUpdate(
-                //codigo unico / params
-                { codigoCiudad: Codigo },
-                {
-                    $set: {
-                        nombre: req.body.nombre,
-                        region: req.body.region,
-                        departamento: req.body.departamento,
-                    }
-                },
-                { new: true }
-            );
-
-            if (!updatedCiudad) {
-                return res.status(404).json({ msg: 'Ciudad no encontrada' });
-            }
-            res.status(200).json({ msg: 'Ciudad actualizada exitosamente', red: updatedCiudad });
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
-        }
-    },
-
     putCiudades: async (req, res) => {
         const ciudadId = req.params.id;
         const { codigoCiudad, nombre, region, departamento, codDepartamento } = req.body;
