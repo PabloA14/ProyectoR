@@ -1,5 +1,6 @@
 <template>
     <div>
+
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Niveles de Formación</div>
             <div class="q-pa-md" style="width: 100%;">
@@ -119,7 +120,6 @@ function vaciar() {
 
 async function buscar() {
     niveles.value = await useNivel.buscarNiveles();
-    console.log(niveles.value);
     niveles.value.reverse()
 }
 
@@ -149,7 +149,9 @@ function editarNivel(nivel) {
 }
 
 async function actualizar() {
-    await useNivel.actualizarNiveles(
+    console.log("entro a actualizar");
+    try{
+        await useNivel.actualizarNiveles(
         id.value,
         codigo.value,
         denominacion.value
@@ -162,6 +164,11 @@ async function actualizar() {
         timeout: Math.random() * 3000
     })
     buscar();
+
+    }catch (error){
+        console.log(error);
+    }
+
 }
 
 async function editarEstado(nivel) {

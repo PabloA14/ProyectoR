@@ -70,6 +70,7 @@ const httpUsuario = {
                     $set: updatedFields
                 },
                 { new: true }
+                
             );
 
             res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });

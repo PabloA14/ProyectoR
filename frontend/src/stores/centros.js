@@ -1,1 +1,53 @@
-    
+import { defineStore } from "pinia";
+import axios from "axios";
+import { LinkBD } from "../routes/variables.js";
+
+
+export const useCentros = defineStore("Centros", () => {
+  const buscarCentros = async () => {
+    try {
+      const buscar = await axios.get(`${LinkBD}/api/centrosF/`);
+      return buscar.data;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
+  const actualizarCentros = async (
+    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional) => {
+    try {
+      let datos = await axios.put(`${LinkBD}/api/usuario/${id}`, {
+        cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+      });
+      return datos;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+  const agregarCentro = async (info) => {
+    try {
+      const newU = await axios.post(`${LinkBD}/api/usuario`, info);
+      return newU;
+    } catch (error) {
+      throw error;
+    }
+  };
+  const cambiarEstado = async (id, estado) => {
+    try {
+      let res = await axios.patch(`${LinkBD}/api/usuario/${id}`, {
+        estado: estado,
+      });
+      return res.data;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  return {
+    buscarCentros,
+    agregarCentro,
+    actualizarCentros,
+    cambiarEstado
+  };
+});
