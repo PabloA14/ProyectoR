@@ -3,10 +3,10 @@ import Material from "../models/materialesFor.js"
 const httpMateriales = {
 
     postMaterial: async (req, res) => {
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, tipo, descripcion, documentacion } = req.body
         try {
             const material = new Material({
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, tipo, descripcion, documentacion
             })
 
             const cod = await Material.findOne({ codigo: codigo })
@@ -48,7 +48,7 @@ const httpMateriales = {
 
     putMaterial: async (req, res) => {
         const materialId = req.params.id
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, tipo, descripcion, documentacion } = req.body
         try {
             const existingMaterial = await Material.findOne({ codigo: codigo });
             if (existingMaterial && existingMaterial._id.toString() !== materialId) {
