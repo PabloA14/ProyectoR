@@ -105,7 +105,7 @@ buscarProgramas();
 
 async function buscarProgramas() {
   programas.value = await useProgramas.getProgramas();
-  programas.value.reverse();
+  // programas.value.reverse();
   console.log(programas);
 }
 

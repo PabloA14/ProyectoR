@@ -7,7 +7,5 @@ const httpDesarrollo = new mongoose.Schema({
     planeacionPedagogica: { type: String, require: true },
     idGuias: {type: mongoose.Schema.Types.ObjectId, ref: 'Guia', required: true},
     createdAt: { type: Date, default: Date.now },
-
-
 })
 export default mongoose.model("Desarrollo", httpDesarrollo)
