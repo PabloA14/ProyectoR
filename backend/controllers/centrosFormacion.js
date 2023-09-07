@@ -59,8 +59,9 @@ const httpCentros = {
             const updatedCentro = await CentrosF.findOneAndUpdate(
                 { _id: redId },
                 {
+                    
                     $set: updatedFields
-
+                    
                 },
                 { new: true }
             );

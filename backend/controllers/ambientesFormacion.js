@@ -23,7 +23,7 @@ const httpAmbiente = {
     },
 
     getAmbientes: async (req, res) => {
-        const ambiente = await Ambiente.find().populate({path:"centroformacion",populate:{path:"direccion"}})
+        const ambiente = await Ambiente.find().populate({ path: "centroformacion", populate: { path: "direccion" } })
         res.json({ ambiente })
     },
 
@@ -42,31 +42,27 @@ const httpAmbiente = {
     },
 
     putAmbiente: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const ambienteId = req.params.id;
+        const { codigo, nombre, tipo, centroformacion, descripcion, archivo } = req.body;
+
         try {
+
+            const updatedFields = {
+                codigo, nombre, tipo, centroformacion, descripcion, archivo
+            };
+
             const updatedAmbiente = await Ambiente.findOneAndUpdate(
-                { codigo: Codigo },
+                { _id: ambienteId },
                 {
-                    $set: {
-                        codigo: req.body.codigo,
-                        nombre: req.body.nombre,
-                        tipo: req.body.tipo,
-                        centroFormacion: req.body.centroFormacion,
-                        descripcion: req.body.descripcion,
-                        archivo: req.body.archivo,
-                        estado: req.body.estado
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedAmbiente) {
-                return res.status(404).json({ msg: 'ambiente no encontrada' });
-            }
-            res.status(200).json({ msg: 'Guia actualizada exitosamente', red: updatedAmbiente });
+            res.status(200).json({ msg: 'Ambiente actualizado exitosamente', ambiente: updatedAmbiente });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar el Ambiente' });
         }
     },
 

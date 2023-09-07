@@ -6,6 +6,6 @@ const router = Router()
 router.post("/", httpAmbiente.postambiente)
 router.get("/", httpAmbiente.getAmbientes)
 router.get("/:codigo", httpAmbiente.getCodigo)
-router.put("/:codigo", httpAmbiente.putAmbiente)
+router.put("/:id", httpAmbiente.putAmbiente)
 
 export default router
