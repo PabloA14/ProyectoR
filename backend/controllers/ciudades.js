@@ -64,7 +64,7 @@ const httpredes = {
         }
     },
 
-    putCiudades: async (req, res) => {
+    putCiudade: async (req, res) => {
         const Codigo = req.params.codigo;
 
         try {
@@ -89,7 +89,32 @@ const httpredes = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
         }
-    }
+    },
+
+    putCiudades: async (req, res) => {
+        const ciudadId = req.params.id;
+        const { codigoCiudad, nombre, region, departamento, codDepartamento } = req.body;
+
+        try {
+
+            const updatedFields = {
+                codigoCiudad, nombre, region, departamento, codDepartamento
+            };
+
+            const updatedCiudad = await Ciudad.findOneAndUpdate(
+                { _id: ciudadId },
+                {
+                    $set: updatedFields
+                },
+                { new: true }
+            );
+
+            res.status(200).json({ msg: 'Ciudad actualizada exitosamente', ciudad: updatedCiudad });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error en el servidor Actualizar la ciudad' });
+        }
+    },
 
 }
 

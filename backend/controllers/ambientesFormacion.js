@@ -64,7 +64,7 @@ const httpAmbiente = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar el Ambiente' });
         }
-    },
+    }
 
 }
 
