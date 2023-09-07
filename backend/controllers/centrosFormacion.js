@@ -45,29 +45,32 @@ const httpCentros = {
         }
     },
 
+
     putCentros: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const redId = req.params.id;
+        const { codigo, nombre, direccion } = req.body;
+
         try {
+
+            const updatedFields = {
+                codigo, nombre, direccion
+            };
+
             const updatedCentro = await CentrosF.findOneAndUpdate(
-                { codigo: Codigo },
+                { _id: redId },
                 {
-                    $set: {
-                        nombre: req.body.nombre,
-                        direccion: req.body.direccion
-                    }
+                    $set: updatedFields
+
                 },
                 { new: true }
             );
 
-            if (!updatedCentro) {
-                return res.status(404).json({ msg: 'Guia no encontrada' });
-            }
-            res.status(200).json({ msg: 'Guia actualizada exitosamente', red: updatedCentro });
+            res.status(200).json({ msg: 'Centro de formacion actualizado exitosamente', centro: updatedCentro });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar  el centro de formacion' });
         }
-    }
+    },
 
 }
 
