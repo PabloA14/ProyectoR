@@ -1,5 +1,5 @@
-// import usuarios from "../models/usuarios.js";
 import Usuario from "../models/usuarios.js";
+import { generarJWT } from "../middlewares/validar-jwt.js";
 import bcrypt from "bcrypt"
 
 
@@ -21,6 +21,35 @@ const httpUsuario = {
                 await usuario.save();
                 res.status(200).json({ msg: 'Registro exitoso', usuario });
             }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error en el servidor' });
+        }
+    },
+    loginUsuario: async (req, res) => {
+        const { cedula, clave } = req.body;
+        try {
+            const user = await Usuario.findOne({ cedula: cedula });
+
+            if (!user) {
+                return res.status(401).json({ msg: 'Credenciales inválidas' });
+            }
+
+            if (user.estado === 0) {
+                return res.status(400).json({
+                    msg: "Usuario Inactivo"
+                })
+            }
+
+            const passwordMatch = await bcrypt.compare(clave, user.clave);
+
+            if (!passwordMatch) {
+                return res.status(401).json({ msg: 'Credenciales inválidas' });
+            }
+            
+            const token = await generarJWT(user.id);
+
+            res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });

@@ -68,7 +68,7 @@ const httpAmbiente = {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar el Ambiente' });
         }
-    }
+    },
 
     patchAmbientes: async (req, res) => {
         const id = req.params.id;

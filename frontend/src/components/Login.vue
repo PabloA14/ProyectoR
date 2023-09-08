@@ -87,10 +87,10 @@
 import { ref } from 'vue';
 import { useRouter } from "vue-router";
 import axios from "axios";
-import { useLoginStore } from "../stores/login.js"
+import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useQuasar } from 'quasar'
 
-let useLogin = useLoginStore()
+let useUsuario = useUsuarioStore()
 let router = useRouter();
 let ruta = ref("")
 const $q = useQuasar()
@@ -119,7 +119,7 @@ function validar() {
 }
 
 async function iniciarSesion() {
-    useLogin.logeo(documento.value, contrasena.value)
+    useUsuario.logeo(documento.value, contrasena.value)
         .then((res) => {
             const token = res.data.token;
             sessionStorage.setItem('token', token);
