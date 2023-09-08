@@ -10,7 +10,6 @@ import guias from "./routes/guias.js"
 import instrumentos from "./routes/instrumentos.js"
 import centrosFormacion from "./routes/centrosFormacion.js"
 import materialesFor from "./routes/materialesFor.js"
-import login from "./routes/login.js"
 import nivelesFormacion from "./routes/nivelesFormacion.js"
 import registroCalificado from "./routes/registroCalificado.js"
 import proyectos from "./routes/proyectos.js"
@@ -43,7 +42,6 @@ class Server {
         this.app.use("/api/instrumentos", instrumentos)
         this.app.use("/api/centrosF", centrosFormacion)
         this.app.use("/api/materiales", materialesFor)
-        this.app.use("/api/login", login)
         this.app.use("/api/proyecto", proyectos)
         this.app.use("/api/nivelesFormacion", nivelesFormacion)
         this.app.use("/api/registroCalificado", registroCalificado)

@@ -42,11 +42,28 @@ export const useUsuarioStore = defineStore("usuario", () => {
       console.log(error);
     }
   };
+  const logeo = async (cedula, clave) => {
+    try {
+      //loading.value = true
+      let datos = await axios.post(`${LinkBD}/api/usuario/login`,
+        { cedula: cedula, clave: clave });
+      //console.log(datos);
+      return datos;
+    } catch (error) {
+      //loading.value = true
+      console.log(error);
+      console.log(LinkBD);
+      throw error
+    } finally {
+      //loading.value = false
+    }
+  };
 
   return {
     buscarUsuarios,
     agregarUsuario,
     actualizarUsuario,
-    cambiarEstado
+    cambiarEstado,
+    logeo
   };
 });

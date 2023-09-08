@@ -7,12 +7,16 @@
           :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
+                style="margin-right: 25px;cursor: pointer;" />
+
+              <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarUsuario(props.row)" />
-              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
-                v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
-              <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
+              <q-icon title="Cambiar Estado" color="green" name="fa-solid fa-check fa-xl" size="20px"
+                style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
                 @click="editarEstado(props.row)" />
+              <q-icon title="Cambiar Estado" color="red" name="fa-solid fa-x" size="20px"
+                style="margin-left: 10px;cursor: pointer;" v-else @click="editarEstado(props.row)" />
             </q-td>
           </template>
 
@@ -121,6 +125,8 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+
+
   </div>
 </template>
 
