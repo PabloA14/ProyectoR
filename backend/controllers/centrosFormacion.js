@@ -48,25 +48,26 @@ const httpCentros = {
 
     putCentros: async (req, res) => {
         const redId = req.params.id;
-        const { codigo, nombre, direccion } = req.body;
-
+        const { codigo, nombre, direccion,ciudad } = req.body;
         try {
-
+            console.log("Put centro");
             const updatedFields = {
-                codigo, nombre, direccion
+                codigo, nombre, direccion,ciudad
             };
 
             const updatedCentro = await CentrosF.findOneAndUpdate(
+
                 { _id: redId },
                 {
-                    
                     $set: updatedFields
-                    
                 },
                 { new: true }
-            );
+            ).populate("ciudad");
+
+            await updatedCentro.save()
 
             res.status(200).json({ msg: 'Centro de formacion actualizado exitosamente', centro: updatedCentro });
+            console.log(updatedCentro);
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar  el centro de formacion' });

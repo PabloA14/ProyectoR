@@ -5,7 +5,7 @@ const routes =Router()
 routes.post("/", httpDesarrollo.postDesarrollo )
 routes.get("/" , httpDesarrollo.getDesarrollosTodo)
 routes.get("/:Codigo" , httpDesarrollo.getCodigo)
-routes.put("/:codigo", httpDesarrollo.putDesarrollo)
+routes.put("/:id", httpDesarrollo.putDesarrollo)
 
 
 export default routes
