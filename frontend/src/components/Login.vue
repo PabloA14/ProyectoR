@@ -52,16 +52,19 @@
             <q-card style="min-width: 350px">
                 <q-card-section>
                     <div class="text-h6">Restablecer Contraseña</div>
-                    <hr class="green-line">
+                    <q-separator style="
+            height: 5px;
+            margin-top: 5px;
+          " color="secondary" />
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
-                    <p>Ingrese su direccion de correo electronico para
+                    <p>Ingrese su dirección de correo electrónico para
                         <br>
-                        restablecer su cotraseña
+                        restablecer su contraseña:
                     </p>
-                    <q-input dense v-model="address" autofocus @keyup.enter="prompt = false"
-                        placeholder="Correo electrónico." />
+                    <q-input color="secondary" dense v-model="address" autofocus @keyup.enter="prompt = false"
+                        placeholder="Correo electrónico" />
                 </q-card-section>
 
                 <q-card-actions class="flex-center column ">
@@ -202,11 +205,5 @@ async function iniciarSesion() {
 
 .custom-border {
     border: 1px solid red;
-}
-
-.green-line {
-    border: none;
-    border-top: 5px solid rgb(57, 169, 0);
-    width: 100%;
 }
 </style>

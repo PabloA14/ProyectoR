@@ -7,7 +7,6 @@
 import { ref } from "vue";
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
-import { arch } from "os";
 
 let ambiente = ref([])
 let agregar = ref(false)
