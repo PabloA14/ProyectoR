@@ -80,7 +80,7 @@ const httpRoles = {
             if (rol) {
                 rol.estado = estado;
                 await rol.save();
-                res.json(usuario);
+                res.json(rol);
             } else {
                 res.status(404).json({ mensaje: `rol con id: ${id} no encontrado` });
             }

@@ -20,6 +20,7 @@
             :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
             <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
                 <q-list padding>
+
                     <router-link to="programas" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple>
 
@@ -29,33 +30,6 @@
 
                             <q-item-section>
                                 Programas de Formación
-                            </q-item-section>
-                        </q-item>
-                    </router-link>
-
-                    <router-link to="usuarios" style="text-decoration: none;color: black;">
-                        <q-item clickable v-ripple>
-
-                            <q-item-section avatar>
-                                <q-icon class="fa-solid fa-users" />
-                            </q-item-section>
-
-                            <q-item-section>
-                                Usuarios
-                            </q-item-section>
-                        </q-item>
-                    </router-link>
-
-
-                    <router-link to="roles" style="color: black; text-decoration: none;">
-                        <q-item clickable v-ripple>
-
-                            <q-item-section avatar>
-                                <q-icon class="fi fi-sr-key" />
-                            </q-item-section>
-
-                            <q-item-section>
-                                Roles de Usuario
                             </q-item-section>
                         </q-item>
                     </router-link>
@@ -99,6 +73,19 @@
                         </q-item>
                     </router-link>
 
+                    <router-link to="ambientes" style="text-decoration: none;color: black;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fi fi-sr-chart-user" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Ambientes de Formación
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
                     <router-link to="materiales" style="text-decoration: none;color: black;">
                         <q-item clickable v-ripple>
 
@@ -108,6 +95,32 @@
 
                             <q-item-section>
                                 Materiales de Formación
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
+                    <router-link to="usuarios" style="text-decoration: none;color: black;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fa-solid fa-users" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Usuarios
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
+                    <router-link to="roles" style="color: black; text-decoration: none;">
+                        <q-item clickable v-ripple>
+
+                            <q-item-section avatar>
+                                <q-icon class="fi fi-sr-key" />
+                            </q-item-section>
+
+                            <q-item-section>
+                                Roles de Usuario
                             </q-item-section>
                         </q-item>
                     </router-link>

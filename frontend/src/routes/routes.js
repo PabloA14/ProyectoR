@@ -8,6 +8,7 @@ import Centros from "../components/Centros.vue"
 import Niveles from "../components/Niveles.vue"
 import Roles from "../components/Roles.vue"
 import Materiales from "../components/Materiales.vue"
+import Ambientes from "../components/Ambientes.vue"
 
 
 export const routes = [
@@ -22,6 +23,7 @@ export const routes = [
             { path: "/niveles", component: Niveles },
             { path: "/roles", component: Roles },
             { path: "/materiales", component: Materiales },
+            { path: "/ambientes", component: Ambientes },
         ]
     },
 ]
