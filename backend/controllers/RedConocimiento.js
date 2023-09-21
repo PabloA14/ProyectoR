@@ -60,7 +60,6 @@ const httpredes = {
                 { _id: redId },
                 {
                     $set: updatedFields
-
                 },
                 { new: true }
             );
@@ -71,7 +70,7 @@ const httpredes = {
             res.status(500).json({ msg: 'Error en el servidor Actualizar  Redes' });
         }
     },
-    
+
     patchRedes: async (req, res) => {
         const id = req.params.id;
         const { estado } = req.body;

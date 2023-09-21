@@ -5,6 +5,6 @@ const routes = Router()
 routes.post("/", httpInvestigaciones.postinveestigacion)
 routes.get("/", httpInvestigaciones.getinvestigaciones)
 routes.get("/:codigo", httpInvestigaciones.getCodigo)
-routes.put("/:codigo", httpInvestigaciones.putninvestigacion)
+routes.put("/:id", httpInvestigaciones.putninvestigacion)
 
 export default routes
