@@ -1,11 +1,11 @@
 import mongoose from "mongoose";
 
 const httpMaterialesF = new mongoose.Schema({
-    codigo: { type: String, require: true },
-    nombre: { type: String, require: true },
-    descripcion: { type: String, require: true },
-    tipo: { type: String, require: true },
-    documentacion: { type: String, require: true },
+    codigo: { type: String, required: true },
+    nombre: { type: String, required: true },
+    descripcion: { type: String, required: true },
+    tipo: { type: String, required: true },
+    documentacion: { type: String, required: false },
     estado: { type: Number, default: 1, required: true },
     createdAt: { type: Date, default: Date.now }
 

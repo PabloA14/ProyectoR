@@ -12,7 +12,7 @@ const httpRoles = {
             });
             const cod = await rolesUsuario.findOne({ codigo: codigo });
             if (cod) {
-                return res.status(400).json({ msg: 'El rol ya se encuentra existente', cod, denominacion });
+                return res.status(400).json({ msg: 'El rol ya se encuentra registrado', cod, denominacion });
             } else {
                 await roles.save()
                 return res.status(200).json({ msg: 'Registro exitoso', roles });
@@ -49,7 +49,7 @@ const httpRoles = {
 
             const existingRol = await rolesUsuario.findOne({ codigo: codigo });
             if (existingRol && existingRol._id.toString() !== rolId) {
-                return res.status(400).json({ msg: 'El código ya está registrado para otro rol' });
+                return res.status(400).json({ msg: 'El rol ya se encuentra registrado' });
             }
 
             const updatedFields = {
@@ -80,7 +80,7 @@ const httpRoles = {
             if (rol) {
                 rol.estado = estado;
                 await rol.save();
-                res.json(usuario);
+                res.json(rol);
             } else {
                 res.status(404).json({ mensaje: `rol con id: ${id} no encontrado` });
             }

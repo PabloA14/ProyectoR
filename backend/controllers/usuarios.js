@@ -1,18 +1,18 @@
-// import usuarios from "../models/usuarios.js";
 import Usuario from "../models/usuarios.js";
+import { generarJWT } from "../middlewares/validar-jwt.js";
 import bcrypt from "bcrypt"
 
 
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
-        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
+        const { cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
 
             const usuario = new Usuario({
-                cedula, nombre, apellidos, telefono, clave: hashedPassword, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+                cedula, nombre, apellidos, telefono, correo, clave: hashedPassword, redConocimiento, hojaDeVida, rol, perfilProfesional
             });
             const buscar = await Usuario.findOne({ cedula: cedula });
             if (buscar) {
@@ -21,6 +21,35 @@ const httpUsuario = {
                 await usuario.save();
                 res.status(200).json({ msg: 'Registro exitoso', usuario });
             }
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error en el servidor' });
+        }
+    },
+    loginUsuario: async (req, res) => {
+        const { cedula, clave } = req.body;
+        try {
+            const user = await Usuario.findOne({ cedula: cedula });
+
+            if (!user) {
+                return res.status(401).json({ msg: 'Credenciales inválidas' });
+            }
+
+            if (user.estado === 0) {
+                return res.status(400).json({
+                    msg: "Usuario Inactivo"
+                })
+            }
+
+            const passwordMatch = await bcrypt.compare(clave, user.clave);
+
+            if (!passwordMatch) {
+                return res.status(401).json({ msg: 'Credenciales inválidas' });
+            }
+
+            const token = await generarJWT(user.id);
+
+            res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
@@ -70,7 +99,7 @@ const httpUsuario = {
                     $set: updatedFields
                 },
                 { new: true }
-                
+
             );
 
             res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });

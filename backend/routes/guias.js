@@ -5,7 +5,7 @@ const routes =Router()
 routes.post("/", httpGuias.postGuia )
 routes.get("/" , httpGuias.getGuias)
 routes.get("/:Codigo" , httpGuias.getCodigoGuia)
-routes.put("/:codigo", httpGuias.putGuias)
+routes.put("/:id", httpGuias.putGuias)
 
 
 export default routes
