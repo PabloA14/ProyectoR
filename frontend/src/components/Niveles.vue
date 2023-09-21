@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Niveles de Formación</div>
             <div class="q-pa-md" style="width: 100%;">
@@ -70,8 +69,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" v-close-popup />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" v-close-popup />
+                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -94,6 +93,7 @@ let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')
 let separator = ref('cell')
+let errores = ref([])
 
 const pagination = ref({
     rowsPerPage: 6
@@ -118,6 +118,28 @@ function vaciar() {
     denominacion.value = ""
 }
 
+function validarVacios() {
+    if (codigo.value === "" && denominacion.value === "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+    })
+}
+
 async function buscar() {
     niveles.value = await useNivel.buscarNiveles();
     niveles.value.reverse()
@@ -128,15 +150,34 @@ async function agregarN() {
     await useNivel.agregarNiveles({
         codigo: codigo.value,
         denominacion: denominacion.value
+    }).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Nivel de formación agregado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
     });
-    $q.notify({
-        message: 'Nivel de formación agregado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
-    })
-    buscar();
 }
 
 function editarNivel(nivel) {
@@ -149,26 +190,38 @@ function editarNivel(nivel) {
 }
 
 async function actualizar() {
-    console.log("entro a actualizar");
-    try{
-        await useNivel.actualizarNiveles(
+    await useNivel.actualizarNiveles(
         id.value,
         codigo.value,
         denominacion.value
-    );
-    $q.notify({
-        message: 'Nivel de formación editado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
+    ).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Nivel de formación editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
     })
-    buscar();
-
-    }catch (error){
-        console.log(error);
-    }
-
 }
 
 async function editarEstado(nivel) {

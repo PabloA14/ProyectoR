@@ -71,11 +71,11 @@
                         <q-input label="Nombre" color="secondary" v-model="nombre" />
                     </div>
 
-                    <q-select v-model="tipo" color="secondary" label="Tipo" :options="options" />
-
                     <div class="q-mb-md">
                         <q-input label="Descripción" color="secondary" type="textarea" v-model="descripcion" />
                     </div>
+
+                    <q-select v-model="tipo" color="secondary" label="Tipo" :options="options" />
 
                     <div class="q-mb-md">
                         <q-input label="Archivo" color="secondary" type="text" v-model="archivo" />
@@ -86,8 +86,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" v-close-popup />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" v-close-popup />
+                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
+                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -103,6 +103,7 @@ const useMaterial = useMaterialStore()
 let material = ref([])
 let options = ref(['Herramienta', 'Evaluación'])
 let agregar = ref(false)
+let errores = ref([])
 
 
 let codigo = ref("")
@@ -117,7 +118,7 @@ let id = ref("")
 
 const $q = useQuasar()
 let filter = ref('')
-let separator = ref('cell')
+let separator = ref('horizontal')
 
 const pagination = ref({
     rowsPerPage: 6
@@ -150,6 +151,28 @@ function vaciar() {
     archivo.value = ""
 }
 
+function validarVacios() {
+    if (codigo.value === "" && nombre.value === "" && tipo.value == "" && descripcion.value == "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+    })
+}
+
 async function buscar() {
     material.value = await useMaterial.buscarMateriales();
     console.log(material.value);
@@ -161,19 +184,38 @@ async function agregarR() {
     await useMaterial.agregarMateriales({
         codigo: codigo.value,
         nombre: nombre.value,
-        tipo: tipo.value,
         descripcion: descripcion.value,
+        tipo: tipo.value,
         documentacion: archivo.value
 
+    }).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Material agregado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
     });
-    $q.notify({
-        message: 'Material agregado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
-    })
-    buscar();
 }
 
 function editarMaterial(materiales) {
@@ -182,8 +224,8 @@ function editarMaterial(materiales) {
     id.value = materiales._id;
     codigo.value = materiales.codigo
     nombre.value = materiales.nombre
-    tipo.value = materiales.tipo
     descripcion.value = materiales.descripcion
+    tipo.value = materiales.tipo
     archivo.value = materiales.documentacion
     agregar.value = true;
 }
@@ -193,18 +235,37 @@ async function actualizar() {
         id.value,
         codigo.value,
         nombre.value,
-        tipo.value,
         descripcion.value,
+        tipo.value,
         archivo.value
-    );
-    $q.notify({
-        message: 'Material editado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
-    })
-    buscar();
+    ).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Material editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
+    });
 }
 
 async function editarEstado(materiales) {

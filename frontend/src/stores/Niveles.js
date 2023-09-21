@@ -14,11 +14,11 @@ export const useNivelStore = defineStore("niveles", () => {
     const actualizarNiveles = async (
         id, codigo, denominacion) => {
         try {
-            const info ={codigo,denominacion}
-            let datos = await axios.put(`${LinkBD}/api/nivelesFormacion/${id}`, info);
+            let datos = await axios.put(`${LinkBD}/api/nivelesFormacion/${id}`, { codigo, denominacion });
             return datos;
         } catch (error) {
             console.log(error);
+            throw error
         }
     };
     const agregarNiveles = async (info) => {
