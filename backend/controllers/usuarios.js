@@ -6,13 +6,13 @@ import bcrypt from "bcrypt"
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
-        const { cedula, nombre, apellidos, telefono, clave, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
+        const { cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
 
             const usuario = new Usuario({
-                cedula, nombre, apellidos, telefono, clave: hashedPassword, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+                cedula, nombre, apellidos, telefono, correo, clave: hashedPassword, redConocimiento, hojaDeVida, rol, perfilProfesional
             });
             const buscar = await Usuario.findOne({ cedula: cedula });
             if (buscar) {
@@ -46,7 +46,7 @@ const httpUsuario = {
             if (!passwordMatch) {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });
             }
-            
+
             const token = await generarJWT(user.id);
 
             res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
@@ -99,7 +99,7 @@ const httpUsuario = {
                     $set: updatedFields
                 },
                 { new: true }
-                
+
             );
 
             res.status(200).json({ msg: 'Usuario actualizado exitosamente', usuario: updatedUsuario });

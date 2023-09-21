@@ -88,12 +88,12 @@
             <q-input label="Teléfono" type="number" color="secondary" v-model="telefono" />
           </div>
 
-          <div class="q-mb-md" v-if="bd == 1">
-            <q-input label="Contraseña" type="password" color="secondary" v-model="clave" />
-          </div>
-
           <div class="q-mb-md">
             <q-input label="Correo Electrónico" color="secondary" v-model="correo" />
+          </div>
+
+          <div class="q-mb-md" v-if="bd == 1">
+            <q-input label="Contraseña" type="password" color="secondary" v-model="clave" />
           </div>
 
           <div class="q-mb-md">
@@ -120,12 +120,11 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" v-close-popup />
-          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" v-close-popup />
+          <q-btn v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
+          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
 
   </div>
 </template>
@@ -160,6 +159,7 @@ const useRol = useRolStore()
 const useRed = useRedStore()
 const $q = useQuasar()
 let filter = ref('')
+let errores = ref([])
 
 const columns = [
   { name: 'cedula', align: 'center', label: 'Cédula', field: 'cedula', sortable: true },
@@ -215,6 +215,29 @@ function vaciar() {
   perfilProfesional.value = "";
 }
 
+function validarVacios() {
+  if (cedula.value === "" && nombre.value === "" && apellido.value === "" && telefono.value === ""
+    && correo.value === "" && clave.value === "" && red.value === "" && rol.value === "" && perfilProfesional.value === "") {
+    $q.notify({
+      message: 'Campos vacíos',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: Math.random() * 3000
+    })
+  } else return true
+}
+
+function validar() {
+  $q.notify({
+    message: errores,
+    color: 'negative',
+    position: 'top',
+    icon: 'warning',
+    timeout: Math.random() * 3000
+  })
+}
+
 async function agregarU() {
   console.log("entro a agregar");
   await useUsuari.agregarUsuario({
@@ -228,15 +251,35 @@ async function agregarU() {
     hojaDeVida: cv.value,
     rol: rol.value,
     perfilProfesional: perfilProfesional.value,
+  }).then(() => {
+    agregar.value = false
+    $q.notify({
+      message: 'Usuario agregado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'top',
+      timeout: Math.random() * 3000
+    })
+    buscar();
+  }).catch((error) => {
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    } else if (error.response && error.response.data && validarVacios() === true) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
   });
-  $q.notify({
-    message: 'Usuario agregado exitosamente',
-    color: 'green',
-    icon: 'check',
-    position: 'top',
-    timeout: Math.random() * 3000
-  })
-  buscar();
+
 }
 
 function editarUsuario(x) {
@@ -266,15 +309,38 @@ async function actualizar() {
     cv.value,
     rol.value,
     perfilProfesional.value
-  );
-  $q.notify({
-    message: 'Usuario editado exitosamente',
-    color: 'green',
-    icon: 'check',
-    position: 'top',
-    timeout: Math.random() * 3000
+
+  ).then(() => {
+    agregar.value = false
+    $q.notify({
+      message: 'Usuario editado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'top',
+      timeout: Math.random() * 3000
+    })
+    buscar();
+
+  }).catch((error) => {
+    errores.value = ''
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    }
+    else if (error.response && error.response.data && validarVacios() === true) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
   })
-  buscar();
 }
 
 async function editarEstado(x) {

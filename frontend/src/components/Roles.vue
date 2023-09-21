@@ -69,8 +69,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" v-close-popup />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" v-close-popup />
+                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -93,6 +93,7 @@ let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')
 let separator = ref('cell')
+let errores = ref([])
 
 const pagination = ref({
     rowsPerPage: 6
@@ -117,6 +118,28 @@ function vaciar() {
     denominacion.value = ""
 }
 
+function validarVacios() {
+    if (codigo.value === "" && denominacion.value === "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+    })
+}
+
 async function buscar() {
     roles.value = await useRol.buscarRoles();
     console.log(roles.value);
@@ -128,16 +151,36 @@ async function agregarN() {
     await useRol.agregarRoles({
         codigo: codigo.value,
         denominacion: denominacion.value
+    }).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Rol de usuario agregado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
     });
-    $q.notify({
-        message: 'Rol de usuario agregado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
-    })
-    buscar();
 }
+
 
 function editarRol(rol) {
     console.log("Entró a editar", rol);
@@ -153,15 +196,37 @@ async function actualizar() {
         id.value,
         codigo.value,
         denominacion.value
-    );
-    $q.notify({
-        message: 'Rol de usuario editado exitosamente',
-        color: 'green',
-        icon: 'check',
-        position: 'top',
-        timeout: Math.random() * 3000
+    ).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Rol de usuario editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+
+    }).catch((error) => {
+        errores.value = ''
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        }
+        else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
     })
-    buscar();
 }
 
 async function editarEstado(rol) {
@@ -184,7 +249,7 @@ async function editarEstado(rol) {
 
     } catch (error) {
         console.log(error);
-    } 
+    }
 }
 
 </script>

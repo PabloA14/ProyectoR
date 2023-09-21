@@ -1,9 +1,12 @@
+
 import Programa from '../models/programasFormacion.js'
+import redesConocimiento from '../models/redesConocimiento.js';
 
 
 const httpprogramas = {
 
     getProgramas: async (req, res) => {
+        console.log("get");
         const programas = await Programa.find()
             .populate("RedConocimiento")
             .populate("desarrolloCurricular")
@@ -15,8 +18,11 @@ const httpprogramas = {
     },
 
     postPrograma: async (req, res) => {
-        const { codigo, denominacionPrograma, nivelFormacion, version, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
+        const { codigo, denominacionPrograma, nivelFormacion, version, estado,
+             RedConocimiento, disCurricular, desarrolloCurricular,
+              instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
 
+        console.log(codigo, denominacionPrograma, nivelFormacion, version,estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
         try {
             const programaExistente = await Programa.findOne({ codigo });
 
@@ -24,7 +30,7 @@ const httpprogramas = {
                 return res.status(400).json({ mensaje: 'El codigo ya está registrado.' });
             }
 
-            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
+            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version,estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
             await programa.save();
             res.json({ programa });
         } catch (error) {
@@ -34,6 +40,7 @@ const httpprogramas = {
     },
 
     getProgramaCod: async (req, res) => {
+        console.log("getcod");
         const { codigo } = req.body
         try {
             const cod = await Programa.find({ codigo: codigo })
@@ -50,6 +57,7 @@ const httpprogramas = {
 
 
     putProgramas: async (req, res) => {
+        console.log("put");
         const ProgramaId = req.params.id;
         const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
 

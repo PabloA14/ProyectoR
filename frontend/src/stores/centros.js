@@ -7,7 +7,7 @@ export const useCentros = defineStore("Centros", () => {
   const buscarCentros = async () => {
     try {
       const buscar = await axios.get(`${LinkBD}/api/centrosF/`);
-      
+
       return buscar.data;
     } catch (error) {
       console.log(error.response);
@@ -25,7 +25,7 @@ export const useCentros = defineStore("Centros", () => {
   
 
   const actualizarCentros = async (id,codigo,nombre,direccion,ciudad) => {
-   
+
     try {
       let datos = await axios.put(`${LinkBD}/api/centrosF/${id}`, {
         codigo: codigo,
