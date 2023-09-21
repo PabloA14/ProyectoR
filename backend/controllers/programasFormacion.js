@@ -19,10 +19,10 @@ const httpprogramas = {
 
     postPrograma: async (req, res) => {
         const { codigo, denominacionPrograma, nivelFormacion, version, estado,
-             RedConocimiento, disCurricular, desarrolloCurricular,
-              instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
+            RedConocimiento, disCurricular, desarrolloCurricular,
+            instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
 
-        console.log(codigo, denominacionPrograma, nivelFormacion, version,estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
+        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
         try {
             const programaExistente = await Programa.findOne({ codigo });
 
@@ -30,7 +30,7 @@ const httpprogramas = {
                 return res.status(400).json({ mensaje: 'El codigo ya está registrado.' });
             }
 
-            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version,estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
+            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
             await programa.save();
             res.json({ programa });
         } catch (error) {

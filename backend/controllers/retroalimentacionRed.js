@@ -34,7 +34,7 @@ const httpProyectos = {
 
     getRetroalimentacion: async (req, res) => {
         const retroalimentaciones = await Retroalimentacion.find()
-            .populate("programa")
+        .populate("programa")
         res.status(200).json({ retroalimentaciones })
     },
 
@@ -57,11 +57,11 @@ const httpProyectos = {
 
     putRetroalimentacion: async (req, res) => {
         const retroalimenId = req.params.id;
-        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento } = req.body;
+        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa } = req.body;
 
         try {
             const updatedFields = {
-                titulo, lugadesarrollo, metodologia, creditos, fecha, documento
+                titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa
             };
 
             const updatedRetroalimetacion = await Retroalimentacion.findOneAndUpdate(
