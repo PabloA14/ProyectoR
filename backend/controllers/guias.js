@@ -1,14 +1,14 @@
-import Guias from "../models/guias.js"
+import Guia from "../models/guias.js"
 
 const httpDesarrolloC = {
 
     postGuia: async (req, res) => {
         const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body
         try {
-            const guiasAp = new Guias({
+            const guiasAp = new Guia({
                 codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
             })
-            const cod = await Guias.findOne({ codigo: codigo })
+            const cod = await Guia.findOne({ codigo: codigo })
             if (cod) {
                 return res.status(400).json({ sms: "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
 
@@ -26,7 +26,7 @@ const httpDesarrolloC = {
     },
 
     getGuias: async (req, res) => {
-        const guia = await Guias.find()
+        const guia = await Guia.find()
             .populate("materialAPoyo")
             .populate("instrumentosEvaluacion")
         res.status(200).json({ guia })
@@ -35,7 +35,7 @@ const httpDesarrolloC = {
     getCodigoGuia: async (req, res) => {
         const Codigo = req.params.Codigo
         try {
-            const cod = await Guias.find({ codigo: Codigo })
+            const cod = await Guia.find({ codigo: Codigo })
             console.log(cod);
             if (cod.length === 0) {
                 res.status(400).json({ sms: `sin coincidencias para el codigo de la guia   ${Codigo}` })
@@ -48,30 +48,28 @@ const httpDesarrolloC = {
         }
     },
 
+    
     putGuias: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const guiasId = req.params.id;
+        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body;
+
         try {
-            const updatedGuia = await Guias.findOneAndUpdate(
-                { codigo: Codigo },
+            const updatedFields = {
+                codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
+            };
+
+            const updatedGuias = await Guia.findOneAndUpdate(
+                { _id: guiasId },
                 {
-                    $set: {
-                        nombre: req.body.nombre,
-                        fase: req.body.matriz,
-                        documento: req.body.documento,
-                        instrumentosEvaluacion: req.body.instrumentosEvaluacion,
-                        materialAPoyo: req.body.materialAPoyo
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedGuia) {
-                return res.status(404).json({ msg: 'Guia no encontrada' });
-            }
-            res.status(200).json({ msg: 'Guia actualizada exitosamente', red: updatedGuia });
+            res.status(200).json({ msg: 'actualizado exitosamente', desarrollo: updatedGuias });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  ciudades' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
     }
 
