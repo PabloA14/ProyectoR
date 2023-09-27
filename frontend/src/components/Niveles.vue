@@ -3,8 +3,12 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Niveles de Formación</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="niveles"
-                    :columns="columns" row-key="name" :pagination="pagination">
+                <div class="spinner-container" v-if="useNivel.loading === true">
+                    <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+                </div>
+
+                <q-table v-if="useNivel.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                    :filter="filter" :rows="niveles" :columns="columns" row-key="name" :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -156,7 +160,7 @@ async function agregarN() {
             message: 'Nivel de formación agregado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -200,7 +204,7 @@ async function actualizar() {
             message: 'Nivel de formación editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -237,7 +241,7 @@ async function editarEstado(nivel) {
             message: 'Estado editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar()
@@ -248,3 +252,17 @@ async function editarEstado(nivel) {
 }
 
 </script>
+
+<style scoped>
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

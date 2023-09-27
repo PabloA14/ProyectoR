@@ -1,14 +1,21 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
 
 export const useRedStore = defineStore("redes", () => {
+    let loading = ref(false)
+
     const buscarRedes = async () => {
         try {
+            loading.value = true
             const buscar = await axios.get(`${LinkBD}/api/redes`);
             return buscar.data.redes;
         } catch (error) {
+            loading.value = true
             console.log(error.response);
+        } finally {
+            loading.value = false
         }
     };
     const actualizarRedes = async (
@@ -47,6 +54,7 @@ export const useRedStore = defineStore("redes", () => {
         buscarRedes,
         actualizarRedes,
         agregarRedes,
-        cambiarEstado
+        cambiarEstado,
+        loading
     };
 });
