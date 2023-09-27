@@ -1,14 +1,22 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
+
 
 export const useMaterialStore = defineStore("materiales", () => {
+    let loading = ref(false)
+
     const buscarMateriales = async () => {
         try {
+            loading.value = true
             const buscar = await axios.get(`${LinkBD}/api/materiales`);
             return buscar.data.material;
         } catch (error) {
+            loading.value = true
             console.log(error.response);
+        } finally {
+            loading.value = false
         }
     };
     const actualizarMateriales = async (
@@ -47,6 +55,7 @@ export const useMaterialStore = defineStore("materiales", () => {
         buscarMateriales,
         actualizarMateriales,
         agregarMateriales,
-        cambiarEstado
+        cambiarEstado,
+        loading
     };
 });

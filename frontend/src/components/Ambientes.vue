@@ -3,8 +3,12 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Ambientes de Formación</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="ambiente"
-                    :columns="columns" row-key="name" :pagination="pagination">
+                <div class="spinner-container" v-if="useAmbiente.loading === true">
+                    <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+                </div>
+
+                <q-table v-if="useAmbiente.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                    :filter="filter" :rows="ambiente" :columns="columns" row-key="name" :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -91,7 +95,11 @@
 
 
                     <div class="q-mb-md">
-                        <q-input label="Archivo" color="secondary" v-model="archivo" />
+                        <q-file label="Archivo" type="file" color="secondary" v-model="archivo">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
                 </q-card-section>
 
@@ -201,13 +209,13 @@ async function agregarR() {
         nombre: nombre.value,
         centroformacion: centro.value,
         descripcion: descripcion.value,
-        archivo: archivo.value
+        //archivo: archivo.value
     }).then(() => {
         $q.notify({
             message: 'Ambiente agregado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         agregar.value = false
@@ -241,7 +249,7 @@ function editarAmbiente(ambientes) {
     nombre.value = ambientes.nombre
     centro.value = ambientes.centroformacion._id
     descripcion.value = ambientes.descripcion
-    archivo.value = ambientes.archivo
+    //archivo.value = ambientes.archivo
     agregar.value = true;
 }
 
@@ -252,13 +260,13 @@ async function actualizar() {
         nombre.value,
         centro.value,
         descripcion.value,
-        archivo.value
+        //archivo.value
     ).then(() => {
         $q.notify({
             message: 'Ambiente editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         agregar.value = false
@@ -296,7 +304,7 @@ async function editarEstado(ambientes) {
             message: 'Estado editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar()
@@ -307,3 +315,17 @@ async function editarEstado(ambientes) {
 }
 
 </script>
+
+<style scoped>
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

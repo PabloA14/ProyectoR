@@ -1,14 +1,21 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
 
 export const useNivelStore = defineStore("niveles", () => {
+    let loading = ref(false)
+
     const buscarNiveles = async () => {
         try {
+            loading.value = true
             const buscar = await axios.get(`${LinkBD}/api/nivelesFormacion`);
             return buscar.data.nivelFormacion;
         } catch (error) {
+            loading.value = true
             console.log(error.response);
+        } finally {
+            loading.value = false
         }
     };
     const actualizarNiveles = async (
@@ -45,6 +52,7 @@ export const useNivelStore = defineStore("niveles", () => {
         buscarNiveles,
         actualizarNiveles,
         agregarNiveles,
-        cambiarEstado
+        cambiarEstado,
+        loading
     };
 });

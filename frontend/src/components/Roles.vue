@@ -157,7 +157,7 @@ async function agregarN() {
             message: 'Rol de usuario agregado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -202,7 +202,7 @@ async function actualizar() {
             message: 'Rol de usuario editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -242,7 +242,7 @@ async function editarEstado(rol) {
             message: 'Estado editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar()

@@ -257,7 +257,7 @@ async function agregarU() {
       message: 'Usuario agregado exitosamente',
       color: 'green',
       icon: 'check',
-      position: 'top',
+      position: 'bottom',
       timeout: Math.random() * 3000
     })
     buscar();
@@ -316,7 +316,7 @@ async function actualizar() {
       message: 'Usuario editado exitosamente',
       color: 'green',
       icon: 'check',
-      position: 'top',
+      position: 'bottom',
       timeout: Math.random() * 3000
     })
     buscar();
@@ -356,7 +356,7 @@ async function editarEstado(x) {
       message: 'Estado editado exitosamente',
       color: 'green',
       icon: 'check',
-      position: 'top',
+      position: 'bottom',
       timeout: Math.random() * 3000
     })
     buscar()

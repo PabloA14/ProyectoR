@@ -1,8 +1,12 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
+
 
 export const useUsuarioStore = defineStore("usuario", () => {
+  let loading = ref(false)
+
   const buscarUsuarios = async () => {
     try {
       const buscar = await axios.get(`${LinkBD}/api/usuario`);
@@ -44,18 +48,16 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
   const logeo = async (cedula, clave) => {
     try {
-      //loading.value = true
+      loading.value = true
       let datos = await axios.post(`${LinkBD}/api/usuario/login`,
         { cedula: cedula, clave: clave });
-      //console.log(datos);
       return datos;
     } catch (error) {
-      //loading.value = true
+      loading.value = true
       console.log(error);
-      console.log(LinkBD);
       throw error
     } finally {
-      //loading.value = false
+      loading.value = false
     }
   };
 
@@ -64,6 +66,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
     agregarUsuario,
     actualizarUsuario,
     cambiarEstado,
-    logeo
+    logeo,
+    loading
   };
 });

@@ -41,7 +41,10 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <q-btn color="secondary" class="full-width" label="Ingresar" @click.prevent="iniciarSesion()" />
+                            <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
+                                v-if="useUsuario.loading === true" />
+                            <q-btn v-else color="secondary" class="full-width" label="Ingresar"
+                                @click.prevent="iniciarSesion()" />
                         </div><br>
                     </q-form>
                 </q-card-section>
