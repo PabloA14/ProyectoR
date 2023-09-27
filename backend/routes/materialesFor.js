@@ -23,7 +23,7 @@ routes.put("/:id", [
     check("tipo", "El tipo es obligatorio").trim().not().isEmpty(),
     validarCampos
 ], httpMateriales.putMaterial)
-routes.patch("/:id", httpMateriales.patchMaterial) 
+routes.patch("/:id", httpMateriales.patchMaterial)
 
 
 

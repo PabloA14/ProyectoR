@@ -34,7 +34,7 @@ const httpProyectos = {
 
     getRetroalimentacion: async (req, res) => {
         const retroalimentaciones = await Retroalimentacion.find()
-        .populate("programa")
+            .populate("programa")
         res.status(200).json({ retroalimentaciones })
     },
 

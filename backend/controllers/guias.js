@@ -48,7 +48,7 @@ const httpDesarrolloC = {
         }
     },
 
-    
+
     putGuias: async (req, res) => {
         const guiasId = req.params.id;
         const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body;
