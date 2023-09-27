@@ -1,14 +1,21 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
+
 
 export const useRolStore = defineStore("roles", () => {
+  let loading = ref(false)
   const buscarRoles = async () => {
     try {
+      loading.value = true
       const buscar = await axios.get(`${LinkBD}/api/roles`);
       return buscar.data.roles;
     } catch (error) {
+      loading.value = true
       console.log(error.response);
+    } finally {
+      loading.value = false
     }
   };
 
@@ -50,7 +57,8 @@ export const useRolStore = defineStore("roles", () => {
     buscarRoles,
     actualizarRoles,
     agregarRoles,
-    cambiarEstado
+    cambiarEstado,
+    loading
 
   };
 });

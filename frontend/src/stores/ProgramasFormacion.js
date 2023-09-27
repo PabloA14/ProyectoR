@@ -1,30 +1,31 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
 
 export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () => {
+  let loading = ref(false)
 
   const getProgramas = async () => {
     try {
-      const programas = await axios.get(`${LinkBD}/api/programasFormacion/`);
-      return programas.data.programas;
+      loading.value = true
+      const buscar = await axios.get(`${LinkBD}/api/programasFormacion`);
+      return buscar.data.programas;
     } catch (error) {
+      loading.value = true
       console.log(error);
+    } finally {
+      loading.value = false
     }
   }
 
   const agregarProgramaFormacion = async (info) => {
-    console.log("asdasdad",info);
     try {
-      const datos = await axios.post(`${LinkBD}/api/programasFormacion`, info,{
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json"
-        }
-      });
-      return datos.data;
+      const datos = await axios.post(`${LinkBD}/api/programasFormacion`, info);
+      return datos
     } catch (error) {
-      console.log(error);;
+      console.log(error)
+      throw error
     }
   }
 
@@ -36,7 +37,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
         nivelFormacion,
         version
       });
-      return datos.data;
+      return datos
     } catch (error) {
       console.log(error);
       throw error;
@@ -58,7 +59,8 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     getProgramas,
     agregarProgramaFormacion,
     actualizarProgramaFormacion,
-    cambiarEstado
+    cambiarEstado,
+    loading
   }
 });
 

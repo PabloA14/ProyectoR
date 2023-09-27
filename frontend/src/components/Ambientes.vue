@@ -22,7 +22,7 @@
                     </template>
 
                     <template v-slot:body-cell-centro="props">
-                        <q-td :props="props" style="white-space: pre-line;">
+                        <q-td :props="props">
                             {{ props.row.centroformacion.nombre }}
                         </q-td>
                     </template>
@@ -148,7 +148,6 @@ const columns = [
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'centro', align: 'center', label: 'Centro de Formación', field: "centroformacion" },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
-    //{ name: 'archivo', align: 'center', label: 'Archivo', field: "archivo" },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]

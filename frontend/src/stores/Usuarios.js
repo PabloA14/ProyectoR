@@ -9,10 +9,14 @@ export const useUsuarioStore = defineStore("usuario", () => {
 
   const buscarUsuarios = async () => {
     try {
+      loading.value = true
       const buscar = await axios.get(`${LinkBD}/api/usuario`);
       return buscar.data.usuarios;
     } catch (error) {
+      loading.value = true
       console.log(error.response);
+    } finally {
+      loading.value = false
     }
   };
 

@@ -129,11 +129,11 @@
 
                     <q-item clickable v-ripple>
                         <q-item-section avatar>
-                            <q-icon name="drafts" />
+                            <q-icon  class="fa-solid fa-gear"  />
                         </q-item-section>
 
                         <q-item-section>
-                            Drafts
+                            Configuración
                         </q-item-section>
                     </q-item>
                 </q-list>

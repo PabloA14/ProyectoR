@@ -3,8 +3,11 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Roles de Usuario</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="roles"
-                    :columns="columns" row-key="name" :pagination="pagination">
+                <div class="spinner-container" v-if="useRol.loading === true">
+                    <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+                </div>
+                <q-table v-if="useRol.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                    :filter="filter" :rows="roles" :columns="columns" row-key="name" :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -253,3 +256,17 @@ async function editarEstado(rol) {
 }
 
 </script>
+
+<style scoped>
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

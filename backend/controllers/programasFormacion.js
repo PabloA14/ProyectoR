@@ -1,7 +1,4 @@
-
 import Programa from '../models/programasFormacion.js'
-import redesConocimiento from '../models/redesConocimiento.js';
-
 
 const httpprogramas = {
 
@@ -9,6 +6,7 @@ const httpprogramas = {
         console.log("get");
         const programas = await Programa.find()
             .populate("RedConocimiento")
+            .populate("nivelFormacion")
             .populate("desarrolloCurricular")
             .populate("instructores")
             .populate("ambienteFormacion")
@@ -27,7 +25,7 @@ const httpprogramas = {
             const programaExistente = await Programa.findOne({ codigo });
 
             if (programaExistente) {
-                return res.status(400).json({ mensaje: 'El codigo ya está registrado.' });
+                return res.status(400).json({ mensaje: 'El programa ya está registrado.' });
             }
 
             const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
@@ -54,14 +52,17 @@ const httpprogramas = {
             res.json({ error })
         }
     },
-
-
     putProgramas: async (req, res) => {
-        console.log("put");
         const ProgramaId = req.params.id;
         const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
 
         try {
+
+            const existingP = await Programa.findOne({ codigo: codigo });
+            if (existingP && existingP._id.toString() !== ProgramaId) {
+                return res.status(400).json({ msg: 'El programa ya está registrado' });
+            }
+
             const updatedFields = {
                 codigo,
                 denominacionPrograma,
@@ -84,6 +85,23 @@ const httpprogramas = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
+        }
+    },
+    patchPrograma: async (req, res) => {
+        const id = req.params.id;
+        const { estado } = req.body;
+        try {
+            const programa = await Programa.findById(id);
+            if (programa) {
+                programa.estado = estado;
+                await programa.save();
+                res.json(programa);
+            } else {
+                res.status(404).json({ mensaje: `programa con id: ${id} no encontrado` });
+            }
+        } catch (error) {
+            console.log(`Error al actualizar el programa: ${error}`);
+            res.status(500).json({ error: "Error interno del servidor" });
         }
     }
 }
