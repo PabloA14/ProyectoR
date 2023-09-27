@@ -7,14 +7,25 @@ export const useCentros = defineStore("Centros", () => {
   const buscarCentros = async () => {
     try {
       const buscar = await axios.get(`${LinkBD}/api/centrosF/`);
-      
-      return buscar.data.centros;
+
+      return buscar.data;
     } catch (error) {
       console.log(error.response);
     }
   };
+  const buscarCiudad = async () => {
+    try {
+      const buscar = await axios.get(`${LinkBD}/api/ciudades`);
+      return buscar.data;
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   
+
   const actualizarCentros = async (id,codigo,nombre,direccion,ciudad) => {
+
     try {
       let datos = await axios.put(`${LinkBD}/api/centrosF/${id}`, {
         codigo: codigo,
@@ -55,5 +66,6 @@ export const useCentros = defineStore("Centros", () => {
     agregarCentro,
     actualizarCentros,
     cambiarEstado,
+    buscarCiudad
   };
 });
