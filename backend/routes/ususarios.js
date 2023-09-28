@@ -2,6 +2,7 @@ import httpUsuario from "../controllers/usuarios.js";
 import { Router } from "express";
 import { check } from "express-validator"
 import { validarCampos } from "../middlewares/validar_campos.js";
+//import { validarExistaArchivo } from "../middlewares/validar-exista-archivo.js";
 
 
 const router = Router()
@@ -46,6 +47,16 @@ router.post("/login", [
     check("clave", "Ingrese la contraseña").trim().not().isEmpty(),
     validarCampos
 ], httpUsuario.loginUsuario)
+
+router.post('/uploadcloudFoto/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+],httpUsuario.cargarArchivoCloudFoto)
+
+router.post('/uploadcloudHoja/:id',[
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+],httpUsuario.cargarArchivoCloudHoja)
 
 export default router
 

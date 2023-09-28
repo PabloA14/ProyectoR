@@ -6,8 +6,8 @@
         <div class="spinner-container" v-if="useUsuari.loading === true">
           <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
         </div>
-        <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="usuarios"
-          :columns="columns" row-key="name" :pagination="pagination">
+        <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
@@ -76,31 +76,31 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Cédula" type="number" color="secondary" v-model="cedula" />
+            <q-input label="Cédula*" type="number" color="secondary" v-model="cedula" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Nombre" color="secondary" v-model="nombre" />
+            <q-input label="Nombre*" color="secondary" v-model="nombre" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Apellidos" color="secondary" v-model="apellido" />
+            <q-input label="Apellidos*" color="secondary" v-model="apellido" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Teléfono" type="number" color="secondary" v-model="telefono" />
+            <q-input label="Teléfono*" type="number" color="secondary" v-model="telefono" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Correo Electrónico" color="secondary" v-model="correo" />
+            <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <q-input label="Contraseña" type="password" color="secondary" v-model="clave" />
+            <q-input label="Contraseña*" type="password" color="secondary" v-model="clave" />
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Red de Conocimiento" color="secondary" v-model="red"
+            <q-select label="Red de Conocimiento*" color="secondary" v-model="red"
               :options="redes.map(red => ({ label: red.denominacion, value: red._id }))" emit-value map-options>
             </q-select>
           </div>
@@ -110,13 +110,13 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Rol" color="secondary" v-model="rol"
+            <q-select label="Rol*" color="secondary" v-model="rol"
               :options="roles.map(rol => ({ label: rol.denominacion, value: rol._id }))" emit-value map-options>
             </q-select>
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Perfil Profesional" color="secondary" v-model="perfilProfesional" />
+            <q-input label="Perfil Profesional*" color="secondary" v-model="perfilProfesional" />
           </div>
         </q-card-section>
 
@@ -401,19 +401,21 @@ async function editarEstado(x) {
   tbody
     /* height of all previous header rows */
     scroll-margin-top: 48px
+    cursor: pointer
+
 </style>
 
 <style scoped>
 .spinner-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgba(255, 255, 255, 0.8);
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
 }
 </style>
 

@@ -9,7 +9,7 @@ import Niveles from "../components/Niveles.vue"
 import Roles from "../components/Roles.vue"
 import Materiales from "../components/Materiales.vue"
 import Ambientes from "../components/Ambientes.vue"
-
+import Configuracion from "../components/Configuracion.vue"
 
 export const routes = [
     { path: "/", component: Login },
@@ -24,6 +24,7 @@ export const routes = [
             { path: "/roles", component: Roles },
             { path: "/materiales", component: Materiales },
             { path: "/ambientes", component: Ambientes },
+            { path: "/configuracion", component: Configuracion },
         ]
     },
 ]

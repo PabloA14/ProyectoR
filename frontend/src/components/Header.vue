@@ -11,7 +11,7 @@
                     </q-avatar>
                     Repositorio
                 </q-toolbar-title>
-                <q-icon name="logout" size="30px" style="cursor: pointer;" />
+                <q-icon name="logout" title="Cerrar Sesión" size="30px" style="cursor: pointer;" />
             </q-toolbar>
         </q-header>
 
@@ -127,15 +127,18 @@
 
                     <q-separator />
 
-                    <q-item clickable v-ripple>
-                        <q-item-section avatar>
-                            <q-icon  class="fa-solid fa-gear"  />
-                        </q-item-section>
+                    <router-link to="configuracion" style="color: black; text-decoration: none;">
+                        <q-item clickable v-ripple>
+                            <q-item-section avatar>
+                                <q-icon class="fa-solid fa-gear" />
+                            </q-item-section>
 
-                        <q-item-section>
-                            Configuración
-                        </q-item-section>
-                    </q-item>
+                            <q-item-section>
+                                Configuración
+                            </q-item-section>
+                        </q-item>
+                    </router-link>
+
                 </q-list>
             </q-scroll-area>
         </q-drawer>

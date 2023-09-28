@@ -17,9 +17,7 @@ import retroalimentacionRed from "./routes/retroalimentacion.js"
 import investigaciones from "./routes/investigaciones.js"
 import mongoose from "mongoose"
 import cors from "cors"
-
-
-
+import fileUpload from "express-fileupload"
 
 class Server {
 
@@ -53,6 +51,11 @@ class Server {
         this.app.use(express.json())
         this.app.use(cors())
         this.app.use(express.static('public'))
+        this.app.use(fileUpload({
+            useTempFiles: true,
+            tempFileDir: '/tmp/',
+            createParentPath: true
+        }));
     }
 
     conecarBaseDatos() {

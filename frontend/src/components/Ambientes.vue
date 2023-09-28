@@ -147,7 +147,7 @@ const columns = [
     { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'centro', align: 'center', label: 'Centro de Formación', field: "centroformacion" },
-    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]

@@ -1,4 +1,5 @@
 import Material from "../models/materialesFor.js"
+import { v2 as cloudinary } from 'cloudinary';
 
 const httpMateriales = {
 
@@ -92,6 +93,104 @@ const httpMateriales = {
         } catch (error) {
             console.log(`Error al actualizar el material: ${error}`);
             res.status(500).json({ error: "Error interno del servidor" });
+        }
+    },
+    cargarArchivo: async (req, res) => {
+        const { id } = req.params;
+        try {
+            let nombre
+            await subirArchivo(req.files, undefined)
+                .then(value => nombre = value)
+                .catch((err) => console.log(err));
+
+            //persona a la cual pertenece la foto
+            let holder = await Material.findById(id);
+            //si el Holder ya tiene foto la borramos
+            if (holder.documentacion) {
+                const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+                const pathImage = path.join(__dirname, '../uploads/', holder.documentacion);
+
+                if (fs.existsSync(pathImage)) {
+                    fs.unlinkSync(pathImage)
+                }
+
+            }
+
+            holder = await Material.findByIdAndUpdate(id, { documentacion: nombre })
+            //responder
+            res.json({ nombre });
+        } catch (error) {
+            res.status(400).json({ error, 'general': 'Controlador' })
+        }
+
+    },
+    mostrarArchivo: async (req, res) => {
+        const { id } = req.params
+
+        try {
+            let holder = await Material.findById(id)
+            if (holder.documentacion) {
+                const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
+                const pathImage = path.join(__dirname, '../uploads/', holder.documentacion);
+                if (fs.existsSync(pathImage)) {
+                    return res.sendFile(pathImage)
+                }
+            }
+            res.status(400).json({ msg: 'Falta Archivo' })
+        } catch (error) {
+            res.status(400).json({ error })
+        }
+    },
+    cargarArchivoCloud: async (req, res) => {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true
+        });
+
+        const { id } = req.params;
+        try {
+            //subir archivo
+            if (!req.files || Object.keys(req.files).length === 0 || !req.files.documentacion) {
+                return res.status(400).json({ msg: "No hay archivos en la peticion" })
+            }
+
+            const { tempFilePath } = req.files.documentacion
+            cloudinary.uploader.upload(tempFilePath,
+                { width: 250, crop: "limit" },
+                async function (error, result) {
+                    if (result) {
+                        let holder = await Material.findById(id);
+                        if (holder.documentacion) {
+                            const nombreTemp = holder.documentacion.split('/')
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg
+                            const [public_id] = nombreArchivo.split('.')
+                            cloudinary.uploader.destroy(public_id)
+                        }
+                        holder = await Material.findByIdAndUpdate(id, { documentacion: result.url })
+                        //responder
+                        res.json({ url: result.url });
+                    } else {
+                        res.json(error)
+                    }
+
+                })
+        } catch (error) {
+            res.status(400).json({ error, 'general': 'Controlador' })
+        }
+    },
+    mostrarArchivoCloud: async (req, res) => {
+        const { id } = req.params
+
+        try {
+            let holder = await Material.findById(id)
+            if (holder.documentacion) {
+                return res.json({ url: holder.documentacion })
+            }
+            res.status(400).json({ msg: 'Falta Archivo' })
+        } catch (error) {
+            res.status(400).json({ error })
         }
     }
 

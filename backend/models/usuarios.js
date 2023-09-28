@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const iususarioSchema = new mongoose.Schema({
+    foto: { type: String, required: false },
     cedula: { type: String, required: true, unique: true },
     nombre: { type: String, required: true },
     apellidos: { type: String, required: true },
@@ -12,7 +13,7 @@ const iususarioSchema = new mongoose.Schema({
     rol: { type: mongoose.Schema.Types.ObjectId, ref: 'rolesUsuario', required: true },
     perfilProfesional: { type: String, required: true },
     estado: { type: Number, default: 1, required: true },
-    createdAt: { type: Date, default: Date.now },
+    createdAt: { type: Date, default: Date.now }
 })
 
 export default mongoose.model("Usuario", iususarioSchema) 

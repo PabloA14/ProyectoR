@@ -134,7 +134,6 @@ const columns = [
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
-    { name: 'archivo', align: 'center', label: 'Archivo', field: "documentacion" },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]

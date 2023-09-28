@@ -23,8 +23,27 @@ routes.put("/:id", [
     check("tipo", "El tipo es obligatorio").trim().not().isEmpty(),
     validarCampos
 ], httpMateriales.putMaterial)
+
 routes.patch("/:id", httpMateriales.patchMaterial)
 
+routes.post('/upload/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+], httpMateriales.cargarArchivo)
 
+routes.get('/upload/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+], httpMateriales.mostrarArchivo)
+
+routes.post('/uploadcloud/:id', [
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+], httpMateriales.cargarArchivoCloud)
+
+routes.get("/uploadcloud/:id", [
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+], httpMateriales.mostrarArchivoCloud)
 
 export default routes

@@ -62,11 +62,11 @@
 
                 <q-card-section style="max-height: 65vh" class="scroll">
                     <div class="q-mb-md">
-                        <q-input label="Código" color="secondary" v-model="codigo" />
+                        <q-input label="Código*" color="secondary" v-model="codigo" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Denominación" color="secondary" v-model="denominacion" />
+                        <q-input label="Denominación*" color="secondary" v-model="denominacion" />
                     </div>
                 </q-card-section>
 
