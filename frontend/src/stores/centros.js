@@ -8,7 +8,7 @@ export const useCentros = defineStore("Centros", () => {
     try {
       const buscar = await axios.get(`${LinkBD}/api/centrosF/`);
 
-      return buscar.data.centros
+      return buscar.data;
     } catch (error) {
       console.log(error.response);
     }

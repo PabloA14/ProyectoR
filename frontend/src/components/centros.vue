@@ -1,3 +1,7 @@
+
+
+
+
 <template>
   <div>
     <div class="text-h4 text-center q-mb-md q-mt-md">Centros De Formacion</div>
