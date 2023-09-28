@@ -1,12 +1,17 @@
-
-
-
-
 <template>
   <div>
     <div class="text-h4 text-center q-mb-md q-mt-md">Centros De Formacion</div>
 
-    <div class="q-pa-md">
+    <div class="spinner-container" v-if="loading">
+      <q-spinner
+        style="margin-left: 10px"
+        color="black"
+        size="7em"
+        :thickness="10"
+      />
+    </div>
+
+    <div class="q-pa-md" v-if="!loading">
       <q-table
         title="Centros"
         :rows="centros.centros"
@@ -14,10 +19,16 @@
         row-key="codigo"
       >
         <template v-slot:body-cell-opciones="props">
-      <q-td :props="props">
-        <q-btn color="secondary" @click="editar(props.row), (editarF = true), (agregar = false)">Editar</q-btn>
-      </q-td>
-    </template>
+          <q-td :props="props">
+            <q-icon
+              color="orange"
+              name="fa-solid fa-pen-to-square fa-xl"
+              size="20px"
+              style="margin-right: 10px; cursor: pointer"
+              @click="editar(props.row), (editarF = true), (agregar = false)"
+            />
+          </q-td>
+        </template>
         <template v-slot:top-left>
           <q-btn
             color="secondary"
@@ -36,10 +47,7 @@
         <q-card-section>
           <div class="text-h6">Agregar Centro</div>
 
-          <q-separator style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+          <q-separator style="height: 5px; margin-top: 5px" color="secondary" />
           <q-input v-model="codigo" label="Codigo Centro" />
           <q-input v-model="nombre" label="Nombre" />
           <q-select
@@ -68,10 +76,7 @@
         <q-card-section>
           <div class="text-h6">Editar Centro</div>
 
-          <q-separator style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+          <q-separator style="height: 5px; margin-top: 5px" color="secondary" />
           <q-input v-model="codigo" label="Codigo Centro" />
           <q-input v-model="nombre" label="Nombre" />
           <q-select
@@ -85,7 +90,7 @@
         </q-card-section>
         <q-card-actions align="right">
           <q-btn color="primary" label="Guardar" @click="guardarEdicion" />
-          <q-btn color="negative" label="Cancelar" @click="editarF = false"  />
+          <q-btn color="negative" label="Cancelar" @click="editarF = false" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -95,7 +100,7 @@
 <script setup>
 import { ref } from "vue";
 import { useCentros } from "../stores/centros.js";
-import { useQuasar } from 'quasar'
+import { useQuasar } from "quasar";
 
 const useCentro = useCentros();
 let centros = ref([]);
@@ -105,6 +110,7 @@ let ciudad = ref("");
 let ciudad2 = ref("");
 let direccion = ref("");
 let id = ref("");
+let loading = ref(false);
 let editarF = ref(false);
 let agregar = ref(false);
 const $q = useQuasar();
@@ -140,10 +146,13 @@ traerCentros();
 
 async function traerCentros() {
   try {
+    loading.value = true; // Mostrar el spinner mientras se carga
     centros.value = await useCentro.buscarCentros();
     city.value = await useCentro.buscarCiudad();
   } catch (error) {
     console.log(error);
+  } finally {
+    loading.value = false; // Ocultar el spinner cuando la carga haya terminado
   }
 }
 
@@ -159,24 +168,25 @@ async function agregarCentro() {
     );
     vaciar();
     traerCentros();
-     // Muestra una alerta de éxito
-     $q.notify({
-      message: 'Centro agregado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'top',
-      timeout: Math.random() * 3000
+    agregar.value = false;
+    // Muestra una alerta de éxito
+    $q.notify({
+      message: "Centro agregado exitosamente",
+      color: "green",
+      icon: "check",
+      position: "bottom",
+      timeout: Math.random() * 3000,
     });
     agregar.value = false;
     return agregar;
-  } catch  (error) {
-     // Muestra una alerta de error
-     $q.notify({
-      message: 'Error al agregar el centro',
-      color: 'negative',
-      icon: 'warning',
-      position: 'top',
-      timeout: Math.random() * 3000
+  } catch (error) {
+    // Muestra una alerta de error
+    $q.notify({
+      message: "Error al agregar el centro",
+      color: "negative",
+      icon: "warning",
+      position: "bottom",
+      timeout: Math.random() * 3000,
     });
     console.log(error);
   }
@@ -215,25 +225,39 @@ async function guardarEdicion() {
     );
     vaciar();
     $q.notify({
-      message: 'Editado correctamente',
-      color: 'green',
-      icon: 'check',
-      position: 'top',
-      timeout: Math.random() * 3000
+      message: "Editado correctamente",
+      color: "green",
+      icon: "check",
+      position: "bottom",
+      timeout: Math.random() * 3000,
     });
 
     console.log("--------------------------");
     console.log(guardar);
     traerCentros();
+    editarF.value = false;
   } catch (error) {
     $q.notify({
-      message: 'Error al editar',
-      color: 'negative',
-      icon: 'warning',
-      position: 'top',
-      timeout: Math.random() * 3000
+      message: "Error al editar",
+      color: "negative",
+      icon: "warning",
+      position: "bottom",
+      timeout: Math.random() * 3000,
     });
     console.log(error);
   }
 }
 </script>
+<style scoped>
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+</style>
