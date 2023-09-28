@@ -3,10 +3,10 @@ import CentrosF from "../models/centrosFormacion.js"
 const httpCentros = {
 
     postCentro: async (req, res) => {
-        const { codigo, nombre, ciudad, direccion  } = req.body
+        const { codigo, nombre, ciudad, direccion } = req.body
         try {
             const centro = new CentrosF({
-                codigo, nombre, ciudad , direccion
+                codigo, nombre, ciudad, direccion
             })
             const cod = await CentrosF.findOne({ codigo: codigo })
             if (cod) {
@@ -48,11 +48,11 @@ const httpCentros = {
 
     putCentros: async (req, res) => {
         const redId = req.params.id;
-        const { codigo, nombre, direccion,ciudad } = req.body;
+        const { codigo, nombre, direccion, ciudad } = req.body;
         try {
             console.log("Put centro");
             const updatedFields = {
-                codigo, nombre, direccion,ciudad
+                codigo, nombre, direccion, ciudad
             };
 
             const updatedCentro = await CentrosF.findOneAndUpdate(

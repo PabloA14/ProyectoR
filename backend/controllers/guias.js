@@ -48,7 +48,7 @@ const httpDesarrolloC = {
         }
     },
 
-    
+
     putGuias: async (req, res) => {
         const guiasId = req.params.id;
         const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body;
@@ -66,7 +66,7 @@ const httpDesarrolloC = {
                 { new: true }
             );
 
-            res.status(200).json({ msg: 'actualizado exitosamente', desarrollo: updatedGuias });
+            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });

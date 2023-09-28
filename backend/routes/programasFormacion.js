@@ -1,11 +1,29 @@
-
 import httpprogramas from "../controllers/programasFormacion.js";
 import { Router } from "express";
+import { check } from "express-validator";
+import { validarCampos } from "../middlewares/validar_campos.js";
 
 const router = Router()
 
-router.post("/", httpprogramas.postPrograma)
+router.post("/", [
+    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
+    check("denominacionPrograma", "La denominación es obligatoria").trim().not().isEmpty(),
+    check("nivelFormacion", "El nivel de formación es obligatorio").not().isEmpty(),
+    check("version", "La version es obligatoria").trim().not().isEmpty(),
+    validarCampos
+], httpprogramas.postPrograma)
+
 router.get("/traer", httpprogramas.getProgramaCod)
 router.get("/", httpprogramas.getProgramas)
-router.put("/:id", httpprogramas.putProgramas)
+
+router.put("/:id", [
+    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
+    check("denominacionPrograma", "La denominación es obligatoria").trim().not().isEmpty(),
+    check("nivelFormacion", "El nivel de formación es obligatorio").not().isEmpty(),
+    check("version", "La version es obligatoria").trim().not().isEmpty(),
+    validarCampos
+], httpprogramas.putProgramas)
+
+router.patch("/:id", httpprogramas.patchPrograma)
+
 export default router

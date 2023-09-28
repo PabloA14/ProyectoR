@@ -36,36 +36,29 @@ const httpregistro = {
         }
     },
 
-
     putRegistro: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const registroId = req.params.id;
+        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento } = req.body;
+
         try {
+            const updatedFields = {
+                titulo, lugadesarrollo, metodologia, creditos, fecha, documento
+            };
+
             const updatedRegistro = await Registro.findOneAndUpdate(
-                { codigosnies: Codigo },
+                { _id: registroId },
                 {
-                    $set: {
-                        titulo: req.body.titulo,
-                        lugadesarrollo: req.body.lugar,
-                        metodologia: req.body.metodologia,
-                        creditos: req.body.creditos,
-                        fecha: req.body.fecha,
-                        documento: req.body.documento
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedRegistro) {
-                return res.status(404).json({ msg: 'registro  no encontrado' });
-            }
-            res.status(200).json({ msg: 'Guia actualizada exitosamente', red: updatedRegistro });
+            res.status(200).json({ msg: 'actualizado exitosamente', registro: updatedRegistro });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  registro' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
-    }
-
-
+    },
 
 
 }

@@ -3,8 +3,14 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Redes de Conocimiento</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="redes"
-                    :columns="columns" row-key="name" :pagination="pagination">
+
+                <div class="spinner-container" v-if="useRed.loading === true">
+                    <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+                </div>
+
+                <q-table v-if="useRed.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                    :filter="filter" :rows="redes" :columns="columns" row-key="name" :pagination="pagination">
+
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -58,18 +64,18 @@
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                     <div class="q-mb-md">
-                        <q-input label="Código" color="secondary" v-model="codigo" />
+                        <q-input label="Código*" color="secondary" v-model="codigo" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Denominación" color="secondary" v-model="denominacion" />
+                        <q-input label="Denominación*" color="secondary" v-model="denominacion" />
                     </div>
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary"  />
+                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
                     <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
@@ -157,7 +163,7 @@ async function agregarR() {
             message: 'Red de conocimiento agregada exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -201,7 +207,7 @@ async function actualizar() {
             message: 'Red de conocimiento editada exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -238,7 +244,7 @@ async function editarEstado(red) {
             message: 'Estado editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar()
@@ -248,3 +254,17 @@ async function editarEstado(red) {
     }
 }
 </script>
+
+<style scoped>
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

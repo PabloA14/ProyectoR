@@ -41,7 +41,10 @@
                             contraseña?</p><br>
 
                         <div class="row">
-                            <q-btn color="secondary" class="full-width" label="Ingresar" @click.prevent="iniciarSesion()" />
+                            <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
+                                v-if="useUsuario.loading === true" />
+                            <q-btn v-else color="secondary" class="full-width" label="Ingresar"
+                                @click.prevent="iniciarSesion()" />
                         </div><br>
                     </q-form>
                 </q-card-section>
@@ -125,11 +128,13 @@ async function iniciarSesion() {
     useUsuario.logeo(documento.value, contrasena.value)
         .then((res) => {
             const token = res.data.token;
+            const usuario = res.data.user
             sessionStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             ruta.value = "/home";
             router.push(ruta.value);
             console.log(token);
+            console.log(usuario);
 
         }).catch((error) => {
             if (error.response && error.response.data.errors && validar() === true) {

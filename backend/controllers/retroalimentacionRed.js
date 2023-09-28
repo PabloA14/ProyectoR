@@ -56,32 +56,28 @@ const httpProyectos = {
     },
 
     putRetroalimentacion: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const retroalimenId = req.params.id;
+        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa } = req.body;
+
         try {
-            const updatedRetroalimentacion = await Retroalimentacion.findOneAndUpdate(
-                { codigo: Codigo },
+            const updatedFields = {
+                titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa
+            };
+
+            const updatedRetroalimetacion = await Retroalimentacion.findOneAndUpdate(
+                { _id: retroalimenId },
                 {
-                    $set: {
-                        nombre: req.body.nombre,
-                        descripcion: req.body.descripcion,
-                        fecha: req.body.fecha,
-                        documentos: req.body.documentos,
-                        programa: req.body.programa
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedRetroalimentacion) {
-                return res.status(404).json({ msg: 'Proyecto no encontradp' });
-            }
-            res.status(200).json({ msg: 'Programa actualizado exitosamente', red: updatedRetroalimentacion });
+            res.status(200).json({ msg: 'actualizado exitosamente', retroalimentacion: updatedRetroalimetacion });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar Programas' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
     }
-
 
 }
 

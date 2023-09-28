@@ -37,34 +37,29 @@ const httpInvestigaciones = {
     },
 
     putninvestigacion: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const investigacionId = req.params.id;
+        const { codigo, denominacion, descripcion, fecha, documentos, idPRograma } = req.body;
 
         try {
-            const updateniveles = await Investigacion.findOneAndUpdate(
-                //codigo unico / params
-                { codigo: Codigo },
+            const updatedFields = {
+                codigo, denominacion, descripcion, fecha, documentos, idPRograma
+            };
+
+            const updatedInvestigacion = await Investigacion.findOneAndUpdate(
+                { _id: investigacionId },
                 {
-                    $set: {
-                        codigo: req.body.codigo,
-                        denominacion: req.body.denominacion,
-                        descripcion: req.body.descripcion,
-                        fecha: req.body.fecha,
-                        documentos: req.body.documentos,
-                        idPRograma: req.body.idPRograma,
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updateniveles) {
-                return res.status(404).json({ msg: 'investigacion no encontrado' });
-            }
-            res.status(200).json({ msg: 'investigacion actualizada exitosamente', red: updateniveles });
+            res.status(200).json({ msg: 'actualizado exitosamente', instrumento: updatedInvestigacion });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar  investigacion' });
+            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
     }
+
 
 }
 

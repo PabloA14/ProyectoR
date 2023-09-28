@@ -1,10 +1,10 @@
 import httpCentrosF from "../controllers/centrosFormacion.js";
 import { Router } from "express";
-const routes =Router()
+const routes = Router()
 
-routes.post("/", httpCentrosF.postCentro )
-routes.get("/" , httpCentrosF.getCentros)
-routes.get("/:Codigo" , httpCentrosF.getCodigoCentro)
+routes.post("/", httpCentrosF.postCentro)
+routes.get("/", httpCentrosF.getCentros)
+routes.get("/:Codigo", httpCentrosF.getCodigoCentro)
 routes.put("/:id", httpCentrosF.putCentros)
 
 

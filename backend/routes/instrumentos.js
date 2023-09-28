@@ -5,7 +5,7 @@ const routes = Router()
 routes.post("/", httpInstrumentos.postInstrumentos)
 routes.get("/", httpInstrumentos.getInstrumentos)
 routes.get("/:Codigo", httpInstrumentos.getInstrumentoCodigo)
-routes.put("/:codigo", httpInstrumentos.putInstrumentosE)
+routes.put("/:id", httpInstrumentos.putInstrumentosE)
 
 
 export default routes

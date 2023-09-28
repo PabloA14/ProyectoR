@@ -3,8 +3,12 @@
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Materiales de Formación</div>
             <div class="q-pa-md" style="width: 100%;">
-                <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="material"
-                    :columns="columns" row-key="name" :pagination="pagination">
+                <div class="spinner-container" v-if="useMaterial.loading === true">
+                    <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+                </div>
+
+                <q-table v-if="useMaterial.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                    :filter="filter" :rows="material" :columns="columns" row-key="name" :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -194,7 +198,7 @@ async function agregarR() {
             message: 'Material agregado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -244,7 +248,7 @@ async function actualizar() {
             message: 'Material editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar();
@@ -281,7 +285,7 @@ async function editarEstado(materiales) {
             message: 'Estado editado exitosamente',
             color: 'green',
             icon: 'check',
-            position: 'top',
+            position: 'bottom',
             timeout: Math.random() * 3000
         })
         buscar()
@@ -293,3 +297,17 @@ async function editarEstado(materiales) {
 
 
 </script>
+
+<style scoped>
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>
