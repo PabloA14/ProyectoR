@@ -22,10 +22,8 @@ export const useCentros = defineStore("Centros", () => {
     }
   };
 
-  
 
   const actualizarCentros = async (id,codigo,nombre,direccion,ciudad) => {
-
     try {
       let datos = await axios.put(`${LinkBD}/api/centrosF/${id}`, {
         codigo: codigo,
