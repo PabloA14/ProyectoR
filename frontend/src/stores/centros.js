@@ -1,35 +1,29 @@
 import { defineStore } from "pinia";
 import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
+import { ref } from "vue";
 
 
-export const useCentros = defineStore("Centros", () => {
+export const useCentroStore = defineStore("Centros", () => {
+  let loading = ref(false)
+
   const buscarCentros = async () => {
     try {
+      loading.value = true
       const buscar = await axios.get(`${LinkBD}/api/centrosF/`);
-
-      return buscar.data;
+      return buscar.data.centros
     } catch (error) {
+      loading.value = true
       console.log(error.response);
-    }
-  };
-  const buscarCiudad = async () => {
-    try {
-      const buscar = await axios.get(`${LinkBD}/api/ciudades`);
-      return buscar.data;
-    } catch (error) {
-      console.log(error.response);
+    } finally {
+      loading.value = false
     }
   };
 
-
-  const actualizarCentros = async (id,codigo,nombre,direccion,ciudad) => {
+  const actualizarCentros = async (id, codigo, nombre, direccion, ciudad) => {
     try {
       let datos = await axios.put(`${LinkBD}/api/centrosF/${id}`, {
-        codigo: codigo,
-        nombre:nombre,
-        direccion: direccion,
-        ciudad: ciudad
+        codigo, nombre, direccion, ciudad
       });
       return datos;
     } catch (error) {
@@ -37,13 +31,13 @@ export const useCentros = defineStore("Centros", () => {
       throw error;
     }
   };
-  const agregarCentro = async (codigo,nombre,ciudad,direccion) => {
-    const info = {codigo,nombre,ciudad,direccion}
+
+  const agregarCentro = async (info) => {
     try {
-      console.log(info);
       const newU = await axios.post(`${LinkBD}/api/centrosF`, info);
       return newU;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   };
@@ -64,6 +58,6 @@ export const useCentros = defineStore("Centros", () => {
     agregarCentro,
     actualizarCentros,
     cambiarEstado,
-    buscarCiudad
+    loading
   };
 });

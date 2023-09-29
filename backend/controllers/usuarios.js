@@ -137,13 +137,13 @@ const httpUsuario = {
         const { id } = req.params;
         try {
             //subir archivo
-            if (!req.files || Object.keys(req.files).length === 0 || !req.files.hojaDeVida) {
+            if (!req.files || Object.keys(req.files).length === 0 || !req.files.foto) {
                 return res.status(400).json({ msg: "No hay archivos en la peticion" })
             }
 
             const { tempFilePath } = req.files.foto
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit" },
+                { width: 250, crop: "limit", resource_type: "image" },
                 async function (error, result) {
                     if (result) {
                         let holder = await Usuario.findById(id);
@@ -180,14 +180,14 @@ const httpUsuario = {
                 return res.status(400).json({ msg: "No hay archivos en la peticion" })
             }
             next();
-            
+
             const { tempFilePath } = req.files.hojaDeVida
             cloudinary.uploader.upload(tempFilePath,
                 { width: 250, crop: "limit" },
                 async function (error, result) {
                     if (result) {
                         let holder = await Usuario.findById(id);
-                        
+
                         if (holder.hojaDeVida) {
                             const nombreTemp = holder.hojaDeVida.split('/')
                             const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg

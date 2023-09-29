@@ -118,7 +118,7 @@
 <script setup>
 import { ref } from "vue";
 import { useAmbienteStore } from "../stores/Ambientes.js"
-import { useCentros } from "../stores/centros.js"
+import { useCentroStore } from "../stores/centros.js"
 import { useQuasar } from 'quasar'
 
 let ambiente = ref([])
@@ -132,7 +132,7 @@ let descripcion = ref("")
 let archivo = ref("")
 
 const useAmbiente = useAmbienteStore()
-const useCentro = useCentros()
+const useCentro = useCentroStore()
 let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')

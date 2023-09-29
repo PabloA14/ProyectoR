@@ -1,253 +1,303 @@
 <template>
   <div>
-    <div class="text-h4 text-center q-mb-md q-mt-md">Centros De Formacion</div>
+    <q-page class="q-pa-md">
+      <div class="text-h4 text-center q-mb-md">Centros de Formación</div>
 
-    <div class="spinner-container" v-if="loading">
-      <q-spinner
-        style="margin-left: 10px"
-        color="black"
-        size="7em"
-        :thickness="10"
-      />
-    </div>
+      <div class="q-pa-md" style="width: 100%;">
+        <div class="spinner-container" v-if="useCentro.loading === true">
+          <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+        </div>
+        <q-table v-if="useCentro.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="centro" :columns="columns" row-key="name" :pagination="pagination">
+          <template v-slot:body-cell-opciones="props">
+            <q-td :props="props">
+              <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                style="margin-right: 10px;cursor: pointer;" @click="editarCentro(props.row)" />
+              <!-- <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
+                v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
+              <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
+                @click="editarEstado(props.row)" /> -->
+            </q-td>
+          </template>
 
-    <div class="q-pa-md" v-if="!loading">
-      <q-table
-        title="Centros"
-        :rows="centros.centros"
-        :columns="columns"
-        row-key="codigo"
-      >
-        <template v-slot:body-cell-opciones="props">
-          <q-td :props="props">
-            <q-icon
-              color="orange"
-              name="fa-solid fa-pen-to-square fa-xl"
-              size="20px"
-              style="margin-right: 10px; cursor: pointer"
-              @click="editar(props.row), (editarF = true), (agregar = false)"
-            />
-          </q-td>
-        </template>
-        <template v-slot:top-left>
-          <q-btn
-            color="secondary"
-            icon="add"
-            label="Agregar"
-            class="q-mb-md"
-            @click="agregar = true"
-          />
-        </template>
-      </q-table>
-    </div>
+          <template v-slot:body-cell-ciudad="props">
+            <q-td :props="props">
+              {{ props.row.ciudad.nombre }}
+            </q-td>
+          </template>
 
-    <!-- Agregar Centro -->
+          <!-- <template v-slot:body-cell-estado="props">
+            <q-td :props="props">
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
+              <span class="text-red" v-else>Inactivo</span>
+            </q-td>
+          </template> -->
+
+          <template v-slot:top-right>
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+              <template v-slot:append>
+                <q-icon name="search" />
+              </template>
+            </q-input>
+          </template>
+          <template v-slot:top-left>
+            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+              agregar = true;
+            nuevo();
+            " />
+          </template>
+        </q-table>
+      </div>
+    </q-page>
+
     <q-dialog v-model="agregar">
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Agregar Centro</div>
-
-          <q-separator style="height: 5px; margin-top: 5px" color="secondary" />
-          <q-input v-model="codigo" label="Codigo Centro" />
-          <q-input v-model="nombre" label="Nombre" />
-          <q-select
-            v-model="ciudad"
-            label="Ciudad"
-            :options="city.ciudades"
-            option-label="nombre"
-            option-value="_id"
-          />
-          <q-input v-model="direccion" label="Dirección" />
+      <q-card style="width: 32%; height: fit-content">
+        <q-card-section class="row items-center q-pb-none">
+          <div class="text-h6">
+            {{ bd === 0 ? "Editar Centro" : "Agregar Centro" }}
+          </div>
+          <q-space />
+          <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
+
+        <q-separator inset style="
+            height: 5px;
+            margin-top: 5px;
+          " color="secondary" />
+
+        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+
+          <div class="q-mb-md">
+            <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
+          </div>
+
+          <div class="q-mb-md">
+            <q-input label="Nombre*" color="secondary" v-model="nombre" />
+          </div>
+
+          <div class="q-mb-md">
+            <q-input label="Dirección*" color="secondary" v-model="direccion" />
+          </div>
+
+          <div class="q-mb-md">
+            <q-select label="Ciudad*" color="secondary" v-model="ciudad"
+              :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))" emit-value map-options>
+            </q-select>
+          </div>
+
+
+        </q-card-section>
+
+        <q-separator />
+
         <q-card-actions align="right">
-          <q-btn
-            color="primary"
-            label="Agregar centro"
-            @click="agregarCentro"
-          />
-          <q-btn color="negative" label="Cancelar" @click="agregar = false" />
+          <q-btn v-if="bd == 1" label="Agregar" @click="agregarC()" color="secondary" />
+          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
-    <!-- Editar Centro -->
-    <q-dialog v-model="editarF">
-      <q-card style="min-width: 350px">
-        <q-card-section>
-          <div class="text-h6">Editar Centro</div>
 
-          <q-separator style="height: 5px; margin-top: 5px" color="secondary" />
-          <q-input v-model="codigo" label="Codigo Centro" />
-          <q-input v-model="nombre" label="Nombre" />
-          <q-select
-            v-model="ciudad2"
-            label="Ciudad"
-            :options="city.ciudades"
-            option-label="nombre"
-            option-value="_id"
-          />
-          <q-input v-model="direccion" label="Dirección" />
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn color="primary" label="Guardar" @click="guardarEdicion" />
-          <q-btn color="negative" label="Cancelar" @click="editarF = false" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </div>
 </template>
 
 <script setup>
+
 import { ref } from "vue";
-import { useCentros } from "../stores/centros.js";
-import { useQuasar } from "quasar";
+import { useCentroStore } from "../stores/centros.js"
+import { useCiudadStore } from "../stores/Ciudades.js"
+import { useQuasar } from 'quasar'
 
-const useCentro = useCentros();
-let centros = ref([]);
-let codigo = ref("");
-let nombre = ref("");
-let ciudad = ref("");
-let ciudad2 = ref("");
-let direccion = ref("");
-let id = ref("");
-let loading = ref(false);
-let editarF = ref(false);
-let agregar = ref(false);
-const $q = useQuasar();
 
-let city = ref([]);
+let centro = ref([])
+let ciudades = ref([])
+let agregar = ref(false)
+let codigo = ref("")
+let nombre = ref("")
+let direccion = ref("")
+let ciudad = ref("")
+let id = ref("")
+
+const useCentro = useCentroStore()
+const useCiudad = useCiudadStore()
+let bd = ref("");
+const $q = useQuasar()
+let filter = ref('')
+let errores = ref([])
+let separator = ref('cell')
+
+const pagination = ref({
+  rowsPerPage: 6
+})
 
 const columns = [
-  {
-    name: "codigo",
-    align: "center",
-    label: "Codigo",
-    field: "codigo",
-    sortable: true,
-  },
-  {
-    name: "nombre",
-    align: "center",
-    label: "Denominacion",
-    field: "nombre",
-    sortable: true,
-  },
-  {
-    name: "ciudad",
-    label: "ciudad",
-    field: (row) => row.ciudad.nombre,
-    sortable: true,
-  },
-  { name: "direccion", label: "Direccion", field: "direccion" },
-  { name: "opciones", label: "opciones", field: "opciones" },
-];
+  { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
+  { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
+  { name: 'direccion', align: 'center', label: 'Dirección', field: "direccion" },
+  { name: 'ciudad', align: 'center', label: 'Ciudad', field: "ciudad" },
+  { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+]
 
-traerCentros();
+buscar()
+buscarCiudad()
 
-async function traerCentros() {
-  try {
-    loading.value = true; // Mostrar el spinner mientras se carga
-    centros.value = await useCentro.buscarCentros();
-    city.value = await useCentro.buscarCiudad();
-  } catch (error) {
-    console.log(error);
-  } finally {
-    loading.value = false; // Ocultar el spinner cuando la carga haya terminado
-  }
-}
-
-traerCentros();
-
-async function agregarCentro() {
-  try {
-    const agregar = await useCentro.agregarCentro(
-      codigo.value,
-      nombre.value,
-      ciudad.value,
-      direccion.value
-    );
-    vaciar();
-    traerCentros();
-    agregar.value = false;
-    // Muestra una alerta de éxito
-    $q.notify({
-      message: "Centro agregado exitosamente",
-      color: "green",
-      icon: "check",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
-    agregar.value = false;
-    return agregar;
-  } catch (error) {
-    // Muestra una alerta de error
-    $q.notify({
-      message: "Error al agregar el centro",
-      color: "negative",
-      icon: "warning",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
-    console.log(error);
-  }
+function nuevo() {
+  bd.value = 1;
+  vaciar();
 }
 
 function vaciar() {
-  codigo.value = "";
-  nombre.value = "";
-  ciudad.value = "";
-  ciudad2.value = "";
-  direccion.value = "";
+  codigo.value = ""
+  nombre.value = ""
+  direccion.value = ""
+  ciudad.value = ""
 }
 
-function editar(x) {
-  console.log(x, ".................");
-  id.value = x._id;
-  codigo.value = x.codigo;
-  nombre.value = x.nombre;
-  ciudad2.value = x.ciudad._id;
-  console.log("ciudad que inicia", x.ciudad._id);
-  direccion.value = x.direccion;
-  console.log(x.direccion, "direccion");
+function validarVacios() {
+  if (codigo.value === "" && nombre.value === "" && direccion.value === "" && ciudad.value == "") {
+    $q.notify({
+      message: 'Campos vacíos',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: Math.random() * 3000
+    })
+  } else return true
 }
 
-async function guardarEdicion() {
-  console.log("ciudad que se elige");
-  console.log(ciudad2.value);
+function validar() {
+  $q.notify({
+    message: errores,
+    color: 'negative',
+    position: 'top',
+    icon: 'warning',
+    timeout: Math.random() * 3000
+  })
+}
 
+async function buscar() {
+  centro.value = await useCentro.buscarCentros();
+  console.log(centro.value);
+  centro.value.reverse()
+}
+
+async function buscarCiudad() {
+  ciudades.value = await useCiudad.buscarCiudad();
+  console.log(ciudades.value);
+}
+
+async function agregarC() {
+  console.log("entro a agregar");
+  await useCentro.agregarCentro({
+    codigo: codigo.value,
+    nombre: nombre.value,
+    direccion: direccion.value,
+    ciudad: ciudad.value,
+  }).then(() => {
+    $q.notify({
+      message: 'Centro de formación agregado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'bottom',
+      timeout: Math.random() * 3000
+    })
+    agregar.value = false
+    buscar();
+  }).catch((error) => {
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    } else if (error.response && error.response.data && validarVacios() === true) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
+  });
+
+}
+
+function editarCentro(c) {
+  console.log("Entró a editar", c);
+  bd.value = 0;
+  id.value = c._id;
+  codigo.value = c.codigo
+  nombre.value = c.nombre
+  direccion.value = c.direccion
+  ciudad.value = c.ciudad._id
+  agregar.value = true;
+}
+
+async function actualizar() {
+  await useCentro.actualizarCentros(
+    id.value,
+    codigo.value,
+    nombre.value,
+    direccion.value,
+    ciudad.value,
+  ).then(() => {
+    $q.notify({
+      message: 'Centro de formación editado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'bottom',
+      timeout: Math.random() * 3000
+    })
+    agregar.value = false
+    buscar();
+  }).catch((error) => {
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    } else if (error.response && error.response.data && validarVacios() === true) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
+  });
+}
+
+/* async function editarEstado(centro) {
+  console.log("entre a editar estado", centro.estado);
   try {
-    const guardar = await useCentro.actualizarCentros(
-      id.value,
-      codigo.value,
-      nombre.value,
-      direccion.value,
-      ciudad2.value
-    );
-    vaciar();
+    if (centro.estado === 1) {
+      centro.estado = 0
+    } else {
+      centro.estado = 1
+    }
+    const res = await useCentro.cambiarEstado(centro._id, centro.estado)
     $q.notify({
-      message: "Editado correctamente",
-      color: "green",
-      icon: "check",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
+      message: 'Estado editado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'bottom',
+      timeout: Math.random() * 3000
+    })
+    buscar()
 
-    console.log("--------------------------");
-    console.log(guardar);
-    traerCentros();
-    editarF.value = false;
   } catch (error) {
-    $q.notify({
-      message: "Error al editar",
-      color: "negative",
-      icon: "warning",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
     console.log(error);
   }
-}
+} */
+
+
 </script>
+
 <style scoped>
 .spinner-container {
   position: fixed;
