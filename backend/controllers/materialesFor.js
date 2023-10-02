@@ -157,14 +157,15 @@ const httpMateriales = {
             }
 
             const { tempFilePath } = req.files.documentacion
+           
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit" },
+                { width: 250, crop: "limit", resource_type: "raw",},
                 async function (error, result) {
                     if (result) {
                         let holder = await Material.findById(id);
                         if (holder.documentacion) {
                             const nombreTemp = holder.documentacion.split('/')
-                            const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1]
                             const [public_id] = nombreArchivo.split('.')
                             cloudinary.uploader.destroy(public_id)
                         }

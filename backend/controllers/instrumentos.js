@@ -1,6 +1,6 @@
 import Instrumentos from "../models/instrumentos.js"
 
-const httpDesarrolloC = {
+const httpInstrumentos = {
 
     postInstrumentos: async (req, res) => {
         const { codigo, nombre, documento } = req.body
@@ -34,9 +34,9 @@ const httpDesarrolloC = {
             const cod = await Instrumentos.find({ codigo: Codigo })
             console.log(cod);
             if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para el material de evaliacion ${Codigo}` })
+                res.status(400).json({ sms: `sin coincidencias para el instrumento ${Codigo}` })
             } else {
-                res.status(200).json({ sms: `Se encontro el material correctamente `, cod })
+                res.status(200).json({ sms: `Se encontro el instrumento correctamente `, cod })
             }
         } catch (error) {
             res.json({ error })
@@ -70,4 +70,4 @@ const httpDesarrolloC = {
 
 }
 
-export default httpDesarrolloC
+export default httpInstrumentos

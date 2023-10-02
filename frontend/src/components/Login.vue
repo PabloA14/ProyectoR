@@ -91,7 +91,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from "vue-router";
+import { useRouter } from "vue-router"
 import axios from "axios";
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useQuasar } from 'quasar'
@@ -100,7 +100,6 @@ let useUsuario = useUsuarioStore()
 let router = useRouter();
 let ruta = ref("")
 const $q = useQuasar()
-
 
 let documento = ref('');
 let contrasena = ref('')

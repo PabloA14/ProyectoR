@@ -1,31 +1,33 @@
 <template>
     <div>
         <q-page class="q-pa-md">
-            <div class="text-h4 text-center q-mb-md">Roles de Usuario</div>
+            <div class="text-h4 text-center q-mb-md">Investigación</div>
             <div class="q-pa-md" style="width: 100%;">
-                <div class="spinner-container" v-if="useRol.loading === true">
+                <div class="spinner-container" v-if="useInvestigacion.loading === true">
                     <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
                 </div>
-                <q-table v-if="useRol.loading === false" class="my-sticky-header-table" :separator="separator" bordered
-                    :filter="filter" :rows="roles" :columns="columns" row-key="name" :pagination="pagination">
+
+                <q-table v-if="useInvestigacion.loading == false" class="my-sticky-header-table" :separator="separator"
+                    bordered :filter="filter" :rows="investigaciones" :columns="columns" row-key="name"
+                    :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
-                                style="margin-right: 10px;cursor: pointer;" @click="editarRol(props.row)" />
-                            <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                                style="margin-right: 10px;cursor: pointer;" @click="editarInves(props.row)" />
+                            <!--  <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
                                 style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
                                 @click="editarEstado(props.row)" />
                             <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;"
-                                v-else @click="editarEstado(props.row)" />
+                                v-else @click="editarEstado(props.row)" /> -->
                         </q-td>
                     </template>
 
-                    <template v-slot:body-cell-estado="props">
+                    <!-- <template v-slot:body-cell-estado="props">
                         <q-td :props="props">
                             <span class="text-green" v-if="props.row.estado == 1">Activo</span>
                             <span class="text-red" v-else>Inactivo</span>
                         </q-td>
-                    </template>
+                    </template> -->
 
                     <template v-slot:top-right>
                         <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -48,7 +50,7 @@
             <q-card style="width: 32%; height: fit-content">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
-                        {{ bd === 0 ? "Editar Rol" : "Agregar Rol" }}
+                        {{ bd === 0 ? "Editar Investigación" : "Agregar Investigación" }}
                     </div>
                     <q-space />
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
@@ -65,7 +67,23 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Denominación*" color="secondary" v-model="denominacion" />
+                        <q-input label="Nombre*" color="secondary" v-model="nombre" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Descripcion*" color="secondary" v-model="descripcion" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Año*" type="number" color="secondary" v-model="fecha" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-file label="Archivo*" type="file" color="secondary" v-model="archivo">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
                 </q-card-section>
 
@@ -82,16 +100,19 @@
 
 <script setup>
 import { ref } from "vue";
-import { useRolStore } from "../stores/Roles.js"
+import { useInveStore } from "../stores/Investigaciones.js"
 import { useQuasar } from 'quasar'
 
 let agregar = ref(false)
 let codigo = ref("")
-let denominacion = ref("")
+let nombre = ref("")
+let descripcion = ref("")
+let fecha = ref("")
+let archivo = ref("")
 let id = ref("")
 
-const useRol = useRolStore()
-let roles = ref([])
+const useInvestigacion = useInveStore()
+let investigaciones = ref([])
 let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')
@@ -104,8 +125,10 @@ const pagination = ref({
 
 const columns = [
     { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
-    { name: 'denominacion', align: 'center', label: 'Denominación', field: "denominacion", sortable: true },
-    { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
+    { name: 'denominacion', align: 'center', label: 'Nombre', field: "denominacion", sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', field: "descripcion", sortable: false },
+    { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
+    //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
 
@@ -118,11 +141,13 @@ function nuevo() {
 
 function vaciar() {
     codigo.value = ""
-    denominacion.value = ""
+    nombre.value = ""
+    descripcion.value = ""
+    fecha.value = ""
 }
 
 function validarVacios() {
-    if (codigo.value === "" && denominacion.value === "") {
+    if (codigo.value === "" && nombre.value === "" && descripcion.value == "" && fecha.value == "" && archivo.value == "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -144,20 +169,22 @@ function validar() {
 }
 
 async function buscar() {
-    roles.value = await useRol.buscarRoles();
-    console.log(roles.value);
-    roles.value.reverse()
+    investigaciones.value = await useInvestigacion.buscarInvestigacion();
+    console.log(investigaciones.value);
+    investigaciones.value.reverse()
 }
 
 async function agregarN() {
     console.log("entro a agregar");
-    await useRol.agregarRoles({
+    await useInvestigacion.agregarInves({
         codigo: codigo.value,
-        denominacion: denominacion.value
+        denominacion: nombre.value,
+        descripcion: descripcion.value,
+        fecha: fecha.value
     }).then(() => {
         agregar.value = false
         $q.notify({
-            message: 'Rol de usuario agregado exitosamente',
+            message: 'Investigación agregada exitosamente',
             color: 'green',
             icon: 'check',
             position: 'bottom',
@@ -185,24 +212,28 @@ async function agregarN() {
 }
 
 
-function editarRol(rol) {
-    console.log("Entró a editar", rol);
+function editarInves(i) {
+    console.log("Entró a editar", i);
     bd.value = 0;
-    id.value = rol._id;
-    codigo.value = rol.codigo
-    denominacion.value = rol.denominacion
+    id.value = i._id;
+    codigo.value = i.codigo
+    nombre.value = i.denominacion
+    descripcion.value = i.descripcion
+    fecha.value = i.fecha
     agregar.value = true;
 }
 
 async function actualizar() {
-    await useRol.actualizarRoles(
+    await useInvestigacion.actualizarInves(
         id.value,
         codigo.value,
-        denominacion.value
+        nombre.value,
+        descripcion.value,
+        fecha.value
     ).then(() => {
         agregar.value = false
         $q.notify({
-            message: 'Rol de usuario editado exitosamente',
+            message: 'Investigación editada exitosamente',
             color: 'green',
             icon: 'check',
             position: 'bottom',
@@ -232,28 +263,6 @@ async function actualizar() {
     })
 }
 
-async function editarEstado(rol) {
-    console.log("entre a editar estado", rol.estado);
-    try {
-        if (rol.estado === 1) {
-            rol.estado = 0
-        } else {
-            rol.estado = 1
-        }
-        const res = await useRol.cambiarEstado(rol._id, rol.estado)
-        $q.notify({
-            message: 'Estado editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: Math.random() * 3000
-        })
-        buscar()
-
-    } catch (error) {
-        console.log(error);
-    }
-}
 
 </script>
 
