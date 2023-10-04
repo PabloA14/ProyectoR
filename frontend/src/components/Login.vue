@@ -127,7 +127,6 @@ async function iniciarSesion() {
     useUsuario.logeo(documento.value, contrasena.value)
         .then((res) => {
             const token = res.data.token;
-            const usuario = res.data.user
             sessionStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             ruta.value = "/home";
