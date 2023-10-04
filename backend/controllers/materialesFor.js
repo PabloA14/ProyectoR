@@ -4,10 +4,10 @@ import { v2 as cloudinary } from 'cloudinary';
 const httpMateriales = {
 
     postMaterial: async (req, res) => {
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, descripcion, tipo } = req.body
         try {
             const material = new Material({
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, descripcion, tipo
             })
 
             const cod = await Material.findOne({ codigo: codigo })
@@ -49,7 +49,7 @@ const httpMateriales = {
 
     putMaterial: async (req, res) => {
         const materialId = req.params.id
-        const { codigo, nombre, descripcion, tipo, documentacion } = req.body
+        const { codigo, nombre, descripcion, tipo } = req.body
         try {
             const existingMaterial = await Material.findOne({ codigo: codigo });
             if (existingMaterial && existingMaterial._id.toString() !== materialId) {
@@ -57,7 +57,7 @@ const httpMateriales = {
             }
 
             const updatedFields = {
-                codigo, nombre, descripcion, tipo, documentacion
+                codigo, nombre, descripcion, tipo
             };
 
             const updatedMaterial = await Material.findOneAndUpdate(
@@ -157,9 +157,9 @@ const httpMateriales = {
             }
 
             const { tempFilePath } = req.files.documentacion
-           
+
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw",},
+                { width: 250, crop: "limit", resource_type: "raw", },
                 async function (error, result) {
                     if (result) {
                         let holder = await Material.findById(id);

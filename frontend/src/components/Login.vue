@@ -132,9 +132,6 @@ async function iniciarSesion() {
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             ruta.value = "/home";
             router.push(ruta.value);
-            console.log(token);
-            console.log(usuario);
-
         }).catch((error) => {
             if (error.response && error.response.data.errors && validar() === true) {
 
