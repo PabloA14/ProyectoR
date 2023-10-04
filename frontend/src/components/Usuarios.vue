@@ -106,7 +106,11 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Hoja de Vida" color="secondary" v-model="cv" />
+            <q-file label="Hoja de Vida" type="file" color="secondary" v-model="cv">
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
           </div>
 
           <div class="q-mb-md">
@@ -251,7 +255,7 @@ async function agregarU() {
     correo: correo.value,
     clave: clave.value,
     redConocimiento: red.value,
-    hojaDeVida: cv.value,
+    //hojaDeVida: cv.value,
     rol: rol.value,
     perfilProfesional: perfilProfesional.value,
   }).then(() => {
@@ -295,7 +299,7 @@ function editarUsuario(x) {
   telefono.value = x.telefono;
   correo.value = x.correo;
   red.value = x.redConocimiento._id;
-  cv.value = x.hojaDeVida;
+  //cv.value = x.hojaDeVida;
   rol.value = x.rol._id;
   perfilProfesional.value = x.perfilProfesional;
   agregar.value = true;
@@ -309,7 +313,7 @@ async function actualizar() {
     telefono.value,
     correo.value,
     red.value,
-    cv.value,
+    //cv.value,
     rol.value,
     perfilProfesional.value
 

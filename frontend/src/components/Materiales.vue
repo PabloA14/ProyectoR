@@ -82,7 +82,11 @@
                     <q-select v-model="tipo" color="secondary" label="Tipo" :options="options" />
 
                     <div class="q-mb-md">
-                        <q-input label="Archivo" color="secondary" type="text" v-model="archivo" />
+                        <q-file label="Archivo" type="file" color="secondary" v-model="archivo">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
 
                 </q-card-section>
