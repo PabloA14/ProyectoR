@@ -13,6 +13,8 @@ import Configuracion from "../components/Configuracion.vue"
 import Investigacion from "../components/Investigacion.vue"
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
+import { createRouter, createWebHashHistory } from 'vue-router';
+
 
 const prueba = () => {
     const useUsuario = useUsuarioStore()
@@ -55,6 +57,18 @@ export const routes = [
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
-        ]
+        ],
+        beforeEnter: (to, from, next) => {
+            const token = sessionStorage.getItem('token');
+            if (!token && to.path !== '/') {
+              next('/');
+            } else {
+              next();
+            }
+          }
     },
 ]
+export const router = createRouter({
+    history: createWebHashHistory(),
+    routes,
+  });
