@@ -112,7 +112,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="investigacion" style="color: black; text-decoration: none" v-if="rol === 'gestor'">
+          <!-- <router-link to="investigacion" style="color: black; text-decoration: none" v-if="rol === 'gestor'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon />
@@ -120,7 +120,7 @@
 
               <q-item-section>Investigación</q-item-section>
             </q-item>
-          </router-link>
+          </router-link> -->
 
           <q-separator />
 

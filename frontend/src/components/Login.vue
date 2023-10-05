@@ -206,4 +206,5 @@ async function iniciarSesion() {
 .custom-border {
     border: 1px solid red;
 }
+
 </style>

@@ -11,6 +11,8 @@ import Materiales from "../components/Materiales.vue"
 import Ambientes from "../components/Ambientes.vue"
 import Configuracion from "../components/Configuracion.vue"
 import Investigacion from "../components/Investigacion.vue"
+import Cards from "../components/Cards.vue"
+
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { createRouter, createWebHashHistory } from 'vue-router';
@@ -49,26 +51,27 @@ export const routes = [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/centroF", component: Centros, name: "centrosF", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/niveles", component: Niveles, name: "niveles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/roles", component: Roles, name: "roles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/materiales", component: Materiales, name: "materiales", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-            { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
+            { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
         ],
         beforeEnter: (to, from, next) => {
-            const token = sessionStorage.getItem('token');
+            const token = sessionStorage.getItem('token')
             if (!token && to.path !== '/') {
-              next('/');
+                next('/');
             } else {
-              next();
+                next();
             }
-          }
+        }
     },
 ]
 export const router = createRouter({
     history: createWebHashHistory(),
     routes,
-  });
+});

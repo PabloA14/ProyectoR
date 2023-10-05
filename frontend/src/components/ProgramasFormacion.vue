@@ -1,7 +1,11 @@
 <template>
   <div>
+
+
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md">Programas de Formación</div>
+      <div class="text-h4 text-center q-mb-md">Programas de Formación
+      </div>
+
       <div class="q-pa-md" style="width: 100%;">
 
         <div class="spinner-container" v-if="usePrograma.loading === true">
@@ -13,6 +17,10 @@
 
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
+              <router-link to="cards">
+                <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px;cursor: pointer;" />
+              </router-link>
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarPrograma(props.row)" />
               <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
