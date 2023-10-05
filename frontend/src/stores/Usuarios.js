@@ -6,7 +6,7 @@ import { ref } from "vue";
 
 export const useUsuarioStore = defineStore("usuario", () => {
   let loading = ref(false)
-  let rol=ref('')
+  let rol = ref('')
   let token = ref('')
 
   const buscarUsuarios = async () => {
@@ -53,17 +53,16 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
   };
   const logeo = async (cedula, clave) => {
-    
+
     try {
       loading.value = true
       let datos = await axios.post(`${LinkBD}/api/usuario/login`,
-        { cedula: cedula, clave: clave }) 
-        rol.value = datos.data.user.rol.denominacion
-        token.value = datos.data.token
+        { cedula: cedula, clave: clave })
+      rol.value = datos.data.user.rol.denominacion
+      token.value = datos.data.token
 
-      ;
       console.log(datos);
-      return datos ;
+      return datos;
     } catch (error) {
       loading.value = true
       console.log(error);

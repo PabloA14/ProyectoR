@@ -35,8 +35,7 @@ const prueba2 = (to, from, next) => {
             return next({ name: 'login' })
         }
         next()
-    }
-    else {
+    } else {
         return next({ name: 'login' })
     }
 }

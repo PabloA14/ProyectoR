@@ -1,5 +1,5 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <q-layout>
     <q-header elevated class="text-white" style="background-color: #39a900">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
@@ -23,7 +23,7 @@
 
         <q-card-actions class="flex-center " align="right">
           <q-btn label="Cancelar" color="negative" @click="confirm = false" />
-          <q-btn label="Cerrar Sesión" color="primary" @click="hh()" />
+          <q-btn label="Cerrar Sesión" color="primary" @click="logout()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -163,7 +163,7 @@ const cerrarSesion = () => {
   confirm.value = true; // Mostrar el diálogo de confirmación
 };
 
-function hh() {
+function logout() {
   confirm.value = false; // Cerrar el diálogo
   sessionStorage.removeItem("token");
   router.push("/");

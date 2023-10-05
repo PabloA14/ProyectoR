@@ -58,7 +58,7 @@ router.post('/uploadcloudHoja/:id', [
     validarCampos
 ], httpUsuario.cargarArchivoCloudHoja)
 
-router.get('/uploadcloudFoto/:id', [
+/* router.get('/uploadcloudFoto/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     validarCampos
 ], httpUsuario.mostrarArchivoCloudFoto)
@@ -66,7 +66,7 @@ router.get('/uploadcloudFoto/:id', [
 router.get('/uploadcloudHoja/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     validarCampos
-], httpUsuario.mostrarArchivoCloudHoja)
+], httpUsuario.mostrarArchivoCloudHoja) */
 
 export default router
 
