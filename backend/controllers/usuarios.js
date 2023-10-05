@@ -7,13 +7,13 @@ import bcrypt from "bcrypt"
 const httpUsuario = {
 
     posUsuario: async (req, res) => {
-        const { cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, rol, perfilProfesional } = req.body;
+        const { cedula, nombre, apellidos, telefono, correo, clave, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
-            const hashedPassword = await bcrypt.hash(clave, 10);
+            const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
 
             const usuario = new Usuario({
-                cedula, nombre, apellidos, telefono, correo, clave: hashedPassword, redConocimiento, rol, perfilProfesional
+                cedula, nombre, apellidos, telefono, correo, clave: hashedPassword, redConocimiento, hojaDeVida, rol, perfilProfesional
             });
             const buscar = await Usuario.findOne({ cedula: cedula });
             if (buscar) {
@@ -30,7 +30,7 @@ const httpUsuario = {
     loginUsuario: async (req, res) => {
         const { cedula, clave } = req.body;
         try {
-            const user = await Usuario.findOne({ cedula: cedula });
+            const user = await Usuario.findOne({ cedula: cedula }).populate('rol');
 
             if (!user) {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });
@@ -83,7 +83,7 @@ const httpUsuario = {
 
     putUsuario: async (req, res) => {
         const usuarioId = req.params.id;
-        const { cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional } = req.body;
+        const { cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional } = req.body;
 
         try {
             const existingUser = await Usuario.findOne({ cedula: cedula });
@@ -91,7 +91,7 @@ const httpUsuario = {
                 return res.status(400).json({ msg: 'La cédula ya está registrada para otro usuario' });
             }
             const updatedFields = {
-                cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional
+                cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
             };
 
             const updatedUsuario = await Usuario.findOneAndUpdate(
@@ -183,14 +183,14 @@ const httpUsuario = {
 
             const { tempFilePath } = req.files.hojaDeVida
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw" },
+                { width: 250, crop: "limit" },
                 async function (error, result) {
                     if (result) {
                         let holder = await Usuario.findById(id);
 
                         if (holder.hojaDeVida) {
                             const nombreTemp = holder.hojaDeVida.split('/')
-                            const nombreArchivo = nombreTemp[nombreTemp.length - 1]
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1] // hgbkoyinhx9ahaqmpcwl jpg
                             const [public_id] = nombreArchivo.split('.')
                             cloudinary.uploader.destroy(public_id)
                         }
@@ -206,32 +206,6 @@ const httpUsuario = {
             res.status(400).json({ error, 'general': 'Controlador' })
         }
     },
-    mostrarArchivoCloudFoto: async (req, res) => {
-        const { id } = req.params
-
-        try {
-            let holder = await Usuario.findById(id)
-            if (holder.foto) {
-                return res.json({ url: holder.foto })
-            }
-            res.status(400).json({ msg: 'Falta Archivo' })
-        } catch (error) {
-            res.status(400).json({ error })
-        }
-    },
-    mostrarArchivoCloudHoja: async (req, res) => {
-        const { id } = req.params
-
-        try {
-            let holder = await Usuario.findById(id)
-            if (holder.hojaDeVida) {
-                return res.json({ url: holder.hojaDeVida })
-            }
-            res.status(400).json({ msg: 'Falta Archivo' })
-        } catch (error) {
-            res.status(400).json({ error })
-        }
-    }
 };
 
 export default httpUsuario;

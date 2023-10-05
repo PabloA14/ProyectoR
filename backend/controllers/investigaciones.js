@@ -5,10 +5,10 @@ import { v2 as cloudinary } from 'cloudinary';
 const httpInvestigaciones = {
 
     postinveestigacion: async (req, res) => {
-        const { codigo, denominacion, descripcion, fecha } = req.body;
+        const { codigo, denominacion, descripcion, fecha, documentos } = req.body;
 
         try {
-            const investigacion = new Investigacion({ codigo, denominacion, descripcion, fecha });
+            const investigacion = new Investigacion({ codigo, denominacion, descripcion, fecha, documentos });
             const cod = await Investigacion.findOne({ codigo: codigo });
             if (cod) {
                 return res.status(400).json({ msg: 'La investigación ya se encuentra registrada', cod, denominacion });
@@ -46,11 +46,11 @@ const httpInvestigaciones = {
 
     putninvestigacion: async (req, res) => {
         const investigacionId = req.params.id;
-        const { codigo, denominacion, descripcion, fecha } = req.body;
+        const { codigo, denominacion, descripcion, fecha, documentos } = req.body;
 
         try {
             const updatedFields = {
-                codigo, denominacion, descripcion, fecha
+                codigo, denominacion, descripcion, fecha, documentos
             };
 
             const existingInves = await Investigacion.findOne({ codigo: codigo });
@@ -66,7 +66,7 @@ const httpInvestigaciones = {
                 { new: true }
             );
 
-            res.status(200).json({ msg: 'actualizado exitosamente', investigacion: updatedInvestigacion });
+            res.status(200).json({ msg: 'actualizado exitosamente', instrumento: updatedInvestigacion });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });
@@ -134,9 +134,10 @@ const httpInvestigaciones = {
             }
 
             const { tempFilePath } = req.files.documentos
+            const extension = tempFilePath.name.split('.').pop()
 
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw", },
+                { width: 250, crop: "limit", resource_type: "raw", format: extension },
                 async function (error, result) {
                     if (result) {
                         let holder = await Investigacion.findById(id);
@@ -171,6 +172,8 @@ const httpInvestigaciones = {
             res.status(400).json({ error })
         }
     }
+
+
 }
 
 export default httpInvestigaciones;

@@ -32,7 +32,7 @@
       :width="300" :breakpoint="500" bordered mini-to-overlay :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list padding>
-          <router-link to="programas" style="text-decoration: none; color: black">
+          <router-link v-if="(rol === 'gestor')" to="programas" style="text-decoration: none; color: black">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-book-open-cover" />
@@ -42,7 +42,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="redes" style="text-decoration: none; color: black">
+          <router-link to="redes" v-if="rol === 'administrador'" style="text-decoration: none; color: black">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-head-side-brain" />
@@ -52,7 +52,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="niveles" style="color: black; text-decoration: none">
+          <router-link to="niveles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-chart-pyramid" />
@@ -62,7 +62,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="centroF" style="text-decoration: none; color: black">
+          <router-link to="centroF" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-building-columns" />
@@ -72,7 +72,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="ambientes" style="text-decoration: none; color: black">
+          <router-link to="ambientes" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-chart-user" />
@@ -82,7 +82,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="materiales" style="text-decoration: none; color: black">
+          <router-link to="materiales" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-clip" />
@@ -92,7 +92,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="usuarios" style="text-decoration: none; color: black">
+          <router-link to="usuarios" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-users" />
@@ -102,7 +102,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="roles" style="color: black; text-decoration: none">
+          <router-link to="roles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-key" />
@@ -112,7 +112,7 @@
             </q-item>
           </router-link>
 
-          <router-link to="investigacion" style="color: black; text-decoration: none">
+          <router-link to="investigacion" style="color: black; text-decoration: none" v-if="rol === 'gestor'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon />
@@ -152,6 +152,12 @@ const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
 
+import { useUsuarioStore } from "../stores/Usuarios.js"
+const useUsuario = useUsuarioStore()
+const rol = useUsuario.rol
+
+console.log(rol);
+
 // Función para cerrar sesión (combina abrir diálogo y realizar cierre)
 const cerrarSesion = () => {
   confirm.value = true; // Mostrar el diálogo de confirmación
@@ -159,6 +165,7 @@ const cerrarSesion = () => {
 
 function hh() {
   confirm.value = false; // Cerrar el diálogo
+  sessionStorage.removeItem("token");
   router.push("/");
 }
 </script>
