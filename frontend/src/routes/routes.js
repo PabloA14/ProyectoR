@@ -12,6 +12,10 @@ import Ambientes from "../components/Ambientes.vue"
 import Configuracion from "../components/Configuracion.vue"
 import Investigacion from "../components/Investigacion.vue"
 import Cards from "../components/Cards.vue"
+import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
+import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
+import InfoDesarrollo from "../components/InfoDesarrollo.vue"
+
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -51,7 +55,16 @@ export const routes = [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+           //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+
+
+            
+
+            //no cards
             { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/centroF", component: Centros, name: "centrosF", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/niveles", component: Niveles, name: "niveles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
@@ -60,6 +73,7 @@ export const routes = [
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+
         ],
         beforeEnter: (to, from, next) => {
             const token = sessionStorage.getItem('token')
