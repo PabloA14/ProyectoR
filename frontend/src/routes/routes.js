@@ -13,6 +13,8 @@ import Configuracion from "../components/Configuracion.vue"
 import Investigacion from "../components/Investigacion.vue"
 import Cards from "../components/Cards.vue"
 import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
+import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
+
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -55,6 +57,8 @@ export const routes = [
            //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+
 
             
 
