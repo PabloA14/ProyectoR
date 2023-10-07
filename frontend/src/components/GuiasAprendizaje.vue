@@ -13,58 +13,46 @@
         :pagination="pagination"
       >
         <template v-slot:body-cell-opciones="props">
-          <q-td :props="props">
-            <q-btn flat round dense>              
-                   <q-btn color="secondary" label="">
-                     <q-icon name="more_vert" />
+          <q-td :props="props" >
+            <div class="opciones">
 
-                     <q-menu max-height="130px">
-                       <q-list style="min-width: 100px">
-                         <q-item clickable>
-                           <q-item-section>
-                            <span class="material-symbols-outlined" style="" id="opciones">
-                              download
-                            </span>
-                            </q-item-section>
-                         </q-item>
-                         <q-item clickable>
-                           <q-item-section>
-                            <span class="material-symbols-outlined" id="opciones">
+              <router-link to="infoDesarrollo">
+                <!-- <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px;cursor: pointer;" /> -->
+                  <q-btn color="secondary">
+                    <q-icon class="material-symbols-outlined" id="opciones" >
+                              visibility
+                    </q-icon>
+                  </q-btn>
+
+              </router-link>
+
+              <router-link to="cards">
+                <!-- <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px;cursor: pointer;" /> -->
+                  <q-btn color="secondary">
+                    <q-icon class="material-symbols-outlined" id="opciones">
                               border_color
-                            </span>
-                           </q-item-section>
-                         </q-item>
-                         <q-separator />
+                    </q-icon>
+                  </q-btn>
 
-                       </q-list>
-                     </q-menu>
-                   </q-btn>
-            </q-btn>
-            <!-- <q-icon
-                color="green"
-                name="fa-solid fa-check fa-xl"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-if="props.row.estado == 0"
-                @click="editarEstado(props.row)"
-              />
-              <q-icon
-                color="red"
-                name="fa-solid fa-x"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-else
-                @click="editarEstado(props.row)"
-              /> -->
+              </router-link>
+
+
+              <router-link to="cards">
+                <!-- <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px;cursor: pointer;" /> -->
+                  <q-btn color="secondary">
+                    <q-icon class="material-symbols-outlined" style="" id="opciones">
+                              download
+                    </q-icon>
+                  </q-btn>
+
+              </router-link>
+
+              </div>
           </q-td>
         </template>
-
-        <!-- <template v-slot:body-cell-estado="props">
-            <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
-              <span class="text-red" v-else>Inactivo</span>
-            </q-td>
-          </template> -->
 
         <template v-slot:top-right>
           <q-input
@@ -95,7 +83,23 @@
     </div>
   </q-page>
 </template>
+ 
   
+  <!-- @click="editarRol(props.row)" -->
+<style>
+ #opciones{
+    font-size:4vh;
+  }
+
+  .opciones button {
+    margin-right: 8%;
+    color: white;
+  }
+</style>
+
+
+
+
   <script setup>
 const columns = [
   {
@@ -114,7 +118,4 @@ const rows = [
   },
 ];
 </script>
-  
-  
-  <!-- @click="editarRol(props.row)" -->
-  
+ 
