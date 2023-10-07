@@ -8,6 +8,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
   let loading = ref(false)
   let rol = ref('')
   let token = ref('')
+  let usuario = ref('')
 
   const buscarUsuarios = async () => {
     try {
@@ -60,6 +61,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
         { cedula: cedula, clave: clave })
       rol.value = datos.data.user.rol.denominacion
       token.value = datos.data.token
+      usuario.value = datos.data.user
 
       console.log(datos);
       return datos;
@@ -80,6 +82,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
     token,
     rol,
     logeo,
-    loading
+    loading,
+    usuario
   };
 });

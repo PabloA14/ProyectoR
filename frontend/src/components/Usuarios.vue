@@ -203,13 +203,6 @@ async function buscarRed() {
   console.log(redes.value);
 }
 
-function getLabel(option) {
-  return option.denominacion
-}
-
-function getValue(option) {
-  return option._id
-}
 
 function nuevo() {
   bd.value = 1;

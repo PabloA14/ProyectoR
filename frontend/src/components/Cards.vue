@@ -22,7 +22,6 @@
 
                     <q-card-section class="q-pt-none">
                         <q-img id="img" src="../imagenes/carpeta.png" />
-
                     </q-card-section>
                 </q-card>
                 <q-card class="my-card" id="cardP">
@@ -84,11 +83,11 @@
 
                 <q-card class="my-card" id="cardP">
                     <q-card-section>
-                        <div  id="img"  class="text-h6">Registro Calificado</div>
+                        <div id="img" class="text-h6">Registro Calificado</div>
                     </q-card-section>
 
                     <q-card-section class="q-pt-none">
-                        <q-img id="img" src="../imagenes/carpeta.png"  />
+                        <q-img id="img" src="../imagenes/carpeta.png" />
                     </q-card-section>
                 </q-card>
             </div>
@@ -101,7 +100,6 @@
     margin: 1%;
     background-color: #38a90063;
     text-align: center;
-    width: 20%;
 }
 
 #cardP:hover {

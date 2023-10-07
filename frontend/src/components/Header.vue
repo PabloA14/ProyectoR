@@ -17,14 +17,14 @@
     <q-dialog v-model="confirm" persistent>
       <q-card>
         <q-card-section class="row items-center">
-          <span class="q-ml-sm">¿Estás seguro de que deseas cerrar la sesión?</span>
+          <span class="q-ml-sm">¿Está seguro de que desea cerrar sesión?</span>
         </q-card-section>
         <i class="fa-solid fa-question" id="interrogacion"></i>
 
         <q-card-actions class="flex-center " align="right">
           <q-btn label="Cancelar" color="negative" @click="confirm = false" />
-          <q-btn label="Cerrar Sesión" color="primary" @click="logout()" />
-        </q-card-actions>
+          <q-btn label="Cerrar Sesión" color="secondary" @click="logout()" />
+        </q-card-actions><br>
       </q-card>
     </q-dialog>
 
