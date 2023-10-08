@@ -28,7 +28,6 @@
 
                     <q-card-section class="q-pt-none">
                         <q-img id="img" src="../imagenes/carpeta.png" />
-
                     </q-card-section>
                 </q-card>
                 <q-card class="my-card" id="cardP">
@@ -110,7 +109,6 @@
     margin: 1%;
     background-color: #38a90063;
     text-align: center;
-    width: 20%;
 }
 
 #cardP:hover {

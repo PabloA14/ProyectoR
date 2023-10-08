@@ -30,7 +30,7 @@ const httpUsuario = {
     loginUsuario: async (req, res) => {
         const { cedula, clave } = req.body;
         try {
-            const user = await Usuario.findOne({ cedula: cedula }).populate('rol');
+            const user = await Usuario.findOne({ cedula: cedula }).populate('rol').populate('redConocimiento');
 
             if (!user) {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });

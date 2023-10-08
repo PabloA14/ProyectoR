@@ -2,7 +2,7 @@
     <div class="container">
         <div class="izquierda"></div>
         <div class="derecha">
-            <q-card white bordered class="my-card" style="width: 60%;height: auto;">
+            <q-card white bordered class="my-card" style="width: 65%;height: auto;">
                 <q-card-section>
                     <div class="row">
                         <div class="col-3">
@@ -35,10 +35,10 @@
 
                         </q-input><br>
                         <!-- <p class="q-mt-sm">¿olvido su contraseña?</p> -->
-                        <p @click="openModal" class="q-mt-sm" style="cursor: pointer; color: rgb(5, 13, 255);">
-                            ¿Olvidó
-                            su
-                            contraseña?</p><br>
+                        <p @click="openModal" class="q-mt-sm" style="cursor: pointer; color: rgb(5, 13, 255);text-align: center;">
+                            ¿OLVIDÓ
+                            SU
+                            CONTRASEÑA?</p><br>
 
                         <div class="row">
                             <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
@@ -207,4 +207,12 @@ async function iniciarSesion() {
     border: 1px solid red;
 }
 
+@media screen and (max-width: 600px) {
+    .container {
+        flex-direction: column;
+    }
+    .izquierda {
+        display: none;
+    }
+}
 </style>
