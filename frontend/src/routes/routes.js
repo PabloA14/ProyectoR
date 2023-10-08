@@ -15,6 +15,7 @@ import Cards from "../components/Cards.vue"
 import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
 import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
 import InfoDesarrollo from "../components/InfoDesarrollo.vue"
+import Retroalimetacion from "../components/retroalimetacion.vue"
 
 
 
@@ -55,14 +56,14 @@ export const routes = [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
-           //cards 
+            //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/retroalimetacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
 
-            
 
             //no cards
             { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
