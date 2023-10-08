@@ -16,7 +16,8 @@ import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
 import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
 import InfoDesarrollo from "../components/InfoDesarrollo.vue"
 import Retroalimetacion from "../components/retroalimetacion.vue"
-
+import instructores from "../components/instructores.vue"
+import proyecto from "../components/proyecto.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -62,6 +63,8 @@ export const routes = [
             { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/retroalimetacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
 
 
