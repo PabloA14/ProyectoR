@@ -30,7 +30,7 @@ const httpUsuario = {
     loginUsuario: async (req, res) => {
         const { cedula, clave } = req.body;
         try {
-            const user = await Usuario.findOne({ cedula: cedula }).populate('rol').populate('redConocimiento');
+            const user = await Usuario.findOne({ cedula: cedula }).populate('rol').populate('redConocimiento').populate('redConocimiento');
 
             if (!user) {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });
@@ -48,7 +48,8 @@ const httpUsuario = {
                 return res.status(401).json({ msg: 'Credenciales inválidas' });
             }
 
-            const token = await generarJWT(user.id);
+            // const token = await generarJWT(user.id);
+            const token = await generarJWT(user.id, user.rol , user.redConocimiento);
 
             res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
         } catch (error) {

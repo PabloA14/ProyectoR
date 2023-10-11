@@ -1,6 +1,6 @@
 <template>
   <q-page class="q-pa-md">
-    <div class="text-h4 text-center q-mb-md">*nombre del programa</div>
+    <div class="text-h4 text-center q-mb-md">{{ nombre }}</div>
 
     <div class="q-pa-md q-gutter-md">
       <div class="row justify-center">
@@ -98,6 +98,38 @@
     </div>
   </q-page>
 </template>
+
+
+<script setup>
+import  {useUserStore} from "../almacenaje/informacion.js"
+import {ref} from 'vue'
+import { watch } from 'vue';
+let nombre=ref()
+
+const dataProgram = useUserStore()
+
+
+function info() {
+  console.log('entro a info');
+
+  watch(dataProgram.informacionPrograma, (newValue) => {
+    if (newValue && newValue[0]) {
+      console.log(newValue[0]);
+      nombre.value =newValue[0].denominacionPrograma
+    } else {
+      console.log('No hay información disponible aún.');
+    }
+  });
+}
+
+info();
+
+
+// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
+// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
+// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
+
+</script>
 
 <style scoped>
 #cardP {

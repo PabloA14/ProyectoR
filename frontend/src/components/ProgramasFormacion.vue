@@ -3,7 +3,7 @@
 
 
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md">Programas de Formación
+      <div class="text-h4 text-center q-mb-md">{{ redConocimiento }}
       </div>
 
       <div class="q-pa-md" style="width: 100%;">
@@ -14,15 +14,22 @@
 
         <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
           :filter="filter" :rows="programas" :columns="columns" row-key="name" :pagination="pagination">
-
+           <!-- opciones -->
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
+              <!-- detalle del programa -->
+              <!-- <router-link to="cards">
+                <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
+              </router-link> -->
               <router-link to="cards">
                 <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
-                  style="margin-right: 25px;cursor: pointer;" />
+                  style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
               </router-link>
+              <!-- editar programa -->
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarPrograma(props.row)" />
+                <!-- estado del programa -->
               <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
                 v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
               <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
@@ -109,11 +116,15 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import axios from 'axios'
+import { LinkBD } from "../routes/variables.js";
+import { ref , onMounted } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useNivelStore } from "../stores/Niveles.js"
 import { useQuasar } from 'quasar'
-
+import {useUserStore}  from '../almacenaje/informacion.js'
+import VueJwtDecode from 'vue-jwt-decode'
+const dataProgram = useUserStore()
 let agregar = ref(false)
 let codigo = ref("")
 let denominacion = ref("")
@@ -123,13 +134,39 @@ let programas = ref([])
 let id = ref("")
 let niveles = ref([])
 let separator = ref('cell')
-
+let redConocimiento =ref('')
 let bd = ref("");
 const usePrograma = useProgramasFormacionStore();
 const useNivel = useNivelStore()
 const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
+
+
+
+function decodeJWT(token) {
+  try {
+    const decodedToken = VueJwtDecode.decode(token);
+    return decodedToken;
+  } catch (error) {
+    console.error('Error al decodificar el token:', error);
+    return null;
+  }
+}
+const token =dataProgram.informacionToken
+console.log(token);
+
+const decodedToken = decodeJWT(token);
+
+if (decodedToken) {
+  console.log('Token decodificado:', decodedToken);
+  redConocimiento.value=decodedToken.redConocimiento.denominacion;
+
+} else {
+  console.log('No se pudo decodificar el token.');
+}
+
+// ---------------------------------------------------------------------------------------CODIGO
 
 
 const columns = [
@@ -150,13 +187,13 @@ buscarNiveles()
 
 async function buscar() {
   programas.value = await usePrograma.getProgramas();
-  console.log(programas.value);
+  // console.log(programas.value);
   programas.value.reverse()
 }
 
 async function buscarNiveles() {
   niveles.value = await useNivel.buscarNiveles();
-  console.log(niveles.value);
+  // console.log(niveles.value);
 }
 
 function nuevo() {
@@ -303,6 +340,31 @@ async function editarEstado(x) {
     console.log(error);
   }
 }
+
+async function informacionPrograma(x) {
+  dataProgram.informacionPrograma = [];
+  let codigo = x.codigo;
+  console.log(codigo);
+
+  try {
+    const response = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`);
+
+    if (response.data && response.data.denominacionPrograma) {
+      dataProgram.informacionPrograma.push(response.data);
+      console.log('informacion programa de formacion');
+      console.log(dataProgram.informacionPrograma[0]);
+      return dataProgram.informacionPrograma[0]; // Devolver los datos
+    } else {
+      console.error('El objeto recibido no tiene la estructura esperada.');
+      return null; // Devolver null si no hay datos
+    }
+  } catch (error) {
+    console.log(error);
+    throw new Error('Error al obtener la información');
+  }
+}
+
+
 
 </script>
 

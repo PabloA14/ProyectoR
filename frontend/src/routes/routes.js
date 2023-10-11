@@ -21,6 +21,8 @@ import proyecto from "../components/proyecto.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
+import  {useUserStore} from "../almacenaje/informacion.js"
+
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 
@@ -80,10 +82,12 @@ export const routes = [
 
         ],
         beforeEnter: (to, from, next) => {
+            const useUsuario= useUserStore()
             const token = sessionStorage.getItem('token')
             if (!token && to.path !== '/') {
                 next('/');
             } else {
+                useUsuario.informacionToken = token
                 next();
             }
         }
