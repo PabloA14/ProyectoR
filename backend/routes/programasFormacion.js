@@ -14,6 +14,8 @@ router.post("/", [
 ], httpprogramas.postPrograma)
 
 router.get("/traer", httpprogramas.getProgramaCod)
+router.get("/traer/:codigo", httpprogramas.getProgramaCod)
+
 router.get("/", httpprogramas.getProgramas)
 
 router.put("/:id", [

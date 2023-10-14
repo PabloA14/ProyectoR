@@ -16,10 +16,14 @@ import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
 import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
 import InfoDesarrollo from "../components/InfoDesarrollo.vue"
 import Ambientes2 from "../components/Ambientes2.vue"
-
+import Retroalimetacion from "../components/retroalimetacion.vue"
+import instructores from "../components/instructores.vue"
+import proyecto from "../components/proyecto.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
+import  {useUserStore} from "../almacenaje/informacion.js"
+
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 
@@ -56,16 +60,17 @@ export const routes = [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
-           //cards 
+            //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/retroalimetacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
 
-
-            
 
             //no cards
             { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
@@ -79,10 +84,12 @@ export const routes = [
 
         ],
         beforeEnter: (to, from, next) => {
+            const useUsuario= useUserStore()
             const token = sessionStorage.getItem('token')
             if (!token && to.path !== '/') {
                 next('/');
             } else {
+                useUsuario.informacionToken = token
                 next();
             }
         }

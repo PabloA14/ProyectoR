@@ -14,6 +14,7 @@ const httpprogramas = {
             .populate("registrocalificado")
         res.status(200).json({ programas })
     },
+    
 
     postPrograma: async (req, res) => {
         const { codigo, denominacionPrograma, nivelFormacion, version, estado,
@@ -37,19 +38,46 @@ const httpprogramas = {
         }
     },
 
+    // getProgramaCod: async (req, res) => {
+    //     console.log("getcod");
+    //     // const { codigo } = req.body
+
+    //     try {
+    //         const cod = await Programa.find({ codigo: codigo })
+    //         if (cod.length === 0) {
+    //             res.status(400).json({ sms: `sin coincidencias para ${codigo}` })
+    //         } else {
+    //             res.status(200).json({ cod })
+
+    //         }
+    //     } catch (error) {
+    //         res.json({ error })
+    //     }
+    // },
+
     getProgramaCod: async (req, res) => {
         console.log("getcod");
-        const { codigo } = req.body
+        const codigo = req.params.codigo;
+        console.log({ codigo });
         try {
-            const cod = await Programa.find({ codigo: codigo })
-            if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para ${codigo}` })
+            const cod = await Programa
+                .findOne({ codigo: codigo })
+                .populate("RedConocimiento")
+                .populate("nivelFormacion")
+                .populate("desarrolloCurricular")
+                .populate("instructores")
+                .populate("ambienteFormacion")
+                .populate("materialesformacion")
+                .populate("registrocalificado");
+    
+            if (!cod) {
+                res.status(400).json({ sms: `sin coincidencias para ${codigo}` });
             } else {
-                res.status(200).json({ cod })
-
+                console.log(cod);
+                res.status(200).json( cod );
             }
         } catch (error) {
-            res.json({ error })
+            res.json({ error });
         }
     },
     putProgramas: async (req, res) => {
@@ -87,6 +115,7 @@ const httpprogramas = {
             res.status(500).json({ msg: 'Error en el servidor' });
         }
     },
+
     patchPrograma: async (req, res) => {
         const id = req.params.id;
         const { estado } = req.body;
