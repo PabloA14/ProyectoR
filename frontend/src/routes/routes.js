@@ -15,6 +15,7 @@ import Cards from "../components/Cards.vue"
 import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
 import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
 import InfoDesarrollo from "../components/InfoDesarrollo.vue"
+import Ambientes2 from "../components/Ambientes2.vue"
 
 
 
@@ -60,6 +61,8 @@ export const routes = [
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+
 
 
             

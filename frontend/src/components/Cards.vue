@@ -5,21 +5,19 @@
         <div class="q-pa-md q-gutter-md">
             <div class="row justify-center">
                 <!-- Agregué la clase justify-center para centrar horizontalmente -->
-                    <q-card class="my-card" id="cardP">
-                        <router-link to="desarrolloCurricular">
+                <q-card class="my-card" id="cardP">
+                    <router-link to="desarrolloCurricular">
 
-                    <q-card-section>
-                        <div class="text-h6">Desarrollo Curricular</div>
-                    </q-card-section>
+                        <q-card-section>
+                            <div class="text-h6">Desarrollo Curricular</div>
+                        </q-card-section>
 
-                    <q-card-section class="q-pt-none">
-                        <q-img id="img" src="../imagenes/carpeta.png" />
-                    </q-card-section>
-                </router-link>
+                        <q-card-section class="q-pt-none">
+                            <q-img id="img" src="../imagenes/carpeta.png" />
+                        </q-card-section>
+                    </router-link>
 
                 </q-card>
-
-
 
                 <q-card class="my-card" id="cardP">
                     <q-card-section>
@@ -30,15 +28,20 @@
                         <q-img id="img" src="../imagenes/carpeta.png" />
                     </q-card-section>
                 </q-card>
+
                 <q-card class="my-card" id="cardP">
-                    <q-card-section>
-                        <div class="text-h6">Ambientes de Formación</div>
-                    </q-card-section>
+                    <router-link to="ambientesPrograma">
 
-                    <q-card-section class="q-pt-none">
-                        <q-img id="img" src="../imagenes/carpeta.png" />
+                        <q-card-section>
+                            <div class="text-h6">Ambientes de Formación</div>
+                        </q-card-section>
 
-                    </q-card-section>
+                        <q-card-section class="q-pt-none">
+                            <q-img id="img" src="../imagenes/carpeta.png" />
+
+                        </q-card-section>
+                    </router-link>
+
                 </q-card>
 
                 <q-card class="my-card" id="cardP">

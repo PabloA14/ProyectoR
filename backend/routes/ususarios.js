@@ -8,7 +8,7 @@ import { validarCampos } from "../middlewares/validar_campos.js";
 const router = Router()
 
 router.get("/", httpUsuario.getUsusarios)
-router.get("/:codigo", httpUsuario.getUsuarioCodigo)
+router.get("/:cedula", httpUsuario.getUsuarioCodigo)
 
 router.post("/", [
     check("cedula", "La cédula es obligatoria").trim().not().isEmpty(),
