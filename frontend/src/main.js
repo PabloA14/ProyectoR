@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { createRouter, createWebHashHistory } from "vue-router"
+import piniaPersist from 'pinia-plugin-persist'
 import App from './App.vue'
 import { routes } from "./routes/routes.js"
 import { Quasar, Notify } from 'quasar'
@@ -32,4 +33,6 @@ app.use(Quasar, {
 
 app.use(pinia)
 app.use(router)
+pinia.use(piniaPersist)
+
 app.mount('#app')

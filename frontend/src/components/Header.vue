@@ -32,7 +32,7 @@
       :width="300" :breakpoint="500" bordered mini-to-overlay :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list padding>
-          <router-link v-if="(rol === 'gestor')" to="programas" style="text-decoration: none; color: black">
+          <router-link v-if="rol === 'gestor'" to="programas" style="text-decoration: none; color: black">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-book-open-cover" />

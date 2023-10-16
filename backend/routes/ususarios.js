@@ -40,6 +40,18 @@ router.put("/:id", [
     validarCampos
 ], httpUsuario.putUsuario)
 
+router.put("/datosPersonales/:id", [
+    check("cedula", "La cédula es obligatoria").trim().not().isEmpty(),
+    check("cedula", "Cédula de máximo 10 dígitos").trim().isLength({ max: 10 }),
+    check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
+    check("apellidos", "Los apellidos son obligatorios").trim().not().isEmpty(),
+    check("telefono", "El teléfono es obligatorio").trim().not().isEmpty(),
+    check("correo", "El correo electrónico es obligatorio").trim().not().isEmpty(),
+    check("correo", "El correo electrónico no es válido").trim().isEmail(),
+    check("perfilProfesional", "El perfil profesional es obligatorio").trim().not().isEmpty(),
+    validarCampos
+], httpUsuario.putUsuario)
+
 router.patch("/:id", httpUsuario.patchUsuario)
 
 router.post("/login", [

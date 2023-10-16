@@ -14,7 +14,7 @@
 
         <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
           :filter="filter" :rows="programas" :columns="columns" row-key="name" :pagination="pagination">
-           <!-- opciones -->
+          <!-- opciones -->
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <!-- detalle del programa -->
@@ -29,7 +29,7 @@
               <!-- editar programa -->
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarPrograma(props.row)" />
-                <!-- estado del programa -->
+              <!-- estado del programa -->
               <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
                 v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
               <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
@@ -118,12 +118,13 @@
 <script setup>
 import axios from 'axios'
 import { LinkBD } from "../routes/variables.js";
-import { ref , onMounted } from "vue";
+import { ref } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useNivelStore } from "../stores/Niveles.js"
 import { useQuasar } from 'quasar'
-import {useUserStore}  from '../almacenaje/informacion.js'
+import { useUserStore } from '../almacenaje/informacion.js'
 import VueJwtDecode from 'vue-jwt-decode'
+
 const dataProgram = useUserStore()
 let agregar = ref(false)
 let codigo = ref("")
@@ -134,7 +135,7 @@ let programas = ref([])
 let id = ref("")
 let niveles = ref([])
 let separator = ref('cell')
-let redConocimiento =ref('')
+let redConocimiento = ref('')
 let bd = ref("");
 const usePrograma = useProgramasFormacionStore();
 const useNivel = useNivelStore()
@@ -153,14 +154,14 @@ function decodeJWT(token) {
     return null;
   }
 }
-const token =dataProgram.informacionToken
+const token = dataProgram.informacionToken
 console.log(token);
 
 const decodedToken = decodeJWT(token);
 
 if (decodedToken) {
   console.log('Token decodificado:', decodedToken);
-  redConocimiento.value=decodedToken.redConocimiento.denominacion;
+  redConocimiento.value = decodedToken.redConocimiento.denominacion;
 
 } else {
   console.log('No se pudo decodificar el token.');

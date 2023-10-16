@@ -58,8 +58,7 @@ export const routes = [
     {
         path: "/header", component: Header, children: [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
-            { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-            { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            
             //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
@@ -71,8 +70,9 @@ export const routes = [
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
 
-
             //no cards
+            { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
+            { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/centroF", component: Centros, name: "centrosF", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/niveles", component: Niveles, name: "niveles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },

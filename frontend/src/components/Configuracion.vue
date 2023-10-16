@@ -109,10 +109,8 @@ import { useQuasar } from 'quasar'
 
 
 let useUsuario = useUsuarioStore()
-const rol = useUsuario.rol
-const datos = useUsuario.usuario
-console.log(datos);
-
+let rol = useUsuario.rol
+let datos = useUsuario.usuario
 
 let agregar = ref(false)
 const $q = useQuasar()
@@ -126,6 +124,7 @@ let correo = ref("");
 let cv = ref("");
 let id = ref("")
 let perfilProfesional = ref("");
+
 
 function validarVacios() {
     if (cedula.value === "" && nombre.value === "" && apellido.value === "" && telefono.value === ""
@@ -163,7 +162,7 @@ function editarUsuario(datos) {
     agregar.value = true;
 }
 async function actualizar() {
-    await useUsuario.actualizarUsuario(
+    await useUsuario.actualizarDatosPersonales(
         id.value,
         cedula.value,
         nombre.value,
@@ -182,7 +181,6 @@ async function actualizar() {
             position: 'bottom',
             timeout: Math.random() * 3000
         })
-        buscar();
 
     }).catch((error) => {
         errores.value = ''
@@ -205,8 +203,6 @@ async function actualizar() {
         }
     })
 }
-
-
 
 
 </script>

@@ -3,7 +3,6 @@ import axios from "axios";
 import { LinkBD } from "../routes/variables.js";
 import { ref } from "vue";
 
-
 export const useUsuarioStore = defineStore("usuario", () => {
   let loading = ref(false)
   let rol = ref('')
@@ -24,10 +23,23 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
 
   const actualizarUsuario = async (
-    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional) => {
+    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional) => {
     try {
       let datos = await axios.put(`${LinkBD}/api/usuario/${id}`, {
-        cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+        cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional
+      });
+      return datos;
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
+
+  const actualizarDatosPersonales = async (
+    id, cedula, nombre, apellidos, telefono, correo, perfilProfesional) => {
+    try {
+      let datos = await axios.put(`${LinkBD}/api/usuario/datosPersonales/${id}`, {
+        cedula, nombre, apellidos, telefono, correo, perfilProfesional
       });
       return datos;
     } catch (error) {
@@ -79,10 +91,11 @@ export const useUsuarioStore = defineStore("usuario", () => {
     agregarUsuario,
     actualizarUsuario,
     cambiarEstado,
+    actualizarDatosPersonales,
     token,
     rol,
     logeo,
     loading,
-    usuario
-  };
+    usuario  
+  }
 });

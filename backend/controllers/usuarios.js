@@ -49,7 +49,7 @@ const httpUsuario = {
             }
 
             // const token = await generarJWT(user.id);
-            const token = await generarJWT(user.id, user.rol , user.redConocimiento);
+            const token = await generarJWT(user.id, user.rol, user.redConocimiento);
 
             res.status(200).json({ msg: 'Inicio de sesión exitoso', token, user });
         } catch (error) {
@@ -57,7 +57,7 @@ const httpUsuario = {
             res.status(500).json({ msg: 'Error en el servidor' });
         }
     },
-
+    
     getUsusarios: async (req, res) => {
         const usuarios = await Usuario.find()
             .populate("rol")
