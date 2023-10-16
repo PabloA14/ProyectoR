@@ -86,13 +86,14 @@
         </q-card>
 
         <q-card class="my-card" id="cardP">
-          <q-card-section>
-            <div id="img" class="text-h6">Registro Calificado</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <q-img id="img" src="../imagenes/carpeta.png" />
-          </q-card-section>
+          <router-link to="registroCalificado">
+            <q-card-section>
+              <div id="img" class="text-h6">Registro Calificado</div>
+            </q-card-section>
+            <q-card-section class="q-pt-none">
+              <q-img id="img" src="../imagenes/carpeta.png" />
+            </q-card-section>
+          </router-link>
         </q-card>
       </div>
     </div>
@@ -101,10 +102,10 @@
 
 
 <script setup>
-import  {useUserStore} from "../almacenaje/informacion.js"
-import {ref} from 'vue'
+import { useUserStore } from "../almacenaje/informacion.js"
+import { ref } from 'vue'
 import { watch } from 'vue';
-let nombre=ref()
+let nombre = ref()
 
 const dataProgram = useUserStore()
 
@@ -115,7 +116,7 @@ function info() {
   watch(dataProgram.informacionPrograma, (newValue) => {
     if (newValue && newValue[0]) {
       console.log(newValue[0]);
-      nombre.value =newValue[0].denominacionPrograma
+      nombre.value = newValue[0].denominacionPrograma
     } else {
       console.log('No hay información disponible aún.');
     }

@@ -18,10 +18,11 @@ import InfoDesarrollo from "../components/InfoDesarrollo.vue"
 import Retroalimetacion from "../components/retroalimetacion.vue"
 import instructores from "../components/instructores.vue"
 import proyecto from "../components/proyecto.vue"
+import registroCalificado from "../components/registroCalificado.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
-import  {useUserStore} from "../almacenaje/informacion.js"
+import { useUserStore } from "../almacenaje/informacion.js"
 
 import { createRouter, createWebHashHistory } from 'vue-router';
 
@@ -67,7 +68,7 @@ export const routes = [
             { path: "/retroalimetacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
-
+            { path: "/registroCalificado", component: registroCalificado, name: "registroCalificado", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
 
             //no cards
@@ -82,7 +83,7 @@ export const routes = [
 
         ],
         beforeEnter: (to, from, next) => {
-            const useUsuario= useUserStore()
+            const useUsuario = useUserStore()
             const token = sessionStorage.getItem('token')
             if (!token && to.path !== '/') {
                 next('/');
