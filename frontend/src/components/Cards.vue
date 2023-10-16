@@ -87,13 +87,14 @@
       </q-card>
 
       <q-card class="my-card" id="cardP">
-        <q-card-section>
-          <div id="img" class="text-h6">Registro Calificado</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          <q-img id="img" src="../imagenes/certificado.png" />
-        </q-card-section>
+        <router-link to="registroCalificado">
+          <q-card-section>
+            <div id="img" class="text-h6">Registro Calificado</div>
+          </q-card-section>
+          <q-card-section class="q-pt-none">
+            <q-img id="img" src="../imagenes/certificado.png" />
+          </q-card-section>
+        </router-link>
       </q-card>
     </div><br>
   </q-page>
