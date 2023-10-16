@@ -48,7 +48,7 @@
         </q-page>
 
         <q-dialog v-model="agregar">
-            <q-card style="width: 32%; height: fit-content">
+            <q-card class="dialog" style="width: 32%; height: fit-content">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         {{ bd === 0 ? "Editar Red" : "Agregar Red" }}

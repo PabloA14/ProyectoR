@@ -66,13 +66,13 @@ const httpUsuario = {
     },
 
     getUsuarioCodigo: async (req, res) => {
-        const Codigo = req.params.codigo
+        const Codigo = req.params.cedula
         console.log(Codigo);
         try {
             const cod = await Usuario.find({ cedula: Codigo })
             console.log(cod);
             if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para el usuario con la cedula  ${Codigo}` })
+                res.status(400).json({ sms: `sin coincidencias para el usuario con la cedula ${Codigo}` })
             } else {
                 res.status(200).json({ cod })
             }
@@ -143,6 +143,7 @@ const httpUsuario = {
             }
 
             const { tempFilePath } = req.files.foto
+
             cloudinary.uploader.upload(tempFilePath,
                 { width: 250, crop: "limit", resource_type: "image" },
                 async function (error, result) {
@@ -166,7 +167,7 @@ const httpUsuario = {
             res.status(400).json({ error, 'general': 'Controlador' })
         }
     },
-    cargarArchivoCloudHoja: async (req, res, next) => {
+    cargarArchivoCloudHoja: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
             api_key: process.env.CLOUDINARY_KEY,
@@ -180,11 +181,12 @@ const httpUsuario = {
             if (!req.files || Object.keys(req.files).length === 0 || !req.files.hojaDeVida) {
                 return res.status(400).json({ msg: "No hay archivos en la peticion" })
             }
-            next();
 
             const { tempFilePath } = req.files.hojaDeVida
+            const extension = tempFilePath.name.split('.').pop()
+
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit" },
+                { width: 250, crop: "limit", resource_type: "raw", format: extension },
                 async function (error, result) {
                     if (result) {
                         let holder = await Usuario.findById(id);

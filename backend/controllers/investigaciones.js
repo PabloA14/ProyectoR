@@ -137,7 +137,7 @@ const httpInvestigaciones = {
             const extension = tempFilePath.name.split('.').pop()
 
             cloudinary.uploader.upload(tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw", format: extension },
+                { width: 250, crop: "limit", resource_type: "raw", format: "xlsx" },
                 async function (error, result) {
                     if (result) {
                         let holder = await Investigacion.findById(id);
