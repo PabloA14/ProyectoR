@@ -43,13 +43,15 @@
       </q-card>
 
       <q-card class="my-card" id="cardP">
-        <q-card-section>
-          <div class="text-h6">Materiales de Formación</div>
-        </q-card-section>
+        <router-link to="materialesPrograma">
+          <q-card-section>
+            <div class="text-h6">Materiales de Formación</div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-img id="img" src="../imagenes/productividad.png" />
-        </q-card-section>
+          <q-card-section class="q-pt-none">
+            <q-img id="img" src="../imagenes/productividad.png" />
+          </q-card-section>
+        </router-link>
       </q-card>
 
       <q-card class="my-card" id="cardP">
@@ -134,7 +136,7 @@ info();
 
 <style scoped>
 #cardP {
-  margin: 3%;
+  margin: 6%;
   background-color: #38a90063;
   text-align: center;
 }
@@ -147,6 +149,6 @@ info();
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: 10px;
 }
 </style>

@@ -55,11 +55,23 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   };
 
+  const asignarMateriales = async (id, materialesformacion) => {
+    try {
+      const res = await axios.post(`${LinkBD}/api/programasFormacion/asignarMateriales/${id}`, {
+        materialesformacion: materialesformacion
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getProgramas,
     agregarProgramaFormacion,
     actualizarProgramaFormacion,
     cambiarEstado,
+    asignarMateriales,
     loading
   }
 

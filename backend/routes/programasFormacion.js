@@ -13,7 +13,7 @@ router.post("/", [
     validarCampos
 ], httpprogramas.postPrograma)
 
-router.get("/traer", httpprogramas.getProgramaCod)
+//router.get("/traer", httpprogramas.getProgramaCod)
 router.get("/traer/:codigo", httpprogramas.getProgramaCod)
 
 router.get("/", httpprogramas.getProgramas)
@@ -27,5 +27,8 @@ router.put("/:id", [
 ], httpprogramas.putProgramas)
 
 router.patch("/:id", httpprogramas.patchPrograma)
+
+router.post("/asignarMateriales/:id", httpprogramas.asignarMateriales)
+
 
 export default router
