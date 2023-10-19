@@ -1,15 +1,15 @@
 <template>
     <q-page class="q-pa-md">
         <div>
-            <div class="text-h4 text-center q-mb-md">Registro calificado</div> <br>
 
             <div class="row">
 
+                <div class="centrada" id="card">
 
-                <div id="card">
+                    <div class="text-h4 text-center q-mb-md">Registro calificado</div> <br>
 
-                    <q-card class="my-card" flat bordered id="csrd2" >
-                        <q-card-section horizontal >
+                    <q-card class="my-card" flat bordered id="csrd2">
+                        <q-card-section horizontal>
                             <q-card-section class="q-pt-xs" id="section">
 
                                 <div class="text-h5 q-mt-sm q-mb-xs">Gestión contable</div> <br>
@@ -52,16 +52,15 @@
 
                         <q-card-actions>
 
-                            <q-btn style="float: right; margin: 0 auto" color="secondary" icon="download" label="Descargar"
+                            <q-btn style="float: ; margin: auto auto" color="secondary" icon="download" label="Descargar"
                                 class="q-mb-md" />
 
-                            <q-btn flat color="primary">
-                                editar
+                            <q-btn style="float: ; margin: auto auto" flat color="primary">
+                                Editar
                             </q-btn>
+
                         </q-card-actions>
                     </q-card>
-
-
                 </div>
             </div>
 
@@ -76,9 +75,9 @@
 <style scoped>
 #card {
     margin: 0 auto;
+    margin-top: auto;
     width: 40%;
 }
-
 
 #csrd2 {
     border-radius: 4%;
