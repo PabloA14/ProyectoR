@@ -28,7 +28,7 @@ router.put("/:id", [
 
 router.patch("/:id", httpprogramas.patchPrograma)
 
-router.post("/asignarMateriales/:id", httpprogramas.asignarMateriales)
+//router.post("/asignarMateriales/:id", httpprogramas.asignarMateriales)
 
 
 export default router

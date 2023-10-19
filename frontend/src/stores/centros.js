@@ -59,5 +59,6 @@ export const useCentroStore = defineStore("Centros", () => {
     actualizarCentros,
     cambiarEstado,
     loading
-  };
+  },
+  { persist: true };
 });

@@ -57,5 +57,6 @@ export const useMaterialStore = defineStore("materiales", () => {
         agregarMateriales,
         cambiarEstado,
         loading
-    };
+    },
+    { persist: true };
 });

@@ -60,7 +60,7 @@ router.post("/login", [
     validarCampos
 ], httpUsuario.loginUsuario)
 
-router.post('/uploadcloudFoto/:id', [
+/* router.post('/uploadcloudFoto/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     validarCampos
 ], httpUsuario.cargarArchivoCloudFoto)
@@ -68,7 +68,7 @@ router.post('/uploadcloudFoto/:id', [
 router.post('/uploadcloudHoja/:id', [
     check('id', 'No es un ID válido').isMongoId(),
     validarCampos
-], httpUsuario.cargarArchivoCloudHoja)
+], httpUsuario.cargarArchivoCloudHoja) */
 
 /* router.get('/uploadcloudFoto/:id', [
     check('id', 'No es un ID válido').isMongoId(),

@@ -106,11 +106,12 @@
           </div>
 
           <div class="q-mb-md">
-            <q-file label="Hoja de Vida" type="file" color="secondary" v-model="cv">
+            <!-- <q-input type="file" @change="archivo" color="secondary" label="Hoja de Vida">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
-            </q-file>
+            </q-input> -->
+            <input type="file" @change="archivo" />
           </div>
 
           <div class="q-mb-md">
@@ -245,8 +246,14 @@ function validar() {
   })
 }
 
+function archivo(event) {
+  cv.value = event.target.files[0]
+  console.log(cv.value);
+}
+
 async function agregarU() {
   console.log("entro a agregar");
+  console.log(cv.value);
   await useUsuari.agregarUsuario({
     cedula: cedula.value,
     nombre: nombre.value,
@@ -255,7 +262,7 @@ async function agregarU() {
     correo: correo.value,
     clave: clave.value,
     redConocimiento: red.value,
-    //hojaDeVida: cv.value,
+    hojaDeVida: cv.value,
     rol: rol.value,
     perfilProfesional: perfilProfesional.value,
   }).then(() => {
@@ -299,11 +306,12 @@ function editarUsuario(x) {
   telefono.value = x.telefono;
   correo.value = x.correo;
   red.value = x.redConocimiento._id;
-  //cv.value = x.hojaDeVida;
+  cv.value = x.hojaDeVida;
   rol.value = x.rol._id;
   perfilProfesional.value = x.perfilProfesional;
   agregar.value = true;
 }
+
 async function actualizar() {
   await useUsuari.actualizarUsuario(
     id.value,
@@ -422,4 +430,3 @@ async function editarEstado(x) {
   background-color: rgba(255, 255, 255, 0.8);
 }
 </style>
-

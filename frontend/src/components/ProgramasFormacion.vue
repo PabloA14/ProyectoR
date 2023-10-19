@@ -22,7 +22,7 @@
                 <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
                   style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
               </router-link> -->
-              <router-link to="cards">
+              <router-link to="InformacionPrograma">
                 <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
                   style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
               </router-link>

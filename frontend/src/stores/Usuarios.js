@@ -47,9 +47,18 @@ export const useUsuarioStore = defineStore("usuario", () => {
       throw error;
     }
   };
-  const agregarUsuario = async (info) => {
+  const agregarUsuario = async (info, hojaDeVida) => {
     try {
-      const newU = await axios.post(`${LinkBD}/api/usuario`, info);
+      const formData = new FormData()
+      for (const key in info) {
+        formData.append(key, info[key])
+      }
+      formData.append('hojaDeVida', hojaDeVida)
+      const newU = await axios.post(`${LinkBD}/api/usuario`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+      });
       return newU;
     } catch (error) {
       throw error;
@@ -96,6 +105,8 @@ export const useUsuarioStore = defineStore("usuario", () => {
     rol,
     logeo,
     loading,
-    usuario  
+    usuario
   }
-});
+},
+  { persist: true }
+);

@@ -21,6 +21,7 @@ import Retroalimetacion from "../components/retroalimetacion.vue"
 import instructores from "../components/instructores.vue"
 import proyecto from "../components/proyecto.vue"
 import registroCalificado from "../components/registroCalificado.vue"
+import InformacionPrograma from "../components/InformacionPrograma.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -60,6 +61,7 @@ export const routes = [
     {
         path: "/header", component: Header, children: [
             { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
+            { path: "/InformacionPrograma", component: InformacionPrograma, name: "InformacionPrograma", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             
             //cards 
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor'] } },

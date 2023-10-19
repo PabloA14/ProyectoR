@@ -14,12 +14,12 @@ const httpprogramas = {
             .populate("registrocalificado")
         res.status(200).json({ programas })
     },
-
-
+    
     postPrograma: async (req, res) => {
-        const { codigo, denominacionPrograma, nivelFormacion, version } = req.body;
-
-        console.log(codigo, denominacionPrograma, nivelFormacion, version);
+        const { codigo, denominacionPrograma, nivelFormacion, version, estado,
+            RedConocimiento, disCurricular, desarrolloCurricular,
+            instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
+        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
         try {
             const programaExistente = await Programa.findOne({ codigo });
 
@@ -27,7 +27,7 @@ const httpprogramas = {
                 return res.status(400).json({ mensaje: 'El programa ya está registrado.' });
             }
 
-            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version });
+            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
             await programa.save();
             res.json({ programa });
         } catch (error) {
@@ -35,23 +35,6 @@ const httpprogramas = {
             res.status(500).json({ mensaje: 'Hubo un error al agregar el programa de formacion.' });
         }
     },
-
-    // getProgramaCod: async (req, res) => {
-    //     console.log("getcod");
-    //     // const { codigo } = req.body
-
-    //     try {
-    //         const cod = await Programa.find({ codigo: codigo })
-    //         if (cod.length === 0) {
-    //             res.status(400).json({ sms: `sin coincidencias para ${codigo}` })
-    //         } else {
-    //             res.status(200).json({ cod })
-
-    //         }
-    //     } catch (error) {
-    //         res.json({ error })
-    //     }
-    // },
 
     getProgramaCod: async (req, res) => {
         console.log("getcod");
@@ -67,12 +50,12 @@ const httpprogramas = {
                 .populate("ambienteFormacion")
                 .populate("materialesformacion")
                 .populate("registrocalificado");
-
+    
             if (!cod) {
                 res.status(400).json({ sms: `sin coincidencias para ${codigo}` });
             } else {
                 console.log(cod);
-                res.status(200).json(cod);
+                res.status(200).json( cod );
             }
         } catch (error) {
             res.json({ error });
@@ -111,30 +94,6 @@ const httpprogramas = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
-        }
-    },
-
-    asignarMateriales: async (req, res) => {
-        const programaId = req.params.id;
-        const { materialesformacion } = req.body;
-
-        try {
-            const programa = await Programa.findById(programaId);
-
-            if (!programa) {
-                return res.status(404).json({ mensaje: 'Programa no encontrado' });
-            }
-
-            // Asignar instructores al programa
-            programa.materialesformacion = materialesformacion;
-
-            // Guardar el programa actualizado
-            await programa.save();
-
-            res.status(200).json({ mensaje: 'Materiales asignados correctamente', programa });
-        } catch (error) {
-            console.error('Error al asignar materiales:', error);
-            res.status(500).json({ mensaje: 'Error interno del servidor' });
         }
     },
 

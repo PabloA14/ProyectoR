@@ -73,7 +73,8 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     cambiarEstado,
     asignarMateriales,
     loading
-  }
+  },
+  { persist: true }
 
 
 });

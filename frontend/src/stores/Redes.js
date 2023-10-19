@@ -56,5 +56,6 @@ export const useRedStore = defineStore("redes", () => {
         agregarRedes,
         cambiarEstado,
         loading
-    };
+    },
+    { persist: true };
 });
