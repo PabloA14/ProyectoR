@@ -59,6 +59,5 @@ export const useInveStore = defineStore("investigacion", () => {
         agregarInves,
         loading
 
-    },
-    { persist: true };
+    }
 });

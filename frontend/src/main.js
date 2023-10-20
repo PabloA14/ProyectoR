@@ -31,11 +31,15 @@ app.use(Quasar, {
     }
 })
 
-pinia.use(createPersistedState(createPersistedState({
+/* pinia.use(createPersistedState(createPersistedState({
     paths: ['token'],
 
 }),
-    { storage: window.localStorage }));
+    { storage: window.localStorage })); */
+
+pinia.use(createPersistedState({
+    storage:sessionStorage
+}))
 
 app.use(pinia)
 app.use(router)

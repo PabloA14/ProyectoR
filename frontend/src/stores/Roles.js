@@ -61,5 +61,5 @@ export const useRolStore = defineStore("roles", () => {
     loading
 
   },
-  { persist: true };
+  {persist:true}
 });

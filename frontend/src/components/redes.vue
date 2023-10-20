@@ -112,7 +112,7 @@ const columns = [
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
 
-buscar()
+
 
 function nuevo() {
     bd.value = 1;
@@ -151,6 +151,8 @@ async function buscar() {
     console.log(redes.value);
     redes.value.reverse()
 }
+
+buscar()
 
 async function agregarR() {
     console.log("entro a agregar");

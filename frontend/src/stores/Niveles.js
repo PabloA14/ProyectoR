@@ -54,6 +54,5 @@ export const useNivelStore = defineStore("niveles", () => {
         agregarNiveles,
         cambiarEstado,
         loading
-    },
-    { persist: true };
+    }
 });

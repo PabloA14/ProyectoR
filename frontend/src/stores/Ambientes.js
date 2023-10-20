@@ -56,6 +56,5 @@ export const useAmbienteStore = defineStore("ambientes", () => {
         agregarAmbientes,
         cambiarEstado,
         loading
-    },
-    { persist: true };
+    }
 });
