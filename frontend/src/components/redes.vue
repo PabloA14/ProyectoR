@@ -64,7 +64,7 @@
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                     <div class="q-mb-md">
-                        <q-input label="Código*" color="secondary" v-model="codigo" />
+                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
                     </div>
 
                     <div class="q-mb-md">
@@ -75,8 +75,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -100,6 +100,7 @@ const $q = useQuasar()
 let filter = ref('')
 let separator = ref('cell')
 let errores = ref([])
+let loading = ref(false)
 
 const pagination = ref({
     rowsPerPage: 6
@@ -155,6 +156,7 @@ async function buscar() {
 buscar()
 
 async function agregarR() {
+    loading.value = true
     console.log("entro a agregar");
     await useRed.agregarRedes({
         codigo: codigo.value,
@@ -186,7 +188,8 @@ async function agregarR() {
         } else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 function editarRed(red) {
@@ -199,6 +202,7 @@ function editarRed(red) {
 }
 
 async function actualizar() {
+    loading.value = true
     await useRed.actualizarRedes(
         id.value,
         codigo.value,
@@ -230,7 +234,8 @@ async function actualizar() {
         } else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 async function editarEstado(red) {

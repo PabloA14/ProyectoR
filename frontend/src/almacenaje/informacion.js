@@ -1,15 +1,15 @@
-import {defineStore} from 'pinia'
+import { defineStore } from 'pinia'
 
-
-export const useUserStore =defineStore(
-    "pk",
+export const useUserStore = defineStore(
+    "programa",
     {
-        state : () =>({
-            nombre: "prueba como puso rosa",
-            informacionPrograma:[],
-            informacionToken:"",
+        state: () => ({
+            nombre: "prueba",
+            informacionPrograma: [],
+            informacionToken: "",
         })
-    }
+    },
+    {persist:true}
 )
 
 

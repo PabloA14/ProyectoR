@@ -62,7 +62,7 @@
 
                 <q-card-section style="max-height: 65vh" class="scroll">
                     <div class="q-mb-md">
-                        <q-input label="Código*" color="secondary" v-model="codigo" />
+                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
                     </div>
 
                     <div class="q-mb-md">
@@ -73,8 +73,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -98,6 +98,7 @@ const $q = useQuasar()
 let filter = ref('')
 let separator = ref('cell')
 let errores = ref([])
+let loading = ref(false)
 
 const pagination = ref({
     rowsPerPage: 6
@@ -150,6 +151,7 @@ async function buscar() {
 }
 
 async function agregarN() {
+    loading.value = true
     console.log("entro a agregar");
     await useNivel.agregarNiveles({
         codigo: codigo.value,
@@ -181,7 +183,8 @@ async function agregarN() {
         } else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 function editarNivel(nivel) {
@@ -194,6 +197,7 @@ function editarNivel(nivel) {
 }
 
 async function actualizar() {
+    loading.value = true
     await useNivel.actualizarNiveles(
         id.value,
         codigo.value,
@@ -226,6 +230,7 @@ async function actualizar() {
             console.log(error);
         }
     })
+    loading.value = false
 }
 
 async function editarEstado(nivel) {

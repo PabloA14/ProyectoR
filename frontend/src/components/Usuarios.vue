@@ -128,8 +128,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
-          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -168,6 +168,8 @@ const useRed = useRedStore()
 const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
+let loading = ref(false)
+
 
 const columns = [
   { name: 'cedula', align: 'center', label: 'Cédula', field: 'cedula', sortable: true },
@@ -187,11 +189,11 @@ buscarRol()
 buscarRed()
 buscar()
 
+
 async function buscar() {
   usuarios.value = await useUsuari.buscarUsuarios();
   console.log(usuarios.value);
   usuarios.value.reverse()
-  // usuarioFiltrado.value = usuarios.filter(x => x.rol === 'Instructor')
 }
 
 async function buscarRol() {
@@ -252,6 +254,7 @@ function archivo(event) {
 }
 
 async function agregarU() {
+  loading.value = true
   console.log("entro a agregar");
   console.log(cv.value);
   await useUsuari.agregarUsuario({
@@ -293,7 +296,7 @@ async function agregarU() {
       console.log(error);
     }
   });
-
+  loading.value = false
 }
 
 function editarUsuario(x) {
@@ -313,6 +316,7 @@ function editarUsuario(x) {
 }
 
 async function actualizar() {
+  loading.value = true
   await useUsuari.actualizarUsuario(
     id.value,
     cedula.value,
@@ -356,6 +360,7 @@ async function actualizar() {
       console.log(error);
     }
   })
+  loading.value = false
 }
 
 async function editarEstado(x) {

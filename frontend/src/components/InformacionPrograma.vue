@@ -1,8 +1,9 @@
 <template>
     <q-page class="q-pa-md">
-        <div class="text-h4 text-center q-mb-md  q-pa-md">{{ nombre }}</div>
+        <div class="text-h4 text-center q-mb-md  q-pa-md">
+            {{ nombre }}
+        </div>
 
-        
         <div class="MatrizCorrelacion">
             <div class="row" id="row">
                 <q-toolbar-title class="title">
@@ -35,23 +36,20 @@
             <small>Ver información del desarrollo Curricular</small>
         </div>
 
-
     </q-page>
 </template>
   
   
 <script setup>
 import { useUserStore } from "../almacenaje/informacion.js"
-import { ref } from 'vue'
-import { watch } from 'vue';
-let nombre = ref()
+import { ref, watch } from 'vue'
+let nombre = ref('')
 
 const dataProgram = useUserStore()
 
+info()
 
 function info() {
-    console.log('entro a info');
-
     watch(dataProgram.informacionPrograma, (newValue) => {
         if (newValue && newValue[0]) {
             console.log(newValue[0]);
@@ -62,7 +60,6 @@ function info() {
     });
 }
 
-info();
 </script>
   
 <style scoped>
@@ -88,25 +85,25 @@ info();
 }
 
 
-#ir{
+#ir {
     font-weight: 800;
     font-size: 6vh;
     color: black;
 }
+
 .title {
-  border-bottom: solid 2px rgba(128, 128, 128, 0.174);
-  font-weight: 800;
+    border-bottom: solid 2px rgba(128, 128, 128, 0.174);
+    font-weight: 800;
 }
 
 #ir {
-  border: solid;
-  padding: 2vh;
-  border-radius: 5px;
-  width: 8vh;
-  height: 6vh;
-  background-color: #39a900;
-  color: white;
-  font-size: 3.8vh;
+    border: solid;
+    padding: 2vh;
+    border-radius: 5px;
+    width: 8vh;
+    height: 6vh;
+    background-color: #39a900;
+    color: white;
+    font-size: 3.8vh;
 }
-
 </style>

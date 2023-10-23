@@ -35,7 +35,8 @@
 
                         </q-input><br>
                         <!-- <p class="q-mt-sm">¿olvido su contraseña?</p> -->
-                        <p @click="openModal" class="q-mt-sm" style="cursor: pointer; color: rgb(5, 13, 255);text-align: center;">
+                        <p @click="openModal" class="q-mt-sm"
+                            style="cursor: pointer; color: rgb(5, 13, 255);text-align: center;">
                             ¿OLVIDÓ
                             SU
                             CONTRASEÑA?</p><br>
@@ -211,6 +212,7 @@ async function iniciarSesion() {
     .container {
         flex-direction: column;
     }
+
     .izquierda {
         display: none;
     }

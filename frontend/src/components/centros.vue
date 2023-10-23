@@ -91,8 +91,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-if="bd == 1" label="Agregar" @click="agregarC()" color="secondary" />
-          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarC()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -125,6 +125,7 @@ const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
 let separator = ref('cell')
+let loading = ref(false)
 
 const pagination = ref({
   rowsPerPage: 6
@@ -187,6 +188,7 @@ async function buscarCiudad() {
 }
 
 async function agregarC() {
+  loading.value = true
   console.log("entro a agregar");
   await useCentro.agregarCentro({
     codigo: codigo.value,
@@ -220,8 +222,8 @@ async function agregarC() {
     } else {
       console.log(error);
     }
-  });
-
+  })
+  loading.value = false
 }
 
 function editarCentro(c) {
@@ -236,6 +238,7 @@ function editarCentro(c) {
 }
 
 async function actualizar() {
+  loading.value = true
   await useCentro.actualizarCentros(
     id.value,
     codigo.value,
@@ -269,7 +272,8 @@ async function actualizar() {
     } else {
       console.log(error);
     }
-  });
+  })
+  loading.value = false
 }
 
 /* async function editarEstado(centro) {

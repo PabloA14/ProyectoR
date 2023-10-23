@@ -60,6 +60,6 @@ export const useRolStore = defineStore("roles", () => {
     cambiarEstado,
     loading
 
-  },
-  {persist:true}
-});
+  }
+}
+);

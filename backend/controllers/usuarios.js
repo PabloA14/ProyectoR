@@ -21,7 +21,7 @@ const httpUsuario = {
       redConocimiento,
       rol,
       perfilProfesional,
-    } = req.body;
+    } = req.body; 
     const { hojaDeVida } = req.files; 
 
     try {

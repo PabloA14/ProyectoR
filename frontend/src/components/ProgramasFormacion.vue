@@ -1,7 +1,5 @@
 <template>
   <div>
-
-
     <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md">{{ redConocimiento }}
       </div>
@@ -13,7 +11,7 @@
         </div>
 
         <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
-          :filter="filter" :rows="programas" :columns="columns" row-key="name" :pagination="pagination">
+          :filter="filter" :rows="programasFiltrados" :columns="columns" row-key="name" :pagination="pagination">
           <!-- opciones -->
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
@@ -22,7 +20,7 @@
                 <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
                   style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
               </router-link> -->
-              <router-link to="InformacionPrograma">
+              <router-link to="/InformacionPrograma">
                 <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
                   style="margin-right: 25px;cursor: pointer;" @click="informacionPrograma(props.row)" />
               </router-link>
@@ -84,7 +82,7 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Código*" color="secondary" v-model="codigo" />
+            <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
@@ -106,8 +104,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
-          <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -118,14 +116,19 @@
 <script setup>
 import axios from 'axios'
 import { LinkBD } from "../routes/variables.js";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useNivelStore } from "../stores/Niveles.js"
+//import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useQuasar } from 'quasar'
 import { useUserStore } from '../almacenaje/informacion.js'
 import VueJwtDecode from 'vue-jwt-decode'
 
 const dataProgram = useUserStore()
+/* let useUsuario = useUsuarioStore()
+let datos = useUsuario.usuario.redConocimiento._id */
+//console.log(datos);
+
 let agregar = ref(false)
 let codigo = ref("")
 let denominacion = ref("")
@@ -142,7 +145,7 @@ const useNivel = useNivelStore()
 const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
-
+let loading = ref(false)
 
 
 function decodeJWT(token) {
@@ -186,9 +189,13 @@ const pagination = ref({
 buscar()
 buscarNiveles()
 
+let programasFiltrados = computed(() => {
+  return programas.value.filter(x => x.RedConocimiento._id === decodedToken.redConocimiento._id)
+})
+
+
 async function buscar() {
   programas.value = await usePrograma.getProgramas();
-  // console.log(programas.value);
   programas.value.reverse()
 }
 
@@ -233,12 +240,14 @@ function validar() {
 }
 
 async function agregarP() {
+  loading.value = true
   console.log("entro a agregar");
   await usePrograma.agregarProgramaFormacion({
     codigo: codigo.value,
     denominacionPrograma: denominacion.value,
     nivelFormacion: nivel.value,
-    version: version.value
+    version: version.value,
+    RedConocimiento: decodedToken.redConocimiento._id
   }).then(() => {
     agregar.value = false
     $q.notify({
@@ -266,7 +275,8 @@ async function agregarP() {
     } else {
       console.log(error);
     }
-  });
+  })
+  loading.value = false
 }
 
 function editarPrograma(x) {
@@ -280,6 +290,7 @@ function editarPrograma(x) {
   agregar.value = true;
 }
 async function actualizar() {
+  loading.value = true
   await usePrograma.actualizarProgramaFormacion(
     id.value,
     codigo.value,
@@ -317,6 +328,7 @@ async function actualizar() {
       console.log(error);
     }
   })
+  loading.value = false
 }
 
 async function editarEstado(x) {
@@ -342,13 +354,19 @@ async function editarEstado(x) {
   }
 }
 
-async function informacionPrograma(x) {
+function informacionPrograma(x) {
   dataProgram.informacionPrograma = [];
   let codigo = x.codigo;
   console.log(codigo);
+  axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
+    .then((res) => {
+      dataProgram.informacionPrograma.push(res.data);
+    }).catch((error) => {
+      console.log(error);
+    });
 
-  try {
-    const response = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`);
+  /* try {
+    const response = axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`);
 
     if (response.data && response.data.denominacionPrograma) {
       dataProgram.informacionPrograma.push(response.data);
@@ -362,7 +380,7 @@ async function informacionPrograma(x) {
   } catch (error) {
     console.log(error);
     throw new Error('Error al obtener la información');
-  }
+  } */
 }
 
 

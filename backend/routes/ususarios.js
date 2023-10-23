@@ -12,7 +12,7 @@ router.get("/:cedula", httpUsuario.getUsuarioCodigo)
 
 router.post("/", [
     check("cedula", "La cédula es obligatoria").trim().not().isEmpty(),
-    check("cedula", "Cédula de máximo 10 dígitos").trim().isLength({ max: 10 }),
+    check("cedula", "La cédula debe tener máximo 10 dígitos").trim().isLength({ min: 8, max: 10 }),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     check("apellidos", "Los apellidos son obligatorios").trim().not().isEmpty(),
     check("telefono", "El teléfono es obligatorio").trim().not().isEmpty(),
@@ -28,7 +28,7 @@ router.post("/", [
 
 router.put("/:id", [
     check("cedula", "La cédula es obligatoria").trim().not().isEmpty(),
-    check("cedula", "Cédula de máximo 10 dígitos").trim().isLength({ max: 10 }),
+    check("cedula", "La cédula debe tener máximo 10 dígitos").trim().isLength({ min: 8, max: 10 }),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     check("apellidos", "Los apellidos son obligatorios").trim().not().isEmpty(),
     check("telefono", "El teléfono es obligatorio").trim().not().isEmpty(),

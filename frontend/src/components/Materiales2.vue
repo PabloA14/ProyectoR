@@ -104,7 +104,7 @@ async function buscarMateriales() {
 
 async function agregarN() {
     console.log("entro a agregar");
-    const id = "652765f7e554c4ce1e5a2efe"
+    const id = "6532cbf02a6021177d311a34"
     await usePrograma.asignarMateriales(id, materialesSeleccionados.value)
     agregar.value = false
 }
