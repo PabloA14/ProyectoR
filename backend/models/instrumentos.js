@@ -4,6 +4,7 @@ const httpInstrumentosEva = new mongoose.Schema({
     codigo: { type: String, require: true },
     nombre: { type: String, require: true },
     documento: { type: String, require: false },
+    guias: { type: mongoose.Schema.Types.ObjectId, ref: 'Guia', require: true },
     createdAt: { type: Date, default: Date.now }
 
 })

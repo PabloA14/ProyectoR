@@ -24,7 +24,7 @@ const httpDesarrolloC = {
     },
 
     getDesarrollosTodo: async (req, res) => {
-        const desarrollo = await DesarrolloC.find().populate("idGuias")
+        const desarrollo = await DesarrolloC.find()
         res.status(200).json({ desarrollo })
     },
 

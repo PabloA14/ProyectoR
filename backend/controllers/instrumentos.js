@@ -3,10 +3,10 @@ import Instrumentos from "../models/instrumentos.js"
 const httpInstrumentos = {
 
     postInstrumentos: async (req, res) => {
-        const { codigo, nombre, documento } = req.body
+        const { codigo, nombre, documento, guias } = req.body
         try {
             const instrumentosE = new Instrumentos({
-                codigo, nombre, documento
+                codigo, nombre, documento, guias
             })
             const cod = await Instrumentos.findOne({ codigo: codigo })
             if (cod) {
@@ -19,12 +19,13 @@ const httpInstrumentos = {
             }
 
         } catch (error) {
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear el registro" })
         }
     },
 
     getInstrumentos: async (req, res) => {
         const inst = await Instrumentos.find()
+        .populate("guias")
         res.status(200).json({ inst })
     },
 
@@ -50,7 +51,7 @@ const httpInstrumentos = {
 
         try {
             const updatedFields = {
-                codigo, nombre, documento,
+                codigo, nombre, documento, guias
             };
 
             const updatedInstrumentos = await Instrumentos.findOneAndUpdate(
