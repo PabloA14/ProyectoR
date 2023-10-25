@@ -1,12 +1,12 @@
 import Guia from "../models/guias.js"
 
-const httpDesarrolloC = {
+const httpGuias = {
 
     postGuia: async (req, res) => {
-        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body
+        const { codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo } = req.body
         try {
             const guiasAp = new Guia({
-                codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
+                codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo
             })
             const cod = await Guia.findOne({ codigo: codigo })
             if (cod) {
@@ -27,8 +27,8 @@ const httpDesarrolloC = {
 
     getGuias: async (req, res) => {
         const guia = await Guia.find()
-            .populate("materialAPoyo")
-            .populate("instrumentosEvaluacion")
+            .populate("MaterialApoyo")
+            .populate("InstrumentosEvaluacion")
         res.status(200).json({ guia })
     },
 
@@ -51,11 +51,11 @@ const httpDesarrolloC = {
 
     putGuias: async (req, res) => {
         const guiasId = req.params.id;
-        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body;
+        const { codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, documento,  instrumentosEvaluacion, materialAPoyo
+                codigo, nombre, fase, documento,  InstrumentosEvaluacion, MaterialApoyo
             };
 
             const updatedGuias = await Guia.findOneAndUpdate(
@@ -75,4 +75,4 @@ const httpDesarrolloC = {
 
 }
 
-export default httpDesarrolloC
+export default httpGuias

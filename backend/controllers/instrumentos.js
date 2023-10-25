@@ -10,16 +10,16 @@ const httpInstrumentos = {
             })
             const cod = await Instrumentos.findOne({ codigo: codigo })
             if (cod) {
-                return res.status(400).json({ sms: "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
+                return res.status(400).json({ msg: "El instrumento ya se encuentra en el sistema con el codigo", cod, nombre })
 
             } else {
                 await instrumentosE.save()
-                return res.status(200).json({ msg: 'Guia de aprendizaje registrada correctamente', instrumentosE });
+                return res.status(200).json({ msg: 'Instrumento registrado correctamente', instrumentosE });
 
             }
 
         } catch (error) {
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear el registro" })
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de crear el registro" })
         }
     },
 
