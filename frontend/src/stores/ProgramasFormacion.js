@@ -66,12 +66,31 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   };
 
+  const postDiseno = async (id, disCurricular) => {
+    try {
+      const formData = new FormData()
+      /* for (const key in info) {
+        formData.append(key, info[key])
+      } */
+      formData.append('disCurricular', disCurricular)
+      const res = await axios.post(`${LinkBD}/api/programasFormacion/postDisCurricular/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return {
     getProgramas,
     agregarProgramaFormacion,
     actualizarProgramaFormacion,
     cambiarEstado,
     asignarMateriales,
+    postDiseno,
     loading
   }
 

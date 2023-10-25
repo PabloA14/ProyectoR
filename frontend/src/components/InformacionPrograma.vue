@@ -8,14 +8,70 @@
             <div class="row" id="row">
                 <q-toolbar-title class="title">
                     Diseño Curricular
-
                 </q-toolbar-title>
 
                 <q-btn flat round dense class="ir">
-                    <router-link to="">
-                        <span class="material-symbols-outlined" id="ir">download</span>
-                    </router-link>
+                    <span class="material-symbols-outlined" id="ir">more_vert</span>
+                    <q-menu max-height="130px">
+                        <q-list style="min-width: 100px">
+                            <q-item clickable @click="agregar = true">
+                                <q-item-section>
+                                    <span class="material-symbols-outlined" style="" id="opciones">
+                                        add
+                                    </span>
+                                </q-item-section>
+                            </q-item>
+                            <q-item clickable>
+                                <q-item-section>
+                                    <span class="material-symbols-outlined" style="" id="opciones">
+                                        download
+                                    </span>
+                                </q-item-section>
+                            </q-item>
+                            <q-item clickable>
+                                <q-item-section>
+                                    <span class="material-symbols-outlined" style="" id="opciones">
+                                        edit
+                                    </span>
+                                </q-item-section>
+                            </q-item>
+
+                            <q-separator />
+
+                        </q-list>
+                    </q-menu>
                 </q-btn>
+
+                <q-dialog v-model="agregar">
+                    <q-card style="width: 40%; height: fit-content">
+                        <q-card-section class="row items-center q-pb-none">
+                            <div class="text-h6">
+                                Agregar Diseño Curricular
+                            </div>
+                            <q-space />
+                            <q-btn icon="close" color="negative" flat round dense v-close-popup />
+                        </q-card-section>
+
+                        <q-separator inset style="
+            height: 5px;
+            margin-top: 5px;
+          " color="secondary" />
+
+                        <q-card-section style="max-height: 65vh" class="scroll">
+
+                            <div class="q-mb-md">
+                                <input type="file" @change="archivo" />
+                            </div>
+
+                        </q-card-section>
+
+                        <q-separator />
+
+                        <q-card-actions align="right">
+                            <q-btn label="Agregar" @click="agregarDis()" color="secondary" />
+                        </q-card-actions>
+                    </q-card>
+                </q-dialog>
             </div>
             <small>Descargar diseño curricular</small>
         </div>
@@ -42,10 +98,28 @@
   
 <script setup>
 import { useUserStore } from "../almacenaje/informacion.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref, watch } from 'vue'
 let nombre = ref('')
 
 const dataProgram = useUserStore()
+const usePrograma = useProgramasFormacionStore();
+
+let agregar = ref(false)
+let dis = ref('')
+
+function archivo(event) {
+    dis.value = event.target.files[0]
+    console.log(dis.value);
+}
+
+async function agregarDis() {
+    console.log("entró");
+    console.log(dis.value);
+    const id = "6532e4ad96ea85c476b11f6d"
+    await usePrograma.postDiseno(id, dis.value)
+    agregar.value = false
+}
 
 info()
 

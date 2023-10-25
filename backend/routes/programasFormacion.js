@@ -30,5 +30,6 @@ router.patch("/:id", httpprogramas.patchPrograma)
 
 router.post("/asignarMateriales/:id", httpprogramas.asignarMateriales)
 
+router.post("/postDisCurricular/:id", httpprogramas.postDiseno)
 
 export default router
