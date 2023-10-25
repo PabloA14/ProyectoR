@@ -19,7 +19,7 @@ const httpInstrumentos = {
             }
 
         } catch (error) {
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear el registro" })
         }
     },
 
@@ -50,7 +50,7 @@ const httpInstrumentos = {
 
         try {
             const updatedFields = {
-                codigo, nombre, documento,
+                codigo, nombre, documento
             };
 
             const updatedInstrumentos = await Instrumentos.findOneAndUpdate(

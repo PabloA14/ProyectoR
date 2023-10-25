@@ -12,6 +12,3 @@ const httpGuias = new mongoose.Schema({
 })
 
 export default mongoose.model("Guia", httpGuias)
-
-// idInstrumentosEvaluacion
-// IDmaterialAPoyo

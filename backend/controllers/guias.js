@@ -55,7 +55,7 @@ const httpDesarrolloC = {
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
+                codigo, nombre, fase, documento,  instrumentosEvaluacion, materialAPoyo
             };
 
             const updatedGuias = await Guia.findOneAndUpdate(
