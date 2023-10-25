@@ -1,9 +1,22 @@
 <template>
   <div>
-    <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mt-md">Instructores</div>
+    <div class="text-h4 text-center q-mt-md">Instructores</div>
+    <div class="spinner-container" v-if="loading">
+      <q-spinner
+        style="margin-left: 10px"
+        color="black"
+        size="7em"
+        :thickness="10"
+      />
+    </div>
+    <q-page v-else class="q-pa-md">
       <div class="q-pa-md" style="width: 100%">
-        <q-table title="Treats" :rows="rows" :columns="columns" row-key="name">
+        <q-table
+          title="Treats"
+          :rows="instructores"
+          :columns="columns"
+          row-key="cedula"
+        >
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-icon
@@ -12,8 +25,16 @@
                 size="20px"
                 style="margin-left: 10px; cursor: pointer"
               />
+              <q-icon
+                color="red"
+                name="fa-solid fa-trash-alt fa-xl"
+                size="20px"
+                style="margin-left: 10px; cursor: pointer"
+                @click="Modeliminar"
+              />
             </q-td>
           </template>
+
           <!--
             <template v-slot:body-cell-estado="props">
               <q-td :props="props">
@@ -45,12 +66,6 @@
               class="q-mb-md"
               @click="Modagregar"
             />
-            <q-btn
-              color="black"
-              label="Eliminar"
-              class="q-mb-md"
-              @click="Modeliminar"
-            />
           </template>
         </q-table>
       </div>
@@ -72,7 +87,16 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-select label="Intructor" color="secondary" />
+            <div class="q-mb-md">
+              <q-select
+                label="Instructor"
+                color="secondary"
+                v-model="instructor"
+                :options="instructores"
+                option-label="nombre"
+                option-value="nombre"
+              />
+            </div>
           </div>
         </q-card-section>
 
@@ -101,7 +125,7 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="text-h5 text-center q-mt-md">
-            ¿Esta seguro que desea eliminar a '*********** ' de la lista de
+            ¿Esta seguro que desea eliminar a '*****+*** ' de la lista de
             instructores ?
           </div>
         </q-card-section>
@@ -119,9 +143,56 @@
 
 <script setup>
 import { ref } from "vue";
+import { useUsuarioStore } from "../stores/Usuarios.js";
+
 let modalAgg = ref();
 let filter = ref();
 let modalEliminar = ref();
+let instructor = ref();
+let loading = ref(false);
+let usuarios = ref([]);
+let instructores = ref([]);
+
+const useUsuari = useUsuarioStore();
+
+const columns = [
+  {
+    name: "nombre",
+    align: "center",
+    label: "Instructor",
+    field: "nombre",
+    sortable: true,
+  },
+  { name: "estado", label: "Estado ", field: "estado", sortable: true },
+  { name: "correo", label: "Email", field: "correo" },
+  { name: "telefono", label: "Telefono", field: "telefono" },
+  { name: "opciones", label: "Opciones", field: "opciones" },
+];
+
+function obtenerInstructores() {
+  console.log("entraste a instructores");
+  instructores.value = usuarios.value.filter(
+    (user) => user.rol.denominacion === "instructor"
+  );
+  console.log("sadasdadasd", instructores.value);
+  // Rellena las opcions del q-select con los instructores
+  instructor.value = null; // Reinicia el valor seleccionado
+}
+
+// function eliminarInstructor(instructor) {
+//   // lógica para eliminar al instructor
+// }
+
+async function cargarUsuarios() {
+  loading.value = true;
+  usuarios.value = await useUsuari.buscarUsuarios();
+  obtenerInstructores();
+  loading.value = false;
+}
+cargarUsuarios();
+// onMounted(() => {
+//   cargarUsuarios();
+// });
 
 function Modagregar() {
   modalAgg.value = true;
@@ -130,79 +201,18 @@ function Modagregar() {
 function Modeliminar() {
   modalEliminar.value = true;
 }
-
-const columns = [
-  {
-    name: "calories",
-    align: "center",
-    label: "Instructor",
-    field: "calories",
-    sortable: true,
-  },
-  { name: "fat", label: "Estado ", field: "fat", sortable: true },
-  { name: "carbs", label: "Email", field: "carbs" },
-  { name: "protein", label: "Telefono", field: "protein" },
-  { name: "sodium", label: "Opciones", field: "sodium" },
-];
-
-const rows = [
-  {
-    name: "Frozen Yogurt",
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    sodium: 87,
-    calcium: "14%",
-    iron: "1%",
-  },
-  {
-    name: "Ice cream sandwich",
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    sodium: 129,
-    calcium: "8%",
-    iron: "1%",
-  },
-  {
-    name: "Eclair",
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    sodium: 337,
-    calcium: "6%",
-    iron: "7%",
-  },
-];
 </script>
 
-<!-- <script setup>
-  import { ref } from "vue";
-  import { useUsuarioStore } from "../stores/Usuarios.js";
-  
-  const useUsuari = useUsuarioStore();
-  let usuarioFiltrado = ref([])
-  let usuarios = ref([])
-  
-  const pagination = ref({
-    rowsPerPage: 6
-  })
-  
-  let filter = ref('')
-  let separator = ref('cell')
-  
-  buscar()
-  
-  async function buscar() {
-    usuarios.value = await useUsuari.buscarUsuarios();
-    console.log(usuarios.value);
-    usuarios.value.reverse()
-    usuarioFiltrado.value = usuarios.filter(x => x.rol === 'instructor')
-    console.log(usuarioFiltrado.value);
-  }
-  
-  </script> -->
-<style scoped></style>
+<style scoped>
+.spinner-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255, 255, 255, 0.8);
+}
+</style>
