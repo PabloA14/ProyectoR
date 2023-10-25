@@ -3,10 +3,10 @@ import Guia from "../models/guias.js"
 const httpDesarrolloC = {
 
     postGuia: async (req, res) => {
-        const { codigo, nombre, fase, documento, materialAPoyo, desarrolloCurricular } = req.body
+        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body
         try {
             const guiasAp = new Guia({
-                codigo, nombre, fase, documento, materialAPoyo, desarrolloCurricular
+                codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo
             })
             const cod = await Guia.findOne({ codigo: codigo })
             if (cod) {
@@ -28,7 +28,7 @@ const httpDesarrolloC = {
     getGuias: async (req, res) => {
         const guia = await Guia.find()
             .populate("materialAPoyo")
-            .populate("desarrolloCurricular")
+            .populate("instrumentosEvaluacion")
         res.status(200).json({ guia })
     },
 
@@ -51,11 +51,11 @@ const httpDesarrolloC = {
 
     putGuias: async (req, res) => {
         const guiasId = req.params.id;
-        const { codigo, nombre, fase, documento, materialAPoyo, desarrolloCurricular } = req.body;
+        const { codigo, nombre, fase, documento, instrumentosEvaluacion, materialAPoyo } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, documento, materialAPoyo, desarrolloCurricular
+                codigo, nombre, fase, documento,  instrumentosEvaluacion, materialAPoyo
             };
 
             const updatedGuias = await Guia.findOneAndUpdate(

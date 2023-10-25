@@ -3,10 +3,10 @@ import Instrumentos from "../models/instrumentos.js"
 const httpInstrumentos = {
 
     postInstrumentos: async (req, res) => {
-        const { codigo, nombre, documento, guias } = req.body
+        const { codigo, nombre, documento } = req.body
         try {
             const instrumentosE = new Instrumentos({
-                codigo, nombre, documento, guias
+                codigo, nombre, documento
             })
             const cod = await Instrumentos.findOne({ codigo: codigo })
             if (cod) {
@@ -25,7 +25,6 @@ const httpInstrumentos = {
 
     getInstrumentos: async (req, res) => {
         const inst = await Instrumentos.find()
-        .populate("guias")
         res.status(200).json({ inst })
     },
 
@@ -51,7 +50,7 @@ const httpInstrumentos = {
 
         try {
             const updatedFields = {
-                codigo, nombre, documento, guias
+                codigo, nombre, documento
             };
 
             const updatedInstrumentos = await Instrumentos.findOneAndUpdate(
