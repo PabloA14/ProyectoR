@@ -10,8 +10,8 @@
           :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
-                style="margin-right: 25px;cursor: pointer;" />
+              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye"
+                color="primary" size="20px" style="margin-right: 25px;cursor: pointer;" />
 
               <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarUsuario(props.row)" />
@@ -184,6 +184,7 @@ const columns = [
 const pagination = ref({
   rowsPerPage: 6
 })
+
 
 buscarRol()
 buscarRed()
