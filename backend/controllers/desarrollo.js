@@ -1,23 +1,54 @@
+import { Long } from "mongodb"
 import DesarrolloC from "../models/desarrollo.js"
 
 const httpDesarrolloC = {
 
+    // postDesarrollo: async (req, res) => {
+    //     console.log("postDesarrollo")
+    //     const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias } = req.body
+    //     try {
+    //         const desarrolloCurricular = new DesarrolloC({
+    //             codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias
+    //         })
+    //         const cod = await DesarrolloC.findOne({ codigo: codigo })
+    //         if (cod) {
+    //             return res.status(400).json({ sms: "El desarrollo curricular ya existente", cod, nombre })
+
+    //         } else {
+    //             await desarrolloCurricular.save()
+    //             return res.status(200).json({ msg: 'El registro de la Desarrollo ha sido exitoso', desarrolloCurricular });
+
+    //         }
+
+    //     } catch (error) {
+    //         return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de inserat" })
+    //     }
+    // },
+
     postDesarrollo: async (req, res) => {
+        console.log("postDesarrollo desarrollo C")
         const { codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias } = req.body
+        console.log('estes es el codigo')
+        console.log({codigo})
+    
+        // Comprueba si el código es indefinido
+        if (codigo === undefined) {
+            return res.status(400).json({ msg: "El código es indefinido", status: "error" });
+        }
+    
         try {
             const desarrolloCurricular = new DesarrolloC({
                 codigo, matrizcorrelacion, proyectoFormativo, planeacionPedagogica, idGuias
             })
+    
             const cod = await DesarrolloC.findOne({ codigo: codigo })
-            if (cod) {
-                return res.status(400).json({ sms: "El desarrollo curricular ya existente", cod, nombre })
-
+            console.log(cod)
+            if (cod != null) {
+                return res.status(400).json({ sms: "El desarrollo curricular ya existente", cod })
             } else {
                 await desarrolloCurricular.save()
-                return res.status(200).json({ msg: 'El registro de la Desarrollo ha sido exitoso', desarrolloCurricular });
-
+                return res.status(200).json({ msg: 'El registro de la Desarrollo ha sido exitoso tienes un status 200', desarrolloCurricular , status :"ok" });
             }
-
         } catch (error) {
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de inserat" })
         }

@@ -21,6 +21,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
 
   const agregarProgramaFormacion = async (info) => {
     try {
+      console.log(info);
       const datos = await axios.post(`${LinkBD}/api/programasFormacion`, info);
       return datos
     } catch (error) {
@@ -28,6 +29,33 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
       throw error
     }
   }
+
+  const addDesarrollo = async (codigo) => {
+    try {
+      console.log(codigo)
+
+      const datos = await axios.post(`${LinkBD}/api/desarrollo`, {
+        codigo
+      });
+      return datos
+    } catch (error) {
+      console.error(error.message)
+        }
+  }
+
+  const updatedDesarrollo = async (id, desarrolloCurricular) => {
+    try {
+      console.log("entro a updated Desarrollo")
+      console.log(id, desarrolloCurricular)
+      const datos = await axios.put(`${LinkBD}/api/programasFormacion/editarDesarrollo/${id}`, {
+        desarrolloCurricular
+      });
+      return datos
+    } catch (error) {
+      throw error.data;
+    }
+  }
+
 
   const actualizarProgramaFormacion = async (id, codigo, denominacionPrograma, nivelFormacion, version) => {
     try {
@@ -91,9 +119,9 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     cambiarEstado,
     asignarMateriales,
     postDiseno,
-    loading
+    loading,
+    addDesarrollo,
+    updatedDesarrollo
   }
 
 });
-
-

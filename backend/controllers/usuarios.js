@@ -21,8 +21,8 @@ const httpUsuario = {
       redConocimiento,
       rol,
       perfilProfesional,
-    } = req.body; 
-    const { hojaDeVida } = req.files; 
+    } = req.body;
+    const { hojaDeVida } = req.files;
 
     try {
       if (!hojaDeVida || !hojaDeVida.tempFilePath) {

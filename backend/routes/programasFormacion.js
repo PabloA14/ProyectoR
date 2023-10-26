@@ -26,6 +26,9 @@ router.put("/:id", [
     validarCampos
 ], httpprogramas.putProgramas)
 
+
+router.put("/editarDesarrollo/:id" , httpprogramas.putDesarrollo)
+
 router.patch("/:id", httpprogramas.patchPrograma)
 
 router.post("/asignarMateriales/:id", httpprogramas.asignarMateriales)
