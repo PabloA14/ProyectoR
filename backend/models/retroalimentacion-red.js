@@ -12,4 +12,4 @@ const retroalimentacionRed = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 })
 
-export default mongoose.model("retroalimentacionRede", retroalimentacionRed)
+export default mongoose.model("Retroalimentacion", retroalimentacionRed)

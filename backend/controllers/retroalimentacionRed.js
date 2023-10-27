@@ -1,21 +1,14 @@
 import Retroalimentacion from "../models/retroalimentacion-red.js"
-import Programa from "../models/programasFormacion.js"
 
 
 const httpProyectos = {
     postRetroalimentacion: async (req, res) => {
-        const { codigo, nombre, descripcion, fecha, documentos, programa } = req.body;
+        const { codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa } = req.body;
 
         try {
-            const programaEncontrado = await Programa.findOne({ codigo: programa });
-
-
-            if (!programaEncontrado) {
-                return res.status(400).json({ msg: "Programa no encontrado con el código proporcionado" });
-            }
 
             const retroalimentacion_red = new Retroalimentacion({
-                codigo, nombre, descripcion, fecha, documentos, programa: programaEncontrado
+                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa 
             });
 
             const cod = await Retroalimentacion.findOne({ codigo: codigo })
@@ -28,14 +21,14 @@ const httpProyectos = {
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ msg: "Ha ocurrido un error en el servidor al momento de crear el proyecto" });
+            return res.status(500).json({ msg: "Ha ocurrido un error en el servidor de a peticion post" });
         }
     },
 
     getRetroalimentacion: async (req, res) => {
-        const retroalimentaciones = await Retroalimentacion.find()
+        const retroalimentacion = await Retroalimentacion.find()
             .populate("programa")
-        res.status(200).json({ retroalimentaciones })
+        res.status(200).json({ retroalimentacion })
     },
 
     getCodigoRetroalimentacion: async (req, res) => {
@@ -56,12 +49,14 @@ const httpProyectos = {
     },
 
     putRetroalimentacion: async (req, res) => {
+
         const retroalimenId = req.params.id;
-        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa } = req.body;
+
+        const { codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa } = req.body;
 
         try {
             const updatedFields = {
-                titulo, lugadesarrollo, metodologia, creditos, fecha, documento, programa
+                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa
             };
 
             const updatedRetroalimetacion = await Retroalimentacion.findOneAndUpdate(
