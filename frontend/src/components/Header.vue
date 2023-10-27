@@ -24,11 +24,11 @@
       <q-card>
         <q-card-section class="row items-center" style="max-width: 370px;">
           <div class="row">
-            <div class="col-6">
+            <div class="col-5">
               <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
             </div>
-            <div class="col-6" style="margin-top: 10px; font-size: 15px;">
-              <span class="q-ml-sm">¿Está seguro de que desea cerrar sesión?</span>
+            <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
+              <span class="q-ml-sm " id="t">¿Está seguro de que desea cerrar sesión?</span>
             </div>
           </div>
 
@@ -200,10 +200,12 @@
       </q-scroll-area>
     </q-drawer>
 
+
     <q-page-container>
       <router-view />
     </q-page-container>
   </q-layout>
+
 </template>
 
 <script setup>
@@ -241,4 +243,11 @@ function logout() {
   justify-content: center;
   align-items: center;
 }
+#t{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
 </style>
