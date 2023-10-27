@@ -13,8 +13,8 @@
                 </div>
                 <div class="col">
 
-                    <q-btn style="float: right; margin: 0 auto" color="secondary" icon="add" label="Agregar"
-                        class="q-mb-md" />
+                    <q-btn @click="abrirModal" style="float: right; margin: 0 auto" color="secondary" icon="add"
+                        label="Agregar" class="q-mb-md" />
 
                 </div>
             </div> <br>
@@ -27,18 +27,18 @@
 
                 <q-list bordered class="rounded-borders" style="width: 100%;">
 
-                    <q-expansion-item expand-separator icon="perm_identity" label="Codigo: 001" caption="Ficha: 2504381">
-
+                    <q-expansion-item v-for=" retroalimetacion in dataRetroaliemtacion.retroalimentaciones"
+                        :key="retroalimetacion._id" expand-separator icon="perm_identity"
+                        :label="`Codigo: ${retroalimetacion.codigo}`" :caption="`Codigo de ficha: ${retroalimetacion.codigoFicha}`">
 
                         <q-card>
 
                             <q-card-section>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos
-                                corrupti
-                                commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto
-                                suscipit iste
-                                eveniet doloribus ullam aliquid.
+                                
+
                             </q-card-section>
+
+                            <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
 
                             <div class="row">
@@ -61,15 +61,89 @@
                 </q-list>
             </div>
 
+
+
+            <q-dialog v-model="mostrarModal">
+                <q-card style="width: 32%; height: fit-content">
+                    <q-card-section class="row items-center q-pb-none">
+
+                        <div class="text-h6">Editar Proyecto</div>
+
+                        <q-space />
+                        <q-btn icon="close" color="negative" flat round dense v-close-popup />
+
+                    </q-card-section>
+
+                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+
+                    <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+                        <div class="q-mb-md">
+                            <q-input label="Código de ficha" color="secondary" v-model="codigoEditar" />
+                        </div>
+
+                        <div class="q-mb-md">
+                            <q-input label="Nombre" color="secondary" v-model="versionEditar" />
+                        </div>
+
+                        <div class="q-mb-md">
+                            <q-input label="Describcion" color="secondary" v-model="nombreEditar" />
+                        </div>
+
+                        <div class="q-mb-md">
+                            <q-input label="Archivo" color="secondary" v-model="descripcionEditar" />
+                        </div>
+
+                        <div class="q-mb-md">
+                            <q-input label="Año" color="secondary" v-model="descripcionEditar" />
+                        </div>
+
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                        <q-btn color="secondary " label="Guardar" />
+                        <q-btn color="negative" label="Cerrar" @click="cerrarModal" />
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
+
+
         </div>
-
-
-
 
     </q-page>
 </template>
     
 <script setup>
+import { ref } from "vue";
+import { useRetroalimentacionStore } from "../stores/retroalimetacion"
+
+const useRetroalimentacion = useRetroalimentacionStore()
+let dataRetroaliemtacion = ref([])
+
+async function buscar() {
+    try {
+        dataRetroaliemtacion.value = await useRetroalimentacion.buscarRetroalimentacion()
+        console.log("Retroalimentacion FRON:", dataRetroaliemtacion.value);
+    } catch (error) {
+        console.error("Error al buscar Retroalimentacion:", error);
+    }
+}
+
+buscar()
+
+
+
+
+
+const mostrarModal = ref(false);
+
+const abrirModal = () => {
+    mostrarModal.value = true;
+};
+
+const cerrarModal = () => {
+    mostrarModal.value = false;
+};
+
 </script>
 
 <style scoped>
