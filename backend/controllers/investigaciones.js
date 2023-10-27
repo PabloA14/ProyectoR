@@ -82,7 +82,7 @@ const httpInvestigaciones = {
             };
 
             const existingInves = await Investigacion.findOne({ codigo: codigo });
-            if (existingInves && existingInves._id.toString() !== rolId) {
+            if (existingInves && existingInves._id.toString() !== investigacionId) {
                 return res.status(400).json({ msg: 'La investigación ya se encuentra registrada' });
             }
 
@@ -97,11 +97,9 @@ const httpInvestigaciones = {
             res.status(200).json({ msg: 'actualizado exitosamente', instrumento: updatedInvestigacion });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar' });
+            res.status(500).json({ msg: 'Error al actualizar la información' });
         }
     },
-
-
 
     /*  cargarArchivo: async (req, res) => {
          const { id } = req.params;
