@@ -227,7 +227,8 @@ const cerrarSesion = () => {
 
 function logout() {
   confirm.value = false; // Cerrar el diálogo
-  sessionStorage.removeItem("token");
+  useUsuario.usuario={}
+  useUsuario.token=""
   router.push("/");
 }
 </script>

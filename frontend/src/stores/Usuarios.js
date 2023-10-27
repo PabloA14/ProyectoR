@@ -7,7 +7,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
   let loading = ref(false)
   let rol = ref('')
   let token = ref('')
-  let usuario = ref('')
+  let usuario = ref({})
 
   const buscarUsuarios = async () => {
     try {

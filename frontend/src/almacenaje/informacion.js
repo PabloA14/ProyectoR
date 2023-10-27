@@ -1,12 +1,11 @@
 import { defineStore } from 'pinia'
 
 export const useUserStore = defineStore(
-    "programa",
+    "guardar",
     {
         state: () => ({
             nombre: "prueba",
-            informacionPrograma: [],
-            informacionToken: "",
+            informacionToken: ""
         })
     },
     {persist:true}
