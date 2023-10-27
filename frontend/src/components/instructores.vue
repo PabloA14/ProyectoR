@@ -89,6 +89,8 @@
           <div class="q-mb-md">
             <div class="q-mb-md">
               <q-select
+              multiple
+              use-chips
                 label="Instructor"
                 color="secondary"
                 v-model="instructor"
@@ -144,15 +146,17 @@
 <script setup>
 import { ref } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
-
+import VueJwtDecode from "vue-jwt-decode";
+import { useUserStore } from "../almacenaje/informacion.js";
 let modalAgg = ref();
 let filter = ref();
 let modalEliminar = ref();
 let instructor = ref();
 let loading = ref(false);
+const dataProgram = useUserStore();
 let usuarios = ref([]);
+let redConocimiento = ref('')
 let instructores = ref([]);
-
 const useUsuari = useUsuarioStore();
 
 const columns = [
@@ -172,7 +176,7 @@ const columns = [
 function obtenerInstructores() {
   console.log("entraste a instructores");
   instructores.value = usuarios.value.filter(
-    (user) => user.rol.denominacion === "instructor"
+    (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
   );
   console.log("sadasdadasd", instructores.value);
   // Rellena las opcions del q-select con los instructores
@@ -182,6 +186,27 @@ function obtenerInstructores() {
 // function eliminarInstructor(instructor) {
 //   // lógica para eliminar al instructor
 // }
+
+function decodeJWT(token) {
+  try {
+    const decodedToken = VueJwtDecode.decode(token);
+    return decodedToken;
+  } catch (error) {
+    console.error("Error al decodificar el token:", error);
+    return null;
+  }
+}
+const token = dataProgram.informacionToken;
+console.log(token);
+
+const decodedToken = decodeJWT(token);
+
+if (decodedToken) {
+  console.log("Token decodificado:", decodedToken);
+  redConocimiento.value = decodedToken.redConocimiento.denominacion;
+} else {
+  console.log("No se pudo decodificar el token.");
+}
 
 async function cargarUsuarios() {
   loading.value = true;
