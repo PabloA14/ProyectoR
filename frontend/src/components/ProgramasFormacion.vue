@@ -1,92 +1,49 @@
 <template>
   <div>
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md">{{ redConocimiento }} --</div>
+      <div class="text-h4 text-center q-mb-md">{{ redConocimiento }}</div>
 
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="usePrograma.loading === true">
-          <q-spinner
-            style="margin-left: 10px"
-            color="black"
-            size="7em"
-            :thickness="10"
-          />
+          <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
         </div>
 
-        <q-table
-          v-if="usePrograma.loading === false"
-          class="my-sticky-header-table"
-          :separator="separator"
-          bordered
-          :filter="filter"
-          :rows="programasFiltrados"
-          :columns="columns"
-          row-key="name"
-          :pagination="pagination"
-        >
+        <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="programasFiltrados" :columns="columns" row-key="name" :pagination="pagination">
           <!-- opciones -->
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <!-- agregar desarrollo C -->
               <div v-if="props.row.desarrolloCurricular === null">
-                <q-icon
-                  class="material-symbols-outlined"
-                  style="
+                <q-icon class="material-symbols-outlined" style="
                     font-size: 5vh;
                     background-color: #39a900;
                     color: white;
-                  "
-                  @click="agregarDesarrollo = true , editarDesarrollo(props.row)"
-                  >add</q-icon
-                >
+                  " @click="agregarDesarrollo = true, editarDesarrollo(props.row)">add</q-icon>
               </div>
 
               <div v-else>
                 <!-- else -->
-                <router-link to="/InformacionPrograma">
-                  <q-icon
-                    title="Detalle de Programa"
-                    name="fa-solid fa-eye"
-                    color="primary"
-                    size="20px"
-                    style="margin-right: 25px; cursor: pointer"
-                    @click="informacionPrograma(props.row)"
-                  />
-                </router-link>
+
+                <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px; cursor: pointer" @click="informacionPrograma(props.row)" />
+
                 <!-- editar programa -->
-                <q-icon
-                  color="orange"
-                  name="fa-solid fa-pen-to-square fa-xl"
-                  size="20px"
-                  style="margin-right: 10px; cursor: pointer"
-                  @click="editarPrograma(props.row)"
-                />
+                <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                  style="margin-right: 10px; cursor: pointer" @click="editarPrograma(props.row)" />
                 <!-- estado del programa -->
-                <q-icon
-                  color="green"
-                  name="fa-solid fa-check fa-xl"
-                  size="20px"
-                  style="margin-left: 10px; cursor: pointer"
-                  v-if="props.row.estado == 0"
-                  @click="editarEstado(props.row)"
-                />
-                <q-icon
-                  color="red"
-                  name="fa-solid fa-x"
-                  size="20px"
-                  style="margin-left: 10px; cursor: pointer"
-                  v-else
-                  @click="editarEstado(props.row)"
-                />
+                <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                  style="margin-left: 10px; cursor: pointer" v-if="props.row.estado == 0"
+                  @click="editarEstado(props.row)" />
+                <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px; cursor: pointer" v-else
+                  @click="editarEstado(props.row)" />
               </div>
             </q-td>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1"
-                >Activo</span
-              >
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
@@ -98,29 +55,17 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input
-              color="secondary"
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn
-              color="secondary"
-              icon="add"
-              label="Agregar"
-              class="q-mb-md"
-              @click="
-                agregar = true;
-                nuevo();
-              "
-            />
+            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+              agregar = true;
+            nuevo();
+            " />
           </template>
         </q-table>
       </div>
@@ -136,44 +81,23 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input
-              label="Código*"
-              type="number"
-              color="secondary"
-              v-model="codigo"
-            />
+            <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Denominación*"
-              color="secondary"
-              v-model="denominacion"
-            />
+            <q-input label="Denominación*" color="secondary" v-model="denominacion" />
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Nivel de Formación*"
-              color="secondary"
-              v-model="nivel"
-              :options="
-                niveles.map((nivel) => ({
-                  label: nivel.denominacion,
-                  value: nivel._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select label="Nivel de Formación*" color="secondary" v-model="nivel" :options="niveles.map((nivel) => ({
+              label: nivel.denominacion,
+              value: nivel._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
@@ -185,20 +109,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            v-if="bd == 1"
-            label="Agregar"
-            @click="agregarP()"
-            color="secondary"
-          />
-          <q-btn
-            :disabled="loading"
-            v-else
-            label="Actualizar"
-            @click="actualizar()"
-            color="secondary"
-          />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -209,32 +121,18 @@
           <div class="text-h6">Agregar Desarrollo</div>
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
-          
+
         </q-card-section>
-        <q-separator
-            inset
-            style="height: 5px; margin-top: 5px"
-            color="secondary"
-          />
-          <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
           <div class="q-mb-md">
-            <q-input
-              label="Código*"
-              type="number"
-              color="secondary"
-              v-model="codDesarrollo"
-            />
+            <q-input label="Código*" type="number" color="secondary" v-model="codDesarrollo" />
           </div>
           <q-card-actions align="right">
 
-          <q-btn
-            :disabled="loading"
-            label="Agregar D"
-            @click="addDesarrolloC()"
-            color="secondary"
-          />
-        </q-card-actions>
+            <q-btn :disabled="loading" label="Agregar D" @click="addDesarrolloC()" color="secondary" />
+          </q-card-actions>
 
         </q-card-section>
 
@@ -249,15 +147,12 @@ import { LinkBD } from "../routes/variables.js";
 import { ref, computed } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useNivelStore } from "../stores/Niveles.js";
-//import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useQuasar } from "quasar";
 import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
+import { useRouter } from "vue-router";
 
 const dataProgram = useUserStore();
-/* let useUsuario = useUsuarioStore()
-let datos = useUsuario.usuario.redConocimiento._id */
-//console.log(datos);
 let desarrolloC = ref("");
 let agregarDesarrollo = ref(false);
 let agregar = ref(false);
@@ -277,8 +172,9 @@ const $q = useQuasar();
 let filter = ref("");
 let errores = ref([]);
 let loading = ref(false);
-let idDesarrollo=ref('')
+let idDesarrollo = ref('')
 let codDesarrollo = ref('')
+let router = useRouter()
 
 function decodeJWT(token) {
   try {
@@ -349,13 +245,8 @@ buscar();
 buscarNiveles();
 
 let programasFiltrados = computed(() => {
-  return programas.value.filter(
-    (x) => x.RedConocimiento._id === decodedToken.redConocimiento._id
-  );
+  return programas.value.filter((x) => x.RedConocimiento._id === decodedToken.redConocimiento._id);
 });
-
-console.log("--------------------*------------");
-console.log(programasFiltrados);
 
 async function buscar() {
   programas.value = await usePrograma.getProgramas();
@@ -464,36 +355,36 @@ function editarPrograma(x) {
   version.value = x.version;
   agregar.value = true;
 }
-function editarDesarrollo(x){
-  idDesarrollo.value= x._id;
+function editarDesarrollo(x) {
+  idDesarrollo.value = x._id;
   console.log(x);
 }
 
-async function addDesarrolloC(){
- console.log("entro a actalizar Desarrollo C")
-//  console.log(codDesarrollo.value)
- try {
+async function addDesarrolloC() {
+  console.log("entro a actalizar Desarrollo C")
+  //  console.log(codDesarrollo.value)
+  try {
     const res = await usePrograma.addDesarrollo(codDesarrollo.value)
     let idDes = res.data.desarrolloCurricular._id
-    if(res.data.status==="ok"){
-      const res= await usePrograma.updatedDesarrollo(idDesarrollo.value,idDes )
-      .then(() => {
-      agregarDesarrollo.value = false;
-      $q.notify({
-        message: "Desarrollo Creado Exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: Math.random() * 3000,
-      });
-      buscar();
-    })
-    }else{
+    if (res.data.status === "ok") {
+      const res = await usePrograma.updatedDesarrollo(idDesarrollo.value, idDes)
+        .then(() => {
+          agregarDesarrollo.value = false;
+          $q.notify({
+            message: "Desarrollo Creado Exitosamente",
+            color: "green",
+            icon: "check",
+            position: "bottom",
+            timeout: Math.random() * 3000,
+          });
+          buscar();
+        })
+    } else {
       console.log("no estuvo ok")
     }
- } catch (error) {
+  } catch (error) {
     console.error(error);
- }
+  }
 }
 
 
@@ -565,36 +456,27 @@ async function editarEstado(x) {
   }
 }
 
-function informacionPrograma(x) {
-  dataProgram.informacionPrograma = [];
+/* function informacionPrograma(x) {
   let codigo = x.codigo;
   console.log(codigo);
   axios
     .get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
     .then((res) => {
-      dataProgram.informacionPrograma.push(res.data);
+      usePrograma.programa = res.data;
+
+      console.log(usePrograma.programa);
     })
     .catch((error) => {
       console.log(error);
     });
+} */
 
-  /* try {
-    const response = axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`);
-
-    if (response.data && response.data.denominacionPrograma) {
-      dataProgram.informacionPrograma.push(response.data);
-      console.log('informacion programa de formacion');
-      console.log(dataProgram.informacionPrograma[0]);
-      return dataProgram.informacionPrograma[0]; // Devolver los datos
-    } else {
-      console.error('El objeto recibido no tiene la estructura esperada.');
-      return null; // Devolver null si no hay datos
-    }
-  } catch (error) {
-    console.log(error);
-    throw new Error('Error al obtener la información');
-  } */
+const informacionPrograma = async (x) => {
+  codigo.value = x.codigo;
+  await usePrograma.informacionPrograma(codigo.value)
+  router.push("/InformacionPrograma")
 }
+
 </script>
 
 <style scoped>

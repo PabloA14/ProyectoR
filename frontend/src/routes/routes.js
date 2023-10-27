@@ -70,8 +70,9 @@ export const routes = [
             { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
-            { path: "/retroalimetacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
+            { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
             { path: "/registroCalificado", component: registroCalificado, name: "registroCalificado", beforeEnter: prueba2, meta: { rol: ['gestor'] } },
 
@@ -102,5 +103,5 @@ export const routes = [
 ]
 export const router = createRouter({
     history: createWebHashHistory(),
-    routes,
+    routes
 });

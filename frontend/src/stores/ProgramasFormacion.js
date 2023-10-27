@@ -5,6 +5,7 @@ import { ref } from "vue";
 
 export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () => {
   let loading = ref(false)
+  let programa=ref({})
 
   const getProgramas = async () => {
     try {
@@ -27,6 +28,16 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     } catch (error) {
       console.log(error)
       throw error
+    }
+  }
+
+  const informacionPrograma = async(codigo) =>{
+    try {
+      let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
+      programa.value = r.data;
+      console.log(programa.value);
+    } catch (error) {
+      console.log(error);
     }
   }
 
@@ -120,8 +131,14 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     asignarMateriales,
     postDiseno,
     loading,
+    programa,
     addDesarrollo,
-    updatedDesarrollo
+    updatedDesarrollo,
+    informacionPrograma
   }
 
-});
+},
+{
+  persist:true
+}
+);

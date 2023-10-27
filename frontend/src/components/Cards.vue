@@ -3,19 +3,6 @@
     <div class="text-h4 text-center q-mb-md">{{ nombre }}</div>
 
     <div class="card-container">
-      <q-card class="my-card" id="cardP">
-        <router-link to="desarrolloCurricular">
-
-          <q-card-section>
-            <div class="text-h6">Desarrollo Curricular</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <q-img id="img" src="../imagenes/archivos.png" />
-          </q-card-section>
-        </router-link>
-
-      </q-card>
 
       <q-card class="my-card" id="cardP">
         <router-link to="instructores">
@@ -67,7 +54,7 @@
       </q-card>
 
       <q-card class="my-card" id="cardP">
-        <router-link to="retroalimetacion">
+        <router-link to="retroalimentacion">
           <q-card-section>
             <div class="text-h6">Retroalimentación de Red</div>
           </q-card-section>
@@ -79,13 +66,15 @@
       </q-card>
 
       <q-card class="my-card" id="cardP">
-        <q-card-section>
-          <div id="img" class="text-h6">Investigación</div>
-        </q-card-section>
+        <router-link to="investigacion">
+          <q-card-section>
+            <div id="img" class="text-h6">Investigación</div>
+          </q-card-section>
 
-        <q-card-section class="q-pt-none">
-          <q-img id="img" src="../imagenes/analitica.png" />
-        </q-card-section>
+          <q-card-section class="q-pt-none">
+            <q-img id="img" src="../imagenes/analitica.png" />
+          </q-card-section>
+        </router-link>
       </q-card>
 
       <q-card class="my-card" id="cardP">
@@ -104,33 +93,14 @@
 
 
 <script setup>
-import { useUserStore } from "../almacenaje/informacion.js"
+//import { useUserStore } from "../almacenaje/informacion.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
-import { watch } from 'vue';
-let nombre = ref()
 
-const dataProgram = useUserStore()
-
-
-function info() {
-  console.log('entro a info');
-
-  watch(dataProgram.informacionPrograma, (newValue) => {
-    if (newValue && newValue[0]) {
-      console.log(newValue[0]);
-      nombre.value = newValue[0].denominacionPrograma
-    } else {
-      console.log('No hay información disponible aún.');
-    }
-  });
-}
-
-info();
-
-
-// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
-// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
-// console.log(dataProgram.informacionPrograma[0].cod.denominacionPrograma);
+const usePrograma = useProgramasFormacionStore();
+let nombre = ref(usePrograma.programa.denominacionPrograma)
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado);
 
 </script>
 
@@ -148,7 +118,6 @@ info();
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 10px;
+  grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
 }
 </style>
