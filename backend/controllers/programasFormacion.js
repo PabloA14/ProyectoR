@@ -1,4 +1,6 @@
 import Programa from '../models/programasFormacion.js'
+import DesarrolloCurricular from '../models/desarrollo.js'
+
 import { v2 as cloudinary } from "cloudinary";
 
 const httpprogramas = {
@@ -63,8 +65,9 @@ const httpprogramas = {
         }
     },
     putProgramas: async (req, res) => {
+        console.log('putProgramas')
         const ProgramaId = req.params.id;
-        const { codigo, denominacionPrograma, nivelFormacion, version } = req.body
+        const { codigo, denominacionPrograma, nivelFormacion, version, desarrolloCurricular } = req.body
 
         try {
 
@@ -77,7 +80,8 @@ const httpprogramas = {
                 codigo,
                 denominacionPrograma,
                 nivelFormacion,
-                version
+                version,
+                desarrolloCurricular
             };
             const updatedProgramas = await Programa.findOneAndUpdate(
                 { _id: ProgramaId },
@@ -95,6 +99,31 @@ const httpprogramas = {
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
+        }
+    },
+
+    putDesarrollo: async (req, res) => {
+        console.log('puDesarrollo programa Formación')
+        const ProgramaId = req.params.id;
+        const { desarrolloCurricular } = req.body
+
+        try {
+            const updatedFields = { desarrolloCurricular};
+            const updatedProgramas = await Programa.findOneAndUpdate(
+                { _id: ProgramaId },
+                {
+                    $set: updatedFields
+
+                },
+                { new: true }
+            );
+            if (!updatedProgramas) {
+                return res.status(404).json({ msg: 'Desarrollo no encontrado' });
+            }
+            res.status(200).json({ msg: 'Desarrollo actualizado exitosamente', Programa: updatedProgramas });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: 'Error en el servidor' , error });
         }
     },
 

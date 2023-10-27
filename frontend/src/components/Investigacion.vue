@@ -8,7 +8,7 @@
                 </div>
 
                 <q-table v-if="useInvestigacion.loading == false" class="my-sticky-header-table" :separator="separator"
-                    bordered :filter="filter" :rows="investigaciones" :columns="columns" row-key="name"
+                    bordered :filter="filter" :rows="invesFiltradas" :columns="columns" row-key="name"
                     :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
@@ -20,6 +20,15 @@
                             <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;"
                                 v-else @click="editarEstado(props.row)" /> -->
                         </q-td>
+                    </template>
+
+                    <template v-slot:body-cell-documento="props">
+                        <q-td :props="props">
+                            <a :href="props.row.documentos" target="_blank">
+                                <q-icon color="blue"  name="fa-solid fa-download" size="20px" />
+                            </a>
+                        </q-td>
+
                     </template>
 
                     <!-- <template v-slot:body-cell-estado="props">
@@ -71,7 +80,7 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripcion*" color="secondary" v-model="descripcion" />
+                        <q-input label="Descripcion*" type="textarea" color="secondary" v-model="descripcion" />
                     </div>
 
                     <div class="q-mb-md">
@@ -79,19 +88,20 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file label="Archivo*" type="file" color="secondary" v-model="archivo">
+                        <!-- <q-input @change="doc" label="Archivo*" type="file" color="secondary">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
-                        </q-file>
+                        </q-input> -->
+                        <input type="file" @change="doc" />
                     </div>
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -99,8 +109,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useInveStore } from "../stores/Investigaciones.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useQuasar } from 'quasar'
 
 let agregar = ref(false)
@@ -118,6 +129,8 @@ const $q = useQuasar()
 let filter = ref('')
 let separator = ref('cell')
 let errores = ref([])
+let loading = ref(false)
+
 
 const pagination = ref({
     rowsPerPage: 6
@@ -128,11 +141,29 @@ const columns = [
     { name: 'denominacion', align: 'center', label: 'Nombre', field: "denominacion", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', field: "descripcion", sortable: false },
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
+    { name: 'documento', align: 'center', label: 'Documento', field: "documentos", sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
 
 buscar()
+
+const usePrograma = useProgramasFormacionStore();
+let programaId = usePrograma.programa._id
+console.log(programaId);
+
+let invesFiltradas = computed(() => {
+    return investigaciones.value.filter(
+        (x) => x.idPrograma._id === programaId
+    );
+});
+
+console.log(invesFiltradas);
+
+function doc(event) {
+    archivo.value = event.target.files[0]
+    console.log(archivo.value);
+}
 
 function nuevo() {
     bd.value = 1;
@@ -176,11 +207,14 @@ async function buscar() {
 
 async function agregarN() {
     console.log("entro a agregar");
+    loading.value = true
     await useInvestigacion.agregarInves({
         codigo: codigo.value,
         denominacion: nombre.value,
         descripcion: descripcion.value,
-        fecha: fecha.value
+        fecha: fecha.value,
+        documentos: archivo.value,
+        idPrograma: programaId
     }).then(() => {
         agregar.value = false
         $q.notify({
@@ -201,14 +235,26 @@ async function agregarN() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
+
         } else if (error.response && error.response.data && validarVacios() === true) {
             errores.value = error.response.data.errors[0].msg
             validar()
 
-        } else {
+        } /* else if (error.response && error.response.data && archivo.value === '') {
+            errores.value = error.response.data.errors[0].msg
+            $q.notify({
+                message: 'falta archivo',
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+
+        } */ else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 

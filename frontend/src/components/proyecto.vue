@@ -280,9 +280,6 @@ async function buscar() {
   }
 }
 
-
-
-
 async function agregarProyecto() {
   console.log("entro a agregar");
   await useProyectos.agregarProyecto({

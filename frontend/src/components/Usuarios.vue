@@ -11,7 +11,7 @@
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
-                style="margin-right: 25px;cursor: pointer;" />
+                style="margin-right: 25px;cursor: pointer;" @click="informacionUsuario(props.row)" />
 
               <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarUsuario(props.row)" />
@@ -134,6 +134,75 @@
       </q-card>
     </q-dialog>
 
+    <q-dialog v-model="infoU">
+      <q-card style="width: 45%; height: fit-content">
+        <q-card-section class="row items-center q-pb-none">
+          <q-avatar size="80px">
+            <img :src='info.hojaDeVida'>
+          </q-avatar>
+          <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
+
+          <q-space />
+          <q-btn icon="close" color="negative" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-separator inset style="
+            height: 5px;
+            margin-top: 5px;
+          " color="secondary" />
+
+        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+
+          <div class="q-mb-md">
+            <p><b>No. de documento:</b>
+              {{ info.cedula }}
+            </p>
+          </div>
+
+          <div class="q-mb-md">
+            <p><b>Teléfono:</b>
+              {{ info.telefono }}
+            </p>
+          </div>
+
+          <div class="q-mb-md">
+            <p><b>Correo electrónico:</b>
+              {{ info.correo }}
+            </p>
+          </div>
+
+          <div class="q-mb-md">
+            <p><b>Red de Conocimiento:</b>
+              {{ info.redConocimiento.denominacion }}
+            </p>
+          </div>
+
+          <div class="q-mb-md">
+            <p><b>Rol de usuario:</b>
+              {{ info.rol.denominacion }}
+            </p>
+          </div>
+
+          <div class="q-mb-md">
+            <p><b>Perfil Profesional:</b>
+              {{ info.perfilProfesional }}
+            </p>
+          </div>
+
+
+          <div class="q-mb-md">
+
+          </div>
+
+          <div class="q-mb-md">
+          </div>
+        </q-card-section>
+
+        <q-separator />
+
+      </q-card>
+    </q-dialog>
+
   </div>
 </template>
 
@@ -143,7 +212,7 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useRolStore } from "../stores/Roles.js"
 import { useRedStore } from "../stores/Redes.js"
 import { useQuasar } from 'quasar'
-
+let infoU = ref(false)
 let agregar = ref(false);
 let cedula = ref("");
 let nombre = ref("");
@@ -159,6 +228,7 @@ let roles = ref([])
 let redes = ref([])
 let separator = ref('cell')
 let id = ref("");
+let info = ref([])
 let perfilProfesional = ref("");
 
 let bd = ref("");
@@ -169,6 +239,16 @@ const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
 let loading = ref(false)
+
+
+function informacionUsuario(x) {
+  infoU.value = true
+  console.log("hdhdhdhd")
+
+  info.value = x
+  console.log(info.value)
+
+}
 
 
 const columns = [
@@ -185,6 +265,7 @@ const pagination = ref({
   rowsPerPage: 6
 })
 
+
 buscarRol()
 buscarRed()
 buscar()
@@ -197,15 +278,16 @@ async function buscar() {
 }
 
 async function buscarRol() {
-  roles.value = await useRol.buscarRoles();
+  const rolesActivos = await useRol.buscarRoles();
+  roles.value = rolesActivos.filter(rol => rol.estado === 1);
   console.log(roles.value);
 }
 
 async function buscarRed() {
-  redes.value = await useRed.buscarRedes();
+  const redesActivas = await useRed.buscarRedes();
+  redes.value = redesActivas.filter(red => red.estado === 1)
   console.log(redes.value);
 }
-
 
 function nuevo() {
   bd.value = 1;

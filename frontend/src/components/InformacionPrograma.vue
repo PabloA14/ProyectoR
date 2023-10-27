@@ -4,7 +4,7 @@
             {{ nombre }}
         </div>
 
-        <div class="MatrizCorrelacion">
+        <div class="bloques">
             <div class="row" id="row">
                 <q-toolbar-title class="title">
                     Diseño Curricular
@@ -77,10 +77,25 @@
         </div>
 
 
-        <div class="MatrizCorrelacion">
+        <div class="bloques">
             <div class="row" id="row">
                 <q-toolbar-title class="title">
                     Desarrollo Curricular
+                </q-toolbar-title>
+
+                <q-btn flat round dense class="ir">
+                    <router-link to="desarrolloCurricular">
+                        <span class="material-symbols-outlined" id="ir">bubble</span>
+                    </router-link>
+                </q-btn>
+            </div>
+            <small>Ver información del Desarrollo Curricular</small>
+        </div>
+
+        <div class="bloques">
+            <div class="row" id="row">
+                <q-toolbar-title class="title">
+                    Gestión del Programa
                 </q-toolbar-title>
 
                 <q-btn flat round dense class="ir">
@@ -89,7 +104,7 @@
                     </router-link>
                 </q-btn>
             </div>
-            <small>Ver información del desarrollo Curricular</small>
+            <small>Ver la gestión del programa de formación como los intructores, los proyectos, el registro calificado, etc.</small>
         </div>
 
     </q-page>
@@ -97,13 +112,14 @@
   
   
 <script setup>
-import { useUserStore } from "../almacenaje/informacion.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import { ref, watch } from 'vue'
-let nombre = ref('')
+import { ref } from 'vue'
 
-const dataProgram = useUserStore()
 const usePrograma = useProgramasFormacionStore();
+let nombre = ref(usePrograma.programa.denominacionPrograma)
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado);
+
 
 let agregar = ref(false)
 let dis = ref('')
@@ -121,23 +137,11 @@ async function agregarDis() {
     agregar.value = false
 }
 
-info()
-
-function info() {
-    watch(dataProgram.informacionPrograma, (newValue) => {
-        if (newValue && newValue[0]) {
-            console.log(newValue[0]);
-            nombre.value = newValue[0].denominacionPrograma
-        } else {
-            console.log('No hay información disponible aún.');
-        }
-    });
-}
 
 </script>
   
 <style scoped>
-.MatrizCorrelacion {
+.bloques {
     padding: 2vh;
     margin: 2vh;
 }
