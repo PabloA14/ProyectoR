@@ -38,7 +38,6 @@ const httpUsuario = {
         async function (error, result) {
           if (result) {
             const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
-
             const usuario = new Usuario({
               cedula,
               nombre,

@@ -8,7 +8,7 @@ const programasDeFormacion = new mongoose.Schema(
         version: { type: String, required: true },
         RedConocimiento: { type: mongoose.Schema.Types.ObjectId, ref: 'RedesConocimiento' },
         disCurricular: { type: String, required: false },
-        desarrolloCurricular: { type: mongoose.Schema.Types.ObjectId, ref: 'Desarrollo' },
+        desarrolloCurricular: { type: mongoose.Schema.Types.ObjectId, ref: 'Desarrollo' , default: null},
         instructores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }],
         ambienteFormacion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ambiente' }],
         materialesformacion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MaterialesFormacione' }],

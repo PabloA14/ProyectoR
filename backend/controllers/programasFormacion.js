@@ -19,20 +19,61 @@ const httpprogramas = {
     },
 
     postPrograma: async (req, res) => {
+        console.log("agregar programa")
+
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true
+        })
         const { codigo, denominacionPrograma, nivelFormacion, version, estado,
-            RedConocimiento, disCurricular, desarrolloCurricular,
+            RedConocimiento, desarrolloCurricular,
             instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
-        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
+        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
+        console.log("------------------")
+        const {disCurricular}=req.files
+        console.log({disCurricular})
         try {
-            const programaExistente = await Programa.findOne({ codigo });
-
-            if (programaExistente) {
-                return res.status(400).json({ msg: 'El programa ya está registrado.' });
+            if (!disCurricular || !disCurricular.tempFilePath) {
+                return res.status(400),json({msj : 'no hay archivo en la peticion'})
             }
+            const extension =disCurricular.name.split(".").pop()
+            const {tempFilePath} =disCurricular;
+            console.log({tempFilePath})
+            cloudinary.uploader.upload(
+                tempFilePath,
+                {width: 250 , crop : "limit", resource_type: "raw", format : extension},
+                async function (error, result) {
+                    if (result) {
+                        const programa = new Programa({
+                             codigo,
+                            denominacionPrograma, 
+                            nivelFormacion, 
+                            version, 
+                            estado, 
+                            RedConocimiento, 
+                            disCurricular : result.url, 
+                            desarrolloCurricular, 
+                            instructores, 
+                            ambienteFormacion, 
+                            materialesformacion, 
+                            registrocalificado 
+                        });
 
-            const programa = new Programa({ codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, disCurricular, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado });
-            await programa.save();
-            res.json({ programa });
+                        const programaExistente = await Programa.findOne({ codigo });
+                        if (programaExistente) {
+                            return res.status(400).json({ msg: 'El programa ya está registrado.' });
+                        }
+                        else {
+                            await programa.save();
+                            res.status(200).json({ mensaje: "todo salio correcto:", programa, status: "ok" });
+                        }
+                    }else{
+                        res.json(error)
+                    }
+                }
+            )
         } catch (error) {
             console.error('Error al agregar el cliente:', error);
             res.status(500).json({ mensaje: 'Hubo un error al agregar el programa de formacion.' });
@@ -66,6 +107,8 @@ const httpprogramas = {
     },
     putProgramas: async (req, res) => {
         console.log('putProgramas')
+
+
         const ProgramaId = req.params.id;
         const { codigo, denominacionPrograma, nivelFormacion, version, desarrolloCurricular } = req.body
 
@@ -108,7 +151,7 @@ const httpprogramas = {
         const { desarrolloCurricular } = req.body
 
         try {
-            const updatedFields = { desarrolloCurricular};
+            const updatedFields = { desarrolloCurricular };
             const updatedProgramas = await Programa.findOneAndUpdate(
                 { _id: ProgramaId },
                 {
@@ -123,7 +166,7 @@ const httpprogramas = {
             res.status(200).json({ msg: 'Desarrollo actualizado exitosamente', Programa: updatedProgramas });
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor' , error });
+            res.status(500).json({ msg: 'Error en el servidor', error });
         }
     },
 

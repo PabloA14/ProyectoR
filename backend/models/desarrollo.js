@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const httpDesarrollo = new mongoose.Schema({
-    codigo: { type: String, required: true },
+    codigo: { type: String, required: false },
     matrizcorrelacion: { type: String, required: false },
     proyectoFormativo: { type: String, required: false },
     planeacionPedagogica: { type: String, required: false },

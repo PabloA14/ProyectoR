@@ -49,6 +49,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
   const agregarUsuario = async (info, hojaDeVida) => {
     try {
+      console.log(hojaDeVida)
       const formData = new FormData()
       for (const key in info) {
         formData.append(key, info[key])

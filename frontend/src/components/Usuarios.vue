@@ -133,7 +133,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-
+<!-- modal informavion -->
     <q-dialog v-model="infoU">
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">

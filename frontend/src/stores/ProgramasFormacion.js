@@ -20,11 +20,22 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   }
 
-  const agregarProgramaFormacion = async (info) => {
+  const agregarProgramaFormacion = async (info, disCurricular) => {
     try {
-      console.log(info);
-      const datos = await axios.post(`${LinkBD}/api/programasFormacion`, info);
-      return datos
+
+      const formData = new FormData()
+      for (const key in info){
+        formData.append(key,info[key])
+      }
+      formData.append('disCurricular', disCurricular)
+
+    const datos = await axios.post(`${LinkBD}/api/programasFormacion`, formData , {
+      headers :{
+        "Content-Type": "multipart/form-data"
+      }
+    });
+      return datos 
+
     } catch (error) {
       console.log(error)
       throw error
@@ -41,16 +52,12 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   }
 
-  const addDesarrollo = async (codigo) => {
+  const addDesarrollo = async () => {
     try {
-      console.log(codigo)
-
-      const datos = await axios.post(`${LinkBD}/api/desarrollo`, {
-        codigo
-      });
+      const datos = await axios.post(`${LinkBD}/api/desarrollo`)
       return datos
     } catch (error) {
-      console.error(error.message)
+      throw error
         }
   }
 
@@ -108,9 +115,6 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
   const postDiseno = async (id, disCurricular) => {
     try {
       const formData = new FormData()
-      /* for (const key in info) {
-        formData.append(key, info[key])
-      } */
       formData.append('disCurricular', disCurricular)
       const res = await axios.post(`${LinkBD}/api/programasFormacion/postDisCurricular/${id}`, formData, {
         headers: {

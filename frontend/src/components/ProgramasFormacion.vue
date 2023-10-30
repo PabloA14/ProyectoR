@@ -19,7 +19,7 @@
                     font-size: 5vh;
                     background-color: #39a900;
                     color: white;
-                  " @click="agregarDesarrollo = true, editarDesarrollo(props.row)">add</q-icon>
+                  " @click=" editarDesarrollo(props.row)">add</q-icon>
               </div>
 
               <div v-else>
@@ -104,6 +104,11 @@
           <div class="q-mb-md">
             <q-input label="Versión*" color="secondary" v-model="version" />
           </div>
+
+          <div class="q-mb-md">
+            <b><p>Diseño Curricular</p></b>
+            <input type="file" name="" id="" @change="archivo">
+          </div>
         </q-card-section>
 
         <q-separator />
@@ -151,7 +156,7 @@ import { useQuasar } from "quasar";
 import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
-
+let disCurricular = ref('')
 const dataProgram = useUserStore();
 let desarrolloC = ref("");
 let agregarDesarrollo = ref(false);
@@ -276,7 +281,8 @@ function validarVacios() {
     codigo.value === "" &&
     denominacion.value === "" &&
     nivel.value === "" &&
-    version.value === ""
+    version.value === "" &&
+    disCurricular.value ===""
   ) {
     $q.notify({
       message: "Campos vacíos",
@@ -298,6 +304,28 @@ function validar() {
   });
 }
 
+
+/* async function agregarDis() {
+    console.log("entró");
+    console.log(dis.value);
+    const id = "6532e4ad96ea85c476b11f6d"
+   const data = await usePrograma.postDiseno(id, dis.value)
+   .then(()=> {
+    agregar.value = false
+    console.log(data)
+   }).catch((error)=>{
+    console.log(error)
+   })
+
+}
+ */
+
+
+ function archivo(event) {
+  disCurricular.value = event.target.files[0]
+  console.log(disCurricular.value)
+  
+ }
 async function agregarP() {
   loading.value = true;
   console.log("entro a agregar");
@@ -308,7 +336,8 @@ async function agregarP() {
       nivelFormacion: nivel.value,
       version: version.value,
       RedConocimiento: decodedToken.redConocimiento._id,
-      desarrolloCurricular: null,
+      //desarrolloCurricular: null,
+      disCurricular : disCurricular.value
     })
     .then(() => {
       agregar.value = false;
@@ -355,10 +384,36 @@ function editarPrograma(x) {
   version.value = x.version;
   agregar.value = true;
 }
-function editarDesarrollo(x) {
+async function editarDesarrollo(x) {
   idDesarrollo.value = x._id;
   console.log(x);
+
+  console.log("entro a editar desarrollo y a prueba")
+  //  console.log(codDesarrollo.value)
+  try {
+    const res = await usePrograma.addDesarrollo(codDesarrollo.value)
+    let idDes = res.data.desarrolloCurricular._id
+    if (res.data.status === "ok") {
+      const res = await usePrograma.updatedDesarrollo(idDesarrollo.value, idDes)
+        .then(() => {
+          agregarDesarrollo.value = false;
+          $q.notify({
+            message: "Desarrollo Creado Exitosamente",
+            color: "green",
+            icon: "check",
+            position: "bottom",
+            timeout: Math.random() * 3000,
+          });
+          buscar();
+        })
+    } else {
+      console.log("no estuvo ok")
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
+
 
 async function addDesarrolloC() {
   console.log("entro a actalizar Desarrollo C")
