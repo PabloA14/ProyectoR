@@ -69,7 +69,15 @@
     </q-page>
 </template>
     
+
 <script setup>
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
+import { ref } from 'vue'
+const usePrograma = useProgramasFormacionStore();
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado);
+
+
 </script>
 
 <style scoped>

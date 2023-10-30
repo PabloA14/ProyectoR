@@ -7,7 +7,7 @@ const resgistroSchema = new mongoose.Schema({
     creditos: { type: String, required: true },
     codigosnies: { type: String, required: true },
     fecha: { type: String, required: true },
-    documento: { type: String, required: true },
+    programa: { type: mongoose.Schema.Types.ObjectId, ref: 'Programa', required: true },
     estado: { type: Number, default: 1, required: true },
     createdAt: { type: Date, default: Date.now },
 })
