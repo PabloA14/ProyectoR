@@ -2,6 +2,7 @@ import Retroalimentacion from "../models/retroalimentacion-red.js"
 
 
 const httpProyectos = {
+
     postRetroalimentacion: async (req, res) => {
         const { codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa } = req.body;
 
@@ -14,21 +15,21 @@ const httpProyectos = {
             const cod = await Retroalimentacion.findOne({ codigo: codigo })
 
             if (cod) {
-                return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
+                return res.status(400).json({ msg: "La retroalimentacion ya se encuentra en el sistema con este codigo", cod, nombre });
             } else {
                 await retroalimentacion_red.save();
                 return res.status(200).json({ msg: 'retroalimentacion de red ingresado satisfactoriamente', retroalimentacion_red });
             }
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ msg: "Ha ocurrido un error en el servidor de a peticion post" });
+            return res.status(500).json({ msg: "Ha ocurrido un error en el server en el servidor de a peticion post" });
         }
     },
 
     getRetroalimentacion: async (req, res) => {
-        const retroalimentacion = await Retroalimentacion.find()
+        const retroalimentaciones = await Retroalimentacion.find()
             .populate("programa")
-        res.status(200).json({ retroalimentacion })
+        res.status(200).json({ retroalimentaciones })
     },
 
     getCodigoRetroalimentacion: async (req, res) => {
