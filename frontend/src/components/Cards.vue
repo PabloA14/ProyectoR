@@ -93,7 +93,6 @@
 
 
 <script setup>
-//import { useUserStore } from "../almacenaje/informacion.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
 
