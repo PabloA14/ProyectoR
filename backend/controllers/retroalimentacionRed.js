@@ -9,7 +9,7 @@ const httpProyectos = {
         try {
 
             const retroalimentacion_red = new Retroalimentacion({
-                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa 
+                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa
             });
 
             const cod = await Retroalimentacion.findOne({ codigo: codigo })

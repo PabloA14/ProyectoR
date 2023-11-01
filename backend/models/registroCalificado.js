@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const resgistroSchema = new mongoose.Schema({
     titulo: { type: String, required: true },
-    lugadesarrollo: { type: String, required: true },
+    lugardesarrollo: { type: String, required: true },
     metodologia: { type: String, required: true },
     creditos: { type: String, required: true },
     codigosnies: { type: String, required: true },

@@ -1,7 +1,7 @@
 <template>
     <q-page class="q-pa-md">
         <div>
-            <div class="text-h4 text-center q-mb-md">Retrolimentación de red</div> <br>
+            <div class="text-h4 text-center q-mb-md">Retroalimentación de red</div> <br>
 
             <div class="row">
                 <div class="col-4">
@@ -28,13 +28,15 @@
                 <q-list bordered class="rounded-borders" style="width: 100%;">
 
                     <q-expansion-item v-for=" retroalimetacion in dataRetroaliemtacion.retroalimentaciones"
-                        :key="retroalimetacion._id" expand-separator icon="perm_identity"
-                        :label="`Codigo: ${retroalimetacion.codigo}`" :caption="`Codigo de ficha: ${retroalimetacion.codigoFicha}`">
+                        :key="retroalimetacion._id" expand-separator :label="`Codigo: ${retroalimetacion.codigo}`"
+                        :caption="`ficha: ${retroalimetacion.codigoFicha}`" `fecha: ${retroalimetacion.fecha}`>
+                        
 
                         <q-card>
 
                             <q-card-section>
-                                
+
+                                <p> {{ retroalimetacion.descripcion }} </p>
 
                             </q-card-section>
 

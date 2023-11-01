@@ -1,20 +1,11 @@
 <template>
     <q-page class="q-pa-md">
-        <div id="agregar">
-            <!-- <q-img id="img" src="../imagenes/formacion.png" /> -->
-            <q-btn color="secondary" icon="add" label="Agregar informaciòn registro Calificado" class="q-mb-xl"
-            @click="(bd = 0, agregar = true)"  
-                
-
-                />
-
-        </div>
-
+        
         <div class="row">
-            <div class="centrada" id="card" v-if="card">
+            <div class="centrada" id="card">
 
-                <div class="text-h4 text-center q-mb-md">Registro calificado</div> <br>
-
+                <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br>
+                
                 <q-card class="my-card" flat bordered id="csrd2">
                     <q-card-section horizontal>
                         <q-card-section class="q-pt-xs" id="section">
@@ -23,34 +14,34 @@
 
                             <div class="text-h6 q-mt-sm q-mb-xs">Titulo que otorga:</div>
                             <div class="text-caption text">
-                                Tecnologo gestión contable
+                                {{ prueba.titulo }}
                             </div>
 
                             <div class="text-h6 q-mt-sm q-mb-xs">Lugar de desarrollo de oferta:</div>
                             <div class="text-caption text">
-                                Nombre del lugar
+                                {{ prueba.lugardesarrollo}}
                             </div>
 
                             <div class="text-h6 q-mt-sm q-mb-xs">Metodologia:</div>
                             <div class="text-caption text">
-                                Metodilogia
+                                {{ prueba.metodologia }}
                             </div>
 
                             <div class="text-h6 q-mt-sm q-mb-xs">Numero de creditos:</div>
                             <div class="text-caption text">
-                                80 creditos
+                                {{ prueba.creditos }}
                             </div>
 
                             <div class="text-h6 q-mt-sm q-mb-xs">Codigo snies:</div>
                             <div class="text-caption text">
-                                48596
+                                {{  prueba.codigosnies }}
                             </div>
 
                         </q-card-section>
 
                         <q-card-section class="col-5 flex flex-center">
 
-                            aqui va la fecha
+                         
 
                         </q-card-section>
                     </q-card-section>
@@ -59,10 +50,12 @@
 
                     <q-card-actions>
 
-                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="download" label="Descargar"
-                            class="q-mb-md" />
 
-                        <q-btn style="float: ; margin: auto auto" flat color="primary">
+                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="add" label="Agregar"
+                            class="q-mb-md" @click="
+                                agregar = true; nuevo();" />
+
+                        <q-btn style="float: ; margin: auto auto" flat color="primary" @click="editarRegistro(registro)">
                             Editar
                         </q-btn>
 
@@ -73,51 +66,57 @@
 
         <q-dialog v-model="agregar">
             <q-card style="width: 32%; height: fit-content">
-              <q-card-section class="row items-center q-pb-none">
-                <div class="text-h6">
-                  <!-- {{ bd === 0 ? "Editar Programa" : "Agregar Programa" }} -->
-                  Agregar Registro Calificado
-                </div>
-                <q-space />
-                <q-btn icon="close" color="negative" flat round dense v-close-popup />
-              </q-card-section>
-      
-              <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-      
-              <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+                <q-card-section class="row items-center q-pb-none">
+                    <div class="text-h6">
+                        {{ bd === 0 ? "Editar Registro Calificado" : "Agregar Registro Calificado" }} 
+                    </div>
+                    <q-space />
+                    <q-btn icon="close" color="negative" flat round dense v-close-popup />
+                </q-card-section>
 
-                <div class="q-mb-md">
-                    <q-input label="Titulo*" type="string" color="secondary" v-model="Titulo" />
-                  </div>
+                <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
-                  <div class="q-mb-md">
-                    <q-input label="Lugar De Desarrollo*" type="string" color="secondary" v-model="LugarDeDesarrollo" />
-                  </div>
+                <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
-                  <div class="q-mb-md">
-                    <q-input label="Creditos*" type="string" color="secondary" v-model="Creditos" />
-                  </div>
+                    <div class="q-mb-md">
+                        <q-input label="Titulo*" color="secondary" v-model="titulo" />
+                    </div>
 
-                  <div class="q-mb-md">
-                    <q-input label="codigosnies*" type="Number" color="secondary" v-model="codigosnies" />
-                  </div>
-                  <div class="q-mb-md">
-                    <q-input label="Fecha *" type="Date" color="secondary" v-model="codigosnies" />
-                  </div>
-  
- 
-              </q-card-section>
-      
-              <q-separator />
-      
-              <q-card-actions align="right">
-        <!--         <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
+                    
+                    <div class="q-mb-md">
+                        <q-input label="Lugar De Desarrollo*" color="secondary" v-model="lugardesarrollo" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Metodología*" color="secondary" v-model="metodologia" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Creditos*" color="secondary" v-model="creditos" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Código SNIES*" type="Number" color="secondary" v-model="codigosnies" />
+                    </div>
+                    <div class="q-mb-md">
+                        <q-input label="Fecha *" type="Date" color="secondary" v-model="fecha" />
+                    </div>
+
+
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                    <!--         <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
                 <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" /> -->
-                <q-btn :disabled="loading" label="Agregar" @click="agregar()" color="secondary" />
-            </q-card-actions>
+                    <q-btn :disabled="loading" v-if="bd== 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+
+                </q-card-actions>
             </q-card>
-          </q-dialog>
-        
+        </q-dialog>
+
 
 
     </q-page>
@@ -125,34 +124,147 @@
     
 
 <script setup>
+
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import { ref } from 'vue'
+import {UsesRegistroCalificado} from "../stores/registroCalificado.js"
+import { ref, computed } from 'vue'
+import { useQuasar } from 'quasar'
+
 const usePrograma = useProgramasFormacionStore();
+const useRegistro = UsesRegistroCalificado()
 let programaSeleccionado = usePrograma.programa
-let registroCalificado = usePrograma.programa.registroCalificado
-let card = ref(false)
+let idPrograma = programaSeleccionado._id
+let registroCalificado = ref([])
 let bd = ref('')
+const $q = useQuasar()
 let agregar = ref(false)
-console.log(registroCalificado);
-let titulo =
+let errores = ref([])
+let loading = ref(false)
+let titulo = ref("")
+let metodologia = ref("")
+let lugardesarrollo = ref("")
+let creditos = ref("")
+let codigosnies = ref("")
+let fecha = ref("")
+let prueba = ref('')
+let infoReg = ref('')
+buscar()
+let registroFiltrado = computed(() => {
+    return registroCalificado.value.filter(
+        (x) => x.programa._id === idPrograma
+    );
+});
 
-ref()
 
-if (registroCalificado == undefined) {
-    card.value = false
-} else {
-    card.value = true
-
+function nuevo() {
+    bd.value = 1;
+    vaciar();
 }
-/* 
-titulo: { type: String, required: true },
-    lugadesarrollo: { type: String, required: true },
-    metodologia: { type: String, required: true },
-    creditos: { type: String, required: true },
-    codigosnies: { type: String, required: true },
-    fecha: { type: String, required: true },
-    documento: { type: String, required: tru */
 
+function vaciar() {
+    titulo.value = ""
+    metodologia.value = ""
+    lugardesarrollo.value = ""
+    creditos.value = ""
+    codigosnies.value = ""
+    fecha.value = ""
+}
+
+async function buscar() {
+    registroCalificado.value = await useRegistro.buscarRegistros();
+    registroCalificado.value.reverse()
+    infoReg.value = registroCalificado.value
+    console.log(registroCalificado.value);
+    console.log("-----------------");
+    console.log(infoReg.value);
+
+    for (let i = 0; i < infoReg.value.length; i++) {
+
+       let a = infoReg.value[i].programa
+       let b =infoReg.value[i]
+      
+        if (b.programa._id === idPrograma) {
+            prueba.value = b
+            console.log(b)
+        }
+    }
+}
+
+async function buscarRegistroCodigo() {
+   
+    console.log(codigosnies.value);
+    const res = await useRegistro.buscarRegistrosCodigo(codigosnies.value) 
+    prueba.value = res
+    console.log(prueba.value);
+}
+
+function validarVacios() {
+    if (titulo.value === "" && metodologia.value === "" && lugardesarrollo.value == "" && creditos.value == "" && codigosnies.value == ""
+    && fecha.value === "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+    })
+}
+
+
+async function agregarN() {
+    console.log("entro a agregar");
+    loading.value = true
+    await useRegistro.agregarRegistroC({
+        titulo: titulo.value,
+        lugardesarrollo: lugardesarrollo.value,
+        metodologia: metodologia.value,
+        creditos: creditos.value,
+        codigosnies: codigosnies.value,
+        fecha: fecha.value,
+        programa: idPrograma
+    }).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Registro Calificado agregado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'bottom',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+        buscarRegistroCodigo()
+    }).catch((error) => {
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
+    })
+    loading.value = false
+}
 
 console.log(programaSeleccionado);
 
