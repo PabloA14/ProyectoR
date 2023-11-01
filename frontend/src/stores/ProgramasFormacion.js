@@ -46,7 +46,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     try {
       let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
       programa.value = r.data;
-      console.log(programa.value);
+      return r
     } catch (error) {
       console.log(error);
     }

@@ -101,6 +101,10 @@ let nombre = ref(usePrograma.programa.denominacionPrograma)
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
 
+
+
+
+
 </script>
 
 <style scoped>
