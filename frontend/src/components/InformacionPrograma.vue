@@ -14,7 +14,7 @@
                     <span class="material-symbols-outlined" id="ir">more_vert</span>
                     <q-menu max-height="130px">
                         <q-list style="min-width: 100px">
-<!--                             <q-item clickable @click="agregar = true">
+                            <!--                             <q-item clickable @click="agregar = true">
                                 <q-item-section>
                                     <span class="material-symbols-outlined" style="" id="opciones">
                                         add
@@ -23,9 +23,12 @@
                             </q-item> -->
                             <q-item clickable>
                                 <q-item-section>
-                                    <span class="material-symbols-outlined" style="" id="opciones">
-                                        download
-                                    </span>
+                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;" target="_blank">
+                                        <span class="material-symbols-outlined" id="opciones">
+                                            download
+                                        </span>
+                                    </a>
+
                                 </q-item-section>
                             </q-item>
                             <q-item clickable>
@@ -104,7 +107,8 @@
                     </router-link>
                 </q-btn>
             </div>
-            <small>Ver la gestión del programa de formación como los intructores, los proyectos, el registro calificado, etc.</small>
+            <small>Ver la gestión del programa de formación como los intructores, los proyectos, el registro calificado,
+                etc.</small>
         </div>
 
     </q-page>
@@ -133,13 +137,13 @@ async function agregarDis() {
     console.log("entró");
     console.log(dis.value);
     const id = "6532e4ad96ea85c476b11f6d"
-   const data = await usePrograma.postDiseno(id, dis.value)
-   .then(()=> {
-    agregar.value = false
-    console.log(data)
-   }).catch((error)=>{
-    console.log(error)
-   })
+    const data = await usePrograma.postDiseno(id, dis.value)
+        .then(() => {
+            agregar.value = false
+            console.log(data)
+        }).catch((error) => {
+            console.log(error)
+        })
 
 }
 

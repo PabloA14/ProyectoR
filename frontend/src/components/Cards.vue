@@ -77,7 +77,7 @@
         </router-link>
       </q-card>
 
-      <q-card class="my-card" id="cardP">
+      <q-card v-if="programaSeleccionado.nivelFormacion.denominacion==='Tecnólogo'" class="my-card" id="cardP">
         <router-link to="registroCalificado">
           <q-card-section>
             <div id="img" class="text-h6">Registro Calificado</div>
@@ -93,7 +93,6 @@
 
 
 <script setup>
-//import { useUserStore } from "../almacenaje/informacion.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
 
