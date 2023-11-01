@@ -527,7 +527,9 @@ async function editarEstado(x) {
 } */
 
 const informacionPrograma = async (x) => {
+  console.log("ggggggggggggggggggggggggggg");
   codigo.value = x.codigo;
+  console.log(codigo.value)
   await usePrograma.informacionPrograma(codigo.value)
   router.push("/InformacionPrograma")
 }

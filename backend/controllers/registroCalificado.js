@@ -3,10 +3,9 @@ import Registro from "../models/registroCalificado.js";
 const httpregistro = {
 
     postregistro: async (req, res) => {
-        const { titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, documento } = req.body;
-
+        const { titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, programa } = req.body;
         try {
-            const registroC = new Registro({ titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, documento });
+            const registroC = new Registro({ titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, programa });
             await registroC.save();
             res.json({ registroC });
         } catch (error) {
@@ -38,11 +37,11 @@ const httpregistro = {
 
     putRegistro: async (req, res) => {
         const registroId = req.params.id;
-        const { titulo, lugadesarrollo, metodologia, creditos, fecha, documento } = req.body;
+        const { titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, programa } = req.body;
 
         try {
             const updatedFields = {
-                titulo, lugadesarrollo, metodologia, creditos, fecha, documento
+                titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha, programa
             };
 
             const updatedRegistro = await Registro.findOneAndUpdate(

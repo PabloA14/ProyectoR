@@ -113,7 +113,6 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
 //   };
 
   const postMatriz = async (id, matrizcorrelacion) => {
-    console.log("post matriz")
     try {
       const formData = new FormData()
       formData.append('matrizcorrelacion', matrizcorrelacion)

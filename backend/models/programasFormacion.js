@@ -18,3 +18,4 @@ const programasDeFormacion = new mongoose.Schema(
     }
 )
 export default mongoose.model("Programa", programasDeFormacion)
+//registrocalificado

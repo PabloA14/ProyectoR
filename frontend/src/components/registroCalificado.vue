@@ -2,7 +2,7 @@
     <q-page class="q-pa-md">
         <div id="agregar">
             <!-- <q-img id="img" src="../imagenes/formacion.png" /> -->
-            <q-btn color="secondary" icon="add" label="Agregar Diseño curricular" class="q-mb-xl"
+            <q-btn color="secondary" icon="add" label="Agregar informaciòn registro Calificado" class="q-mb-xl"
             @click="(bd = 0, agregar = true)"  
                 
 
@@ -134,6 +134,9 @@ let card = ref(false)
 let bd = ref('')
 let agregar = ref(false)
 console.log(registroCalificado);
+let titulo =
+
+ref()
 
 if (registroCalificado == undefined) {
     card.value = false

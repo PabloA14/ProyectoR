@@ -268,7 +268,13 @@
 <script setup>
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useDesarrolloCurricular } from "../stores/desarrolloC.js"
+import { useRouter } from "vue-router";
+
+import { useQuasar } from "quasar";
 import { ref } from 'vue';
+
+const usePrograma = useProgramasFormacionStore();
+
 let agregar = ref()
 const useDesarrollo = useDesarrolloCurricular()
 const useInfoPrograma = useProgramasFormacionStore()
@@ -277,10 +283,14 @@ let matriz = ref(useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion
 let proyectoFormativo = ref(useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo)
 let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica)
 let inf = ref('')
+const $q = useQuasar();
 let archivo = ref('')
 let _id =ref (useInfoPrograma.programa.desarrolloCurricular._id)
+let codigo = ref(useInfoPrograma.programa.codigo)
+console.log(codigo)
 console.log(_id.value      +  "id del desarrollo curricular")
 console.log(useInfoPrograma.programa._id + "id del programa")
+let router = useRouter()
 
 function archivoM(event) {
   archivo.value = event.target.files[0]
@@ -292,9 +302,22 @@ function agregarMatriz() {
   inf.value = 0
 }
 async function guardarMatriz() {
+  console.log('guardar matriz');
   try {
+    console.log('------------------------------');
     const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
+    console.log(res);
+    if (res.data.status === "ok") {
+      informacionPrograma(codigo.value)
+      console.log(codigo.value);
+    } else {
+      console.log("no estuvo ok")
+    }
+  } catch (error) {
+    console.error(error);
+  }
 
+/*   try {
     agregar.value = false;
     $q.notify({
       message: "matriz de correlacion agregada exitosamente",
@@ -303,8 +326,8 @@ async function guardarMatriz() {
       position: "bottom",
       timeout: Math.random() * 3000,
     });
-
-    buscar();
+    console.log('pase por aca ')
+    informacionPrograma(codigo.value);
   } catch (error) {
     if (error.response && error.response.data.msg) {
       const repetida = error.response.data.msg;
@@ -316,7 +339,34 @@ async function guardarMatriz() {
         timeout: Math.random() * 3000,
       });
     }
-  }
+  } */
+}
+
+
+async function informacionPrograma (x) {
+  console.log("ggggggggggggggggggggggggggg");
+  codigo.value = x;
+  console.log(codigo.value)
+  const a = await usePrograma.informacionPrograma(codigo.value)
+      router.push("/desarrolloCurricular")
+      router.push("/InformacionPrograma")
+
+      
+        .then(() => {
+          $q.notify({
+            message: "Matriz curricular Agregada de manera Exitosa",
+            color: "green",
+            icon: "check",
+            position: "bottom",
+            timeout: Math.random() * 3000,
+          });
+          console.log('..................................');
+          console.log(a);
+        })
+        .catch ( (error)=> {
+          console.log(error)
+        })
+
 }
 
 
