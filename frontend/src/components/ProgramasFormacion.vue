@@ -305,20 +305,7 @@ function validar() {
 }
 
 
-/* async function agregarDis() {
-    console.log("entró");
-    console.log(dis.value);
-    const id = "6532e4ad96ea85c476b11f6d"
-   const data = await usePrograma.postDiseno(id, dis.value)
-   .then(()=> {
-    agregar.value = false
-    console.log(data)
-   }).catch((error)=>{
-    console.log(error)
-   })
 
-}
- */
 
 
  function archivo(event) {

@@ -5,26 +5,20 @@ import Programa from "../models/programasFormacion.js"
 const httpProyectos = {
     postProyecto: async (req, res) => {
         const { codigo, nombre, descripcion, fecha, version, documento, programa } = req.body;
-
         try {
             const programaEncontrado = await Programa.findOne({ codigo: programa });
-
-
             if (!programaEncontrado) {
                 return res.status(400).json({ msg: "Programa no encontrado con el código proporcionado" });
             }
-
             const proyecto = new Proyectos({
                 codigo, nombre, descripcion, fecha, version, documento, programa: programaEncontrado
             });
-
             const cod = await Proyectos.findOne({ codigo: codigo })
-
             if (cod) {
                 return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
             } else {
                 await proyecto.save();
-                return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto });
+                return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto, status :"ok" });
             }
         } catch (error) {
             console.log(error);

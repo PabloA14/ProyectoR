@@ -18,8 +18,12 @@
                   <!-- sino tiene archivo le saldra esto  -->
                   <q-item clickable v-if="matriz === undefined">
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones"
-                        @click="agregar = true, agregarMatriz()">
+                      <span
+                        class="material-symbols-outlined"
+                        style=""
+                        id="opciones"
+                        @click="(agregar = true), agregarMatriz()"
+                      >
                         add
                       </span>
                     </q-item-section>
@@ -28,7 +32,11 @@
                   <div v-else>
                     <q-item clickable>
                       <q-item-section>
-                        <span class="material-symbols-outlined" style="" id="opciones">
+                        <span
+                          class="material-symbols-outlined"
+                          style=""
+                          id="opciones"
+                        >
                           download
                         </span>
                       </q-item-section>
@@ -40,11 +48,9 @@
                         </span>
                       </q-item-section>
                     </q-item>
-
                   </div>
 
                   <q-separator />
-
                 </q-list>
               </q-menu>
             </q-btn>
@@ -55,8 +61,7 @@
       <!-- proyecto formativo -->
       <div class="MatrizCorrelacion">
         <div class="row" id="row">
-          <q-toolbar-title class="title">
-            proyecto formativo </q-toolbar-title>
+          <q-toolbar-title class="title"> proyecto formativo </q-toolbar-title>
 
           <q-btn flat round dense>
             <q-btn color="secondary" label="">
@@ -65,9 +70,18 @@
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
                   <!-- sino tiene archivo le saldra esto  -->
-                  <q-item clickable @click="agregar = true" v-if="proyectoFormativo === undefined">
+                  <q-item
+                    clickable
+                    @click="agregar = true"
+                    v-if="proyectoFormativo === undefined"
+                  >
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones">
+                      <span
+                        class="material-symbols-outlined"
+                        style=""
+                        id="opciones"
+                        @click="(agregar = true), addProyecto()"
+                      >
                         add
                       </span>
                     </q-item-section>
@@ -76,7 +90,11 @@
                   <div v-else>
                     <q-item clickable>
                       <q-item-section>
-                        <span class="material-symbols-outlined" style="" id="opciones">
+                        <span
+                          class="material-symbols-outlined"
+                          style=""
+                          id="opciones"
+                        >
                           download
                         </span>
                       </q-item-section>
@@ -88,11 +106,9 @@
                         </span>
                       </q-item-section>
                     </q-item>
-
                   </div>
 
                   <q-separator />
-
                 </q-list>
               </q-menu>
             </q-btn>
@@ -115,9 +131,18 @@
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
                   <!-- sino tiene archivo le saldra esto  -->
-                  <q-item clickable @click="agregar = true" v-if="planeacionPedagogica === undefined">
+                  <q-item
+                    clickable
+                    @click="agregar = true"
+                    v-if="planeacionPedagogica === undefined"
+                  >
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones">
+                      <span
+                        class="material-symbols-outlined"
+                        style=""
+                        id="opciones"
+                        @click="(agregar = true), addplaneacionPedagogica()"
+                      >
                         add
                       </span>
                     </q-item-section>
@@ -126,7 +151,11 @@
                   <div v-else>
                     <q-item clickable>
                       <q-item-section>
-                        <span class="material-symbols-outlined" style="" id="opciones">
+                        <span
+                          class="material-symbols-outlined"
+                          style=""
+                          id="opciones"
+                        >
                           download
                         </span>
                       </q-item-section>
@@ -138,11 +167,9 @@
                         </span>
                       </q-item-section>
                     </q-item>
-
                   </div>
 
                   <q-separator />
-
                 </q-list>
               </q-menu>
             </q-btn>
@@ -150,25 +177,21 @@
         </div>
         <small>Ver planeación pedagogica</small>
       </div>
-
-
     </div>
 
-
-    <div class="text-h4 text-center q-mb-md" style="margin-top: 3%;">Guías de Aprendizaje</div>
+    <div class="text-h4 text-center q-mb-md" style="margin-top: 3%">
+      Guías de Aprendizaje
+    </div>
     <!-- guias de aprendizaje -->
     <div class="q-mt-md">
       <div class="MatrizCorrelacion">
         <div class="row" id="row">
-          <q-toolbar-title class="title">
-            Fase de Análisis
-          </q-toolbar-title>
+          <q-toolbar-title class="title"> Fase de Análisis </q-toolbar-title>
 
           <q-btn flat round dense>
             <router-link to="guiasAprendizaje">
               <span class="material-symbols-outlined" id="ir">bubble</span>
             </router-link>
-
           </q-btn>
         </div>
         <small>Ver Fase de Análisis</small>
@@ -176,10 +199,7 @@
 
       <div class="MatrizCorrelacion">
         <div class="row" id="row">
-          <q-toolbar-title class="title">
-            Fase de Planeación
-
-          </q-toolbar-title>
+          <q-toolbar-title class="title"> Fase de Planeación </q-toolbar-title>
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
@@ -192,10 +212,7 @@
 
       <div class="MatrizCorrelacion">
         <div class="row" id="row">
-          <q-toolbar-title class="title">
-            Fase de ejecución
-
-          </q-toolbar-title>
+          <q-toolbar-title class="title"> Fase de ejecución </q-toolbar-title>
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
@@ -209,10 +226,7 @@
 
     <div class="MatrizCorrelacion">
       <div class="row" id="row">
-        <q-toolbar-title class="title">
-          Fase de evaluación
-
-        </q-toolbar-title>
+        <q-toolbar-title class="title"> Fase de evaluación </q-toolbar-title>
 
         <q-btn flat round dense class="ir">
           <router-link to="guiasAprendizaje">
@@ -223,156 +237,161 @@
       <small>Ver Fase de evaluación</small>
     </div>
 
-
-
     <q-dialog v-model="agregar">
       <q-card style="width: 40%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
-        {{ inf === 0 ? 'Agregar Matriz De Correlación' : (inf === 1 ? 'Agregar Proyecto Formativo' : 'Agregar Planeación Pedagógica') }}
-         </div>
-
+            {{
+              inf === 0
+                ? "Agregar Matriz De Correlación"
+                : inf === 1
+                ? "Agregar Proyecto Formativo"
+                : "Agregar Planeación Pedagógica"
+            }}
+          </div>
 
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+        <q-separator
+          inset
+          style="height: 5px; margin-top: 5px"
+          color="secondary"
+        />
         <q-card-section style="max-height: 65vh" class="scroll">
-
           <div class="q-mb-md">
             <input type="file" @change="archivoM" />
           </div>
-
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn label="Agregar" @click="guardarMatriz()" color="secondary" />
+          <q-btn v-if="inf===0" label="Agregar M " @click="guardarMatriz()" color="secondary" />
+          <q-btn v-if="inf===1" label="Agregar P" @click="saveProyecto()" color="secondary" />
+          <q-btn  v-if="inf===2" label="Agregar -" @click="savePlaneacionPedagogica()" color="secondary" />
         </q-card-actions>
-
       </q-card>
     </q-dialog>
-
-
-
-
-
   </q-page>
 </template>
-  
+
 <script setup>
-import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import { useDesarrolloCurricular } from "../stores/desarrolloC.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
+import { useDesarrolloCurricular } from "../stores/desarrolloC.js";
 import { useRouter } from "vue-router";
-
 import { useQuasar } from "quasar";
-import { ref } from 'vue';
-
-const usePrograma = useProgramasFormacionStore();
-
-let agregar = ref()
-const useDesarrollo = useDesarrolloCurricular()
-const useInfoPrograma = useProgramasFormacionStore()
-console.log(useInfoPrograma.programa)
-let matriz = ref(useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion)
-let proyectoFormativo = ref(useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo)
-let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica)
-let inf = ref('')
+import { ref } from "vue";
+let agregado =ref('')
+let usePrograma = useProgramasFormacionStore();
+let router = useRouter();
+let agregar = ref();
+const useDesarrollo = useDesarrolloCurricular();
+let useInfoPrograma = useProgramasFormacionStore();
+let inf = ref("");
 const $q = useQuasar();
-let archivo = ref('')
-let _id =ref (useInfoPrograma.programa.desarrolloCurricular._id)
-let codigo = ref(useInfoPrograma.programa.codigo)
-console.log(codigo)
-console.log(_id.value      +  "id del desarrollo curricular")
-console.log(useInfoPrograma.programa._id + "id del programa")
-let router = useRouter()
+let archivo = ref("");
+let matriz = ref( useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion );
+let proyectoFormativo = ref( useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo);
+let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica);
+let _id = ref(useInfoPrograma.programa.desarrolloCurricular._id);
+let codigo = ref(useInfoPrograma.programa.codigo);
+
 
 function archivoM(event) {
-  archivo.value = event.target.files[0]
-  console.log(archivo.value)
-  
- }
-function agregarMatriz() {
-  agregar.value = true
-  inf.value = 0
+  archivo.value = event.target.files[0];
+  console.log(archivo.value);
 }
+function agregarMatriz() {
+  agregar.value = true;
+  inf.value = 0;
+}
+
+function addProyecto() {
+  inf.value=1
+}
+
+function addplaneacionPedagogica() {
+  inf.value=2
+  
+}
+
 async function guardarMatriz() {
-  console.log('guardar matriz');
   try {
-    console.log('------------------------------');
     const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
     console.log(res);
     if (res.data.status === "ok") {
-      informacionPrograma(codigo.value)
+      agregado.value ="La Matriz de Correlaciòn "
+      informacionPrograma(codigo.value);
       console.log(codigo.value);
     } else {
-      console.log("no estuvo ok")
+      console.log("no estuvo ok");
     }
   } catch (error) {
     console.error(error);
   }
+}
 
-/*   try {
-    agregar.value = false;
-    $q.notify({
-      message: "matriz de correlacion agregada exitosamente",
-      color: "green",
-      icon: "check",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
-    console.log('pase por aca ')
-    informacionPrograma(codigo.value);
+async function saveProyecto() {
+    try {
+    const res = await useDesarrollo.putProyecto(_id.value, archivo.value);
+    console.log(res);
+    console.log("------------------------------"); 
+    if (res.data.status === "ok") {
+      agregado.value= ' El Proyecto '
+      informacionPrograma(codigo.value);
+      console.log(codigo.value);
+    } else {
+      console.log("no estuvo ok");
+    }
   } catch (error) {
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg;
+    console.error(error);
+  }  
+}
+
+async function savePlaneacionPedagogica() {
+    try {
+      const res = await useDesarrollo.putplaneacionPedagogica(_id.value, archivo.value);
+    console.log(res);
+    if (res.data.status === "ok") {
+      agregado.value= 'La Planeaciòn Pedagigica'
+      informacionPrograma(codigo.value);
+      console.log(codigo.value);
+    } else {
+      console.log("no estuvo ok");
+    }
+  } catch (error) {
+    console.error(error);
+  }   
+}
+
+async function informacionPrograma(x) {
+  codigo.value = x;
+  console.log(codigo.value);
+  const a = await usePrograma.informacionPrograma(codigo.value);
+  agregar.value =false
+  router.push("/InformacionPrograma")
+  router.push("/desarrolloCurricular")
+
+
+    .then(() => {
       $q.notify({
-        message: repetida,
-        color: "negative",
-        position: "top",
-        icon: "warning",
+        message:  ` ${agregado.value} Agregado Correctamente `,
+        color: "green",
+        icon: "check",
+        position: "bottom",
         timeout: Math.random() * 3000,
       });
-    }
-  } */
+      console.log("..................................");
+      console.log(a);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
-
-
-async function informacionPrograma (x) {
-  console.log("ggggggggggggggggggggggggggg");
-  codigo.value = x;
-  console.log(codigo.value)
-  const a = await usePrograma.informacionPrograma(codigo.value)
-      router.push("/desarrolloCurricular")
-      router.push("/InformacionPrograma")
-
-      
-        .then(() => {
-          $q.notify({
-            message: "Matriz curricular Agregada de manera Exitosa",
-            color: "green",
-            icon: "check",
-            position: "bottom",
-            timeout: Math.random() * 3000,
-          });
-          console.log('..................................');
-          console.log(a);
-        })
-        .catch ( (error)=> {
-          console.log(error)
-        })
-
-}
-
-
-
 </script>
-  
+
 <style scoped>
 .MatrizCorrelacion {
   padding: 2vh;
@@ -397,8 +416,5 @@ async function informacionPrograma (x) {
   background-color: #39a900;
   color: white;
   font-size: 3.8vh;
-
-
 }
 </style>
-  
