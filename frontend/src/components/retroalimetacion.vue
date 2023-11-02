@@ -29,19 +29,19 @@
 
                     <q-expansion-item v-for=" retroalimetacion in dataRetroaliemtacion.retroalimentaciones"
                         :key="retroalimetacion._id" expand-separator :label="`Codigo: ${retroalimetacion.codigo}`"
-                        :caption="`ficha: ${retroalimetacion.codigoFicha}`" `fecha: ${retroalimetacion.fecha}`>
+                        :caption="`ficha: ${retroalimetacion.codigoFicha}`">
                         
-
                         <q-card>
 
                             <q-card-section>
 
-                                <p> {{ retroalimetacion.descripcion }} </p>
+                                <p> {{ retroalimetacion.descripcion }} </p> <br>
+
+                                <p>{{ retroalimetacion.fecha }}</p>
 
                             </q-card-section>
 
                             <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
 
                             <div class="row">
 
@@ -131,9 +131,6 @@ async function buscar() {
 }
 
 buscar()
-
-
-
 
 
 const mostrarModal = ref(false);
