@@ -23,7 +23,8 @@
                             </q-item> -->
                             <q-item clickable>
                                 <q-item-section>
-                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;" target="_blank">
+                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;"
+                                        target="_blank">
                                         <span class="material-symbols-outlined" id="opciones">
                                             download
                                         </span>
@@ -107,7 +108,8 @@
                     </router-link>
                 </q-btn>
             </div>
-            <small>Ver la gestión del programa de formación como los intructores, los proyectos, el registro calificado,
+            <small>Ver la gestión del programa de formación como los intructores, los proyectos, las investigaciones, el
+                registro calificado,
                 etc.</small>
         </div>
 

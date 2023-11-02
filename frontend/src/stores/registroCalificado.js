@@ -35,14 +35,14 @@ export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
             return buscar.data;
         } catch (error) {
             console.log(error.response);
-        } 
+        }
     };
 
     const actualizarRegistro = async (
-        id, titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha) => {
+        id, titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha) => {
         try {
-            let datos = await axios.put(`${LinkBD}/api/roles/${id}`, {
-                titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha
+            let datos = await axios.put(`${LinkBD}/api/registroCalificado/${id}`, {
+                titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha
             });
             return datos;
         } catch (error) {
@@ -50,15 +50,12 @@ export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
             throw error;
         }
     };
-
-
-
     return {
         agregarRegistroC,
         buscarRegistros,
         actualizarRegistro,
-        buscarRegistrosCodigo
-
+        buscarRegistrosCodigo,
+        loading
     }
 
 });

@@ -413,7 +413,7 @@ async function addDesarrolloC() {
         .then(() => {
           agregarDesarrollo.value = false;
           $q.notify({
-            message: "Desarrollo Creado Exitosamente",
+            message: "Desarrollo Curricular creado exitosamente",
             color: "green",
             icon: "check",
             position: "bottom",
@@ -514,7 +514,7 @@ async function editarEstado(x) {
 } */
 
 const informacionPrograma = async (x) => {
-  console.log("ggggggggggggggggggggggggggg");
+  console.log("----------------");
   codigo.value = x.codigo;
   console.log(codigo.value)
   await usePrograma.informacionPrograma(codigo.value)

@@ -51,7 +51,7 @@
             </q-btn>
           </q-btn>
         </div>
-        <small>Ver matriz de Correlación</small>
+        <small>Ver Matriz de Correlación</small>
       </div>
       <!-- proyecto formativo -->
       <div class="MatrizCorrelacion">
@@ -100,7 +100,7 @@
             </q-btn>
           </q-btn>
         </div>
-        <small>Ver proyecto formativo</small>
+        <small>Ver Proyecto Formativo</small>
       </div>
 
       <!-- planeación pedagogica -->
@@ -152,7 +152,7 @@
             </q-btn>
           </q-btn>
         </div>
-        <small>Ver planeación pedagogica</small>
+        <small>Ver Planeación Pedagógica</small>
       </div>
     </div>
 
@@ -271,6 +271,7 @@ let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.pla
 let _id = ref(useInfoPrograma.programa.desarrolloCurricular._id);
 let codigo = ref(useInfoPrograma.programa.codigo);
 
+console.log(usePrograma.programa);
 
 function archivoM(event) {
   archivo.value = event.target.files[0];

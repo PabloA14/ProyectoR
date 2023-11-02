@@ -25,10 +25,9 @@
                     <template v-slot:body-cell-documento="props">
                         <q-td :props="props">
                             <a :href="props.row.documentos" target="_blank">
-                                <q-icon color="blue"  name="fa-solid fa-download" size="20px" />
+                                <q-icon color="blue" name="fa-solid fa-download" size="20px" />
                             </a>
                         </q-td>
-
                     </template>
 
                     <!-- <template v-slot:body-cell-estado="props">

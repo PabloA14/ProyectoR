@@ -14,7 +14,6 @@ const httpprogramas = {
             .populate("instructores")
             .populate("ambienteFormacion")
             .populate("materialesformacion")
-            .populate("registrocalificado")
         res.status(200).json({ programas })
     },
 
@@ -30,7 +29,7 @@ const httpprogramas = {
         const { codigo, denominacionPrograma, nivelFormacion, version, estado,
             RedConocimiento, desarrolloCurricular,
             instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
-        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion, registrocalificado);
+        console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion);
         console.log("------------------")
         const {disCurricular}=req.files
         console.log({disCurricular})
@@ -57,8 +56,7 @@ const httpprogramas = {
                             desarrolloCurricular, 
                             instructores, 
                             ambienteFormacion, 
-                            materialesformacion, 
-                            registrocalificado 
+                            materialesformacion
                         });
 
                         const programaExistente = await Programa.findOne({ codigo });
@@ -93,8 +91,6 @@ const httpprogramas = {
                 .populate("instructores")
                 .populate("ambienteFormacion")
                 .populate("materialesformacion")
-                .populate("registrocalificado");
-
             if (!cod) {
                 res.status(400).json({ sms: `sin coincidencias para ${codigo}` });
             } else {

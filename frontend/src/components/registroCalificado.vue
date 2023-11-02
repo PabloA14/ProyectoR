@@ -1,61 +1,67 @@
 <template>
     <q-page class="q-pa-md">
-        
-        <div class="row">
-            <div class="centrada" id="card">
 
-                <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br>
-                
+        <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br>
+
+        <div class="spinner-container" v-if="useRegistro.loading === true">
+            <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+        </div>
+
+        <div class="row" v-if="useRegistro.loading === false">
+            <div class="col-12" id="card">
                 <q-card class="my-card" flat bordered id="csrd2">
+                    <div class="text-h5 q-mt-sm q-mb-xs" style="text-align: center">
+                        {{ programaSeleccionado.denominacionPrograma }}</div>
+
+                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+
                     <q-card-section horizontal>
                         <q-card-section class="q-pt-xs" id="section">
 
-                            <div class="text-h5 q-mt-sm q-mb-xs">Gestión contable</div> <br>
-
-                            <div class="text-h6 q-mt-sm q-mb-xs">Titulo que otorga:</div>
+                            <div class="text-h6 q-mt-sm q-mb-xs">Título que otorga:</div>
                             <div class="text-caption text">
-                                {{ prueba.titulo }}
+                                {{ mostrarRegistro.titulo }}
                             </div>
 
-                            <div class="text-h6 q-mt-sm q-mb-xs">Lugar de desarrollo de oferta:</div>
+                            <div class="text-h6 q-mt-sm q-mb-xs">Lugar de desarrollo de la oferta:</div>
                             <div class="text-caption text">
-                                {{ prueba.lugardesarrollo}}
+                                {{ mostrarRegistro.lugardesarrollo }}
                             </div>
 
-                            <div class="text-h6 q-mt-sm q-mb-xs">Metodologia:</div>
+                            <div class="text-h6 q-mt-sm q-mb-xs">Metodología:</div>
                             <div class="text-caption text">
-                                {{ prueba.metodologia }}
+                                {{ mostrarRegistro.metodologia }}
                             </div>
 
-                            <div class="text-h6 q-mt-sm q-mb-xs">Numero de creditos:</div>
+                            <div class="text-h6 q-mt-sm q-mb-xs">Numero de créditos:</div>
                             <div class="text-caption text">
-                                {{ prueba.creditos }}
+                                {{ mostrarRegistro.creditos }}
                             </div>
 
-                            <div class="text-h6 q-mt-sm q-mb-xs">Codigo snies:</div>
+                            <div class="text-h6 q-mt-sm q-mb-xs">Código SNIES:</div>
                             <div class="text-caption text">
-                                {{  prueba.codigosnies }}
+                                {{ mostrarRegistro.codigosnies }}
+                            </div>
+
+                            <div class="text-h6 q-mt-sm q-mb-xs">Fecha:</div>
+                            <div class="text-caption text">
+                                {{ mostrarRegistro.fecha }}
                             </div>
 
                         </q-card-section>
 
-                        <q-card-section class="col-5 flex flex-center">
 
-                         
-
-                        </q-card-section>
                     </q-card-section>
 
                     <q-separator />
 
                     <q-card-actions>
-
-
                         <q-btn style="float: ; margin: auto auto" color="secondary" icon="add" label="Agregar"
-                            class="q-mb-md" @click="
+                            class="q-mb-md" :disabled="deshabilitado" @click="
                                 agregar = true; nuevo();" />
 
-                        <q-btn style="float: ; margin: auto auto" flat color="primary" @click="editarRegistro(registro)">
+                        <q-btn style="float: ; margin: auto auto" flat color="primary"
+                            @click="editarRegistro(mostrarRegistro)">
                             Editar
                         </q-btn>
 
@@ -68,7 +74,7 @@
             <q-card style="width: 32%; height: fit-content">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
-                        {{ bd === 0 ? "Editar Registro Calificado" : "Agregar Registro Calificado" }} 
+                        {{ bd === 0 ? "Editar Registro Calificado" : "Agregar Registro Calificado" }}
                     </div>
                     <q-space />
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
@@ -79,10 +85,10 @@
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
                     <div class="q-mb-md">
-                        <q-input label="Titulo*" color="secondary" v-model="titulo" />
+                        <q-input label="Título que otorga el programa*" color="secondary" v-model="titulo" />
                     </div>
 
-                    
+
                     <div class="q-mb-md">
                         <q-input label="Lugar De Desarrollo*" color="secondary" v-model="lugardesarrollo" />
                     </div>
@@ -92,14 +98,14 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Creditos*" color="secondary" v-model="creditos" />
+                        <q-input label="Creditos*" type="number" color="secondary" v-model="creditos" />
                     </div>
 
                     <div class="q-mb-md">
                         <q-input label="Código SNIES*" type="Number" color="secondary" v-model="codigosnies" />
                     </div>
                     <div class="q-mb-md">
-                        <q-input label="Fecha *" type="Date" color="secondary" v-model="fecha" />
+                        <q-input label="Fecha*" type="Date" color="secondary" v-model="fecha" />
                     </div>
 
 
@@ -108,26 +114,20 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <!--         <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
-                <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" /> -->
-                    <q-btn :disabled="loading" v-if="bd== 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
                     <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
-
                 </q-card-actions>
             </q-card>
         </q-dialog>
 
-
-
     </q-page>
 </template>
     
-
 <script setup>
 
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import {UsesRegistroCalificado} from "../stores/registroCalificado.js"
-import { ref, computed } from 'vue'
+import { UsesRegistroCalificado } from "../stores/registroCalificado.js"
+import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 
 const usePrograma = useProgramasFormacionStore();
@@ -140,21 +140,20 @@ const $q = useQuasar()
 let agregar = ref(false)
 let errores = ref([])
 let loading = ref(false)
+
 let titulo = ref("")
 let metodologia = ref("")
 let lugardesarrollo = ref("")
 let creditos = ref("")
 let codigosnies = ref("")
 let fecha = ref("")
-let prueba = ref('')
-let infoReg = ref('')
-buscar()
-let registroFiltrado = computed(() => {
-    return registroCalificado.value.filter(
-        (x) => x.programa._id === idPrograma
-    );
-});
+let id = ref("")
 
+let mostrarRegistro = ref('')
+let infoReg = ref('')
+let deshabilitado = ref(false)
+
+buscar()
 
 function nuevo() {
     bd.value = 1;
@@ -176,31 +175,30 @@ async function buscar() {
     infoReg.value = registroCalificado.value
     console.log(registroCalificado.value);
     console.log("-----------------");
-    console.log(infoReg.value);
+
+    const registrosProgramaActual = infoReg.value.filter((reg) => reg.programa._id === idPrograma);
+    deshabilitado.value = registrosProgramaActual.length > 0
 
     for (let i = 0; i < infoReg.value.length; i++) {
+        let a = infoReg.value[i]
 
-       let a = infoReg.value[i].programa
-       let b =infoReg.value[i]
-      
-        if (b.programa._id === idPrograma) {
-            prueba.value = b
-            console.log(b)
+        if (a.programa._id === idPrograma) {
+            mostrarRegistro.value = a
+            console.log(a)
         }
     }
 }
 
 async function buscarRegistroCodigo() {
-   
     console.log(codigosnies.value);
-    const res = await useRegistro.buscarRegistrosCodigo(codigosnies.value) 
-    prueba.value = res
-    console.log(prueba.value);
+    const res = await useRegistro.buscarRegistrosCodigo(codigosnies.value)
+    mostrarRegistro.value = res
+    console.log(mostrarRegistro.value);
 }
 
 function validarVacios() {
     if (titulo.value === "" && metodologia.value === "" && lugardesarrollo.value == "" && creditos.value == "" && codigosnies.value == ""
-    && fecha.value === "") {
+        && fecha.value === "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -266,9 +264,64 @@ async function agregarN() {
     loading.value = false
 }
 
+function editarRegistro(mostrarRegistro) {
+    console.log("entró a editar", mostrarRegistro)
+    bd.value = 0;
+    id.value = mostrarRegistro._id
+    titulo.value = mostrarRegistro.titulo
+    lugardesarrollo.value = mostrarRegistro.lugardesarrollo
+    metodologia.value = mostrarRegistro.metodologia
+    creditos.value = mostrarRegistro.creditos
+    codigosnies.value = mostrarRegistro.codigosnies
+    fecha.value = mostrarRegistro.fecha
+    agregar.value = true
+}
+
+async function actualizar() {
+    loading.value = true
+    await useRegistro.actualizarRegistro(
+        id.value,
+        titulo.value,
+        lugardesarrollo.value,
+        metodologia.value,
+        creditos.value,
+        codigosnies.value,
+        fecha.value
+    ).then(() => {
+        agregar.value = false
+        $q.notify({
+            message: 'Registro Calificado editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'bottom',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+
+    }).catch((error) => {
+        errores.value = ''
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        }
+        else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
+    })
+    loading.value = false
+}
+
 console.log(programaSeleccionado);
-
-
 
 </script>
 
@@ -276,7 +329,7 @@ console.log(programaSeleccionado);
 #card {
     margin: 0 auto;
     margin-top: auto;
-    width: 40%;
+    width: 50%;
 }
 
 #csrd2 {
@@ -287,23 +340,20 @@ console.log(programaSeleccionado);
     margin: 2% 5%;
 }
 
-.centrada {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.centrada2 {
-    position: absolute;
-    top: 80%;
-    left: 50%;
-    transform: translate(-50%, -50%)
-}
-
 #agregar {
     justify-content: center;
     text-align: center;
+}
 
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 </style>
