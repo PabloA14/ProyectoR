@@ -12,7 +12,6 @@ const programasDeFormacion = new mongoose.Schema(
         instructores: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Usuario' }],
         ambienteFormacion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Ambiente' }],
         materialesformacion: [{ type: mongoose.Schema.Types.ObjectId, ref: 'MaterialesFormacione' }],
-        registrocalificado: { type: mongoose.Schema.Types.ObjectId, ref: 'Registro' },
         estado: { type: Number, default: 1 },
         createdAt: { type: Date, default: Date.now },
     }
