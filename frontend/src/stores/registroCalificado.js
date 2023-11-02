@@ -6,7 +6,6 @@ import { ref } from "vue";
 export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
     let loading = ref(false)
 
-
     const agregarRegistroC = async (info) => {
         try {
             const newU = await axios.post(`${LinkBD}/api/registroCalificado`, info);
@@ -17,10 +16,49 @@ export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
         }
     };
 
+    const buscarRegistros = async () => {
+        try {
+            loading.value = true
+            const buscar = await axios.get(`${LinkBD}/api/registroCalificado`);
+            return buscar.data.registroC;
+        } catch (error) {
+            loading.value = true
+            console.log(error.response);
+        } finally {
+            loading.value = false
+        }
+    };
+
+    const buscarRegistrosCodigo = async (codigosnies) => {
+        try {
+            const buscar = await axios.get(`${LinkBD}/api/registroCalificado/${codigosnies}`);
+            return buscar.data;
+        } catch (error) {
+            console.log(error.response);
+        } 
+    };
+
+    const actualizarRegistro = async (
+        id, titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha) => {
+        try {
+            let datos = await axios.put(`${LinkBD}/api/roles/${id}`, {
+                titulo, lugadesarrollo, metodologia, creditos, codigosnies, fecha
+            });
+            return datos;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+    };
+
+
 
     return {
         agregarRegistroC,
-  
+        buscarRegistros,
+        actualizarRegistro,
+        buscarRegistrosCodigo
+
     }
-    
+
 });
