@@ -385,7 +385,7 @@ async function editarDesarrollo(x) {
         .then(() => {
           agregarDesarrollo.value = false;
           $q.notify({
-            message: "Desarrollo Creado Exitosamente",
+            message: "Desarrollo Curricular creado exitosamente",
             color: "green",
             icon: "check",
             position: "bottom",
