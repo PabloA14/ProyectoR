@@ -106,7 +106,9 @@
           </div>
 
           <div class="q-mb-md">
-            <b><p>Diseño Curricular</p></b>
+            <b>
+              <p>Diseño Curricular</p>
+            </b>
             <input type="file" name="" id="" @change="archivo">
           </div>
         </q-card-section>
@@ -147,8 +149,7 @@
 </template>
 
 <script setup>
-import axios from "axios";
-import { LinkBD } from "../routes/variables.js";
+
 import { ref, computed } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useNivelStore } from "../stores/Niveles.js";
@@ -282,7 +283,7 @@ function validarVacios() {
     denominacion.value === "" &&
     nivel.value === "" &&
     version.value === "" &&
-    disCurricular.value ===""
+    disCurricular.value === ""
   ) {
     $q.notify({
       message: "Campos vacíos",
@@ -305,14 +306,12 @@ function validar() {
 }
 
 
-
-
-
- function archivo(event) {
+function archivo(event) {
   disCurricular.value = event.target.files[0]
   console.log(disCurricular.value)
-  
- }
+
+}
+
 async function agregarP() {
   loading.value = true;
   console.log("entro a agregar");
@@ -324,7 +323,7 @@ async function agregarP() {
       version: version.value,
       RedConocimiento: decodedToken.redConocimiento._id,
       //desarrolloCurricular: null,
-      disCurricular : disCurricular.value
+      disCurricular: disCurricular.value
     })
     .then(() => {
       agregar.value = false;
@@ -371,6 +370,7 @@ function editarPrograma(x) {
   version.value = x.version;
   agregar.value = true;
 }
+
 async function editarDesarrollo(x) {
   idDesarrollo.value = x._id;
   console.log(x);
@@ -497,21 +497,6 @@ async function editarEstado(x) {
     console.log(error);
   }
 }
-
-/* function informacionPrograma(x) {
-  let codigo = x.codigo;
-  console.log(codigo);
-  axios
-    .get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
-    .then((res) => {
-      usePrograma.programa = res.data;
-
-      console.log(usePrograma.programa);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-} */
 
 const informacionPrograma = async (x) => {
   console.log("----------------");

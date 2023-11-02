@@ -27,6 +27,7 @@ import InformacionPrograma from "../components/InformacionPrograma.vue"
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useUserStore } from "../almacenaje/informacion.js"
 
+
 import { createRouter, createWebHashHistory } from 'vue-router';
 
 
