@@ -8,7 +8,7 @@
         </div>
 
         <div class="row" v-if="useRegistro.loading === false">
-            <div class="col-12" id="card">
+            <div class="col-12" id="card" v-if="mostrarRegistro">
                 <q-card class="my-card" flat bordered id="csrd2">
                     <div class="text-h5 q-mt-sm q-mb-xs" style="text-align: center">
                         {{ programaSeleccionado.denominacionPrograma }}</div>
@@ -56,18 +56,18 @@
                     <q-separator />
 
                     <q-card-actions>
-                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="add" label="Agregar"
-                            class="q-mb-md" :disabled="deshabilitado" @click="
-                                agregar = true; nuevo();" />
-
-                        <q-btn style="float: ; margin: auto auto" flat color="primary"
-                            @click="editarRegistro(mostrarRegistro)">
-                            Editar
-                        </q-btn>
-
+                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
+                            class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
                     </q-card-actions>
                 </q-card>
             </div>
+
+            <div v-else>
+                <q-btn style="margin: auto auto" color="secondary" icon="add" label="Agregar Registro Calificado"
+                    class="q-mb-md" @click="
+                        agregar = true; nuevo();" />
+            </div>
+
         </div>
 
         <q-dialog v-model="agregar">
@@ -151,7 +151,7 @@ let id = ref("")
 
 let mostrarRegistro = ref('')
 let infoReg = ref('')
-let deshabilitado = ref(false)
+//let deshabilitado = ref(false)
 
 buscar()
 
@@ -176,8 +176,8 @@ async function buscar() {
     console.log(registroCalificado.value);
     console.log("-----------------");
 
-    const registrosProgramaActual = infoReg.value.filter((reg) => reg.programa._id === idPrograma);
-    deshabilitado.value = registrosProgramaActual.length > 0
+    /* const registrosProgramaActual = infoReg.value.filter((reg) => reg.programa._id === idPrograma);
+    deshabilitado.value = registrosProgramaActual.length > 0 */
 
     for (let i = 0; i < infoReg.value.length; i++) {
         let a = infoReg.value[i]
