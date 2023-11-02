@@ -16,6 +16,8 @@ router.post("/", [
     validarCampos
 ], httpprogramas.postPrograma)
 
+router.post("/agregar/instructor/:id",httpprogramas.postProgramaInstructor)
+
 //router.get("/traer", httpprogramas.getProgramaCod)
 router.get("/traer/:codigo", httpprogramas.getProgramaCod)
 

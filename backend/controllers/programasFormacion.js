@@ -31,31 +31,31 @@ const httpprogramas = {
             instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
         console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion);
         console.log("------------------")
-        const {disCurricular}=req.files
-        console.log({disCurricular})
+        const { disCurricular } = req.files
+        console.log({ disCurricular })
         try {
             if (!disCurricular || !disCurricular.tempFilePath) {
-                return res.status(400),json({msj : 'no hay archivo en la peticion'})
+                return res.status(400), json({ msj: 'no hay archivo en la peticion' })
             }
-            const extension =disCurricular.name.split(".").pop()
-            const {tempFilePath} =disCurricular;
-            console.log({tempFilePath})
+            const extension = disCurricular.name.split(".").pop()
+            const { tempFilePath } = disCurricular;
+            console.log({ tempFilePath })
             cloudinary.uploader.upload(
                 tempFilePath,
-                {width: 250 , crop : "limit", resource_type: "raw", format : extension},
+                { width: 250, crop: "limit", resource_type: "raw", format: extension },
                 async function (error, result) {
                     if (result) {
                         const programa = new Programa({
-                             codigo,
-                            denominacionPrograma, 
-                            nivelFormacion, 
-                            version, 
-                            estado, 
-                            RedConocimiento, 
-                            disCurricular : result.url, 
-                            desarrolloCurricular, 
-                            instructores, 
-                            ambienteFormacion, 
+                            codigo,
+                            denominacionPrograma,
+                            nivelFormacion,
+                            version,
+                            estado,
+                            RedConocimiento,
+                            disCurricular: result.url,
+                            desarrolloCurricular,
+                            instructores,
+                            ambienteFormacion,
                             materialesformacion
                         });
 
@@ -67,7 +67,7 @@ const httpprogramas = {
                             await programa.save();
                             res.status(200).json({ mensaje: "todo salio correcto:", programa, status: "ok" });
                         }
-                    }else{
+                    } else {
                         res.json(error)
                     }
                 }
@@ -241,6 +241,28 @@ const httpprogramas = {
         }
 
 
+    },
+
+    postProgramaInstructor: async (req, res) => {
+
+        try {
+            const { id } = req.params;
+            const { instructores } = req.body;
+            const buscar = await Programa.findById(id);
+            console.log(buscar);
+            if (buscar.instructores && buscar.instructores.includes(instructores)) {
+                return res.status(404).json({ msg: 'El Instructor ya se encuentra ligado al programa' })
+            };
+            const instructorAgregado = await Programa.updateOne(
+                { _id: id },
+                { $addToSet: { instructores: instructores } }
+            );
+            if (instructorAgregado.modifiedCount !== 0) {
+                return res.json({ instructorAgregado })
+            }
+        } catch (error) {
+            console.log(error);
+        }
     },
 
     patchPrograma: async (req, res) => {

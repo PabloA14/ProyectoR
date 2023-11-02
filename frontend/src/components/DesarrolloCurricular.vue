@@ -296,6 +296,7 @@ async function guardarMatriz() {
     const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
     console.log(res);
     if (res.data.status === "ok") {
+      console.log(res)
       agregado.value = "Matriz de Correlación"
       informacionPrograma(codigo.value);
       console.log(codigo.value);
@@ -347,8 +348,6 @@ async function informacionPrograma(x) {
   agregar.value = false
   router.push("/InformacionPrograma")
   router.push("/desarrolloCurricular")
-
-
     .then(() => {
       $q.notify({
         message: ` ${agregado.value} Agregado Correctamente `,
@@ -359,6 +358,23 @@ async function informacionPrograma(x) {
       });
       console.log("..................................");
       console.log(a);
+      console.log(a.data.desarrolloCurricular.matrizcorrelacion)
+
+      if (a.data.desarrolloCurricular.matrizcorrelacion != undefined) {
+        matriz.value =a.data.desarrolloCurricular.matrizcorrelacion 
+        console.log('----------- matriz correlacion-----')
+        console.log(matriz.value)
+      }
+      if (a.data.desarrolloCurricular.planeacionPedagogica != undefined){
+        planeacionPedagogica.value =  a.data.desarrolloCurricular.planeacionPedagogica 
+        console.log(planeacionPedagogica.value)
+        console.log('------- desarrollo curricular---------')
+      }
+      if (a.data.desarrolloCurricular.proyectoFormativo != undefined) {
+        console.log('-------proyecto formativo---------')
+        proyectoFormativo.value = a.data.desarrolloCurricular.proyectoFormativo
+      }
+
     })
     .catch((error) => {
       console.log(error);

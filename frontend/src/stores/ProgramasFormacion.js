@@ -42,6 +42,22 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   }
 
+  const agregarInstructores = async (id, instructores) => {
+    try {
+      loading.value = true;
+      const nuevoInstructor = axios.post(`${LinkBD}/api/programasFormacion/agregar/instructor/${id}`,
+        { instructores: instructores })
+      return nuevoInstructor;
+
+    } catch (error) {
+      loading.value = true
+      console.log(error)
+      throw error
+    } finally {
+      loading.value = false
+    }
+  }
+
   const informacionPrograma = async(codigo) =>{
     try {
       let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
@@ -138,7 +154,8 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     programa,
     addDesarrollo,
     updatedDesarrollo,
-    informacionPrograma
+    informacionPrograma,
+    agregarInstructores
   }
 
 },

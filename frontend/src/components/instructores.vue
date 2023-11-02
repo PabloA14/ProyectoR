@@ -13,7 +13,7 @@
       <div class="q-pa-md" style="width: 100%">
         <q-table
           title="Treats"
-          :rows="instructores"
+          :rows="usuarios"
           :columns="columns"
           row-key="cedula"
         >
@@ -88,7 +88,7 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <div class="q-mb-md">
-              <q-select
+              <!-- <q-select
               multiple
               use-chips
                 label="Instructor"
@@ -97,7 +97,10 @@
                 :options="instructores"
                 option-label="nombre"
                 option-value="nombre"
-              />
+              /> -->
+              <select name="" id="" v-model="instructor">
+                <option :value="a._id" v-for="a in instructores" :key="a">{{  a.nombre}}</option>
+              </select>
             </div>
           </div>
         </q-card-section>
@@ -105,7 +108,7 @@
         <q-separator />
 
         <q-card-actions class="flex-center" align="right">
-          <q-btn color="secondary" label="Agregar" />
+          <q-btn @click="agregarInstructor()" color="secondary" label="Agregar" />
           <q-btn color="negative" label="Cancelar" />
         </q-card-actions>
       </q-card>
@@ -127,7 +130,7 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="text-h5 text-center q-mt-md">
-            ¿Esta seguro que desea eliminar a '*****+*** ' de la lista de
+            ¿Esta seguro que desea eliminar a '**+** ' de la lista de
             instructores ?
           </div>
         </q-card-section>
@@ -148,16 +151,18 @@ import { ref } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useUserStore } from "../almacenaje/informacion.js";
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 let modalAgg = ref();
 let filter = ref();
 let modalEliminar = ref();
-let instructor = ref();
+let instructor = ref('');
 let loading = ref(false);
 const dataProgram = useUserStore();
 let usuarios = ref([]);
 let redConocimiento = ref('')
 let instructores = ref([]);
 const useUsuari = useUsuarioStore();
+const usePrograma= useProgramasFormacionStore();
 
 const columns = [
   {
@@ -170,22 +175,49 @@ const columns = [
   { name: "estado", label: "Estado ", field: "estado", sortable: true },
   { name: "correo", label: "Email", field: "correo" },
   { name: "telefono", label: "Telefono", field: "telefono" },
-  { name: "opciones", label: "Opciones", field: "opciones" },
+  // { name: "opciones", label: "Opciones", field: "opciones" },
 ];
 
-function obtenerInstructores() {
+async function buscar(){
+  await usePrograma.informacionPrograma(usePrograma.programa.codigo)
+    usuarios.value=usePrograma.programa.instructores
+    console.log('ppppppppppppp');
+    console.log(usuarios.value);
+}
+
+
+ async function obtenerInstructores() {
   console.log("entraste a instructores");
-  instructores.value = usuarios.value.filter(
+  await useUsuari.buscarUsuarios()
+  .then((res)=>{
+    instructores.value = res.filter(
     (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
   );
+  //instructor.value.push(prueba)
   console.log("sadasdadasd", instructores.value);
+  })
+  
+  
   // Rellena las opcions del q-select con los instructores
   instructor.value = null; // Reinicia el valor seleccionado
 }
 
-// function eliminarInstructor(instructor) {
-//   // lógica para eliminar al instructor
-// }
+async function agregarInstructor(){
+
+  await usePrograma.agregarInstructores(
+    usePrograma.programa._id,
+    instructor.value)
+    .then((res)=>{
+      console.log(res);
+    console.log('todo bien');
+  }).catch((error)=>{
+    console.log(error);
+  })
+}
+
+function eliminarInstructor(instructor) {
+  // lógica para eliminar al instructor
+}
 
 function decodeJWT(token) {
   try {
@@ -196,6 +228,8 @@ function decodeJWT(token) {
     return null;
   }
 }
+
+
 const token = dataProgram.informacionToken;
 console.log(token);
 
@@ -210,7 +244,7 @@ if (decodedToken) {
 
 async function cargarUsuarios() {
   loading.value = true;
-  usuarios.value = await useUsuari.buscarUsuarios();
+  buscar();
   obtenerInstructores();
   loading.value = false;
 }
