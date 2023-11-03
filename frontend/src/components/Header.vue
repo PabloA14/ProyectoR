@@ -61,7 +61,7 @@
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list padding>
           <router-link
-            v-if="rol === 'gestor'"
+            v-if="rol === 'gestor' ||  rol ==='instructor'"
             to="programas"
             style="text-decoration: none; color: black"
           >
@@ -102,7 +102,7 @@
             </q-item>
           </router-link>
 
-          <router-link
+          <router-link 
             to="centroF"
             style="text-decoration: none; color: black"
             v-if="rol === 'administrador'"
@@ -116,7 +116,7 @@
             </q-item>
           </router-link>
 
-          <router-link
+          <router-link 
             to="ambientes"
             style="text-decoration: none; color: black"
             v-if="rol === 'administrador'"
@@ -206,9 +206,10 @@
     </q-page-container>
   </q-layout>
 
-</template>
+</template> 
 
 <script setup>
+ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const drawer = ref(false);
@@ -216,11 +217,10 @@ const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
 
-import { useUsuarioStore } from "../stores/Usuarios.js";
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
 
-console.log(rol);
+//console.log(rol);
 
 // Función para cerrar sesión (combina abrir diálogo y realizar cierre)
 const cerrarSesion = () => {

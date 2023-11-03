@@ -15,7 +15,14 @@
             <q-td :props="props">
               <!-- agregar desarrollo C -->
               <div v-if="props.row.desarrolloCurricular === null">
-                <q-icon class="material-symbols-outlined" style="
+
+                <q-icon v-if="rol ==='instructor'" class="material-symbols-outlined" style="
+                font-size: 5vh;
+                background-color: red;
+                color: white;
+              " >priority_high</q-icon>
+                
+                <q-icon  v-else class="material-symbols-outlined" style="
                     font-size: 5vh;
                     background-color: #39a900;
                     color: white;
@@ -61,8 +68,8 @@
               </template>
             </q-input>
           </template>
-          <template v-slot:top-left>
-            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+          <template v-slot:top-left  >
+            <q-btn  v-if="rol=='gestor' || rol==='administrador'" color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
               agregar = true;
             nuevo();
             " />
@@ -151,12 +158,16 @@
 <script setup>
 
 import { ref, computed } from "vue";
+import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useNivelStore } from "../stores/Niveles.js";
 import { useQuasar } from "quasar";
 import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
+
 let disCurricular = ref('')
 const dataProgram = useUserStore();
 let desarrolloC = ref("");
@@ -195,7 +206,7 @@ const token = dataProgram.informacionToken;
 console.log(token);
 
 const decodedToken = decodeJWT(token);
-
+console.log(rol)
 if (decodedToken) {
   console.log("Token decodificado:", decodedToken);
   redConocimiento.value = decodedToken.redConocimiento.denominacion;
