@@ -136,6 +136,7 @@ const columns = [
   { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
   { name: 'direccion', align: 'center', label: 'Dirección', field: "direccion" },
   { name: 'ciudad', align: 'center', label: 'Ciudad', field: "ciudad" },
+  { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
   { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
 

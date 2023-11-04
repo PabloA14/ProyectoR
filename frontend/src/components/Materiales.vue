@@ -81,21 +81,13 @@
 
                     <q-select v-model="tipo" color="secondary" label="Tipo" :options="options" />
 
-                    <div class="q-mb-md">
-                        <q-file label="Archivo" type="file" color="secondary" v-model="archivo">
-                            <template v-slot:prepend>
-                                <q-icon name="attach_file" />
-                            </template>
-                        </q-file>
-                    </div>
-
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -109,7 +101,7 @@ import { useQuasar } from 'quasar'
 
 const useMaterial = useMaterialStore()
 let material = ref([])
-let options = ref(['Herramienta', 'Evaluación'])
+let options = ref(['Devolutivo', 'Consumible'])
 let agregar = ref(false)
 let errores = ref([])
 
@@ -118,7 +110,6 @@ let codigo = ref("")
 let nombre = ref("")
 let tipo = ref("")
 let descripcion = ref("")
-let archivo = ref("")
 let bd = ref("")
 let id = ref("")
 
@@ -127,6 +118,7 @@ let id = ref("")
 const $q = useQuasar()
 let filter = ref('')
 let separator = ref('horizontal')
+let loading = ref(false)
 
 const pagination = ref({
     rowsPerPage: 6
@@ -155,7 +147,6 @@ function vaciar() {
     nombre.value = ""
     tipo.value = ""
     descripcion.value = ""
-    archivo.value = ""
 }
 
 function validarVacios() {
@@ -187,14 +178,13 @@ async function buscar() {
 }
 
 async function agregarR() {
+    loading.value = true
     console.log("entro a agregar");
     await useMaterial.agregarMateriales({
         codigo: codigo.value,
         nombre: nombre.value,
         descripcion: descripcion.value,
-        tipo: tipo.value,
-        documentacion: archivo.value
-
+        tipo: tipo.value
     }).then(() => {
         agregar.value = false
         $q.notify({
@@ -222,7 +212,8 @@ async function agregarR() {
         } else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 function editarMaterial(materiales) {
@@ -233,18 +224,17 @@ function editarMaterial(materiales) {
     nombre.value = materiales.nombre
     descripcion.value = materiales.descripcion
     tipo.value = materiales.tipo
-    archivo.value = materiales.documentacion
     agregar.value = true;
 }
 
 async function actualizar() {
+    loading.value = true
     await useMaterial.actualizarMateriales(
         id.value,
         codigo.value,
         nombre.value,
         descripcion.value,
-        tipo.value,
-        archivo.value
+        tipo.value
     ).then(() => {
         agregar.value = false
         $q.notify({
@@ -272,7 +262,8 @@ async function actualizar() {
         } else {
             console.log(error);
         }
-    });
+    })
+    loading.value = false
 }
 
 async function editarEstado(materiales) {

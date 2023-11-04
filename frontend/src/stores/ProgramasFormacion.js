@@ -5,7 +5,7 @@ import { ref } from "vue";
 
 export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () => {
   let loading = ref(false)
-  let programa=ref({})
+  let programa = ref({})
 
   const getProgramas = async () => {
     try {
@@ -24,17 +24,17 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     try {
 
       const formData = new FormData()
-      for (const key in info){
-        formData.append(key,info[key])
+      for (const key in info) {
+        formData.append(key, info[key])
       }
       formData.append('disCurricular', disCurricular)
 
-    const datos = await axios.post(`${LinkBD}/api/programasFormacion`, formData , {
-      headers :{
-        "Content-Type": "multipart/form-data"
-      }
-    });
-      return datos 
+      const datos = await axios.post(`${LinkBD}/api/programasFormacion`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      });
+      return datos
 
     } catch (error) {
       console.log(error)
@@ -58,13 +58,17 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   }
 
-  const informacionPrograma = async(codigo) =>{
+  const informacionPrograma = async (codigo) => {
     try {
+      loading.value = true
       let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
       programa.value = r.data;
       return r
     } catch (error) {
+      loading.value = true
       console.log(error);
+    } finally {
+      loading.value = false
     }
   }
 
@@ -74,7 +78,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
       return datos
     } catch (error) {
       throw error
-        }
+    }
   }
 
   const updatedDesarrollo = async (id, desarrolloCurricular) => {
@@ -120,11 +124,37 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
   const asignarMateriales = async (id, materialesformacion) => {
     try {
       const res = await axios.post(`${LinkBD}/api/programasFormacion/asignarMateriales/${id}`, {
-        materialesformacion: materialesformacion
+        materialesformacion
       });
       return res;
     } catch (error) {
       console.log(error);
+      throw error
+    }
+  };
+
+  const getMaterialesPrograma = async (id) => {
+    try {
+      loading.value = true
+      const buscar = await axios.get(`${LinkBD}/api/programasFormacion/materiales/${id}`);
+      return buscar.data.materiales;
+    } catch (error) {
+      loading.value = true
+      console.log(error);
+    } finally {
+      loading.value = false
+    }
+  };
+
+  const asignarAmbientes = async (id, ambienteFormacion) => {
+    try {
+      const res = await axios.post(`${LinkBD}/api/programasFormacion/asignarAmbientes/${id}`, {
+        ambienteFormacion
+      });
+      return res;
+    } catch (error) {
+      console.log(error);
+      throw error
     }
   };
 
@@ -155,11 +185,13 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     addDesarrollo,
     updatedDesarrollo,
     informacionPrograma,
-    agregarInstructores
+    agregarInstructores,
+    getMaterialesPrograma,
+    asignarAmbientes
   }
 
 },
-{
-  persist:true
-}
+  {
+    persist: true
+  }
 );

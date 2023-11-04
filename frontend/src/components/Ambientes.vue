@@ -90,24 +90,20 @@
                     </div>
 
                     <div class="q-mb-md">
+                        <q-select label="Tipo*" color="secondary" v-model="tipo" :options="options" />
+                    </div>
+
+                    <div class="q-mb-md">
                         <q-input label="Descripción*" type="textarea" color="secondary" v-model="descripcion" />
                     </div>
 
-
-                    <div class="q-mb-md">
-                        <q-file label="Archivo" type="file" color="secondary" v-model="archivo">
-                            <template v-slot:prepend>
-                                <q-icon name="attach_file" />
-                            </template>
-                        </q-file>
-                    </div>
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
-                    <q-btn v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="cargando" v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
+                    <q-btn :disabled="cargando" v-else label="Actualizar" @click="actualizar()" color="secondary" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -127,17 +123,18 @@ let centros = ref([])
 let codigo = ref("")
 let nombre = ref("")
 let centro = ref("")
+let tipo = ref("")
+let options = ref(['Ideal', 'Disponible'])
 let id = ref("")
 let descripcion = ref("")
-let archivo = ref("")
-
 const useAmbiente = useAmbienteStore()
 const useCentro = useCentroStore()
 let bd = ref("");
 const $q = useQuasar()
 let filter = ref('')
 let errores = ref([])
-let separator = ref('none')
+let separator = ref('cell')
+let cargando = ref(false)
 
 const pagination = ref({
     rowsPerPage: 6
@@ -147,6 +144,7 @@ const columns = [
     { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'centro', align: 'center', label: 'Centro de Formación', field: "centroformacion" },
+    { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
@@ -164,12 +162,12 @@ function vaciar() {
     codigo.value = ""
     nombre.value = ""
     centro.value = ""
+    tipo.value = ""
     descripcion.value = ""
-    archivo.value = ""
 }
 
 function validarVacios() {
-    if (codigo.value === "" && nombre.value === "" && centro.value === "" && descripcion.value == "") {
+    if (codigo.value === "" && nombre.value === "" && centro.value === "" && tipo.value == "" && descripcion.value == "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -197,18 +195,20 @@ async function buscar() {
 }
 
 async function buscarCentro() {
-    centros.value = await useCentro.buscarCentros();
+    const centrosActivos = await useCentro.buscarCentros();
+    centros.value = centrosActivos.filter(c => c.estado === 1);
     console.log(centros.value);
 }
 
 async function agregarR() {
+    cargando.value = true
     console.log("entro a agregar");
     await useAmbiente.agregarAmbientes({
         codigo: codigo.value,
         nombre: nombre.value,
         centroformacion: centro.value,
-        descripcion: descripcion.value,
-        //archivo: archivo.value
+        tipo: tipo.value,
+        descripcion: descripcion.value
     }).then(() => {
         $q.notify({
             message: 'Ambiente agregado exitosamente',
@@ -236,8 +236,8 @@ async function agregarR() {
         } else {
             console.log(error);
         }
-    });
-
+    })
+    cargando.value = false
 }
 
 function editarAmbiente(ambientes) {
@@ -247,19 +247,20 @@ function editarAmbiente(ambientes) {
     codigo.value = ambientes.codigo
     nombre.value = ambientes.nombre
     centro.value = ambientes.centroformacion._id
+    tipo.value = ambientes.tipo
     descripcion.value = ambientes.descripcion
-    //archivo.value = ambientes.archivo
     agregar.value = true;
 }
 
 async function actualizar() {
+    cargando.value = true
     await useAmbiente.actualizarAmbientes(
         id.value,
         codigo.value,
         nombre.value,
         centro.value,
-        descripcion.value,
-        //archivo.value
+        tipo.value,
+        descripcion.value
     ).then(() => {
         $q.notify({
             message: 'Ambiente editado exitosamente',
@@ -287,7 +288,8 @@ async function actualizar() {
         } else {
             console.log(error);
         }
-    });
+    })
+    cargando.value = false
 }
 
 async function editarEstado(ambientes) {
