@@ -119,9 +119,14 @@
   
   
 <script setup>
+ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
 
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
+
+console.log(rol)
 const usePrograma = useProgramasFormacionStore();
 let nombre = ref(usePrograma.programa.denominacionPrograma)
 let programaSeleccionado = usePrograma.programa
