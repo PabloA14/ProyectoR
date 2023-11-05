@@ -3,15 +3,15 @@ import Ambiente from "../models/ambientesFormacion.js"
 const httpAmbiente = {
 
     postambiente: async (req, res) => {
-        const { codigo, nombre, centroformacion, descripcion, archivo } = req.body;
+        const { codigo, nombre, centroformacion, tipo, descripcion } = req.body;
         try {
             const codigoExiste = await Ambiente.findOne({ codigo })
 
             if (codigoExiste) {
-                return res.status(400).json({ mensaje: 'El ambiente ya está registrado' });
+                return res.status(400).json({ msg: 'El ambiente ya está registrado' });
             }
             else {
-                const ambiente = new Ambiente({ codigo, nombre, centroformacion, descripcion, archivo });
+                const ambiente = new Ambiente({ codigo, nombre, centroformacion, tipo, descripcion });
                 await ambiente.save();
                 res.json({ ambiente });
             }
@@ -43,7 +43,7 @@ const httpAmbiente = {
 
     putAmbiente: async (req, res) => {
         const ambienteId = req.params.id;
-        const { codigo, nombre, centroformacion, descripcion, archivo } = req.body;
+        const { codigo, nombre, centroformacion, tipo, descripcion } = req.body;
 
         try {
             const existingAmbiente = await Ambiente.findOne({ codigo: codigo });
@@ -52,7 +52,7 @@ const httpAmbiente = {
             }
 
             const updatedFields = {
-                codigo, nombre, centroformacion, descripcion, archivo
+                codigo, nombre, centroformacion, tipo, descripcion
             };
 
             const updatedAmbiente = await Ambiente.findOneAndUpdate(

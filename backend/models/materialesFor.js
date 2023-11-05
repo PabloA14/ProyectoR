@@ -5,7 +5,6 @@ const httpMaterialesF = new mongoose.Schema({
     nombre: { type: String, required: true },
     descripcion: { type: String, required: true },
     tipo: { type: String, required: true },
-    documentacion: { type: String, required: false },
     estado: { type: Number, default: 1, required: true },
     createdAt: { type: Date, default: Date.now }
 

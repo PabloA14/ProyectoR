@@ -1,7 +1,12 @@
 import Programa from '../models/programasFormacion.js'
-import DesarrolloCurricular from '../models/desarrollo.js'
+//import DesarrolloCurricular from '../models/desarrollo.js'
+import Material from "../models/materialesFor.js"
+import Ambiente from "../models/ambientesFormacion.js"
+
+
 
 import { v2 as cloudinary } from "cloudinary";
+import ambientesFormacion from '../models/ambientesFormacion.js';
 
 const httpprogramas = {
 
@@ -28,7 +33,7 @@ const httpprogramas = {
         })
         const { codigo, denominacionPrograma, nivelFormacion, version, estado,
             RedConocimiento, desarrolloCurricular,
-            instructores, ambienteFormacion, materialesformacion, registrocalificado } = req.body;
+            instructores, ambienteFormacion, materialesformacion } = req.body;
         console.log(codigo, denominacionPrograma, nivelFormacion, version, estado, RedConocimiento, desarrolloCurricular, instructores, ambienteFormacion, materialesformacion);
         console.log("------------------")
         const { disCurricular } = req.files
@@ -65,7 +70,7 @@ const httpprogramas = {
                         }
                         else {
                             await programa.save();
-                            res.status(200).json({ mensaje: "todo salio correcto:", programa, status: "ok" });
+                            res.status(200).json({ msg: "todo salio correcto:", programa, status: "ok" });
                         }
                     } else {
                         res.json(error)
@@ -74,7 +79,7 @@ const httpprogramas = {
             )
         } catch (error) {
             console.error('Error al agregar el cliente:', error);
-            res.status(500).json({ mensaje: 'Hubo un error al agregar el programa de formacion.' });
+            res.status(500).json({ msg: 'Hubo un error al agregar el programa de formacion.' });
         }
     },
 
@@ -167,26 +172,91 @@ const httpprogramas = {
     },
 
     asignarMateriales: async (req, res) => {
-        const programaId = req.params.id;
-        const { materialesformacion } = req.body;
+        const programaId = req.params.id;  // ID del programa al que se le asignará el material
+        const { materialesformacion } = req.body;  // ID del material de formación que se asignará
 
         try {
-            const programa = await Programa.findById(programaId);
 
+            // Verificar si el programa existe
+            const programa = await Programa.findById(programaId);
             if (!programa) {
-                return res.status(404).json({ mensaje: 'Programa no encontrado' });
+                return res.status(404).json({ msg: 'Programa no encontrado' });
             }
 
-            // Asignar materiales al programa
-            programa.materialesformacion = materialesformacion;
+            // Verificar si el material de formación existe
+            const material = await Material.findById(materialesformacion);
+            if (!material) {
+                return res.status(404).json({ msg: 'Material de formación no encontrado' });
+            }
 
-            // Guardar el programa actualizado
+            // Verificar si el material ya está asignado al programa
+            if (programa.materialesformacion.includes(materialesformacion)) {
+                return res.status(400).json({ msg: 'El material ya está asignado al programa' });
+            }
+
+            // Asignar el material de formación al programa
+            programa.materialesformacion.push(materialesformacion);
             await programa.save();
 
-            res.status(200).json({ mensaje: 'Materiales asignados correctamente', programa });
+            res.status(200).json({ msg: 'Material de formación asignado exitosamente al programa', programa });
         } catch (error) {
-            console.error('Error al asignar materiales:', error);
-            res.status(500).json({ mensaje: 'Error interno del servidor' });
+            console.error('Error al asignar material de formación al programa:', error);
+            res.status(500).json({ msg: 'Error interno del servidor' });
+        }
+    },
+
+    asignarAmbientes: async (req, res) => {
+        const programaId = req.params.id;  // ID del programa al que se le asignará el material
+        const { ambienteFormacion } = req.body;  // ID del ambiente que se asignará
+
+        try {
+
+            // Verificar si el programa existe
+            const programa = await Programa.findById(programaId);
+            if (!programa) {
+                return res.status(404).json({ msg: 'Programa no encontrado' });
+            }
+
+            // Verificar si el ambiente de formación existe
+            const ambiente = await Ambiente.findById(ambienteFormacion);
+            if (!ambiente) {
+                return res.status(404).json({ msg: 'Ambiente de formación no encontrado' });
+            }
+
+            // Verificar si el material ya está asignado al programa
+            if (programa.ambienteFormacion.includes(ambienteFormacion)) {
+                return res.status(400).json({ msg: 'El ambiente ya está asignado al programa' });
+            }
+
+            // Asignar el material de formación al programa
+            programa.ambienteFormacion.push(ambienteFormacion);
+            await programa.save();
+
+            res.status(200).json({ msg: 'Ambiente asignado exitosamente al programa', programa });
+        } catch (error) {
+            console.error('Error al asignar material de formación al programa:', error);
+            res.status(500).json({ msg: 'Error interno del servidor' });
+        }
+    },
+
+    getMaterialesPrograma: async (req, res) => {
+        const programaId = req.params.id;
+
+        try {
+            // Buscar el programa por ID
+            const programa = await Programa.findById(programaId).populate("materialesformacion");
+
+            if (!programa) {
+                return res.status(404).json({ msg: 'Programa no encontrado' });
+            }
+
+            // Devolver los materiales asociados al programa
+            const materiales = programa.materialesformacion;
+
+            res.status(200).json({ materiales });
+        } catch (error) {
+            console.error('Error al obtener materiales del programa:', error);
+            res.status(500).json({ msg: 'Error interno del servidor' });
         }
     },
 
@@ -275,7 +345,7 @@ const httpprogramas = {
                 await programa.save();
                 res.json(programa);
             } else {
-                res.status(404).json({ mensaje: `programa con id: ${id} no encontrado` });
+                res.status(404).json({ msg: `programa con id: ${id} no encontrado` });
             }
         } catch (error) {
             console.log(`Error al actualizar el programa: ${error}`);
