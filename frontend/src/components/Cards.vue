@@ -1,13 +1,15 @@
 <template>
-  <q-page class="q-pa-md">
-    <div class="text-h4 text-center q-mb-md">{{ nombre }}</div>
+  <q-page class="q-pa-md q-mt-md  q-mb-md">
+      <div class="text-h4 text-center q-mb-md">
+        <b  style="text-transform:capitalize;">{{nombre}}</b>
+        </div>
 
-    <div class="card-container">
+    <div class="card-container q-mt-xl">
 
       <q-card class="my-card" id="cardP">
-        <router-link to="instructores">
+        <router-link to="instructores" class="cardP">
           <q-card-section>
-            <div class="text-h6">Instructores</div>
+            <div class="text-h6" id="name">Instructores</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -16,23 +18,24 @@
         </router-link>
       </q-card>
 
+      
       <q-card class="my-card" id="cardP">
-        <router-link to="ambientesPrograma">
+        <router-link to="ambientesPrograma" class="cardP">
           <q-card-section>
-            <div class="text-h6">Ambientes de Formación</div>
+            <div class="text-h6" id="name" style="text-decoration: none;">Ambientes de Formación</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
             <q-img id="img" src="../imagenes/formacion.png" />
-
           </q-card-section>
         </router-link>
       </q-card>
 
+
       <q-card class="my-card" id="cardP">
-        <router-link to="materialesPrograma">
+        <router-link to="materialesPrograma" class="cardP">
           <q-card-section>
-            <div class="text-h6">Materiales de Formación</div>
+            <div class="text-h6" id="name">Materiales de Formación</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -41,10 +44,11 @@
         </router-link>
       </q-card>
 
+      
       <q-card class="my-card" id="cardP">
-        <router-link to="proyecto">
+        <router-link to="proyecto" class="cardP">
           <q-card-section>
-            <div class="text-h6">Proyectos</div>
+            <div class="text-h6" id="name">Proyectos</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -53,22 +57,23 @@
         </router-link>
       </q-card>
 
-      <!-- <q-card class="my-card" id="cardP">
-        <router-link to="retroalimentacion">
+      <q-card class="my-card" id="cardP">
+        <router-link to="proyecto" class="cardP">
           <q-card-section>
-            <div class="text-h6">Retroalimentación de Red</div>
+            <div class="text-h6" id="name">Proyectos</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
-            <q-img id="img" src="../imagenes/retroalimentacion.png" />
+            <q-img id="img" src="../imagenes/proyecto.png" />
           </q-card-section>
         </router-link>
-      </q-card> -->
+      </q-card>
+
 
       <q-card class="my-card" id="cardP">
-        <router-link to="investigacion">
+        <router-link to="investigacion" class="cardP">
           <q-card-section>
-            <div id="img" class="text-h6">Investigación</div>
+            <div class="text-h6" id="name">Investigación</div>
           </q-card-section>
 
           <q-card-section class="q-pt-none">
@@ -77,16 +82,26 @@
         </router-link>
       </q-card>
 
+
+
+
+
       <q-card v-if="programaSeleccionado.nivelFormacion.denominacion==='Tecnólogo'" class="my-card" id="cardP">
-        <router-link to="registroCalificado">
+        <router-link to="registroCalificado" class="cardP">
           <q-card-section>
-            <div id="img" class="text-h6">Registro Calificado</div>
+            <div class="text-h6" id="name">Registro Calificado</div>
           </q-card-section>
+
           <q-card-section class="q-pt-none">
             <q-img id="img" src="../imagenes/certificado.png" />
           </q-card-section>
         </router-link>
       </q-card>
+
+
+
+
+
     </div><br>
   </q-page>
 </template>
@@ -108,15 +123,35 @@ console.log(programaSeleccionado);
 </script>
 
 <style scoped>
+.cardP{
+  text-decoration: none;
+  
+  
+  font-size: 15%;
+}
+
+#name{
+  
+  font-weight:800;
+  color: black;
+
+}
+#name:hover{
+  border-bottom: 2px solid;
+
+}
 #cardP {
   margin: 6%;
   background-color: #38a90063;
   text-align: center;
+ 
 }
 
 #cardP:hover {
   background-color: #38a90094;
   cursor: pointer;
+  box-shadow: 0px 0px 20px 5px #38a900d5 ;
+  
 }
 
 .card-container {

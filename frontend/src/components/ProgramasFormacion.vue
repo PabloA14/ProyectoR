@@ -1,7 +1,7 @@
 <template>
   <div>
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md">{{ redConocimiento }}</div>
+      <div class="text-h4 text-center q-mb-md">{{ redConocimiento }}/ {{rol}}</div>
 
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="usePrograma.loading === true">
@@ -206,7 +206,7 @@ const token = dataProgram.informacionToken;
 console.log(token);
 
 const decodedToken = decodeJWT(token);
-console.log(rol)
+
 if (decodedToken) {
   console.log("Token decodificado:", decodedToken);
   redConocimiento.value = decodedToken.redConocimiento.denominacion;

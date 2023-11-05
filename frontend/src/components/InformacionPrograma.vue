@@ -1,8 +1,9 @@
 <template>
     <q-page class="q-pa-md">
-        <div class="text-h4 text-center q-mb-md  q-pa-md">
-            {{ nombre }}
-        </div>
+ 
+        <div class="text-h4 text-center q-mb-md q-mt-md">
+            <b  style="text-transform:capitalize;">{{nombre}}</b>
+            </div>
 
         <div class="bloques">
             <div class="row" id="row">
