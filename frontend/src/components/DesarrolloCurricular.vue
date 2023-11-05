@@ -3,7 +3,7 @@
     <div class="text-h4 text-center q-mb-md">Desarrollo Curricular</div>
     <div>
       <!-- matriz correlacion -->
-      <div class="MatrizCorrelacion">
+      <div class="MatrizCorrelacion  q-mt-xl">
         <div class="row" id="row">
           <q-toolbar-title class="title">
             Matriz de Correlación
@@ -12,16 +12,20 @@
           <q-btn flat round dense>
             <q-btn color="secondary" label="">
               <q-icon name="more_vert" />
-
+              <!-- opciones -->
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
                   <!-- sino tiene archivo le saldra esto  -->
                   <q-item clickable v-if="matriz === undefined">
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones"
+                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor' && matriz != undefined">
+                            download
+                      </span>
+                      <span class="material-symbols-outlined" v-else id="opciones"
                         @click="(agregar = true), agregarMatriz()">
                         add
                       </span>
+
                     </q-item-section>
                   </q-item>
                   <!-- si tiene archivo le saldra esto -->
@@ -36,9 +40,9 @@
                         </a>
                       </q-item-section>
                     </q-item>
-                    <q-item clickable>
+                    <q-item clickable v-if="rol != 'instructor'">
                       <q-item-section>
-                        <span class="material-symbols-outlined" id="opciones">
+                        <span class="material-symbols-outlined" id="opciones" v-if="rol"  >
                           border_color
                         </span>
                       </q-item-section>
@@ -67,7 +71,11 @@
                   <!-- sino tiene archivo le saldra esto  -->
                   <q-item clickable @click="agregar = true" v-if="proyectoFormativo === undefined">
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones"
+                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor'">
+                            download
+                          </span>
+
+                      <span v-else class="material-symbols-outlined" style="" id="opciones"
                         @click="(agregar = true), addProyecto()">
                         add
                       </span>
@@ -119,7 +127,11 @@
                   <!-- sino tiene archivo le saldra esto  -->
                   <q-item clickable @click="agregar = true" v-if="planeacionPedagogica === undefined">
                     <q-item-section>
-                      <span class="material-symbols-outlined" style="" id="opciones"
+                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor'">
+                            download
+                          </span>
+
+                      <span v-else class="material-symbols-outlined" style="" id="opciones"
                         @click="(agregar = true), addplaneacionPedagogica()">
                         add
                       </span>
@@ -156,11 +168,11 @@
       </div>
     </div>
 
-    <div class="text-h4 text-center q-mb-md" style="margin-top: 3%">
+    <div class="text-h4 text-center q-mb-md" style="margin-top: 9%">
       Guías de Aprendizaje
     </div>
     <!-- guias de aprendizaje -->
-    <div class="q-mt-md">
+    <div class="q-mt-xl  ">
       <div class="MatrizCorrelacion">
         <div class="row" id="row">
           <q-toolbar-title class="title"> Fase de Análisis </q-toolbar-title>
@@ -251,6 +263,8 @@
 </template>
 
 <script setup>
+import { useUsuarioStore } from "../stores/Usuarios.js";
+const useUsuario = useUsuarioStore();
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useDesarrolloCurricular } from "../stores/desarrolloC.js";
 import { useRouter } from "vue-router";
@@ -260,6 +274,8 @@ let agregado = ref('')
 let usePrograma = useProgramasFormacionStore();
 let router = useRouter();
 let agregar = ref();
+const rol = useUsuario.rol;
+console.log(rol)
 const useDesarrollo = useDesarrolloCurricular();
 let useInfoPrograma = useProgramasFormacionStore();
 let inf = ref("");

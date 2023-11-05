@@ -15,13 +15,16 @@
             <q-td :props="props">
               <!-- agregar desarrollo C -->
               <div v-if="props.row.desarrolloCurricular === null">
-
-                <q-icon v-if="rol ==='instructor'" class="material-symbols-outlined" style="
+                <!-- simbolo rojo **********************************************************************************************************************+ -->
+                <q-icon v-if="rol ==='instructor'" class="material-symbols-outlined" @click=" desarrolloNulo = true , desarrolloNuloF()" style="
                 font-size: 5vh;
                 background-color: red;
                 color: white;
               " >priority_high</q-icon>
                 
+                
+
+
                 <q-icon  v-else class="material-symbols-outlined" style="
                     font-size: 5vh;
                     background-color: #39a900;
@@ -54,6 +57,25 @@
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
+
+
+          <!-- modal desarrollo nulo -->
+    <!-- <q-dialog  persistent  v-model="desarrolloNulo">
+      <q-card>
+        <q-card-section class="row items-center" style="max-width: 370px;">
+          <div class="row">
+            <div class="col-5">
+              <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
+            </div>
+            <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
+              <span class="q-ml-sm " id="t">El programa seleccionado no tiene Información</span>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+    </q-dialog> -->
+
+    <!-- fin de modall -->
 
           <template v-slot:body-cell-nivel="props">
             <q-td :props="props">
@@ -156,7 +178,6 @@
 </template>
 
 <script setup>
-
 import { ref, computed } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
@@ -165,9 +186,9 @@ import { useQuasar } from "quasar";
 import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
+let desarrolloNulo = ref(false)
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
-
 let disCurricular = ref('')
 const dataProgram = useUserStore();
 let desarrolloC = ref("");
@@ -192,6 +213,19 @@ let loading = ref(false);
 let idDesarrollo = ref('')
 let codDesarrollo = ref('')
 let router = useRouter()
+
+function desarrolloNuloF() {
+  console.log("desarrollo nulo")
+  if (desarrolloNulo.value === true) {
+    $q.notify({
+      message: "El programa seleccionado aún no tiene información",
+      color: "negative",
+      icon: "warning",
+      position: "top",
+      timeout: Math.random() * 3000,
+    });
+  } 
+}
 
 function decodeJWT(token) {
   try {

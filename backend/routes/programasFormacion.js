@@ -11,8 +11,6 @@ router.post("/", [
     check("nivelFormacion", "El nivel de formación es obligatorio").not().isEmpty(),
     check("version", "La version es obligatoria").trim().not().isEmpty(),
     check("disCurricular", "el diseño curricular es obligatorio ").isString(),
-
-
     validarCampos
 ], httpprogramas.postPrograma)
 
