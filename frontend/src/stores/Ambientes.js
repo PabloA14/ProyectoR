@@ -19,10 +19,10 @@ export const useAmbienteStore = defineStore("ambientes", () => {
         }
     };
     const actualizarAmbientes = async (
-        id, codigo, nombre, centroformacion, descripcion, archivo) => {
+        id, codigo, nombre, centroformacion, tipo, descripcion) => {
         try {
             let datos = await axios.put(`${LinkBD}/api/ambientes/${id}`, {
-                codigo, nombre, centroformacion, descripcion, archivo
+                codigo, nombre, centroformacion, tipo, descripcion
             });
             return datos;
         } catch (error) {

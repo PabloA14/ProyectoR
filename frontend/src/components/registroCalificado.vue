@@ -1,6 +1,13 @@
 <template>
     <q-page class="q-pa-md">
 
+        <q-breadcrumbs separator=">">
+            <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+            <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+            <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+            <q-breadcrumbs-el label="Registro Calificado" />
+        </q-breadcrumbs><br>
+
         <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br>
 
         <div class="spinner-container" v-if="useRegistro.loading === true">

@@ -53,7 +53,7 @@
         </router-link>
       </q-card>
 
-      <q-card class="my-card" id="cardP">
+      <!-- <q-card class="my-card" id="cardP">
         <router-link to="retroalimentacion">
           <q-card-section>
             <div class="text-h6">Retroalimentación de Red</div>
@@ -63,7 +63,7 @@
             <q-img id="img" src="../imagenes/retroalimentacion.png" />
           </q-card-section>
         </router-link>
-      </q-card>
+      </q-card> -->
 
       <q-card class="my-card" id="cardP">
         <router-link to="investigacion">

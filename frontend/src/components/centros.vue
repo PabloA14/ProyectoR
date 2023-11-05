@@ -13,10 +13,10 @@
             <q-td :props="props">
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarCentro(props.row)" />
-              <!-- <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
+              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
                 v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
               <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
-                @click="editarEstado(props.row)" /> -->
+                @click="editarEstado(props.row)" />
             </q-td>
           </template>
 
@@ -26,12 +26,12 @@
             </q-td>
           </template>
 
-          <!-- <template v-slot:body-cell-estado="props">
+          <template v-slot:body-cell-estado="props">
             <q-td :props="props">
               <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
-          </template> -->
+          </template>
 
           <template v-slot:top-right>
             <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -136,6 +136,7 @@ const columns = [
   { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
   { name: 'direccion', align: 'center', label: 'Dirección', field: "direccion" },
   { name: 'ciudad', align: 'center', label: 'Ciudad', field: "ciudad" },
+  { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
   { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
 ]
 
@@ -276,7 +277,7 @@ async function actualizar() {
   loading.value = false
 }
 
-/* async function editarEstado(centro) {
+async function editarEstado(centro) {
   console.log("entre a editar estado", centro.estado);
   try {
     if (centro.estado === 1) {
@@ -297,7 +298,7 @@ async function actualizar() {
   } catch (error) {
     console.log(error);
   }
-} */
+} 
 
 
 </script>
