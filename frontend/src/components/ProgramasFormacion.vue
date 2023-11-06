@@ -58,25 +58,6 @@
             </q-td>
           </template>
 
-
-          <!-- modal desarrollo nulo -->
-    <!-- <q-dialog  persistent  v-model="desarrolloNulo">
-      <q-card>
-        <q-card-section class="row items-center" style="max-width: 370px;">
-          <div class="row">
-            <div class="col-5">
-              <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
-            </div>
-            <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
-              <span class="q-ml-sm " id="t">El programa seleccionado no tiene Información</span>
-            </div>
-          </div>
-        </q-card-section>
-      </q-card>
-    </q-dialog> -->
-
-    <!-- fin de modall -->
-
           <template v-slot:body-cell-nivel="props">
             <q-td :props="props">
               <span>{{ props.row.nivelFormacion.denominacion }}</span>

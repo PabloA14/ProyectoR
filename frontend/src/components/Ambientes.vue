@@ -139,7 +139,22 @@ let cargando = ref(false)
 const pagination = ref({
     rowsPerPage: 6
 })
-
+const programa_filtrado = computed(() => {
+  if (buscado_v.value === "") {
+    buscarPrograma();
+    vacio.value = "";
+  } else {
+    usePrograma.buscarProgramaCodigo(buscado_v.value).then((res) => {
+      programasBuscados.value = res;
+      if (programasBuscados.value.length === 0) {
+        vacio.value = `Sin resultados para ${buscado_v.value}`;
+      } else {
+        console.log(programasBuscados.value);
+        return programasBuscados.value;
+      }
+    });
+  }
+});
 const columns = [
     { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },

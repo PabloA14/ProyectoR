@@ -152,6 +152,10 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useUserStore } from "../almacenaje/informacion.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
+import { useRouter } from "vue-router";
+import { useQuasar } from "quasar";
+const $q = useQuasar();
+let router = useRouter()
 let modalAgg = ref();
 let filter = ref();
 let modalEliminar = ref();
@@ -163,6 +167,9 @@ let redConocimiento = ref('')
 let instructores = ref([]);
 const useUsuari = useUsuarioStore();
 const usePrograma= useProgramasFormacionStore();
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado.codigo);
+
 
 const columns = [
   {
@@ -181,13 +188,11 @@ const columns = [
 async function buscar(){
   await usePrograma.informacionPrograma(usePrograma.programa.codigo)
     usuarios.value=usePrograma.programa.instructores
-    console.log('ppppppppppppp');
-    console.log(usuarios.value);
+    //console.log(usuarios.value);
 }
 
 
  async function obtenerInstructores() {
-  console.log("entraste a instructores");
   await useUsuari.buscarUsuarios()
   .then((res)=>{
     instructores.value = res.filter(
@@ -210,6 +215,7 @@ async function agregarInstructor(){
     .then((res)=>{
       console.log(res);
     console.log('todo bien');
+    informacionPrograma(programaSeleccionado.codigo)
   }).catch((error)=>{
     console.log(error);
   })
@@ -228,15 +234,11 @@ function decodeJWT(token) {
     return null;
   }
 }
-
-
 const token = dataProgram.informacionToken;
-console.log(token);
-
 const decodedToken = decodeJWT(token);
 
 if (decodedToken) {
-  console.log("Token decodificado:", decodedToken);
+  //console.log("Token decodificado:", decodedToken);
   redConocimiento.value = decodedToken.redConocimiento.denominacion;
 } else {
   console.log("No se pudo decodificar el token.");
@@ -259,6 +261,25 @@ function Modagregar() {
 
 function Modeliminar() {
   modalEliminar.value = true;
+}
+
+const informacionPrograma = async (x) => {
+  console.log("--------------- ninformacion programa-");
+  console.log(x);
+  const res = await usePrograma.informacionPrograma(x).then((res)=>{
+      router.push("/instructores")
+      console.log(res);
+      usuarios.value =res.data.instructores
+      modalAgg.value =false
+    $q.notify({
+      message: "instructor agregado correctamente al programa de formacion",
+      color: "positive",
+      icon: "warning",
+      position: "bottom",
+      timeout: Math.random() * 3100,
+    });
+  })
+
 }
 </script>
 

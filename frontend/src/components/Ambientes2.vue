@@ -11,21 +11,27 @@
 
         <div class="row">
             <div class="col-6">
-                <q-input style="width: fit-content;min-width: 40%;" v-model="buscarCodigo"
-                    placeholder="Buscar por código..." dense color="secondary" outlined>
-                    <template v-slot:prepend>
+                <q-input @input="programafiltrao"  style="width: fit-content;min-width: 40%;" 
+                v-model="buscarCodigo"
+                placeholder="Buscar por código..." 
+                dense color="secondary" outlined>
+                <template v-slot:prepend>
                         <q-icon name="search" />
-                    </template>
-                </q-input>
+                </template>
+                </q-input >
             </div>
+            
             <div class="col-6 text-right">
-                <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
-                    agregar = true; nuevo()" />
+                <q-btn color="secondary" 
+                icon="add" label="Agregar" 
+                class="q-mb-md" 
+                @click="
+                agregar = true; nuevo()" />
             </div>
+
         </div>
 
-        <span v-if="ambientesPrograma.length === 0">No se han agregado ambientes</span>
-
+        <span v-if="error=true">{{errorD}}</span>
         <div style="overflow-y: auto;height: 60vh;">
             <q-list bordered class="rounded-borders">
                 <q-expansion-item switch-toggle-side v-for="amb in ambientesPrograma" :key="amb"
@@ -84,16 +90,23 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref , computed} from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
 
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado);
+
+let buscarCodigo = ref('')
 let ambienteSeleccionado = ref("")
 let ambiente = ref([])
 let ambientesPrograma = ref([])
 let agregar = ref(false)
 const $q = useQuasar()
+let error =ref(false)
+let errorD =ref()
+let prueba =ref([])
 let loading = ref(false)
 const useAmbiente = useAmbienteStore()
 const usePrograma = useProgramasFormacionStore()
@@ -103,6 +116,31 @@ buscarAmbientes()
 ambientesPrograma.value = usePrograma.programa.ambienteFormacion
 
 let idPrograma = usePrograma.programa._id
+
+const programafiltrao = computed(() => {
+  if (buscarCodigo.value === "" ) {
+    ambientesPrograma.value = usePrograma.programa.ambienteFormacion
+    error.value=false
+    errorD.value =''
+  } else{
+    useAmbiente.buscarCodigo(buscarCodigo.value).then((res) => {
+      if (res ===undefined) {
+        error.value=true
+        errorD.value ='no se encontro ningun resultado'
+        ambientesPrograma.value =''
+    }else {
+        errorD.value =''
+        error.value=false
+        console.log(res);
+        ambientesPrograma.value =res
+    } 
+    });
+
+  }
+    
+}
+)
+
 
 async function buscarAmb() {
     await usePrograma.informacionPrograma(usePrograma.programa.codigo)
@@ -164,5 +202,14 @@ async function agregarN() {
         })
     loading.value = false
 }
+
+const informacionPrograma = async (x) => {
+  console.log("----------------");
+  codigo.value = x.codigo;
+  console.log(codigo.value)
+  await usePrograma.informacionPrograma(codigo.value)
+  router.push("/InformacionPrograma")
+}
+
 
 </script>

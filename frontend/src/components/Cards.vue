@@ -131,15 +131,11 @@ console.log(programaSeleccionado);
 }
 
 #name{
-  
   font-weight:800;
   color: black;
 
 }
-#name:hover{
-  border-bottom: 2px solid;
 
-}
 #cardP {
   margin: 6%;
   background-color: #38a90063;
@@ -154,6 +150,9 @@ console.log(programaSeleccionado);
   
 }
 
+#img:hover {
+  border-top:  2px solid black ;
+}
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));

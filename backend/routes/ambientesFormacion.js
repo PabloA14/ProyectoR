@@ -18,6 +18,7 @@ router.post("/", [
 router.get("/", httpAmbiente.getAmbientes)
 router.get("/:codigo", httpAmbiente.getCodigo)
 
+
 router.put("/:id", [
     check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),

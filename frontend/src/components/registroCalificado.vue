@@ -8,23 +8,28 @@
             <q-breadcrumbs-el label="Registro Calificado" />
         </q-breadcrumbs><br>
 
-        <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br>
+        <!-- <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br> -->
 
         <div class="spinner-container" v-if="useRegistro.loading === true">
             <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
         </div>
 
+
         <div class="row" v-if="useRegistro.loading === false">
-            <div class="col-12" id="card" v-if="mostrarRegistro">
-                <q-card class="my-card" flat bordered id="csrd2">
-                    <div class="text-h5 q-mt-sm q-mb-xs" style="text-align: center">
-                        {{ programaSeleccionado.denominacionPrograma }}</div>
+            <div class="col-3"></div>
+            <div class="col-6">
+                <q-card class="my-card q-mt-xl" flat bordered id="csrd2" v-if="mostrarRegistro">
+                    <div class="text-h5 q-mt-sm q-mb-md" style="text-align: center">
+                      <b style="text-transform: capitalize;">{{ programaSeleccionado.denominacionPrograma }}</b>
+                        </div>
 
                     <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
                     <q-card-section horizontal>
                         <q-card-section class="q-pt-xs" id="section">
-
+                            <div class="row">
+                                <div class="col-5">
+                                    
                             <div class="text-h6 q-mt-sm q-mb-xs">Título que otorga:</div>
                             <div class="text-caption text">
                                 {{ mostrarRegistro.titulo }}
@@ -40,6 +45,9 @@
                                 {{ mostrarRegistro.metodologia }}
                             </div>
 
+                                </div>
+                                <div class="col-2"></div>
+                                <div class="col-5">
                             <div class="text-h6 q-mt-sm q-mb-xs">Numero de créditos:</div>
                             <div class="text-caption text">
                                 {{ mostrarRegistro.creditos }}
@@ -54,6 +62,10 @@
                             <div class="text-caption text">
                                 {{ mostrarRegistro.fecha }}
                             </div>
+                                </div>
+                            </div>
+
+
 
                         </q-card-section>
 
@@ -64,16 +76,19 @@
 
                     <q-card-actions>
                         <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
-                            class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
+                        class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
+
                     </q-card-actions>
                 </q-card>
-            </div>
 
             <div v-else>
                 <q-btn style="margin: auto auto" color="secondary" icon="add" label="Agregar Registro Calificado"
                     class="q-mb-md" @click="
                         agregar = true; nuevo();" />
             </div>
+            </div>
+            <div class="col-3"></div>
+
 
         </div>
 
@@ -338,9 +353,25 @@ console.log(programaSeleccionado);
     margin-top: auto;
     width: 50%;
 }
+.my-card{
+    margin-top: -1%;
+    color: rgb(0, 0, 0);
+    border-radius: 1px;
+}
+.my-card .text-h6{
+    color: rgb(0, 0, 0);
+    font-weight: 800;
+    margin-bottom: 9%;
+    font-size: 3vh;
+    text-align: center;
+    margin-top: 5%;
+    margin-bottom: 10%;
 
-#csrd2 {
-    border-radius: 4%;
+}
+.my-card .text-caption{
+    font-size: 2.5vh;
+    color: rgb(63, 63, 63);
+    text-align: center;
 }
 
 #section {

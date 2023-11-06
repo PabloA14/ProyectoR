@@ -49,12 +49,23 @@ export const useAmbienteStore = defineStore("ambientes", () => {
             console.log(error);
         }
     };
+    const buscarCodigo = async (codigo) => {
+        console.log('buscar coigo desde el ambiente de fomacion');
+        try {
+            let ambiente = await axios.get(`${LinkBD}/api/ambientes/${codigo}`);
+            return ambiente;
+        } catch (error) {
+            console.log(error);
+
+        }
+    };
 
     return {
         buscarAmbientes,
         actualizarAmbientes,
         agregarAmbientes,
         cambiarEstado,
+        buscarCodigo,
         loading
     }
 });
