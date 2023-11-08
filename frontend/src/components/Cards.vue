@@ -1,8 +1,8 @@
 <template>
   <q-page class="q-pa-md q-mt-md  q-mb-md">
-      <div class="text-h4 text-center q-mb-md">
-        <b  style="text-transform:capitalize;">{{nombre}}</b>
-        </div>
+    <div class="text-h4 text-center q-mb-md">
+      <b style="text-transform:capitalize;">{{ nombre }}</b>
+    </div>
 
     <div class="card-container q-mt-xl">
 
@@ -18,7 +18,7 @@
         </router-link>
       </q-card>
 
-      
+
       <q-card class="my-card" id="cardP">
         <router-link to="ambientesPrograma" class="cardP">
           <q-card-section>
@@ -44,18 +44,6 @@
         </router-link>
       </q-card>
 
-      
-      <q-card class="my-card" id="cardP">
-        <router-link to="proyecto" class="cardP">
-          <q-card-section>
-            <div class="text-h6" id="name">Proyectos</div>
-          </q-card-section>
-
-          <q-card-section class="q-pt-none">
-            <q-img id="img" src="../imagenes/proyecto.png" />
-          </q-card-section>
-        </router-link>
-      </q-card>
 
       <q-card class="my-card" id="cardP">
         <router-link to="proyecto" class="cardP">
@@ -68,7 +56,6 @@
           </q-card-section>
         </router-link>
       </q-card>
-
 
       <q-card class="my-card" id="cardP">
         <router-link to="investigacion" class="cardP">
@@ -82,11 +69,7 @@
         </router-link>
       </q-card>
 
-
-
-
-
-      <q-card v-if="programaSeleccionado.nivelFormacion.denominacion==='Tecnólogo'" class="my-card" id="cardP">
+      <q-card v-if="programaSeleccionado.nivelFormacion.denominacion === 'Tecnólogo'" class="my-card" id="cardP">
         <router-link to="registroCalificado" class="cardP">
           <q-card-section>
             <div class="text-h6" id="name">Registro Calificado</div>
@@ -97,9 +80,6 @@
           </q-card-section>
         </router-link>
       </q-card>
-
-
-
 
 
     </div><br>
@@ -123,15 +103,13 @@ console.log(programaSeleccionado);
 </script>
 
 <style scoped>
-.cardP{
+.cardP {
   text-decoration: none;
-  
-  
   font-size: 15%;
 }
 
-#name{
-  font-weight:800;
+#name {
+  font-weight: 800;
   color: black;
 
 }
@@ -140,19 +118,16 @@ console.log(programaSeleccionado);
   margin: 6%;
   background-color: #38a90063;
   text-align: center;
- 
+
 }
 
 #cardP:hover {
   background-color: #38a90094;
   cursor: pointer;
-  box-shadow: 0px 0px 20px 5px #38a900d5 ;
-  
+  box-shadow: 0px 0px 20px 5px #38a900d5;
+
 }
 
-#img:hover {
-  border-top:  2px solid black ;
-}
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
