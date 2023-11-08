@@ -24,7 +24,6 @@
           <q-card-section>
             <div class="text-h6" id="name" style="text-decoration: none;">Ambientes de Formación</div>
           </q-card-section>
-
           <q-card-section class="q-pt-none">
             <q-img id="img" src="../imagenes/formacion.png" />
           </q-card-section>

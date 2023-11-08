@@ -2,36 +2,17 @@
   <div>
     <div class="text-h4 text-center q-mt-md">Instructores</div>
     <div class="spinner-container" v-if="loading">
-      <q-spinner
-        style="margin-left: 10px"
-        color="black"
-        size="7em"
-        :thickness="10"
-      />
+      <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
     </div>
     <q-page v-else class="q-pa-md">
       <div class="q-pa-md" style="width: 100%">
-        <q-table
-          title="Treats"
-          :rows="usuarios"
-          :columns="columns"
-          row-key="cedula"
-        >
+        <q-table title="Treats" :rows="usuarios" :columns="columns" row-key="cedula">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-icon
-                color="green"
-                name="fa-solid fa-check fa-xl"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-              />
-              <q-icon
-                color="red"
-                name="fa-solid fa-trash-alt fa-xl"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                @click="Modeliminar"
-              />
+              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                style="margin-left: 10px; cursor: pointer" />
+              <q-icon color="red" name="fa-solid fa-trash-alt fa-xl" size="20px"
+                style="margin-left: 10px; cursor: pointer" @click="Modeliminar" />
             </q-td>
           </template>
 
@@ -46,26 +27,14 @@
             </template> -->
 
           <template v-slot:top-right>
-            <q-input
-              color="secondary"
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn
-              color="secondary"
-              icon="add"
-              label="Agregar"
-              class="q-mb-md"
-              @click="Modagregar"
-            />
+            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="Modagregar" />
           </template>
         </q-table>
       </div>
@@ -79,27 +48,18 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <div class="q-mb-md">
-              <!-- <q-select
-              multiple
-              use-chips
-                label="Instructor"
-                color="secondary"
-                v-model="instructor"
-                :options="instructores"
-                option-label="nombre"
-                option-value="nombre"
-              /> -->
+
               <select name="" id="" v-model="instructor">
-                <option :value="a._id" v-for="a in instructores" :key="a">{{  a.nombre}}</option>
+                <span v-if="instructores === '' "> No hay instructores para agregar por el momento</span>
+
+                <option :value="a._id" v-for="a in instructores" :key="a" v-else>
+                  {{ a.nombre }}
+                </option>
               </select>
             </div>
           </div>
@@ -122,11 +82,7 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="text-h5 text-center q-mt-md">
@@ -165,8 +121,9 @@ const dataProgram = useUserStore();
 let usuarios = ref([]);
 let redConocimiento = ref('')
 let instructores = ref([]);
+let arrayInstructores =[]
 const useUsuari = useUsuarioStore();
-const usePrograma= useProgramasFormacionStore();
+const usePrograma = useProgramasFormacionStore();
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado.codigo);
 
@@ -185,44 +142,60 @@ const columns = [
   // { name: "opciones", label: "Opciones", field: "opciones" },
 ];
 
-async function buscar(){
+async function buscar() {
   await usePrograma.informacionPrograma(usePrograma.programa.codigo)
-    usuarios.value=usePrograma.programa.instructores
-    //console.log(usuarios.value);
+  usuarios.value = usePrograma.programa.instructores
+  //console.log(usuarios.value);
 }
 
 
- async function obtenerInstructores() {
+// async function obtenerInstructores() {
+//   await useUsuari.buscarUsuarios()
+//     .then((res) => {
+//       instructores.value = res.filter(
+//         (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
+//       );
+//       //instructor.value.push(prueba)
+//       console.log("sadasdadasd", instructores.value);
+//     })
+//   // Rellena las opcions del q-select con los instructores
+//   instructor.value = null; // Reinicia el valor seleccionado
+// }
+
+
+async function obtenerInstructores() {
   await useUsuari.buscarUsuarios()
-  .then((res)=>{
-    instructores.value = res.filter(
-    (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
-  );
-  //instructor.value.push(prueba)
-  console.log("sadasdadasd", instructores.value);
-  })
-  
-  
-  // Rellena las opcions del q-select con los instructores
+    .then((res) => {
+      const nuevosInstructores = res.filter(
+        (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
+      );
+
+      nuevosInstructores.forEach((nuevoInstructor) => {
+        const nuevoInstructorId = nuevoInstructor._id;
+        // Comprueba si el ID del nuevo instructor no está en la lista existente
+        if (!arrayInstructores.includes(nuevoInstructorId)) {
+          instructores.value.push(nuevoInstructor);
+          arrayInstructores.push(nuevoInstructorId);
+        }
+      });
+
+      console.log("Nuevos instructores:", nuevosInstructores);
+    })
+
+  // Rellena las opciones del q-select con los instructores
   instructor.value = null; // Reinicia el valor seleccionado
 }
 
-async function agregarInstructor(){
-
-  await usePrograma.agregarInstructores(
-    usePrograma.programa._id,
-    instructor.value)
-    .then((res)=>{
+async function agregarInstructor() {
+  console.log('agregar instructor');
+  await usePrograma.agregarInstructores( usePrograma.programa._id, instructor.value)
+    .then((res) => {
       console.log(res);
-    console.log('todo bien');
-    informacionPrograma(programaSeleccionado.codigo)
-  }).catch((error)=>{
-    console.log(error);
-  })
-}
-
-function eliminarInstructor(instructor) {
-  // lógica para eliminar al instructor
+      console.log('todo bien');
+      informacionPrograma(programaSeleccionado.codigo)
+    }).catch((error) => {
+      console.log(error);
+    })
 }
 
 function decodeJWT(token) {
@@ -266,11 +239,11 @@ function Modeliminar() {
 const informacionPrograma = async (x) => {
   console.log("--------------- ninformacion programa-");
   console.log(x);
-  const res = await usePrograma.informacionPrograma(x).then((res)=>{
-      router.push("/instructores")
-      console.log(res);
-      usuarios.value =res.data.instructores
-      modalAgg.value =false
+  const res = await usePrograma.informacionPrograma(x).then((res) => {
+    router.push("/instructores")
+    console.log(res);
+    usuarios.value = res.data.instructores
+    modalAgg.value = false
     $q.notify({
       message: "instructor agregado correctamente al programa de formacion",
       color: "positive",
@@ -278,9 +251,36 @@ const informacionPrograma = async (x) => {
       position: "bottom",
       timeout: Math.random() * 3100,
     });
+    arrayInstructores.push(instructor.value)
+    let objetoAEliminar = instructor.value;
+
+instructores.value.forEach((element, index) => {
+  if (element._id === objetoAEliminar) {
+    console.log('Elemento encontrado y eliminado:', element);
+    instructores.value.splice(index, 1); 
+  }
+
+  arrayIns()
+});
   })
+}
+arrayIns()
+function arrayIns() {
+  
+for (let i = 0; i < arrayInstructores.length; i++) {
+console.log(arrayInstructores);
+if (arrayInstructores[i] ==='') {
+  console.log('el array esa vacio');
+  break
+}else{
+  console.log('else');
+  console.log(arrayInstructores[i]);
+}
 
 }
+  
+}
+
 </script>
 
 <style scoped>
