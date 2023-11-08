@@ -50,9 +50,9 @@ import Usuario from "../models/usuarios.js";
 //     }
 // }
 
-const generarJWT = (uid, rol,redConocimiento) => {
+const generarJWT = (uid, rol, redConocimiento) => {
     return new Promise((resolve, reject) => {
-        const payload = { uid, rol,redConocimiento };  // Incluye el id y el rol en la carga útil
+        const payload = { uid, rol, redConocimiento };  // Incluye el id y el rol en la carga útil
         jwt.sign(payload, process.env.CLAVE_SECRETA, {
             expiresIn: "4h" // 4 horas de expiración (ajusta según tus necesidades)
         }, (err, token) => {
@@ -86,7 +86,7 @@ const validarJWT = async (req, res, next) => {
         if (usuario.estado === 0) {
             return res.status(401).json({ msg: "Token no válido" });
         }
-        req.holder = { usuario, rol,redConocimiento };
+        req.holder = { usuario, rol, redConocimiento };
         next();
     } catch (error) {
         res.status(401).json({ msg: "Token no válido" });

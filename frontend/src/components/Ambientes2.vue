@@ -95,9 +95,6 @@ import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
 
-let programaSeleccionado = usePrograma.programa
-console.log(programaSeleccionado);
-
 let buscarCodigo = ref('')
 let ambienteSeleccionado = ref("")
 let ambiente = ref([])
@@ -110,6 +107,9 @@ let prueba =ref([])
 let loading = ref(false)
 const useAmbiente = useAmbienteStore()
 const usePrograma = useProgramasFormacionStore()
+
+let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado);
 
 buscarAmbientes()
 
@@ -203,13 +203,13 @@ async function agregarN() {
     loading.value = false
 }
 
-const informacionPrograma = async (x) => {
+/* const informacionPrograma = async (x) => {
   console.log("----------------");
   codigo.value = x.codigo;
   console.log(codigo.value)
   await usePrograma.informacionPrograma(codigo.value)
   router.push("/InformacionPrograma")
-}
+} */
 
 
 </script>

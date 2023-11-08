@@ -23,11 +23,32 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
 
   const actualizarUsuario = async (
-    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional) => {
+    id, cedula, nombre, apellidos, telefono, correo, redConocimiento, hojaDeVida, rol, perfilProfesional
+  ) => {
     try {
-      let datos = await axios.put(`${LinkBD}/api/usuario/${id}`, {
-        cedula, nombre, apellidos, telefono, correo, redConocimiento, rol, perfilProfesional
+      const formData = new FormData();
+
+      formData.append('cedula', cedula);
+      formData.append('nombre', nombre);
+      formData.append('apellidos', apellidos);
+      formData.append('telefono', telefono);
+      formData.append('correo', correo);
+      formData.append('redConocimiento', redConocimiento);
+      formData.append('rol', rol);
+      formData.append('perfilProfesional', perfilProfesional);
+
+      // Agregar la hoja de vida al FormData si está presente
+      if (hojaDeVida) {
+        formData.append('hojaDeVida', hojaDeVida);
+      }
+
+      // Realizar la solicitud PUT usando axios y FormData
+      const datos = await axios.put(`${LinkBD}/api/usuario/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
+
       return datos;
     } catch (error) {
       console.log(error);

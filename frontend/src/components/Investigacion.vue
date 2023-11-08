@@ -239,8 +239,9 @@ async function agregarN() {
             errores.value = error.response.data.errors[0].msg
             validar()
 
-        } /* else if (error.response && error.response.data && archivo.value === '') {
+        } else if (error.response && error.response.msg && !archivo.value) {
             errores.value = error.response.data.errors[0].msg
+            validar()
             $q.notify({
                 message: 'falta archivo',
                 color: 'negative',
@@ -248,8 +249,7 @@ async function agregarN() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
-
-        } */ else {
+        } else {
             console.log(error);
         }
     })
@@ -274,7 +274,8 @@ async function actualizar() {
         codigo.value,
         nombre.value,
         descripcion.value,
-        fecha.value
+        fecha.value,
+        archivo.value
     ).then(() => {
         agregar.value = false
         $q.notify({
