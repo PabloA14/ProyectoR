@@ -53,12 +53,24 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <div class="q-mb-md">
+        
 
               <select name="" id="" v-model="instructor">
-                <span v-if="instructores === '' "> No hay instructores para agregar por el momento</span>
 
-                <option :value="a._id" v-for="a in instructores" :key="a" v-else>
-                  {{ a.nombre }}
+                <option  :value="a._id" v-for="a in instructores" :key="a"  >
+                  <small> 
+                    <b>
+                      {{a.nombre}} 
+                      {{a.apellidos}} 
+
+                    </b>
+
+                  </small>
+   
+                </option>
+
+                <option v-if="instructores.length === 0" value="" disabled>
+                  No hay instructores dispnibles en este momento
                 </option>
               </select>
             </div>
@@ -125,7 +137,10 @@ let arrayInstructores =[]
 const useUsuari = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
 let programaSeleccionado = usePrograma.programa
-console.log(programaSeleccionado.codigo);
+console.log(programaSeleccionado);
+let instructoresBd = usePrograma.instructores
+
+
 
 
 const columns = [
@@ -136,9 +151,11 @@ const columns = [
     field: "nombre",
     sortable: true,
   },
-  { name: "estado", label: "Estado ", field: "estado", sortable: true },
+  { name: "Apellidos", label: "Apellidos ", field: "apellidos", sortable: true },
   { name: "correo", label: "Email", field: "correo" },
   { name: "telefono", label: "Telefono", field: "telefono" },
+  { name: "estado", label: "Estado ", field: "estado", sortable: true },
+
   // { name: "opciones", label: "Opciones", field: "opciones" },
 ];
 
@@ -149,42 +166,32 @@ async function buscar() {
 }
 
 
-// async function obtenerInstructores() {
-//   await useUsuari.buscarUsuarios()
-//     .then((res) => {
-//       instructores.value = res.filter(
-//         (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
-//       );
-//       //instructor.value.push(prueba)
-//       console.log("sadasdadasd", instructores.value);
-//     })
-//   // Rellena las opcions del q-select con los instructores
-//   instructor.value = null; // Reinicia el valor seleccionado
-// }
 
+ async function obtenerInstructores() {
+  await useUsuari.buscarUsuarios().then((res) => {
+    const nuevosInstructores = res.filter(
+      (user) =>
+        user.rol.denominacion === "instructor" &&
+        user.redConocimiento._id === decodedToken.redConocimiento._id &&
+        user.estado === 1
+    );
 
-async function obtenerInstructores() {
-  await useUsuari.buscarUsuarios()
-    .then((res) => {
-      const nuevosInstructores = res.filter(
-        (user) => user.rol.denominacion === "instructor" && user.redConocimiento._id === decodedToken.redConocimiento._id && user.estado === 1
-      );
+    nuevosInstructores.forEach((nuevoInstructor) => {
+      // Comprueba si el nuevo instructor está en instructoresBd
+      const encontrado = instructoresBd.find((i) => i._id === nuevoInstructor._id);
+      if (encontrado) {
+        encontrado.split = true;
+      } else {
+        instructores.value.push(nuevoInstructor);
+      }
+    });
 
-      nuevosInstructores.forEach((nuevoInstructor) => {
-        const nuevoInstructorId = nuevoInstructor._id;
-        // Comprueba si el ID del nuevo instructor no está en la lista existente
-        if (!arrayInstructores.includes(nuevoInstructorId)) {
-          instructores.value.push(nuevoInstructor);
-          arrayInstructores.push(nuevoInstructorId);
-        }
-      });
-
-      console.log("Nuevos instructores:", nuevosInstructores);
-    })
-
-  // Rellena las opciones del q-select con los instructores
-  instructor.value = null; // Reinicia el valor seleccionado
+    console.log("Nuevos instructores:", instructores.value);
+  });
+  instructor.value = null; 
 }
+
+
 
 async function agregarInstructor() {
   console.log('agregar instructor');
@@ -193,6 +200,8 @@ async function agregarInstructor() {
       console.log(res);
       console.log('todo bien');
       informacionPrograma(programaSeleccionado.codigo)
+      console.log(instructores.value);
+
     }).catch((error) => {
       console.log(error);
     })
@@ -224,9 +233,7 @@ async function cargarUsuarios() {
   loading.value = false;
 }
 cargarUsuarios();
-// onMounted(() => {
-//   cargarUsuarios();
-// });
+
 
 function Modagregar() {
   modalAgg.value = true;
@@ -260,26 +267,10 @@ instructores.value.forEach((element, index) => {
     instructores.value.splice(index, 1); 
   }
 
-  arrayIns()
 });
   })
 }
-arrayIns()
-function arrayIns() {
-  
-for (let i = 0; i < arrayInstructores.length; i++) {
-console.log(arrayInstructores);
-if (arrayInstructores[i] ==='') {
-  console.log('el array esa vacio');
-  break
-}else{
-  console.log('else');
-  console.log(arrayInstructores[i]);
-}
 
-}
-  
-}
 
 </script>
 

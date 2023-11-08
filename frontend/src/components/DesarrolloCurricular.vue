@@ -15,19 +15,47 @@
               <!-- opciones -->
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <!-- sino tiene archivo le saldra esto  -->
-                  <q-item clickable v-if="matriz === undefined">
+                  <!-- sino tiene ol de instructor le saldra esto  -->
+                  <q-item clickable v-if="rol=== 'instructor' "  >
                     <q-item-section>
-                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor' && matriz != undefined">
-                            download
-                      </span>
-                      <span class="material-symbols-outlined" v-else id="opciones"
-                        @click="(agregar = true), agregarMatriz()">
-                        add
-                      </span>
+                      
+                    <span v-if="matriz != undefined" class="material-symbols-outlined"  style="
+                    font-size: 5vh;
+                    background-color: red;
+                    color: white;
+                  " >download</span>
+                  
+                      <span v-if="matriz === undefined" class="material-symbols-outlined" @click="matrizNull()" style="
+                      font-size: 5vh;
+                      background-color: red;
+                      color: white;
+                      height: 100%;
+                      border-radius: 3px;
+                      " >priority_high</span>
+
 
                     </q-item-section>
                   </q-item>
+                  <!-- si tiene otro rol  le saldra esto -->
+                  <q-item clickable v-if="rol != 'instructor' "  >
+                    <q-item-section>
+                      <span v-if="matriz === undefined" class="material-symbols-outlined" @click="agregarMatriz()" style="
+                      font-size: 5vh;
+                      background-color: green;
+                      color: white;
+                      height: 100%;
+                      border-radius: 3px;
+                      " >add</span>
+
+                    <span v-else class="material-symbols-outlined" @click=" desarrolloNulo = true , desarrolloNuloF()" style="
+                    font-size: 5vh;
+                    background-color: red;
+                    color: white;
+                  " >download</span>
+
+                    </q-item-section>
+                  </q-item>
+ 
                   <!-- si tiene archivo le saldra esto -->
                   <div v-else>
                     <q-item clickable>
@@ -264,12 +292,12 @@
 
 <script setup>
 import { useUsuarioStore } from "../stores/Usuarios.js";
-const useUsuario = useUsuarioStore();
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useDesarrolloCurricular } from "../stores/desarrolloC.js";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 import { ref } from "vue";
+const useUsuario = useUsuarioStore();
 let agregado = ref('')
 let usePrograma = useProgramasFormacionStore();
 let router = useRouter();
@@ -282,6 +310,7 @@ let inf = ref("");
 const $q = useQuasar();
 let archivo = ref("");
 let matriz = ref(useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion);
+console.log(matriz.value);
 let proyectoFormativo = ref(useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo);
 let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica);
 let _id = ref(useInfoPrograma.programa.desarrolloCurricular._id);
@@ -395,6 +424,18 @@ async function informacionPrograma(x) {
     .catch((error) => {
       console.log(error);
     });
+}
+
+
+function matrizNull() {
+  $q.notify({
+        message: ` El programa aun no tiene matrizz de correlacion `,
+        color: "red",
+        icon: "check",
+        position: "bottom",
+        timeout: Math.random() * 3000,
+      });
+  
 }
 </script>
 

@@ -15,13 +15,7 @@
                     <span class="material-symbols-outlined" id="ir">more_vert</span>
                     <q-menu max-height="130px">
                         <q-list style="min-width: 100px">
-                            <!--                             <q-item clickable @click="agregar = true">
-                                <q-item-section>
-                                    <span class="material-symbols-outlined" style="" id="opciones">
-                                        add
-                                    </span>
-                                </q-item-section>
-                            </q-item> -->
+
                             <q-item clickable>
                                 <q-item-section>
                                     <a :href="programaSeleccionado.disCurricular" style="text-align: center;"
@@ -33,7 +27,7 @@
 
                                 </q-item-section>
                             </q-item>
-                            <q-item clickable>
+                            <q-item clickable v-if="useUsuario.rol != 'instructor'">
                                 <q-item-section>
                                     <span class="material-symbols-outlined" style="" id="opciones">
                                         edit
@@ -128,9 +122,11 @@ const rol = useUsuario.rol;
 
 console.log(rol)
 const usePrograma = useProgramasFormacionStore();
+let instructor = usePrograma.instructores
 let nombre = ref(usePrograma.programa.denominacionPrograma)
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
+console.log(instructor);
 
 
 let agregar = ref(false)

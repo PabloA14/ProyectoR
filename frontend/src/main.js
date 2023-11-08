@@ -30,10 +30,15 @@ app.use(Quasar, {
         Notify
     }
 })
+pinia.use(createPersistedState(createPersistedState({
+    paths: [
+        'instructores'
+  ],
+  }),
+  { storage: window.localStorage }));
 
-pinia.use(createPersistedState({
-    storage:sessionStorage
-}))
+
+
 
 app.use(pinia)
 app.use(router)
