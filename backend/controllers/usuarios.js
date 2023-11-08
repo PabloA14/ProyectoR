@@ -4,6 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcrypt";
 
 const httpUsuario = {
+
   posUsuario: async (req, res) => {
     cloudinary.config({
       cloud_name: process.env.CLOUDINARY_NAME,
@@ -11,6 +12,7 @@ const httpUsuario = {
       api_secret: process.env.CLOUDINARY_SECRET,
       secure: true,
     });
+
     const {
       cedula,
       nombre,
@@ -22,48 +24,56 @@ const httpUsuario = {
       rol,
       perfilProfesional,
     } = req.body;
-    const { hojaDeVida } = req.files;
 
     try {
-      if (!hojaDeVida || !hojaDeVida.tempFilePath) {
-        return res.status(400).json({ msg: "No hay archivos en la peticion" });
-      }
-      const extencion = hojaDeVida.name.split(".").pop();
+      let hojaDeVidaUrl = null;
 
-      const { tempFilePath } = hojaDeVida;
-      console.log(tempFilePath);
-      cloudinary.uploader.upload(
-        tempFilePath,
-        { width: 250, crop: "limit", resource_type: "raw", format: extencion },
-        async function (error, result) {
-          if (result) {
-            const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
-            const usuario = new Usuario({
-              cedula,
-              nombre,
-              apellidos,
-              telefono,
-              correo,
-              clave: hashedPassword,
-              redConocimiento,
-              hojaDeVida: result.url,
-              rol,
-              perfilProfesional,
-            });
-            const buscar = await Usuario.findOne({ cedula: cedula });
-            if (buscar) {
-              return res
-                .status(400)
-                .json({ msg: "La cédula ya se encuentra registrada", buscar });
-            } else {
-              await usuario.save();
-              res.status(200).json({ msg: "Registro exitoso", usuario });
-            }
-          } else {
-            res.json(error);
-          }
+      // Verificar si se proporciona la hoja de vida
+      if (req.files && req.files.hojaDeVida) {
+        const { hojaDeVida } = req.files;
+        if (!hojaDeVida.tempFilePath) {
+          return res.status(400).json({ msg: "No hay archivos en la petición" });
         }
-      );
+
+        const extension = hojaDeVida.name.split(".").pop();
+
+        const { tempFilePath } = hojaDeVida;
+        console.log(tempFilePath);
+
+        // Subir la hoja de vida a Cloudinary
+        const result = await cloudinary.uploader.upload(tempFilePath, {
+          width: 250,
+          crop: "limit",
+          resource_type: "raw",
+          format: extension,
+        });
+
+        hojaDeVidaUrl = result.url;
+      }
+
+      const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
+      const usuario = new Usuario({
+        cedula,
+        nombre,
+        apellidos,
+        telefono,
+        correo,
+        clave: hashedPassword,
+        redConocimiento,
+        hojaDeVida: hojaDeVidaUrl, // Usar la URL de Cloudinary si está disponible
+        rol,
+        perfilProfesional,
+      });
+
+      const buscar = await Usuario.findOne({ cedula: cedula });
+      if (buscar) {
+        return res
+          .status(400)
+          .json({ msg: "La cédula ya se encuentra registrada", buscar });
+      } else {
+        await usuario.save();
+        res.status(200).json({ msg: "Registro exitoso", usuario });
+      }
     } catch (error) {
       console.error(error);
       res.status(500).json({ msg: "Error en el servidor" });
@@ -130,6 +140,13 @@ const httpUsuario = {
   },
 
   putUsuario: async (req, res) => {
+    cloudinary.config({
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_KEY,
+      api_secret: process.env.CLOUDINARY_SECRET,
+      secure: true
+    });
+
     const usuarioId = req.params.id;
     const {
       cedula,
@@ -150,6 +167,39 @@ const httpUsuario = {
           .status(400)
           .json({ msg: "La cédula ya está registrada para otro usuario" });
       }
+
+      let hojaDeVidaUrl = null;
+
+      // Verificar si se proporciona la hoja de vida
+      if (req.files && req.files.hojaDeVida) {
+        const { hojaDeVida } = req.files;
+        if (!hojaDeVida.tempFilePath) {
+          return res.status(400).json({ msg: "No hay archivos en la petición" });
+        }
+
+        const extension = hojaDeVida.name.split(".").pop();
+
+        const { tempFilePath } = hojaDeVida;
+
+        // Subir la hoja de vida a Cloudinary
+        const result = await cloudinary.uploader.upload(tempFilePath, {
+          width: 250,
+          crop: "limit",
+          resource_type: "raw",
+          format: extension,
+        });
+
+        const buscar = await Usuario.findById(usuarioId);
+        if (buscar.hojaDeVida) {
+          const nombreTemp = buscar.hojaDeVida.split("/");
+          const nombrehojaDeVida = nombreTemp[nombreTemp.length - 1];
+          const [public_id] = nombrehojaDeVida.split(".");
+          await cloudinary.uploader.destroy(public_id);
+        }
+
+        hojaDeVidaUrl = result.url;
+      }
+
       const updatedFields = {
         cedula,
         nombre,
@@ -157,7 +207,7 @@ const httpUsuario = {
         telefono,
         correo,
         redConocimiento,
-        hojaDeVida,
+        hojaDeVida: hojaDeVidaUrl || hojaDeVida, // Usar la URL de Cloudinary si está disponible, de lo contrario, usar el valor proporcionado en el body
         rol,
         perfilProfesional,
       };
@@ -179,6 +229,7 @@ const httpUsuario = {
       res.status(500).json({ msg: "Error en el servidor" });
     }
   },
+
   patchUsuario: async (req, res) => {
     const id = req.params.id;
     const { estado } = req.body;
@@ -197,7 +248,7 @@ const httpUsuario = {
       console.log(`Error al actualizar el usuario: ${error}`);
       res.status(500).json({ error: "Error interno del servidor" });
     }
-  },
+  }
 
   /* cargarArchivoCloudHoja: async (req, res, next) => {
     cloudinary.config({

@@ -407,7 +407,7 @@ async function actualizar() {
     telefono.value,
     correo.value,
     red.value,
-    //cv.value,
+    cv.value,
     rol.value,
     perfilProfesional.value
 

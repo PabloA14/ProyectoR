@@ -4,53 +4,62 @@ import { v2 as cloudinary } from 'cloudinary';
 
 const httpInvestigaciones = {
 
-    postinveestigacion: async (req, res) => {
-
+    postInvestigacion: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
             api_key: process.env.CLOUDINARY_KEY,
             api_secret: process.env.CLOUDINARY_SECRET,
             secure: true,
         });
-
+    
         const { codigo, denominacion, descripcion, fecha, idPrograma } = req.body;
-        const { documentos } = req.files
-
+        let documentoUrl = null;
+    
         try {
-            if (!documentos || !documentos.tempFilePath) {
-                return res.status(400).json({ msg: "No hay archivos en la petición" });
-            }
-            const extension = documentos.name.split(".").pop();
-
-            const { tempFilePath } = documentos;
-
-            cloudinary.uploader.upload(
-                tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw", format: extension },
-
-                async function (error, result) {
-                    if (result) {
-                        const investigacion = new Investigacion({ codigo, denominacion, descripcion, fecha, documentos: result.url, idPrograma });
-
-                        const cod = await Investigacion.findOne({ codigo: codigo });
-                        if (cod) {
-                            return res.status(400).json({ msg: 'La investigación ya se encuentra registrada', cod, denominacion });
-                        } else {
-                            await investigacion.save();
-                            res.status(200).json({ msg: "Registro exitoso", investigacion });
-                        }
-                    } else {
-                        res.json(error);
-                    }
+            // Verificar si se proporciona un documento
+            if (req.files && req.files.documentos) {
+                const { documentos } = req.files;
+    
+                if (!documentos.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
                 }
-            )
-
+    
+                const extension = documentos.name.split(".").pop();
+                const { tempFilePath } = documentos;
+    
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+    
+                documentoUrl = result.url;
+            }
+    
+            const investigacion = new Investigacion({
+                codigo,
+                denominacion,
+                descripcion,
+                fecha,
+                documentos: documentoUrl,
+                idPrograma
+            });
+    
+            const cod = await Investigacion.findOne({ codigo: codigo });
+            if (cod) {
+                return res.status(400).json({ msg: 'La investigación ya se encuentra registrada', cod, denominacion });
+            } else {
+                await investigacion.save();
+                res.status(200).json({ msg: "Registro exitoso", investigacion });
+            }
         } catch (error) {
             console.error('Error al agregar la investigación:', error);
             res.status(500).json({ mensaje: 'Error en el servidor' });
         }
     },
-
+    
     getinvestigaciones: async (req, res) => {
         const investigacion = await Investigacion.find().populate("idPrograma")
         res.json({ investigacion })
@@ -73,13 +82,44 @@ const httpInvestigaciones = {
     },
 
     putninvestigacion: async (req, res) => {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
         const investigacionId = req.params.id;
-        const { codigo, denominacion, descripcion, fecha, documentos } = req.body;
+        const { codigo, denominacion, descripcion, fecha } = req.body;
 
         try {
             const updatedFields = {
-                codigo, denominacion, descripcion, fecha, documentos
+                codigo, denominacion, descripcion, fecha
             };
+
+            // Verificar si se proporciona un nuevo documentos
+            if (req.files && req.files.documentos) {
+                const { documentos } = req.files;
+
+                if (!documentos.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documentos.name.split(".").pop();
+                const { tempFilePath } = documentos;
+
+                // Subir el nuevo documentos a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documentos a los campos actualizados
+                updatedFields.documentos = result.url;
+            }
 
             const existingInves = await Investigacion.findOne({ codigo: codigo });
             if (existingInves && existingInves._id.toString() !== investigacionId) {
@@ -99,109 +139,8 @@ const httpInvestigaciones = {
             console.error(error);
             res.status(500).json({ msg: 'Error al actualizar la información' });
         }
-    },
+    }
 
-    /*  cargarArchivo: async (req, res) => {
-         const { id } = req.params;
-         try {
-             let nombre
-             await subirArchivo(req.files, undefined)
-                 .then(value => nombre = value)
-                 .catch((err) => console.log(err));
- 
-             //persona a la cual pertenece la foto
-             let holder = await Investigacion.findById(id);
-             //si el Holder ya tiene foto la borramos
-             if (holder.documentos) {
-                 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-                 const pathImage = path.join(__dirname, '../uploads/', holder.documentos);
- 
-                 if (fs.existsSync(pathImage)) {
-                     fs.unlinkSync(pathImage)
-                 }
- 
-             }
- 
-             holder = await Investigacion.findByIdAndUpdate(id, { documentos: nombre })
-             //responder
-             res.json({ nombre });
-         } catch (error) {
-             res.status(400).json({ error, 'general': 'Controlador' })
-         }
- 
-     },
-     mostrarArchivo: async (req, res) => {
-         const { id } = req.params
- 
-         try {
-             let holder = await Investigacion.findById(id)
-             if (holder.documentos) {
-                 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
-                 const pathImage = path.join(__dirname, '../uploads/', holder.documentos);
-                 if (fs.existsSync(pathImage)) {
-                     return res.sendFile(pathImage)
-                 }
-             }
-             res.status(400).json({ msg: 'Falta Archivo' })
-         } catch (error) {
-             res.status(400).json({ error })
-         }
-     },
-     cargarArchivoCloud: async (req, res) => {
-         cloudinary.config({
-             cloud_name: process.env.CLOUDINARY_NAME,
-             api_key: process.env.CLOUDINARY_KEY,
-             api_secret: process.env.CLOUDINARY_SECRET,
-             secure: true
-         });
- 
-         const { id } = req.params;
-         try {
-             //subir archivo
-             if (!req.files || Object.keys(req.files).length === 0 || !req.files.documentos) {
-                 return res.status(400).json({ msg: "No hay archivos en la peticion" })
-             }
- 
-             const { tempFilePath } = req.files.documentos
-             const extension = tempFilePath.name.split('.').pop()
- 
-             cloudinary.uploader.upload(tempFilePath,
-                 { width: 250, crop: "limit", resource_type: "raw", format: "xlsx" },
-                 async function (error, result) {
-                     if (result) {
-                         let holder = await Investigacion.findById(id);
-                         if (holder.documentos) {
-                             const nombreTemp = holder.documentos.split('/')
-                             const nombreArchivo = nombreTemp[nombreTemp.length - 1]
-                             const [public_id] = nombreArchivo.split('.')
-                             cloudinary.uploader.destroy(public_id)
-                         }
-                         holder = await Investigacion.findByIdAndUpdate(id, { documentos: result.url })
-                         //responder
-                         res.json({ url: result.url });
-                     } else {
-                         res.json(error)
-                     }
- 
-                 })
-         } catch (error) {
-             res.status(400).json({ error, 'general': 'Controlador' })
-         }
-     },
-     mostrarArchivoCloud: async (req, res) => {
-         const { id } = req.params
- 
-         try {
-             let holder = await Investigacion.findById(id)
-             if (holder.documentos) {
-                 return res.json({ url: holder.documentos })
-             }
-             res.status(400).json({ msg: 'Falta Archivo' })
-         } catch (error) {
-             res.status(400).json({ error })
-         }
-     }
-  */
 
 }
 
