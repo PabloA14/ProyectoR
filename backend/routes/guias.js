@@ -4,8 +4,7 @@ const routes = Router()
 
 routes.post("/", httpGuias.postGuia)
 routes.get("/", httpGuias.getGuias)
-routes.get("/:Codigo", httpGuias.getCodigoGuia)
+routes.get("/:id", httpGuias.getGuiaPorId)
 routes.put("/:id", httpGuias.putGuias)
-
 
 export default routes

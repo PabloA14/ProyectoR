@@ -7,6 +7,7 @@ import ciudades from "./routes/ciudades.js"
 import ambientesFormacion from "./routes/ambientesFormacion.js"
 import desarrolloCurricular from "./routes/desarrolloCurricular.js"
 import guias from "./routes/guias.js"
+import materialesApoyo from "./routes/materialApoyo.js" 
 import instrumentos from "./routes/instrumentos.js"
 import centrosFormacion from "./routes/centrosFormacion.js"
 import materialesFor from "./routes/materialesFor.js"
@@ -30,6 +31,7 @@ class Server {
 
     routes() {
         this.app.use('/api/usuario', usuarios)
+        this.app.use('/api/materialesApoyo', materialesApoyo)
         this.app.use('/api/programasFormacion', programasFormacion)
         this.app.use('/api/redes', redes)
         this.app.use('/api/roles', roles)

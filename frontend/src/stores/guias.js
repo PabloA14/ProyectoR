@@ -4,16 +4,15 @@ import { LinkBD } from "../routes/variables";
 import { ref } from "vue";
 
 export const usegiasStore = defineStore("Guia", () => {
-
+    let loading = ref(false)
+    let guia = ref({})
     const buscarguia = async () => {
         try {
-            console.log("Haciendo la solicitud para buscar guia de red...");
             const buscar = await axios.get(`${LinkBD}/api/guia`);
-            // return buscar.data
             console.log("Guia recuperados:", buscar.data.guia);
             return buscar.data.guia;
         } catch (error) {
-            console.log("Error al buscar Gia:", error.response);
+            console.log(error);
         }
     }
 
@@ -58,10 +57,28 @@ export const usegiasStore = defineStore("Guia", () => {
         }
     };
 
+    const informacionGuia = async (id) => {
+        try {
+            loading.value = true
+            let r = await axios.get(`${LinkBD}/api/guia/${id}`)
+            guia.value = r.data;
+            return r
+        } catch (error) {
+            loading.value = true
+            console.log(error);
+        } finally {
+            loading.value = false
+        }
+    }
+
     return {
         buscarguia,
         agregarGuia,
-        actualizarGuia
-
+        actualizarGuia,
+        informacionGuia,
+        loading,
+        guia
     }
-})
+},
+{ persist: true }
+)

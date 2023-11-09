@@ -1,10 +1,10 @@
-import Guia from "../models/guias.js"
+import MaterialApoyo from "../models/materialApoyo.js"
 import { v2 as cloudinary } from 'cloudinary';
 
 
-const httpGuias = {
+const httpMatAp = {
 
-    postGuia: async (req, res) => {
+    postMaterialApoyo: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
             api_key: process.env.CLOUDINARY_KEY,
@@ -12,7 +12,7 @@ const httpGuias = {
             secure: true,
         });
 
-        const { codigo, nombre, fase,  } = req.body
+        const { codigo, nombre, enlace, guia, } = req.body
         let documentoUrl = null;
 
         try {
@@ -38,46 +38,46 @@ const httpGuias = {
                 documentoUrl = result.url;
             }
 
-            const guia = new Guia({
-                codigo, nombre, fase, documento: documentoUrl, 
+            const matApoyo = new MaterialApoyo({
+                codigo, nombre, enlace, guia, documento: documentoUrl,
             });
 
-            const cod = await Guia.findOne({ codigo: codigo });
+            const cod = await MaterialApoyo.findOne({ codigo: codigo });
             if (cod) {
-                return res.status(400).json({ msg: 'La guía ya se encuentra registrada', cod });
+                return res.status(400).json({ msg: 'El material ya se encuentra registrado', cod });
             } else {
-                await guia.save();
-                res.status(200).json({ msg: "Registro exitoso", guia });
+                await matApoyo.save();
+                res.status(200).json({ msg: "Registro exitoso", matApoyo });
             }
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momento de Crear la guia de aprendizaje" })
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momento de Crear el material" })
         }
     },
 
-    getGuias: async (req, res) => {
-        const guia = await Guia.find()
-        res.status(200).json({ guia })
+    getMaterialApoyo: async (req, res) => {
+        const mat = await MaterialApoyo.find().populate("guia")
+        res.status(200).json({ mat })
     },
 
-    getGuiaPorId: async (req, res) => {
-        const id = req.params.id;
+    getMaterialApCodigo: async (req, res) => {
+        const codigo = req.params.codigo
         try {
-            const guia = await Guia.findById(id);
-            console.log(guia);
-            if (!guia) {
-                res.status(400).json({ sms: `No se encontró ninguna guía con el ID ${id}` });
+            const cod = await MaterialApoyo.findOne({ codigo: codigo }).populate('guia')
+            console.log(cod);
+            if (!cod) {
+                res.status(400).json({ sms: `sin coincidencias para el material ${codigo}` })
             } else {
-                res.status(200).json({ guia });
+                res.status(200).json({ sms: `Se encontro el material correctamente `, cod })
             }
         } catch (error) {
-            res.json({ error });
+            res.json({ error })
             console.log(error);
         }
     },
-    
-    putGuias: async (req, res) => {
+
+    putMaterialApoyo: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
             api_key: process.env.CLOUDINARY_KEY,
@@ -85,12 +85,12 @@ const httpGuias = {
             secure: true,
         });
 
-        const guiasId = req.params.id;
-        const { codigo, nombre, fase,  } = req.body;
+        const matId = req.params.id;
+        const { codigo, nombre, enlace, guia, } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, 
+                codigo, nombre, enlace, guia,
             };
 
             // Verificar si se proporciona un nuevo documento
@@ -117,20 +117,20 @@ const httpGuias = {
                 updatedFields.documento = result.url;
             }
 
-            const existingGuia = await Guia.findOne({ codigo: codigo });
-            if (existingGuia && existingGuia._id.toString() !== guiasId) {
-                return res.status(400).json({ msg: 'La guía ya se encuentra registrada' });
+            const existingMat = await MaterialApoyo.findOne({ codigo: codigo });
+            if (existingMat && existingMat._id.toString() !== matId) {
+                return res.status(400).json({ msg: 'El material ya se encuentra registrado' });
             }
 
-            const updatedGuias = await Guia.findOneAndUpdate(
-                { _id: guiasId },
+            const updatedMaterialesAp = await MaterialApoyo.findOneAndUpdate(
+                { _id: matId },
                 {
                     $set: updatedFields
                 },
                 { new: true }
             );
 
-            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias });
+            res.status(200).json({ msg: 'actualizado exitosamente', materialApoyos: updatedMaterialesAp });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });
@@ -139,4 +139,4 @@ const httpGuias = {
 
 }
 
-export default httpGuias
+export default httpMatAp
