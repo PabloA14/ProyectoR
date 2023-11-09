@@ -8,92 +8,82 @@
             <q-breadcrumbs-el label="Registro Calificado" />
         </q-breadcrumbs><br>
 
-        <!-- <div class="text-h4 text-center q-mb-md">Registro Calificado</div> <br> -->
+        <div class="text-h4 text-center q-mb-md">Registro Calificado</div><br>
 
         <div class="spinner-container" v-if="useRegistro.loading === true">
             <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
         </div>
 
 
-        <div class="row" v-if="useRegistro.loading === false">
-            <div class="col-3"></div>
-            <div class="col-6">
-                <q-card class="my-card q-mt-xl" flat bordered id="csrd2" v-if="mostrarRegistro">
-                    <div class="text-h5 q-mt-sm q-mb-md" style="text-align: center">
-                      <b style="text-transform: capitalize;">{{ programaSeleccionado.denominacionPrograma }}</b>
+        <div class="row" style="display: grid; place-items: center;" v-if="useRegistro.loading === false">
+            <q-card class="my-card q-mt-xl" flat bordered v-if="mostrarRegistro">
+                <div class="text-h5 q-mt-sm q-mb-md" style="text-align: center">
+                    <b style="text-transform: capitalize;">{{ programaSeleccionado.denominacionPrograma }}</b>
+                </div>
+
+                <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+
+                <q-card-section horizontal>
+                    <q-card-section class="q-pt-xs" id="section">
+                        <div class="row">
+                            <div class="col-6">
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Título que otorga:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.titulo }}
+                                </div>
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Lugar de desarrollo de la oferta:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.lugardesarrollo }}
+                                </div>
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Metodología:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.metodologia }}
+                                </div>
+
+                            </div>
+
+                            <div class="col-6">
+                                <div class="text-h6 q-mt-sm q-mb-xs">Numero de créditos:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.creditos }}
+                                </div>
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Código SNIES:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.codigosnies }}
+                                </div>
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Fecha:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.fecha }}
+                                </div>
+                            </div>
                         </div>
-
-                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
-                    <q-card-section horizontal>
-                        <q-card-section class="q-pt-xs" id="section">
-                            <div class="row">
-                                <div class="col-5">
-                                    
-                            <div class="text-h6 q-mt-sm q-mb-xs">Título que otorga:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.titulo }}
-                            </div>
-
-                            <div class="text-h6 q-mt-sm q-mb-xs">Lugar de desarrollo de la oferta:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.lugardesarrollo }}
-                            </div>
-
-                            <div class="text-h6 q-mt-sm q-mb-xs">Metodología:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.metodologia }}
-                            </div>
-
-                                </div>
-                                <div class="col-2"></div>
-                                <div class="col-5">
-                            <div class="text-h6 q-mt-sm q-mb-xs">Numero de créditos:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.creditos }}
-                            </div>
-
-                            <div class="text-h6 q-mt-sm q-mb-xs">Código SNIES:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.codigosnies }}
-                            </div>
-
-                            <div class="text-h6 q-mt-sm q-mb-xs">Fecha:</div>
-                            <div class="text-caption text">
-                                {{ mostrarRegistro.fecha }}
-                            </div>
-                                </div>
-                            </div>
-
-
-
-                        </q-card-section>
-
 
                     </q-card-section>
 
-                    <q-separator />
+                </q-card-section>
 
-                    <q-card-actions>
-                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
-                        class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
+                <q-separator />
 
-                    </q-card-actions>
-                </q-card>
+                <q-card-actions>
+                    <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar" class="q-mb-md"
+                        @click="editarRegistro(mostrarRegistro)" />
 
-            <div v-else>
-                <q-btn style="margin: auto auto" color="secondary" icon="add" label="Agregar Registro Calificado"
-                    class="q-mb-md" @click="
-                        agregar = true; nuevo();" />
+                </q-card-actions>
+            </q-card>
+
+            <div style="display: flex;justify-content: center;align-items: center;" v-else>
+                <q-btn color="secondary" icon="add" label="Agregar Registro Calificado" class="q-mb-md" @click="
+                    agregar = true; nuevo();" />
             </div>
-            </div>
-            <div class="col-3"></div>
-
-
         </div>
 
         <q-dialog v-model="agregar">
-            <q-card style="width: 32%; height: fit-content">
+            <q-card class="modal" style="width: 32%; height: fit-content">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         {{ bd === 0 ? "Editar Registro Calificado" : "Agregar Registro Calificado" }}
@@ -129,7 +119,6 @@
                     <div class="q-mb-md">
                         <q-input label="Fecha*" type="Date" color="secondary" v-model="fecha" />
                     </div>
-
 
                 </q-card-section>
 
@@ -195,18 +184,12 @@ async function buscar() {
     registroCalificado.value = await useRegistro.buscarRegistros();
     registroCalificado.value.reverse()
     infoReg.value = registroCalificado.value
-    console.log(registroCalificado.value);
-    console.log("-----------------");
-
-    /* const registrosProgramaActual = infoReg.value.filter((reg) => reg.programa._id === idPrograma);
-    deshabilitado.value = registrosProgramaActual.length > 0 */
 
     for (let i = 0; i < infoReg.value.length; i++) {
         let a = infoReg.value[i]
 
         if (a.programa._id === idPrograma) {
             mostrarRegistro.value = a
-            console.log(a)
         }
     }
 }
@@ -348,17 +331,13 @@ console.log(programaSeleccionado);
 </script>
 
 <style scoped>
-#card {
-    margin: 0 auto;
-    margin-top: auto;
-    width: 50%;
-}
-.my-card{
+.my-card {
     margin-top: -1%;
     color: rgb(0, 0, 0);
     border-radius: 1px;
 }
-.my-card .text-h6{
+
+.my-card .text-h6 {
     color: rgb(0, 0, 0);
     font-weight: 800;
     margin-bottom: 9%;
@@ -368,7 +347,8 @@ console.log(programaSeleccionado);
     margin-bottom: 10%;
 
 }
-.my-card .text-caption{
+
+.my-card .text-caption {
     font-size: 2.5vh;
     color: rgb(63, 63, 63);
     text-align: center;
@@ -393,5 +373,11 @@ console.log(programaSeleccionado);
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+@media screen and (max-width: 600px) {
+    .modal {
+        width: 100%;
+    }
 }
 </style>
