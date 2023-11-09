@@ -225,6 +225,7 @@ async function agregarN() {
         })
         buscar();
     }).catch((error) => {
+        console.log(error);
         if (error.response && error.response.data.msg) {
             const repetida = error.response.data.msg
             $q.notify({
@@ -239,9 +240,7 @@ async function agregarN() {
             errores.value = error.response.data.errors[0].msg
             validar()
 
-        } else if (error.response && error.response.msg && !archivo.value) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+        } else if (error.response.data.error) {
             $q.notify({
                 message: 'falta archivo',
                 color: 'negative',

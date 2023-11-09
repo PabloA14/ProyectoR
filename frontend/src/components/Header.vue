@@ -10,13 +10,7 @@
           </q-avatar>
           Repositorio
         </q-toolbar-title>
-        <q-icon
-          name="logout"
-          title="Cerrar Sesión"
-          size="30px"
-          style="cursor: pointer"
-          @click="cerrarSesion()"
-        />
+        <q-icon name="logout" title="Cerrar Sesión" size="30px" style="cursor: pointer" @click="cerrarSesion()" />
       </q-toolbar>
     </q-header>
 
@@ -37,34 +31,16 @@
 
         <q-card-actions class="flex-center" align="right">
           <q-btn label="Cancelar" color="dark" @click="confirm = false" />
-          <q-btn
-            label="Cerrar Sesión"
-            color="negative"
-            @click="logout()"
-          /> </q-card-actions
-        ><br />
+          <q-btn label="Cerrar Sesión" color="negative" @click="logout()" /> </q-card-actions><br />
       </q-card>
     </q-dialog>
 
-    <q-drawer
-      v-model="drawer"
-      show-if-above
-      :mini="miniState"
-      @mouseover="miniState = false"
-      @mouseout="miniState = true"
-      :width="300"
-      :breakpoint="500"
-      bordered
-      mini-to-overlay
-      :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'"
-    >
+    <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false" @mouseout="miniState = true"
+      :width="300" :breakpoint="500" bordered mini-to-overlay :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list padding>
-          <router-link
-            v-if="rol === 'gestor' ||  rol ==='instructor'"
-            to="programas"
-            style="text-decoration: none; color: black"
-          >
+          <router-link v-if="rol === 'gestor' || rol === 'instructor'" to="programas"
+            style="text-decoration: none; color: black">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-book-open-cover" />
@@ -74,11 +50,7 @@
             </q-item>
           </router-link>
 
-          <router-link
-            to="redes"
-            v-if="rol === 'administrador'"
-            style="text-decoration: none; color: black"
-          >
+          <router-link to="redes" v-if="rol === 'administrador'" style="text-decoration: none; color: black">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-head-side-brain" />
@@ -88,11 +60,7 @@
             </q-item>
           </router-link>
 
-          <router-link
-            to="niveles"
-            style="color: black; text-decoration: none"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="niveles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-chart-pyramid" />
@@ -102,11 +70,7 @@
             </q-item>
           </router-link>
 
-          <router-link 
-            to="centroF"
-            style="text-decoration: none; color: black"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="centroF" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-building-columns" />
@@ -116,11 +80,7 @@
             </q-item>
           </router-link>
 
-          <router-link 
-            to="ambientes"
-            style="text-decoration: none; color: black"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="ambientes" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-chart-user" />
@@ -130,25 +90,17 @@
             </q-item>
           </router-link>
 
-          <router-link
-            to="materiales"
-            style="text-decoration: none; color: black"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="materiales" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
-                <q-icon class="fi fi-sr-clip" />
+                <q-icon class="fi fi-sr-pencil-paintbrush" />
               </q-item-section>
 
               <q-item-section> Materiales de Formación </q-item-section>
             </q-item>
           </router-link>
 
-          <router-link
-            to="usuarios"
-            style="text-decoration: none; color: black"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="usuarios" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-users" />
@@ -158,11 +110,7 @@
             </q-item>
           </router-link>
 
-          <router-link
-            to="roles"
-            style="color: black; text-decoration: none"
-            v-if="rol === 'administrador'"
-          >
+          <router-link to="roles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-key" />
@@ -172,22 +120,9 @@
             </q-item>
           </router-link>
 
-          <!-- <router-link to="investigacion" style="color: black; text-decoration: none" v-if="rol === 'gestor'">
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon />
-              </q-item-section>
-
-              <q-item-section>Investigación</q-item-section>
-            </q-item>
-          </router-link> -->
-
           <q-separator />
 
-          <router-link
-            to="configuracion"
-            style="color: black; text-decoration: none"
-          >
+          <router-link to="configuracion" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-gear" />
@@ -205,11 +140,10 @@
       <router-view />
     </q-page-container>
   </q-layout>
-
 </template> 
 
 <script setup>
- import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useUsuarioStore } from "../stores/Usuarios.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
 const drawer = ref(false);
@@ -229,8 +163,8 @@ const cerrarSesion = () => {
 
 function logout() {
   confirm.value = false; // Cerrar el diálogo
-  useUsuario.usuario={}
-  useUsuario.token=""
+  useUsuario.usuario = {}
+  useUsuario.token = ""
   router.push("/");
 }
 </script>
@@ -243,11 +177,10 @@ function logout() {
   justify-content: center;
   align-items: center;
 }
-#t{
+
+#t {
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
-
 </style>

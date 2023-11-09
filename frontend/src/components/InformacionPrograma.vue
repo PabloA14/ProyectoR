@@ -1,9 +1,13 @@
 <template>
     <q-page class="q-pa-md">
- 
+        <q-breadcrumbs separator=">">
+            <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+            <q-breadcrumbs-el :label="usePrograma.programa.denominacionPrograma" />
+        </q-breadcrumbs><br>
+
         <div class="text-h4 text-center q-mb-md q-mt-md">
-            <b  style="text-transform:capitalize;">{{nombre}}</b>
-            </div>
+            <b style="text-transform:capitalize;">{{ nombre }}</b>
+        </div>
 
         <div class="bloques">
             <div class="row" id="row">
@@ -113,7 +117,7 @@
   
   
 <script setup>
- import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
 

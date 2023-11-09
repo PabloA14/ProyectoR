@@ -31,6 +31,8 @@
 
         </div>
 
+        <span v-if="ambientesPrograma.length === 0">No se han agregado ambientes</span>
+
         <span v-if="error=true">{{errorD}}</span>
         <div style="overflow-y: auto;height: 60vh;">
             <q-list bordered class="rounded-borders">

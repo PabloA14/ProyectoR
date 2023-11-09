@@ -32,7 +32,8 @@ app.use(Quasar, {
 })
 pinia.use(createPersistedState(createPersistedState({
     paths: [
-        'instructores'
+        'instructores',
+        'proyectoRecuperado'
   ],
   }),
   { storage: window.localStorage }));

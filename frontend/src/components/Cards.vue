@@ -1,5 +1,11 @@
 <template>
-  <q-page class="q-pa-md q-mt-md  q-mb-md">
+  <q-page class="q-pa-md">
+    <q-breadcrumbs separator=">">
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el label="Gestionar Programa" />
+    </q-breadcrumbs><br>
+
     <div class="text-h4 text-center q-mb-md">
       <b style="text-transform:capitalize;">{{ nombre }}</b>
     </div>
@@ -94,9 +100,6 @@ const usePrograma = useProgramasFormacionStore();
 let nombre = ref(usePrograma.programa.denominacionPrograma)
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
-
-
-
 
 
 </script>
