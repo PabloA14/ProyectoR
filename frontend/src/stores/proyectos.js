@@ -4,19 +4,21 @@ import { LinkBD } from "../routes/variables";
 import { ref } from "vue";
 
 export const useProyectosStore = defineStore("proyecto", () => {
+    let proyectoRecuperado = ref({})
+
     const buscarProyectos = async () => {
         try {
             console.log("Haciendo la solicitud para buscar proyectos...");
             const buscar = await axios.get(`${LinkBD}/api/proyecto`);
-            // return buscar.data
-            console.log("Proyectos recuperados:", buscar.data);
-            return buscar.data;
+            proyectoRecuperado.value = buscar.data.guia
+            console.log("Proyectos recuperados: ------", proyectoRecuperado.value);
         } catch (error) {
             console.log("Error al buscar proyectos:", error.response);
         }
     }
 
     const agregarProyecto = async (info) => {
+        console.log(info);
         try {
             console.log("Haciendo la solicitud para agregar proyecto...");
             const agregar = await axios.post(`${LinkBD}/api/proyecto`, info);
@@ -41,19 +43,13 @@ export const useProyectosStore = defineStore("proyecto", () => {
     }
 
 
-
-
-
-
-
-
-
     return {
         buscarProyectos,
         agregarProyecto,
-        editarProyecto
+        editarProyecto,
+        proyectoRecuperado
     }
 
-})
+},{persist: true})
 
 

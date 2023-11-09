@@ -28,8 +28,8 @@
       </div>
 
       <div class="row" id="pro">
-        <div class="col-12">
-          <q-expansion-item v-for="proyecto in proyectos.guia" :key="proyecto._id" style="max-width: 100%"
+        <div class="col-12  q-mt-xl">
+          <q-expansion-item v-for="proyecto in invesFiltradas" :key="proyecto._id" style="max-width: 100%"
             expand-separator icon="perm_identity" :label="`Código: ${proyecto.codigo || 'deberia salir el codigo'}`"
             :caption="`Proyecto: ${proyecto.nombre || 'deberia salir el nombre del proyecto'
               }`">
@@ -52,7 +52,7 @@
                   <div class="col-1 text-right">
                     <q-icon name="edit" color="blue" size="24px" style="cursor: pointer"
                       @click="ModeditModal(proyecto)" />
-                    <q-icon name="delete" color="red" size="24px" style="cursor: pointer" @click="Modeliminar" />
+                    
                   </div>
                 </div>
               </q-card-section>
@@ -63,30 +63,7 @@
         <div class="col-12"></div>
       </div>
 
-      <q-dialog v-model="modalEliminar">
-        <q-card style="width: 32%; height: fit-content">
-          <q-card-section class="row items-center q-pb-none">
-            <div class="text-h6">Eliminar Proyecto</div>
-            <q-space />
-            <q-btn icon="close" color="negative" flat round dense v-close-popup />
-          </q-card-section>
-
-          <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
-          <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-            <div class="text-h5 text-center q-mt-md">
-              ¿Esta seguro que desea eliminar el proyecto ... ?
-            </div>
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions class="flex-center" align="right">
-            <q-btn color="secondary " label="Confirmar" />
-            <q-btn color="negative" label="Rechazar" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+  
 
       <q-dialog v-model="modalagregar">
         <q-card style="width: 32%; height: fit-content">
@@ -111,9 +88,9 @@
             <div class="q-mb-md">
               <q-input label="Descripción" color="secondary" v-model="descripcion" />
             </div>
-            <!-- <div class="q-mb-md">
+            <div class="q-mb-md">
             <q-input label="fecha" type="date" color="secondary" v-model="fecha" />
-          </div> -->
+          </div>
             <!-- <div class="q-mb-md">
             <q-file
               label="Archivo"
@@ -161,6 +138,9 @@
               <q-input label="Descripción" color="secondary" v-model="descripcionEditar" />
             </div>
 
+            <div class="q-mb-md">
+              <q-input label="Fecha De Creacion" color="secondary" v-model="fechaEditar" />
+            </div>
             <!-- <div class="q-mb-md">
             <q-file label="Archivo" type="file" color="secondary">
               <template v-slot:prepend>
@@ -182,8 +162,15 @@
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref , computed} from "vue";
 import { useProyectosStore } from "../stores/proyectos";
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
+
+
+
+
+const usePrograma = useProgramasFormacionStore();
+let programaId = usePrograma.programa._id
 
 const useProyectos = useProyectosStore();
 let proyectos = ref([]);
@@ -192,8 +179,10 @@ let modalagregar = ref();
 let modalEliminar = ref();
 let searchTerm = ref("");
 
+
 let codigo = ref();
 let version = ref();
+let fecha=ref()
 let nombre = ref();
 let descripcion = ref();
 let loading = ref(false);
@@ -203,6 +192,7 @@ let loading = ref(false);
 let codigoEditar = ref();
 let versionEditar = ref();
 let nombreEditar = ref();
+let fechaEditar = ref()
 let descripcionEditar = ref();
 
 let documento = ref();
@@ -211,10 +201,19 @@ let proyectoSeleccionado = ref(null);
 buscar();
 
 
+let invesFiltradas = computed(() => {
+    return proyectos.value.filter(
+        (x) => x.programa._id === programaId
+    );
+});
+
+
+
 async function buscar() {
   loading.value = true;
   try {
-    proyectos.value = await useProyectos.buscarProyectos();
+    await useProyectos.buscarProyectos();
+    proyectos.value = useProyectos.proyectoRecuperado
     console.log("Proyectos FRON:", proyectos.value);
   } catch (error) {
     console.error("Error al buscar proyectos:", error);
@@ -222,14 +221,17 @@ async function buscar() {
     loading.value = false; // Asegura que el spinner se oculte incluso si hay un error
   }
 }
-
 async function agregarProyecto() {
   console.log("entro a agregar");
   await useProyectos.agregarProyecto({
     codigo: codigo.value,
-    version: version.value,
     nombre: nombre.value,
+    version: version.value,
     descripcion: descripcion.value,
+    fecha : fecha.value,
+    version :version.value,
+    documento :  'documento prueba', 
+    programa: programaId
   });
   modalagregar.value = false;
   codigo.value = "";
@@ -241,11 +243,13 @@ async function agregarProyecto() {
 
 function ModeditModal(proyecto) {
   console.log(`estas en la funcion editar `);
+  console.log(proyecto);
   proyectoSeleccionado.value = proyecto;
   codigoEditar.value = proyecto.codigo;
   versionEditar.value = proyecto.version;
   nombreEditar.value = proyecto.nombre;
   descripcionEditar.value = proyecto.descripcion;
+  fecha.value = proyecto.fecha
   modaleditar.value = true;
 }
 
@@ -257,6 +261,7 @@ function guardarEdicion() {
     version: versionEditar.value,
     nombre: nombreEditar.value,
     descripcion: descripcionEditar.value,
+    fecha : fechaEditar.value
   };
 
   useProyectos
@@ -272,9 +277,7 @@ function guardarEdicion() {
 }
 
 
-function Modeliminar() {
-  modalEliminar.value = true;
-}
+
 
 function Modagg() {
   modalagregar.value = true;
