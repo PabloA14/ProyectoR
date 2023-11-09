@@ -1,33 +1,64 @@
 import Guia from "../models/guias.js"
+import { v2 as cloudinary } from 'cloudinary';
+
 
 const httpGuias = {
 
     postGuia: async (req, res) => {
-        const { codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo } = req.body
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { codigo, nombre, fase, InstrumentosEvaluacion, MaterialApoyo } = req.body
+        let documentoUrl = null;
+
         try {
-            const guiasAp = new Guia({
-                codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo
-            })
-            const cod = await Guia.findOne({ codigo: codigo })
+
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                documentoUrl = result.url;
+            }
+
+            const guia = new Guia({
+                codigo, nombre, fase, documento: documentoUrl, InstrumentosEvaluacion, MaterialApoyo
+            });
+
+            const cod = await Guia.findOne({ codigo: codigo });
             if (cod) {
-                return res.status(400).json({ sms: "la guia de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
-
+                return res.status(400).json({ msg: 'La guía ya se encuentra registrada', cod });
             } else {
-
-                await guiasAp.save()
-                return res.status(200).json({ msg: 'Guia de aprendizaje registrada correctamente', guiasAp });
-
+                await guia.save();
+                res.status(200).json({ msg: "Registro exitoso", guia });
             }
 
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de Crear la guia de aprendizaje" })
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momento de Crear la guia de aprendizaje" })
         }
     },
 
     getGuias: async (req, res) => {
         const guia = await Guia.find()
-            .populate("MaterialApoyo")
+            //.populate("MaterialApoyo")
             .populate("InstrumentosEvaluacion")
         res.status(200).json({ guia })
     },
@@ -50,13 +81,49 @@ const httpGuias = {
 
 
     putGuias: async (req, res) => {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
         const guiasId = req.params.id;
-        const { codigo, nombre, fase, documento, InstrumentosEvaluacion, MaterialApoyo } = req.body;
+        const { codigo, nombre, fase, InstrumentosEvaluacion, MaterialApoyo } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, documento,  InstrumentosEvaluacion, MaterialApoyo
+                codigo, nombre, fase, InstrumentosEvaluacion, MaterialApoyo
             };
+
+            // Verificar si se proporciona un nuevo documento
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el nuevo documento a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documento a los campos actualizados
+                updatedFields.documento = result.url;
+            }
+
+            const existingGuia = await Guia.findOne({ codigo: codigo });
+            if (existingGuia && existingGuia._id.toString() !== guiasId) {
+                return res.status(400).json({ msg: 'La guía ya se encuentra registrada' });
+            }
 
             const updatedGuias = await Guia.findOneAndUpdate(
                 { _id: guiasId },
