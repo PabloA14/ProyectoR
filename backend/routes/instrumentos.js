@@ -5,7 +5,6 @@ import { check } from "express-validator"
 import { validarCampos } from "../middlewares/validar_campos.js";
 
 routes.post("/", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     validarCampos
 ], httpInstrumentos.postInstrumentos)
@@ -14,7 +13,6 @@ routes.get("/", httpInstrumentos.getInstrumentos)
 routes.get("/:codigo", httpInstrumentos.getInstrumentoCodigo)
 
 routes.put("/:id", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     validarCampos
 ], httpInstrumentos.putInstrumentosE)

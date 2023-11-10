@@ -19,11 +19,11 @@ export const useInstrumento = defineStore("instrumento", () => {
         }
     };
 
-    const actualizarInstrumento = async (id, codigo, nombre, documento) => {
+    const actualizarInstrumento = async (id, nombre, documento) => {
         try {
             const formData = new FormData();
 
-            formData.append('codigo', codigo);
+            //formData.append('codigo', codigo);
             formData.append('nombre', nombre);
 
             if (documento) {

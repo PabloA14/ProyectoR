@@ -42,13 +42,16 @@ const httpMatAp = {
                 codigo, nombre, enlace, guia, documento: documentoUrl,
             });
 
-            const cod = await MaterialApoyo.findOne({ codigo: codigo });
+            /* const cod = await MaterialApoyo.findOne({ codigo: codigo });
             if (cod) {
                 return res.status(400).json({ msg: 'El material ya se encuentra registrado', cod });
             } else {
                 await matApoyo.save();
                 res.status(200).json({ msg: "Registro exitoso", matApoyo });
-            }
+            } */
+
+            await matApoyo.save();
+            res.status(200).json({ msg: "Registro exitoso", matApoyo });
 
         } catch (error) {
             console.log(error);
@@ -117,10 +120,10 @@ const httpMatAp = {
                 updatedFields.documento = result.url;
             }
 
-            const existingMat = await MaterialApoyo.findOne({ codigo: codigo });
+            /* const existingMat = await MaterialApoyo.findOne({ codigo: codigo });
             if (existingMat && existingMat._id.toString() !== matId) {
                 return res.status(400).json({ msg: 'El material ya se encuentra registrado' });
-            }
+            } */
 
             const updatedMaterialesAp = await MaterialApoyo.findOneAndUpdate(
                 { _id: matId },

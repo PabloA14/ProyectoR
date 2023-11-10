@@ -19,11 +19,11 @@ export const useApoyo = defineStore("matApoyo", () => {
         }
     };
 
-    const actualizarMatApoyo = async (id, codigo, nombre, enlace, documento) => {
+    const actualizarMatApoyo = async (id, nombre, enlace, documento) => {
         try {
             const formData = new FormData();
 
-            formData.append('codigo', codigo);
+            //formData.append('codigo', codigo);
             formData.append('nombre', nombre);
             formData.append('enlace', enlace)
 

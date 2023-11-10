@@ -4,7 +4,6 @@ import { v2 as cloudinary } from 'cloudinary';
 
 const httpInstrumentos = {
 
-
     postInstrumentos: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
@@ -43,13 +42,16 @@ const httpInstrumentos = {
                 codigo, nombre, guia, documento: documentoUrl,
             });
 
-            const cod = await Instrumentos.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'El instrumento ya se encuentra registrado', cod });
-            } else {
-                await instrumento.save();
-                res.status(200).json({ msg: "Registro exitoso", instrumento });
-            }
+            /*  const cod = await Instrumentos.findOne({ codigo: codigo });
+             if (cod) {
+                 return res.status(400).json({ msg: 'El instrumento ya se encuentra registrado', cod });
+             } else {
+                 await instrumento.save();
+                 res.status(200).json({ msg: "Registro exitoso", instrumento });
+             } */
+
+            await instrumento.save();
+            res.status(200).json({ msg: "Registro exitoso", instrumento });
 
         } catch (error) {
             console.log(error);
@@ -118,10 +120,10 @@ const httpInstrumentos = {
                 updatedFields.documento = result.url;
             }
 
-            const existingInstrumento = await Instrumentos.findOne({ codigo: codigo });
+           /*  const existingInstrumento = await Instrumentos.findOne({ codigo: codigo });
             if (existingInstrumento && existingInstrumento._id.toString() !== istrumentosId) {
                 return res.status(400).json({ msg: 'El instrumento ya se encuentra registrado' });
-            }
+            } */
 
             const updatedInstrumentos = await Instrumentos.findOneAndUpdate(
                 { _id: istrumentosId },

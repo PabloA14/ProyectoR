@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const materialAp = new mongoose.Schema({
-    codigo: { type: String, required: true },
+    codigo: { type: String, required: false },
     nombre: { type: String, required: true },
     enlace: { type: String, required: false },
     documento: { type: String, required: false },
