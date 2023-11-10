@@ -132,7 +132,7 @@
                       <a
                         target="_blank"
                         :href="proyectoFormativo"
-                        style="text-align: center; font-size: 4vh"
+                        style="text-align: center; font-size: 7vh ; color : black"
                       >
                         <span class="material-symbols-outlined">download</span>
                       </a>
