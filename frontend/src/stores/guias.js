@@ -6,6 +6,7 @@ import { ref } from "vue";
 export const usegiasStore = defineStore("Guia", () => {
     let loading = ref(false)
     let guia = ref({})
+    let fase = ref('')
     const buscarguia = async () => {
         try {
             const buscar = await axios.get(`${LinkBD}/api/guia`);
@@ -15,8 +16,10 @@ export const usegiasStore = defineStore("Guia", () => {
             console.log(error);
         }
     }
+    
 
     const agregarGuia = async (info, documento) => {
+
         try {
             const formData = new FormData()
             for (const key in info) {
@@ -77,7 +80,8 @@ export const usegiasStore = defineStore("Guia", () => {
         actualizarGuia,
         informacionGuia,
         loading,
-        guia
+        guia,
+        fase
     }
 },
 { persist: true }

@@ -1,4 +1,5 @@
 import Guia from "../models/guias.js"
+import DesarrolloC from "../models/desarrollo.js"
 import { v2 as cloudinary } from 'cloudinary';
 
 
@@ -11,11 +12,11 @@ const httpGuias = {
             api_secret: process.env.CLOUDINARY_SECRET,
             secure: true,
         });
-
         const { codigo, nombre, fase, } = req.body
         let documentoUrl = null;
 
         try {
+
 
             if (req.files && req.files.documento) {
                 const { documento } = req.files;
@@ -47,7 +48,8 @@ const httpGuias = {
                 return res.status(400).json({ msg: 'La guía ya se encuentra registrada', cod });
             } else {
                 await guia.save();
-                res.status(200).json({ msg: "Registro exitoso", guia });
+                    res.status(200).json({ msg: "Registro exitoso", guia });
+
             }
 
         } catch (error) {

@@ -93,10 +93,14 @@ import { usegiasStore } from "../stores/guias"
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
 import { useUsuarioStore } from "../stores/Usuarios.js";
+import {useProgramasFormacionStore} from "../stores/ProgramasFormacion.js"
+import { useDesarrolloCurricular } from "../stores/desarrolloC";
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
+const useDesarrollo = useDesarrolloCurricular();
+const usePrograma = useProgramasFormacionStore()
+let IdDesarrollo = ref('')
 
-console.log(rol);
 let filter = ref('')
 let separator = ref('cell')
 
@@ -112,6 +116,7 @@ let loading = ref(false)
 const $q = useQuasar()
 let router = useRouter()
 let errores = ref([])
+let fase = ref(usegias.fase);
 
 const pagination = ref({
   rowsPerPage: 6
@@ -143,8 +148,10 @@ async function buscar() {
     dataGuias.value = await usegias.buscarguia()
     dataGuias.value.reverse()
     console.log("Guias FRON:", dataGuias.value);
-  } catch (error) {
-    console.error("Error al buscar Guias:", error);
+    let filtrado= dataGuias.value.filter(a=>a.fase===fase.value)
+    dataGuias.value=filtrado
+  }catch{
+    console.error("Error al buscar Guias:");
   }
 }
 
@@ -166,12 +173,18 @@ function doc(event) {
 
 async function agregarN() {
   console.log("entro a agregar");
+
   loading.value = true
   await usegias.agregarGuia({
     codigo: codigo.value,
     nombre: nombre.value,
-    documento: archivo.value
-  }).then(() => {
+    documento: archivo.value,
+    fase : fase.value
+
+  }).then((res) => {
+    console.log(res);
+    let des=useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id,res.data.guia._id)
+    console.log(des);
     mostrarModal.value = false
     $q.notify({
       message: 'Guía de aprendizaje agregada exitosamente',
