@@ -1,44 +1,44 @@
 <template>
-  <div>
+  <q-page class="q-pa-md">
+    <q-breadcrumbs separator=">">
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+      <q-breadcrumbs-el label="Instructores" />
+    </q-breadcrumbs><br>
     <div class="text-h4 text-center q-mt-md">Instructores</div>
-    <div class="spinner-container" v-if="loading">
+    <!-- <div class="spinner-container" v-if="loading">
       <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
+    </div> -->
+    <div class="q-pa-md" style="width: 100%">
+      <q-table class="my-sticky-header-table" :filter="filter" :rows="usuarios" :columns="columns" row-key="cedula">
+        <template v-slot:body-cell-opciones="props">
+          <q-td :props="props">
+            <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px; cursor: pointer" />
+            <q-icon color="red" name="fa-solid fa-trash-alt fa-xl" size="20px" style="margin-left: 10px; cursor: pointer"
+              @click="Modeliminar" />
+          </q-td>
+        </template>
+
+        <template v-slot:body-cell-estado="props">
+          <q-td :props="props">
+            <span class="text-green" v-if="props.row.estado == 1">Activo</span>
+            <span class="text-red" v-else>Inactivo</span>
+          </q-td>
+        </template>
+
+        <template v-slot:top-right>
+          <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+            <template v-slot:append>
+              <q-icon name="search" />
+            </template>
+          </q-input>
+        </template>
+        <template v-slot:top-left>
+          <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="Modagregar" />
+        </template>
+      </q-table>
     </div>
-    <q-page v-else class="q-pa-md">
-      <div class="q-pa-md" style="width: 100%">
-        <q-table title="Treats" :rows="usuarios" :columns="columns" row-key="cedula">
-          <template v-slot:body-cell-opciones="props">
-            <q-td :props="props">
-              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
-                style="margin-left: 10px; cursor: pointer" />
-              <q-icon color="red" name="fa-solid fa-trash-alt fa-xl" size="20px"
-                style="margin-left: 10px; cursor: pointer" @click="Modeliminar" />
-            </q-td>
-          </template>
-
-          <!--
-            <template v-slot:body-cell-estado="props">
-              <q-td :props="props">
-                <span class="text-green" v-if="props.row.estado == 1"
-                  >Activo</span
-                >
-                <span class="text-red" v-else>Inactivo</span>
-              </q-td>
-            </template> -->
-
-          <template v-slot:top-right>
-            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
-              <template v-slot:append>
-                <q-icon name="search" />
-              </template>
-            </q-input>
-          </template>
-          <template v-slot:top-left>
-            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="Modagregar" />
-          </template>
-        </q-table>
-      </div>
-    </q-page>
 
     <q-dialog v-model="modalAgg">
       <q-card style="width: 32%; height: fit-content">
@@ -53,26 +53,34 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <div class="q-mb-md">
-        
 
-              <select name="" id="" v-model="instructor">
+              <q-select v-if="instructores.length === 0" label="No hay instructores disponibles" color="secondary"
+                disable>
+              </q-select>
 
-                <option  :value="a._id" v-for="a in instructores" :key="a"  >
-                  <small> 
+              <q-select v-else label="Seleccionar Instructor" color="secondary" v-model="instructor"
+                :options="instructores.map(i => ({ label: `${i.nombre} ${i.apellidos}`, value: i._id }))" emit-value
+                map-options>
+              </q-select>
+
+              <!-- <select name="" id="" v-model="instructor">
+
+                <option :value="a._id" v-for="a in instructores" :key="a">
+                  <small>
                     <b>
-                      {{a.nombre}} 
-                      {{a.apellidos}} 
+                      {{ a.nombre }}
+                      {{ a.apellidos }}
 
                     </b>
 
                   </small>
-   
+
                 </option>
 
                 <option v-if="instructores.length === 0" value="" disabled>
                   No hay instructores dispnibles en este momento
                 </option>
-              </select>
+              </select> -->
             </div>
           </div>
         </q-card-section>
@@ -80,13 +88,13 @@
         <q-separator />
 
         <q-card-actions class="flex-center" align="right">
-          <q-btn @click="agregarInstructor()" color="secondary" label="Agregar" />
-          <q-btn color="negative" label="Cancelar" />
+          <q-btn :disable="loading" v-if="instructores.length > 0" @click="agregarInstructor()" color="secondary"
+            label="Agregar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-
-    <q-dialog v-model="modalEliminar">
+  </q-page>
+  <!-- <q-dialog v-model="modalEliminar">
       <q-card style="width: 32%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Eliminar Instructor</div>
@@ -110,8 +118,7 @@
           <q-btn color="negative" label="Rechazar" />
         </q-card-actions>
       </q-card>
-    </q-dialog>
-  </div>
+    </q-dialog> -->
 </template>
 
 <script setup>
@@ -122,10 +129,12 @@ import { useUserStore } from "../almacenaje/informacion.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
+
+
 const $q = useQuasar();
 let router = useRouter()
 let modalAgg = ref();
-let filter = ref();
+let filter = ref('');
 let modalEliminar = ref();
 let instructor = ref('');
 let loading = ref(false);
@@ -133,15 +142,12 @@ const dataProgram = useUserStore();
 let usuarios = ref([]);
 let redConocimiento = ref('')
 let instructores = ref([]);
-let arrayInstructores =[]
+let arrayInstructores = []
 const useUsuari = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
 let instructoresBd = usePrograma.instructores
-
-
-
 
 const columns = [
   {
@@ -151,10 +157,10 @@ const columns = [
     field: "nombre",
     sortable: true,
   },
-  { name: "Apellidos", label: "Apellidos ", field: "apellidos", sortable: true },
-  { name: "correo", label: "Email", field: "correo" },
-  { name: "telefono", label: "Telefono", field: "telefono" },
-  { name: "estado", label: "Estado ", field: "estado", sortable: true },
+  { name: "Apellidos", label: "Apellidos ", align: "center", field: "apellidos", sortable: true },
+  { name: "correo", label: "Email", field: "correo", align: "center" },
+  { name: "telefono", label: "Teléfono", field: "telefono", align: "center" },
+  { name: "estado", label: "Estado ", field: "estado", sortable: true, align: "center" },
 
   // { name: "opciones", label: "Opciones", field: "opciones" },
 ];
@@ -166,8 +172,7 @@ async function buscar() {
 }
 
 
-
- async function obtenerInstructores() {
+async function obtenerInstructores() {
   await useUsuari.buscarUsuarios().then((res) => {
     const nuevosInstructores = res.filter(
       (user) =>
@@ -188,23 +193,26 @@ async function buscar() {
 
     console.log("Nuevos instructores:", instructores.value);
   });
-  instructor.value = null; 
+  instructor.value = null;
 }
 
 
 
 async function agregarInstructor() {
   console.log('agregar instructor');
-  await usePrograma.agregarInstructores( usePrograma.programa._id, instructor.value)
+  loading.value = true
+  await usePrograma.agregarInstructores(usePrograma.programa._id, instructor.value)
     .then((res) => {
       console.log(res);
       console.log('todo bien');
       informacionPrograma(programaSeleccionado.codigo)
       console.log(instructores.value);
+      instructor.value = ''
 
     }).catch((error) => {
       console.log(error);
     })
+  loading.value = false
 }
 
 function decodeJWT(token) {
@@ -227,10 +235,10 @@ if (decodedToken) {
 }
 
 async function cargarUsuarios() {
-  loading.value = true;
+  //loading.value = true;
   buscar();
   obtenerInstructores();
-  loading.value = false;
+  //loading.value = false;
 }
 cargarUsuarios();
 
@@ -244,7 +252,7 @@ function Modeliminar() {
 }
 
 const informacionPrograma = async (x) => {
-  console.log("--------------- ninformacion programa-");
+  console.log("--------------- informacion programa-");
   console.log(x);
   const res = await usePrograma.informacionPrograma(x).then((res) => {
     router.push("/instructores")
@@ -252,22 +260,24 @@ const informacionPrograma = async (x) => {
     usuarios.value = res.data.instructores
     modalAgg.value = false
     $q.notify({
-      message: "instructor agregado correctamente al programa de formacion",
+      message: "Instructor asignado correctamente al programa de formación",
       color: "positive",
-      icon: "warning",
+      icon: "check",
       position: "bottom",
       timeout: Math.random() * 3100,
     });
     arrayInstructores.push(instructor.value)
     let objetoAEliminar = instructor.value;
 
-instructores.value.forEach((element, index) => {
-  if (element._id === objetoAEliminar) {
-    console.log('Elemento encontrado y eliminado:', element);
-    instructores.value.splice(index, 1); 
-  }
+    instructores.value.forEach((element, index) => {
+      if (element._id === objetoAEliminar) {
+        console.log('Elemento encontrado y eliminado:', element);
+        instructores.value.splice(index, 1);
+      }
+    })
 
-});
+  }).catch((error) => {
+    console.log(error);
   })
 }
 

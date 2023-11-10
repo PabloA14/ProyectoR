@@ -3,7 +3,7 @@
     <div class="text-h4 text-center q-mb-md">Desarrollo Curricular</div>
     <div>
       <!-- matriz correlacion -->
-      <div class="MatrizCorrelacion  q-mt-xl">
+      <div class="menus  q-mt-xl">
         <div class="row" id="row">
           <q-toolbar-title class="title">
             Matriz de Correlación
@@ -15,67 +15,41 @@
               <!-- opciones -->
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <!-- sino tiene ol de instructor le saldra esto  -->
-                  <q-item clickable v-if="rol=== 'instructor' "  >
+                  <q-item clickable v-if="matriz === undefined && rol === 'gestor'">
                     <q-item-section>
-                      
-                    <span v-if="matriz != undefined" class="material-symbols-outlined"  style="
-                    font-size: 5vh;
-                    background-color: red;
-                    color: white;
-                  " >download</span>
-                  
-                      <span v-if="matriz === undefined" class="material-symbols-outlined" @click="matrizNull()" style="
-                      font-size: 5vh;
-                      background-color: red;
-                      color: white;
-                      height: 100%;
-                      border-radius: 3px;
-                      " >priority_high</span>
+                      <span class="material-symbols-outlined" style="font-size: 4vh;"
+                        @click="agregarMatriz(); agregar = true">add</span>
+                    </q-item-section>
+                  </q-item>
 
+                  <q-item clickable v-if="matriz === undefined && rol === 'instructor'">
+                    <q-item-section>
+                      <span class="material-symbols-outlined" @click="matrizNull()" style="
+                    font-size: 7vh;
+                    color: rgb(0, 0, 0);
+                  ">priority_high</span>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-if="matriz != undefined">
+                    <q-item-section>
+                      <a target="_blank" :href="matriz" style="text-align: center;font-size: 5vh;color: black;">
+                        <span class="material-symbols-outlined">download</span>
+                      </a>
 
                     </q-item-section>
                   </q-item>
-                  <!-- si tiene otro rol  le saldra esto -->
-                  <q-item clickable v-if="rol != 'instructor' "  >
+
+                  <q-item clickable v-if="matriz != undefined && rol == 'gestor'">
                     <q-item-section>
-                      <span v-if="matriz === undefined" class="material-symbols-outlined" @click="agregarMatriz()" style="
-                      font-size: 5vh;
-                      background-color: green;
-                      color: white;
-                      height: 100%;
-                      border-radius: 3px;
-                      " >add</span>
+                      <span class="material-symbols-outlined" style="
+                    font-size: 5vh;text-align: center;
+                    color: rgb(0, 0, 0);
 
-                    <span v-else class="material-symbols-outlined" @click=" desarrolloNulo = true , desarrolloNuloF()" style="
-                    font-size: 5vh;
-                    background-color: red;
-                    color: white;
-                  " >download</span>
-
+                  ">edit</span>
                     </q-item-section>
                   </q-item>
- 
-                  <!-- si tiene archivo le saldra esto -->
-                  <div v-else>
-                    <q-item clickable>
-                      <q-item-section>
-                        <a :href="useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion"
-                          style="text-align: center;">
-                          <span class="material-symbols-outlined" id="opciones">
-                            download
-                          </span>
-                        </a>
-                      </q-item-section>
-                    </q-item>
-                    <q-item clickable v-if="rol != 'instructor'">
-                      <q-item-section>
-                        <span class="material-symbols-outlined" id="opciones" v-if="rol"  >
-                          border_color
-                        </span>
-                      </q-item-section>
-                    </q-item>
-                  </div>
+
 
                   <q-separator />
                 </q-list>
@@ -86,7 +60,7 @@
         <small>Ver Matriz de Correlación</small>
       </div>
       <!-- proyecto formativo -->
-      <div class="MatrizCorrelacion">
+      <div class="menus">
         <div class="row" id="row">
           <q-toolbar-title class="title">Proyecto Formativo </q-toolbar-title>
 
@@ -96,39 +70,39 @@
 
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <!-- sino tiene archivo le saldra esto  -->
-                  <q-item clickable @click="agregar = true" v-if="proyectoFormativo === undefined">
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'gestor'">
                     <q-item-section>
-                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor'">
-                            download
-                          </span>
-
-                      <span v-else class="material-symbols-outlined" style="" id="opciones"
-                        @click="(agregar = true), addProyecto()">
-                        add
-                      </span>
+                      <span class="material-symbols-outlined" style="font-size: 4vh;"
+                        @click="addProyecto(); agregar = true">add</span>
                     </q-item-section>
                   </q-item>
-                  <!-- si tiene archivo le saldra esto -->
-                  <div v-else>
-                    <q-item clickable>
-                      <q-item-section>
-                        <a :href="useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo"
-                          style="text-align: center;">
-                          <span class="material-symbols-outlined" id="opciones">
-                            download
-                          </span>
-                        </a>
-                      </q-item-section>
-                    </q-item>
-                    <q-item clickable>
-                      <q-item-section>
-                        <span class="material-symbols-outlined" id="opciones">
-                          border_color
-                        </span>
-                      </q-item-section>
-                    </q-item>
-                  </div>
+
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'instructor'">
+                    <q-item-section>
+                      <span class="material-symbols-outlined" @click="proyectoNull()" style="
+                    font-size: 4vh;
+                  ">priority_high</span>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-if="proyectoFormativo != undefined">
+                    <q-item-section>
+                      <a target="_blank" :href="proyectoFormativo"
+                        style="text-align: center;font-size: 4vh">
+                        <span class="material-symbols-outlined">download</span>
+                      </a>
+
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-if="proyectoFormativo != undefined && rol == 'gestor'">
+                    <q-item-section>
+                      <span class="material-symbols-outlined" style="
+                    font-size: 4vh;text-align: center;
+                  ">edit</span>
+                    </q-item-section>
+                  </q-item>
+
 
                   <q-separator />
                 </q-list>
@@ -140,7 +114,7 @@
       </div>
 
       <!-- planeación pedagogica -->
-      <div class="MatrizCorrelacion">
+      <div class="menus">
         <div class="row" id="row">
           <q-toolbar-title class="title">
             Planeación Pedagógica
@@ -149,42 +123,41 @@
           <q-btn flat round dense>
             <q-btn color="secondary" label="">
               <q-icon name="more_vert" />
-
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <!-- sino tiene archivo le saldra esto  -->
-                  <q-item clickable @click="agregar = true" v-if="planeacionPedagogica === undefined">
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'gestor'">
                     <q-item-section>
-                      <span class="material-symbols-outlined" id="opciones" v-if="rol ==='instructor'">
-                            download
-                          </span>
-
-                      <span v-else class="material-symbols-outlined" style="" id="opciones"
-                        @click="(agregar = true), addplaneacionPedagogica()">
-                        add
-                      </span>
+                      <span class="material-symbols-outlined" style="font-size: 4vh;"
+                        @click="addProyecto(); agregar = true">add</span>
                     </q-item-section>
                   </q-item>
-                  <!-- si tiene archivo le saldra esto -->
-                  <div v-else>
-                    <q-item clickable>
-                      <q-item-section>
-                        <a :href="useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica"
-                          style="text-align: center;">
-                          <span class="material-symbols-outlined" id="opciones">
-                            download
-                          </span>
-                        </a>
-                      </q-item-section>
-                    </q-item>
-                    <q-item clickable>
-                      <q-item-section>
-                        <span class="material-symbols-outlined" id="opciones">
-                          border_color
-                        </span>
-                      </q-item-section>
-                    </q-item>
-                  </div>
+
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'instructor'">
+                    <q-item-section>
+                      <span class="material-symbols-outlined" @click="proyectoNull()" style="
+                    font-size: 4vh;
+                  ">priority_high</span>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-if="proyectoFormativo != undefined">
+                    <q-item-section>
+                      <a target="_blank" :href="proyectoFormativo"
+                        style="text-align: center;font-size: 4vh">
+                        <span class="material-symbols-outlined">download</span>
+                      </a>
+
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-if="proyectoFormativo != undefined && rol == 'gestor'">
+                    <q-item-section>
+                      <span class="material-symbols-outlined" style="
+                    font-size: 4vh;text-align: center;
+                  ">edit</span>
+                    </q-item-section>
+                  </q-item>
+
 
                   <q-separator />
                 </q-list>
@@ -201,7 +174,7 @@
     </div>
     <!-- guias de aprendizaje -->
     <div class="q-mt-xl  ">
-      <div class="MatrizCorrelacion">
+      <div class="menus">
         <div class="row" id="row">
           <q-toolbar-title class="title"> Fase de Análisis </q-toolbar-title>
 
@@ -214,7 +187,7 @@
         <small>Ver Fase de Análisis</small>
       </div>
 
-      <div class="MatrizCorrelacion">
+      <div class="menus">
         <div class="row" id="row">
           <q-toolbar-title class="title"> Fase de Planeación </q-toolbar-title>
 
@@ -227,7 +200,7 @@
         <small>Ver Fase de Planeación</small>
       </div>
 
-      <div class="MatrizCorrelacion">
+      <div class="menus">
         <div class="row" id="row">
           <q-toolbar-title class="title"> Fase de Ejecución </q-toolbar-title>
 
@@ -241,7 +214,7 @@
       </div>
     </div>
 
-    <div class="MatrizCorrelacion">
+    <div class="menus">
       <div class="row" id="row">
         <q-toolbar-title class="title"> Fase de Evaluación </q-toolbar-title>
 
@@ -312,6 +285,7 @@ let archivo = ref("");
 let matriz = ref(useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion);
 console.log(matriz.value);
 let proyectoFormativo = ref(useInfoPrograma.programa.desarrolloCurricular.proyectoFormativo);
+console.log(proyectoFormativo.value);
 let planeacionPedagogica = ref(useInfoPrograma.programa.desarrolloCurricular.planeacionPedagogica);
 let _id = ref(useInfoPrograma.programa.desarrolloCurricular._id);
 let codigo = ref(useInfoPrograma.programa.codigo);
@@ -406,12 +380,12 @@ async function informacionPrograma(x) {
       console.log(a.data.desarrolloCurricular.matrizcorrelacion)
 
       if (a.data.desarrolloCurricular.matrizcorrelacion != undefined) {
-        matriz.value =a.data.desarrolloCurricular.matrizcorrelacion 
+        matriz.value = a.data.desarrolloCurricular.matrizcorrelacion
         console.log('----------- matriz correlacion-----')
         console.log(matriz.value)
       }
-      if (a.data.desarrolloCurricular.planeacionPedagogica != undefined){
-        planeacionPedagogica.value =  a.data.desarrolloCurricular.planeacionPedagogica 
+      if (a.data.desarrolloCurricular.planeacionPedagogica != undefined) {
+        planeacionPedagogica.value = a.data.desarrolloCurricular.planeacionPedagogica
         console.log(planeacionPedagogica.value)
         console.log('------- desarrollo curricular---------')
       }
@@ -429,18 +403,38 @@ async function informacionPrograma(x) {
 
 function matrizNull() {
   $q.notify({
-        message: ` El programa aun no tiene matrizz de correlacion `,
-        color: "red",
-        icon: "check",
-        position: "bottom",
-        timeout: Math.random() * 3000,
-      });
-  
+    message: ` El programa aún no tiene matriz de correlación `,
+    color: "negative",
+    icon: "warning",
+    position: "top",
+    timeout: Math.random() * 3500,
+  });
+}
+
+function proyectoNull() {
+  $q.notify({
+    message: ` El programa aún no tiene proyecto formativo `,
+    color: "negative",
+    icon: "warning",
+    position: "top",
+    timeout: Math.random() * 3500,
+  });
+
+}
+
+function planeacionNull() {
+  $q.notify({
+    message: ` El programa aún no tiene planeación pedagógica `,
+    color: "negative",
+    icon: "warning",
+    position: "top",
+    timeout: Math.random() * 3500,
+  });
 }
 </script>
 
 <style scoped>
-.MatrizCorrelacion {
+.menus {
   padding: 2vh;
   background-color: white;
 }
