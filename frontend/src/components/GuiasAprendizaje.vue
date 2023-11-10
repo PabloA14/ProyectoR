@@ -104,6 +104,7 @@ const mostrarModal = ref(false);
 let loading = ref(false)
 const $q = useQuasar()
 let router = useRouter()
+let errores = ref([])
 
 const pagination = ref({
   rowsPerPage: 6
@@ -174,7 +175,24 @@ async function agregarN() {
     })
     buscar()
   }).catch((error) => {
-    console.log(error);
+    // Para trae las validaciones
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    } else if (error.response && error.response.data) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
+
   })
   loading.value = false
 }
@@ -207,9 +225,38 @@ async function actualizar() {
     })
     buscar();
   }).catch((error) => {
-    console.log(error);
+    
+    errores.value = ''
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    }
+    else if (error.response && error.response.data) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else {
+      console.log(error);
+    }
+
   })
   loading.value = false
+}
+
+function validar() {
+  $q.notify({
+    message: errores,
+    color: 'negative',
+    position: 'top',
+    icon: 'warning',
+    timeout: Math.random() * 3000
+  })
 }
 
 const informacionGuia = async (x) => {
