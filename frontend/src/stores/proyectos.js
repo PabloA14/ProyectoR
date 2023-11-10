@@ -11,7 +11,7 @@ export const useProyectosStore = defineStore("proyecto", () => {
             console.log("Haciendo la solicitud para buscar proyectos...");
             const buscar = await axios.get(`${LinkBD}/api/proyecto`);
             proyectoRecuperado.value = buscar.data.guia
-            console.log("Proyectos recuperados: ------", proyectoRecuperado.value);
+            console.log("Proyectos recuperados store : ------", proyectoRecuperado.value);
         } catch (error) {
             console.log("Error al buscar proyectos:", error.response);
         }

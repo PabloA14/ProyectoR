@@ -53,7 +53,7 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <div class="q-mb-md">
-        
+
 
               <select name="" id="" v-model="instructor">
 
@@ -66,7 +66,7 @@
                     </b>
 
                   </small>
-   
+
                 </option>
 
                 <option v-if="instructores.length === 0" value="" disabled>
