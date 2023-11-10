@@ -207,6 +207,7 @@
               </template>
             </q-input> -->
             <p>Hoja de Vida</p>
+            <p style="color: rgb(122, 122, 121);">Hoja de Vida</p>
             <input type="file" @change="archivo" />
           </div>
 

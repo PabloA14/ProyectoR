@@ -10,7 +10,13 @@
         </div>
         
         <q-page class="q-pa-md">
-            <div class="text-h4 text-center q-mb-md">Investigación</div>
+            <q-breadcrumbs separator=">">
+                <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+                <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+                <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+                <q-breadcrumbs-el label="Investigaciones" />
+            </q-breadcrumbs><br>
+            <div class="text-h4 text-center q-mb-md">Investigaciones</div>
             <div class="q-pa-md" style="width: 100%;">
                 <div class="spinner-container" v-if="useInvestigacion.loading === true">
                     <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />

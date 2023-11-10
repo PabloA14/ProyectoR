@@ -12,7 +12,7 @@ const httpGuias = {
             secure: true,
         });
 
-        const { codigo, nombre, fase,  } = req.body
+        const { codigo, nombre, fase, } = req.body
         let documentoUrl = null;
 
         try {
@@ -39,7 +39,7 @@ const httpGuias = {
             }
 
             const guia = new Guia({
-                codigo, nombre, fase, documento: documentoUrl, 
+                codigo, nombre, fase, documento: documentoUrl,
             });
 
             const cod = await Guia.findOne({ codigo: codigo });
@@ -69,14 +69,14 @@ const httpGuias = {
             if (!guia) {
                 res.status(400).json({ sms: `No se encontró ninguna guía con el ID ${id}` });
             } else {
-                res.status(200).json({ guia });
+                res.status(200).json(guia);
             }
         } catch (error) {
             res.json({ error });
             console.log(error);
         }
     },
-    
+
     putGuias: async (req, res) => {
         cloudinary.config({
             cloud_name: process.env.CLOUDINARY_NAME,
@@ -86,11 +86,11 @@ const httpGuias = {
         });
 
         const guiasId = req.params.id;
-        const { codigo, nombre, fase,  } = req.body;
+        const { codigo, nombre, fase, } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase, 
+                codigo, nombre, fase,
             };
 
             // Verificar si se proporciona un nuevo documento
