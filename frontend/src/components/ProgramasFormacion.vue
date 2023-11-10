@@ -7,98 +7,50 @@
 
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="usePrograma.loading === true">
-          <q-spinner
-            style="margin-left: 10px"
-            color="black"
-            size="7em"
-            :thickness="10"
-          />
+          <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
         </div>
 
-        <q-table
-          v-if="usePrograma.loading === false"
-          class="my-sticky-header-table"
-          :separator="separator"
-          bordered
-          :filter="filter"
-          :rows="programasFiltrados"
-          :columns="columns"
-          row-key="name"
-          :pagination="pagination"
-        >
+        <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="programasFiltrados" :columns="columns" row-key="name" :pagination="pagination">
           <!-- opciones -->
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <!-- agregar desarrollo C -->
               <div v-if="props.row.desarrolloCurricular === null">
                 <!-- simbolo rojo **********************************************************************************************************************+ -->
-                <q-icon
-                  v-if="rol === 'instructor'"
-                  class="material-symbols-outlined"
+                <q-icon v-if="rol === 'instructor'" class="material-symbols-outlined"
                   @click="(desarrolloNulo = true), desarrolloNuloF()"
-                  style="font-size: 5vh; background-color: red; color: white"
-                  >priority_high</q-icon
-                >
+                  style="font-size: 5vh; background-color: red; color: white">priority_high</q-icon>
 
-                <q-icon
-                  v-else
-                  class="material-symbols-outlined"
-                  style="
+                <q-icon v-else class="material-symbols-outlined" style="
                     font-size: 5vh;
                     background-color: #39a900;
                     color: white;
-                  "
-                  @click="editarDesarrollo(props.row)"
-                  >add</q-icon
-                >
+                  " @click="editarDesarrollo(props.row)">add</q-icon>
               </div>
 
               <div v-else>
                 <!-- else -->
 
-                <q-icon
-                  title="Detalle de Programa"
-                  name="fa-solid fa-eye"
-                  color="primary"
-                  size="20px"
-                  style="margin-right: 25px; cursor: pointer"
-                  @click="informacionPrograma(props.row)"
-                />
+                <q-icon title="Detalle de Programa" name="fa-solid fa-eye" color="primary" size="20px"
+                  style="margin-right: 25px; cursor: pointer" @click="informacionPrograma(props.row)" />
 
                 <!-- editar programa -->
-                <q-icon
-                  color="orange"
-                  name="fa-solid fa-pen-to-square fa-xl"
-                  size="20px"
-                  style="margin-right: 10px; cursor: pointer"
-                  @click="editarPrograma(props.row)"
-                />
+                <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                  style="margin-right: 10px; cursor: pointer" @click="editarPrograma(props.row)" />
                 <!-- estado del programa -->
-                <q-icon
-                  color="green"
-                  name="fa-solid fa-check fa-xl"
-                  size="20px"
-                  style="margin-left: 10px; cursor: pointer"
-                  v-if="props.row.estado == 0"
-                  @click="editarEstado(props.row)"
-                />
-                <q-icon
-                  color="red"
-                  name="fa-solid fa-x"
-                  size="20px"
-                  style="margin-left: 10px; cursor: pointer"
-                  v-else
-                  @click="editarEstado(props.row)"
-                />
+                <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                  style="margin-left: 10px; cursor: pointer" v-if="props.row.estado == 0"
+                  @click="editarEstado(props.row)" />
+                <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px; cursor: pointer" v-else
+                  @click="editarEstado(props.row)" />
               </div>
             </q-td>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1"
-                >Activo</span
-              >
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
@@ -110,30 +62,18 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input
-              color="secondary"
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn
-              v-if="rol == 'gestor' || rol === 'administrador'"
-              color="secondary"
-              icon="add"
-              label="Agregar"
-              class="q-mb-md"
-              @click="
+            <q-btn v-if="rol == 'gestor' || rol === 'administrador'" color="secondary" icon="add" label="Agregar"
+              class="q-mb-md" @click="
                 agregar = true;
-                nuevo();
-              "
-            />
+              nuevo();
+              " />
           </template>
         </q-table>
       </div>
@@ -149,44 +89,23 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input
-              label="Código*"
-              type="number"
-              color="secondary"
-              v-model="codigo"
-            />
+            <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Denominación*"
-              color="secondary"
-              v-model="denominacion"
-            />
+            <q-input label="Denominación*" color="secondary" v-model="denominacion" />
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Nivel de Formación*"
-              color="secondary"
-              v-model="nivel"
-              :options="
-                niveles.map((nivel) => ({
-                  label: nivel.denominacion,
-                  value: nivel._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select label="Nivel de Formación*" color="secondary" v-model="nivel" :options="niveles.map((nivel) => ({
+              label: nivel.denominacion,
+              value: nivel._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
@@ -196,7 +115,7 @@
 
           <div class="q-mb-md">
             <b>
-              <p>Diseño Curricular</p>
+              <p>Diseño Curricular*</p>
             </b>
             <input type="file" name="" id="" @change="archivo" />
           </div>
@@ -205,20 +124,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            v-if="bd == 1"
-            label="Agregar"
-            @click="agregarP()"
-            color="secondary"
-          />
-          <q-btn
-            :disabled="loading"
-            v-else
-            label="Actualizar"
-            @click="actualizar()"
-            color="secondary"
-          />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -230,27 +137,13 @@
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input
-              label="Código*"
-              type="number"
-              color="secondary"
-              v-model="codDesarrollo"
-            />
+            <q-input label="Código*" type="number" color="secondary" v-model="codDesarrollo" />
           </div>
           <q-card-actions align="right">
-            <q-btn
-              :disabled="loading"
-              label="Agregar D"
-              @click="addDesarrolloC()"
-              color="secondary"
-            />
+            <q-btn :disabled="loading" label="Agregar D" @click="addDesarrolloC()" color="secondary" />
           </q-card-actions>
         </q-card-section>
       </q-card>

@@ -106,11 +106,7 @@
           </div>
 
           <div class="q-mb-md">
-            <!-- <q-input type="file" @change="archivo" color="secondary" label="Hoja de Vida">
-              <template v-slot:prepend>
-                <q-icon name="attach_file" />
-              </template>
-            </q-input> -->
+            <p style="color: rgb(122, 122, 121);">Hoja de Vida</p>
             <input type="file" @change="archivo" />
           </div>
 
@@ -133,7 +129,7 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-<!-- modal informavion -->
+    <!-- modal informavion -->
     <q-dialog v-model="infoU">
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">

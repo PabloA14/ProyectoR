@@ -22,7 +22,8 @@
 
                             <q-item clickable>
                                 <q-item-section>
-                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;"
+                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;
+                                    font-size: 5vh;color: black;"
                                         target="_blank">
                                         <span class="material-symbols-outlined" id="opciones">
                                             download
@@ -33,7 +34,7 @@
                             </q-item>
                             <q-item clickable v-if="useUsuario.rol != 'instructor'">
                                 <q-item-section>
-                                    <span class="material-symbols-outlined" style="" id="opciones">
+                                    <span class="material-symbols-outlined" style="font-size: 4.5vh;" id="opciones">
                                         edit
                                     </span>
                                 </q-item-section>

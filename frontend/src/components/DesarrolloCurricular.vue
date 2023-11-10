@@ -1,5 +1,11 @@
 <template>
   <q-page padding>
+    <q-breadcrumbs separator=">">
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el label="Desarrollo Curricular" />
+    </q-breadcrumbs><br>
+
     <div class="text-h4 text-center q-mb-md">Desarrollo Curricular</div>
     <div>
       <!-- matriz correlacion -->
@@ -87,8 +93,7 @@
 
                   <q-item clickable v-if="proyectoFormativo != undefined">
                     <q-item-section>
-                      <a target="_blank" :href="proyectoFormativo"
-                        style="text-align: center;font-size: 4vh">
+                      <a target="_blank" :href="proyectoFormativo" style="text-align: center;font-size: 4vh">
                         <span class="material-symbols-outlined">download</span>
                       </a>
 
@@ -142,8 +147,7 @@
 
                   <q-item clickable v-if="proyectoFormativo != undefined">
                     <q-item-section>
-                      <a target="_blank" :href="proyectoFormativo"
-                        style="text-align: center;font-size: 4vh">
+                      <a target="_blank" :href="proyectoFormativo" style="text-align: center;font-size: 4vh">
                         <span class="material-symbols-outlined">download</span>
                       </a>
 

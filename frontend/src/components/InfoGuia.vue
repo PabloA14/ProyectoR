@@ -94,10 +94,10 @@
             <q-td :props="props">
               <div class="opciones">
 
-                <q-icon title="Visitar Link" color="blue" @click="editarGuia(props.row)" name="fa-solid fa-share"
+                <q-icon title="Visitar Link" color="blue" name="fa-solid fa-share"
                   size="25px" style="margin-right: 25px;cursor: pointer;" />
 
-                <q-icon title="Editar Material" color="orange" @click="editarGuia(props.row)"
+                <q-icon title="Editar Material" color="orange" @click="editarMat(props.row)"
                   name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
                 <a :href="props.row.documento" target="_blank">
@@ -119,7 +119,7 @@
           <template v-slot:top-left>
             <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
               agregarMaterial = true;
-            nuevo();
+            nuevoMaterial();
             " />
           </template>
         </q-table>
@@ -128,48 +128,48 @@
 
     <!-- Modal MATERIALES -->
     <q-dialog v-model="agregarMaterial">
-        <q-card style="width: 32%; height: fit-content">
-          <q-card-section class="row items-center q-pb-none">
+      <q-card style="width: 32%; height: fit-content">
+        <q-card-section class="row items-center q-pb-none">
 
-            <div class="text-h6">
-              {{ bd === 0 ? "Editar Material" : "Agregar Material" }}
-            </div>
+          <div class="text-h6">
+            {{ bd === 0 ? "Editar Material" : "Agregar Material" }}
+          </div>
 
-            <q-space />
-            <q-btn icon="close" color="negative" flat round dense v-close-popup />
+          <q-space />
+          <q-btn icon="close" color="negative" flat round dense v-close-popup />
 
-          </q-card-section>
+        </q-card-section>
 
-          <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
-          <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
-            <div class="q-mb-md">
-              <q-input label="Código*" color="secondary" v-model="codigo" />
-            </div>
+          <div class="q-mb-md">
+            <q-input label="Código*" color="secondary" v-model="codigo" />
+          </div>
 
-            <div class="q-mb-md">
-              <q-input label="Nombre*" color="secondary" v-model="nombre" />
-            </div>
+          <div class="q-mb-md">
+            <q-input label="Nombre*" color="secondary" v-model="nombre" />
+          </div>
 
-            <div class="q-mb-md">
-              <q-input label="Enlace" color="secondary" v-model="enlace" />
-            </div>
+          <div class="q-mb-md">
+            <q-input label="Enlace" color="secondary" v-model="enlace" />
+          </div>
 
-            <div class="q-mb-md">
-              <b>
-                <p>Archivo</p>
-              </b>
-              <input type="file" @change="doc">
-            </div>
-          </q-card-section>
+          <div class="q-mb-md">
+            <b>
+              <p>Archivo</p>
+            </b>
+            <input type="file" @change="docMat">
+          </div>
+        </q-card-section>
 
-          <q-card-actions align="right">
-            <q-btn :disabled="loading" color="secondary" v-if="bd == 1" label="Guardar" @click="agregarN" />
-            <q-btn :disabled="loading" color="secondary" v-else label="Actualizar" @click="actualizar" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
+        <q-card-actions align="right">
+          <q-btn :disabled="loading" color="secondary" v-if="bd == 1" label="Guardar" @click="agregarMat" />
+          <q-btn :disabled="loading" color="secondary" v-else label="Actualizar" @click="actualizar" />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
 
 
   </q-page>
@@ -198,6 +198,16 @@ console.log(useGuia.guia);
 const agregarMaterial = ref(false)
 let loading = ref(false)
 const $q = useQuasar()
+let errores = ref([])
+let bd = ref('')
+
+//variables materiales
+
+let idMat = ref('')
+let codigo = ref('')
+let nombre = ref('')
+let enlace = ref('')
+let documentoMat = ref('')
 
 const columnsInstrumento = [
   {
@@ -220,6 +230,28 @@ const pagination = ref({
 
 buscarMaterialesApoyo()
 
+function vaciarMat() {
+  codigo.value = ""
+  nombre.value = ""
+  enlace.value = ""
+  documentoMat.value = ""
+}
+
+function nuevoMaterial() {
+  bd.value = 1;
+  vaciarMat();
+}
+
+function validar() {
+  $q.notify({
+    message: errores,
+    color: 'negative',
+    position: 'top',
+    icon: 'warning',
+    timeout: Math.random() * 3000
+  })
+}
+
 async function buscarMaterialesApoyo() {
   try {
     materiales.value = await useMatApoyo.buscarMatApoyo()
@@ -230,6 +262,71 @@ async function buscarMaterialesApoyo() {
   }
 }
 
+function docMat(event) {
+  documentoMat.value = event.target.files[0]
+  console.log(documentoMat.value);
+}
+
+async function agregarMat() {
+  console.log("entro a agregar");
+  loading.value = true
+  await useMatApoyo.agregarMatApoyo({
+    codigo: codigo.value,
+    nombre: nombre.value,
+    enlace: enlace.value,
+    documento: documentoMat.value,
+    guia: useGuia.guia._id
+  }).then(() => {
+    agregarMaterial.value = false
+    $q.notify({
+      message: 'Material de Apoyo agregado exitosamente',
+      color: 'green',
+      icon: 'check',
+      position: 'bottom',
+      timeout: Math.random() * 3000
+    })
+    buscarMaterialesApoyo();
+  }).catch((error) => {
+    console.log(error);
+    if (error.response && error.response.data.msg) {
+      const repetida = error.response.data.msg
+      $q.notify({
+        message: repetida,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+
+    } else if (error.response && error.response.data) {
+      errores.value = error.response.data.errors[0].msg
+      validar()
+
+    } else if (error.response.data.error) {
+      $q.notify({
+        message: 'falta archivo',
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+      })
+    } else {
+      console.log(error);
+    }
+  })
+  loading.value = false
+}
+
+function editarMat(i) {
+  console.log("Entró a editar", i);
+  bd.value = 0;
+  idMat.value = i._id;
+  codigo.value = i.codigo
+  nombre.value = i.denominacion
+  enlace.value = i.enlace
+  documentoMat.value = i.documento
+  agregar.value = true;
+}
 
 </script>
 
