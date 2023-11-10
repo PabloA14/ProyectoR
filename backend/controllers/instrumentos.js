@@ -1,40 +1,74 @@
 import Instrumentos from "../models/instrumentos.js"
+import { v2 as cloudinary } from 'cloudinary';
+
 
 const httpInstrumentos = {
 
+
     postInstrumentos: async (req, res) => {
-        const { codigo, nombre, documento } = req.body
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { codigo, nombre, guia, } = req.body
+        let documentoUrl = null;
+
         try {
-            const instrumentosE = new Instrumentos({
-                codigo, nombre, documento
-            })
-            const cod = await Instrumentos.findOne({ codigo: codigo })
+
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                documentoUrl = result.url;
+            }
+
+            const instrumento = new Instrumentos({
+                codigo, nombre, guia, documento: documentoUrl,
+            });
+
+            const cod = await Instrumentos.findOne({ codigo: codigo });
             if (cod) {
-                return res.status(400).json({ msg: "El instrumento ya se encuentra en el sistema con el codigo", cod, nombre })
-
+                return res.status(400).json({ msg: 'El instrumento ya se encuentra registrado', cod });
             } else {
-                await instrumentosE.save()
-                return res.status(200).json({ msg: 'Instrumento registrado correctamente', instrumentosE });
-
+                await instrumento.save();
+                res.status(200).json({ msg: "Registro exitoso", instrumento });
             }
 
         } catch (error) {
-            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de crear el registro" })
+            console.log(error);
+            return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momento de Crear el instrumento" })
         }
     },
 
     getInstrumentos: async (req, res) => {
-        const inst = await Instrumentos.find()
+        const inst = await Instrumentos.find().populate("guia")
         res.status(200).json({ inst })
     },
 
     getInstrumentoCodigo: async (req, res) => {
-        const Codigo = req.params.Codigo
+        const codigo = req.params.codigo
         try {
-            const cod = await Instrumentos.find({ codigo: Codigo })
+            const cod = await Instrumentos.find({ codigo: codigo })
             console.log(cod);
             if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para el instrumento ${Codigo}` })
+                res.status(400).json({ sms: `sin coincidencias para el instrumento ${codigo}` })
             } else {
                 res.status(200).json({ sms: `Se encontro el instrumento correctamente `, cod })
             }
@@ -45,16 +79,52 @@ const httpInstrumentos = {
     },
 
     putInstrumentosE: async (req, res) => {
-        const instrumentosId = req.params.id;
-        const { codigo, nombre, documento, } = req.body;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const istrumentosId = req.params.id;
+        const { codigo, nombre, guia, } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, documento
+                codigo, nombre, guia,
             };
 
+            // Verificar si se proporciona un nuevo documento
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el nuevo documento a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documento a los campos actualizados
+                updatedFields.documento = result.url;
+            }
+
+            const existingInstrumento = await Instrumentos.findOne({ codigo: codigo });
+            if (existingInstrumento && existingInstrumento._id.toString() !== istrumentosId) {
+                return res.status(400).json({ msg: 'El instrumento ya se encuentra registrado' });
+            }
+
             const updatedInstrumentos = await Instrumentos.findOneAndUpdate(
-                { _id: instrumentosId },
+                { _id: istrumentosId },
                 {
                     $set: updatedFields
                 },

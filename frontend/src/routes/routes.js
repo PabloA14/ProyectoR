@@ -14,7 +14,7 @@ import Investigacion from "../components/Investigacion.vue"
 import Cards from "../components/Cards.vue"
 import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
 import GuiasAprendizaje from "../components/GuiasAprendizaje.vue"
-import InfoDesarrollo from "../components/InfoDesarrollo.vue"
+import InfoGuia from "../components/InfoGuia.vue"
 import Ambientes2 from "../components/Ambientes2.vue"
 import Materiales2 from "../components/Materiales2.vue"
 //import Retroalimetacion from "../components/retroalimetacion.vue"
@@ -68,7 +68,7 @@ export const routes = [
             { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
             { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
-            { path: "/infoDesarrollo", component: InfoDesarrollo, name: "infoDesarrollo", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
+            { path: "/infoGuia", component: InfoGuia, name: "infoGuia", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor' , 'instructor'] } },
             //{ path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },

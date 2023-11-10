@@ -46,12 +46,13 @@ const httpProyectos = {
     },
 
     putProyecto: async (req, res) => {
-        const Codigo = req.params.codigo;
+        const id = req.params.id;
         try {
             const updatedPRoyectos = await Proyectos.findOneAndUpdate(
-                { codigo: Codigo },
+                { _id: id },
                 {
                     $set: {
+                        codigo:req.body.codigo,
                         nombre: req.body.nombre,
                         descripcion: req.body.descripcion,
                         version: req.body.version,
@@ -64,7 +65,7 @@ const httpProyectos = {
             if (!updatedPRoyectos) {
                 return res.status(404).json({ msg: 'Proyecto no encontradp' });
             }
-            res.status(200).json({ msg: 'Programa actualizado exitosamente', red: updatedPRoyectos });
+            res.status(200).json({ msg: 'Proyecto actualizado exitosamente', red: updatedPRoyectos });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar Programas' });

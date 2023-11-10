@@ -8,10 +8,8 @@
           <q-td :props="props">
             <div class="opciones">
 
-              <router-link to="infoDesarrollo">
-                <q-icon title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
-                  style="margin-right: 25px;cursor: pointer;" />
-              </router-link>
+              <q-icon title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
+                style="margin-right: 25px;cursor: pointer;" @click="informacionGuia(props.row)" />
 
               <q-icon title="Editar Guía" color="orange" @click="editarGuia(props.row)"
                 name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
@@ -83,8 +81,6 @@
   </q-page>
 </template>
  
-  
-  <!-- @click="editarRol(props.row)" -->
 <style scoped></style>
 
 
@@ -92,6 +88,7 @@
 import { ref } from "vue";
 import { usegiasStore } from "../stores/guias"
 import { useQuasar } from 'quasar'
+import { useRouter } from "vue-router";
 
 let filter = ref('')
 let separator = ref('cell')
@@ -106,6 +103,11 @@ let archivo = ref('')
 const mostrarModal = ref(false);
 let loading = ref(false)
 const $q = useQuasar()
+let router = useRouter()
+
+const pagination = ref({
+  rowsPerPage: 6
+})
 
 const columns = [
   {
@@ -210,6 +212,13 @@ async function actualizar() {
   loading.value = false
 }
 
+const informacionGuia = async (x) => {
+  console.log("----------------");
+  id.value = x._id;
+  console.log(id.value)
+  await usegias.informacionGuia(id.value)
+  router.push("/infoGuia")
+}
 
 </script>
  

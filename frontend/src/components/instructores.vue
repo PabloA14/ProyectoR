@@ -54,16 +54,8 @@
           <div class="q-mb-md">
             <div class="q-mb-md">
 
-              <q-select v-if="instructores.length === 0" label="No hay instructores disponibles" color="secondary"
-                disable>
-              </q-select>
 
-              <q-select v-else label="Seleccionar Instructor" color="secondary" v-model="instructor"
-                :options="instructores.map(i => ({ label: `${i.nombre} ${i.apellidos}`, value: i._id }))" emit-value
-                map-options>
-              </q-select>
-
-              <!-- <select name="" id="" v-model="instructor">
+              <select name="" id="" v-model="instructor">
 
                 <option :value="a._id" v-for="a in instructores" :key="a">
                   <small>
