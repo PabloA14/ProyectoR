@@ -151,7 +151,7 @@ const $q = useQuasar()
 let agregar = ref(false)
 let errores = ref([])
 let loading = ref(false)
-
+const renderTrigger = ref(0);
 let titulo = ref("")
 let metodologia = ref("")
 let lugardesarrollo = ref("")
@@ -302,6 +302,7 @@ async function actualizar() {
             timeout: Math.random() * 3000
         })
         buscar();
+        renderTrigger.value += 1;
 
     }).catch((error) => {
         errores.value = ''

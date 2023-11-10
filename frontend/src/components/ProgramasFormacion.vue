@@ -66,7 +66,7 @@
                 />
 
                 <!-- editar programa -->
-                <q-icon
+                <q-icon v-if="rol != 'instructor'"
                   color="orange"
                   name="fa-solid fa-pen-to-square fa-xl"
                   size="20px"
@@ -109,6 +109,7 @@
             </q-td>
           </template>
 
+          <!-- buscar -->
           <template v-slot:top-right>
             <q-input
               color="secondary"
@@ -122,6 +123,7 @@
               </template>
             </q-input>
           </template>
+          <!-- agregar -->
           <template v-slot:top-left>
             <q-btn
               v-if="rol == 'gestor' || rol === 'administrador'"

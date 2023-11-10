@@ -96,8 +96,8 @@ export const useUsuarioStore = defineStore("usuario", () => {
       console.log(error);
     }
   };
-  const logeo = async (cedula, clave) => {
 
+  const logeo = async (cedula, clave) => {
     try {
       loading.value = true
       let datos = await axios.post(`${LinkBD}/api/usuario/login`,
@@ -117,6 +117,24 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
   };
 
+  
+  const putFoto = async (id, foto) => {
+    console.log(id, foto);
+    try {
+     const formData = new FormData()
+     formData.append('foto', foto)
+     const res = await axios.put(`${LinkBD}/api/usuario/Usuario/${id}`, formData, {
+       headers: {
+         "Content-Type": "multipart/form-data"
+       },
+     });
+     console.log('----------****-----------');
+     return res;
+   } catch (error) {
+     console.log(error);
+   }  
+ };
+
   return {
     buscarUsuarios,
     agregarUsuario,
@@ -127,7 +145,8 @@ export const useUsuarioStore = defineStore("usuario", () => {
     rol,
     logeo,
     loading,
-    usuario
+    usuario,
+    putFoto
   }
 },
   { persist: true }

@@ -1,11 +1,11 @@
 <template>
-  <div>
-    <!-- <q-breadcrumbs separator=">">
-        <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
-        <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
-        <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
-        <q-breadcrumbs-el label="Proyectos" />
-      </q-breadcrumbs><br> -->
+  <div class="q-mt-md">
+    <q-breadcrumbs separator=">" >
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+      <q-breadcrumbs-el to="/proyecto" label="Proyectos del programa" />
+  </q-breadcrumbs><br>
 
     <div class="text-h4 text-center q-mt-md">Proyectos</div>
     <div class="spinner-container" v-if="loading">

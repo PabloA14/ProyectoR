@@ -2,30 +2,82 @@
   <div>
     <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
-      <div class="q-pa-md" style="width: 100%;">
+      <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="useUsuari.loading === true">
-          <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+          <q-spinner
+            style="margin-left: 10px"
+            color="black"
+            size="7em"
+            :thickness="10"
+          />
         </div>
-        <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
-          :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
+        <q-table
+          v-if="useUsuari.loading === false"
+          class="my-sticky-header-table"
+          :separator="separator"
+          bordered
+          :filter="filter"
+          :rows="usuarios"
+          :columns="columns"
+          row-key="name"
+          :pagination="pagination"
+        >
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
-                style="margin-right: 25px;cursor: pointer;" @click="informacionUsuario(props.row)" />
 
-              <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
-                style="margin-right: 10px;cursor: pointer;" @click="editarUsuario(props.row)" />
-              <q-icon title="Cambiar Estado" color="green" name="fa-solid fa-check fa-xl" size="20px"
-                style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
-                @click="editarEstado(props.row)" />
-              <q-icon title="Cambiar Estado" color="red" name="fa-solid fa-x" size="20px"
-                style="margin-left: 10px;cursor: pointer;" v-else @click="editarEstado(props.row)" />
+
+              <q-icon
+                title="Detalle de Usuario"
+                name="fa-solid fa-eye"
+                color="primary"
+                size="20px"
+                style="margin-right: 25px; cursor: pointer"
+                @click="informacionUsuario(props.row)"
+              />
+              <q-icon
+              title="Foto de Pefil"
+              size="30px"
+              style="padding-right:3vh ; color: green"
+            >
+              <span class="material-symbols-outlined" @click="putImagen(props.row)">
+                face
+              </span>
+            </q-icon>
+
+              <q-icon
+                title="Editar Usuario"
+                color="orange"
+                name="fa-solid fa-pen-to-square fa-xl"
+                size="20px"
+                style="margin-right: 10px; cursor: pointer"
+                @click="editarUsuario(props.row)"
+              />
+              <q-icon
+                title="Cambiar Estado"
+                color="green"
+                name="fa-solid fa-check fa-xl"
+                size="20px"
+                style="margin-left: 10px; cursor: pointer"
+                v-if="props.row.estado == 0"
+                @click="editarEstado(props.row)"
+              />
+              <q-icon
+                title="Cambiar Estado"
+                color="red"
+                name="fa-solid fa-x"
+                size="20px"
+                style="margin-left: 10px; cursor: pointer"
+                v-else
+                @click="editarEstado(props.row)"
+              />
             </q-td>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
+              <span class="text-green" v-if="props.row.estado == 1"
+                >Activo</span
+              >
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
@@ -43,17 +95,29 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input
+              color="secondary"
+              dense
+              debounce="300"
+              v-model="filter"
+              placeholder="Buscar"
+            >
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
-              agregar = true;
-            nuevo();
-            " />
+            <q-btn
+              color="secondary"
+              icon="add"
+              label="Agregar"
+              class="q-mb-md"
+              @click="
+                agregar = true;
+                nuevo();
+              "
+            />
           </template>
         </q-table>
       </div>
@@ -69,14 +133,20 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+        <q-separator
+          inset
+          style="height: 5px; margin-top: 5px"
+          color="secondary"
+        />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Cédula*" type="number" color="secondary" v-model="cedula" />
+            <q-input
+              label="Cédula*"
+              type="number"
+              color="secondary"
+              v-model="cedula"
+            />
           </div>
 
           <div class="q-mb-md">
@@ -88,20 +158,45 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Teléfono*" type="number" color="secondary" v-model="telefono" />
+            <q-input
+              label="Teléfono*"
+              type="number"
+              color="secondary"
+              v-model="telefono"
+            />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
+            <q-input
+              label="Correo Electrónico*"
+              color="secondary"
+              v-model="correo"
+            />
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <q-input label="Contraseña*" type="password" color="secondary" v-model="clave" />
+            <q-input
+              label="Contraseña*"
+              type="password"
+              color="secondary"
+              v-model="clave"
+            />
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Red de Conocimiento*" color="secondary" v-model="red"
-              :options="redes.map(red => ({ label: red.denominacion, value: red._id }))" emit-value map-options>
+            <q-select
+              label="Red de Conocimiento*"
+              color="secondary"
+              v-model="red"
+              :options="
+                redes.map((red) => ({
+                  label: red.denominacion,
+                  value: red._id,
+                }))
+              "
+              emit-value
+              map-options
+            >
             </q-select>
           </div>
 
@@ -111,34 +206,63 @@
                 <q-icon name="attach_file" />
               </template>
             </q-input> -->
+            <p>Hoja de Vida</p>
             <input type="file" @change="archivo" />
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Rol*" color="secondary" v-model="rol"
-              :options="roles.map(rol => ({ label: rol.denominacion, value: rol._id }))" emit-value map-options>
+            <q-select
+              label="Rol*"
+              color="secondary"
+              v-model="rol"
+              :options="
+                roles.map((rol) => ({
+                  label: rol.denominacion,
+                  value: rol._id,
+                }))
+              "
+              emit-value
+              map-options
+            >
             </q-select>
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Perfil Profesional*" color="secondary" v-model="perfilProfesional" />
+            <q-input
+              label="Perfil Profesional*"
+              color="secondary"
+              v-model="perfilProfesional"
+            />
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
-          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+          <q-btn
+            :disabled="loading"
+            v-if="bd == 1"
+            label="Agregar"
+            @click="agregarU()"
+            color="secondary"
+          />
+          <q-btn
+            :disabled="loading"
+            v-else
+            label="Actualizar"
+            @click="actualizar()"
+            color="secondary"
+          />
         </q-card-actions>
       </q-card>
     </q-dialog>
-<!-- modal informavion -->
+    <!-- modal informavion -->
     <q-dialog v-model="infoU">
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
-          <q-avatar size="80px">
-            <img :src='info.hojaDeVida'>
+          <q-avatar size="100px" class="q-mr-md">
+            <img  v-if="info.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+            <img  v-else :src="info.foto" />
           </q-avatar>
           <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
 
@@ -146,73 +270,131 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+        <q-separator
+          inset
+          style="height: 5px; margin-top: 5px"
+          color="secondary"
+        />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-
           <div class="q-mb-md">
-            <p><b>No. de documento:</b>
+            <p>
+              <b>No. de documento:</b>
               {{ info.cedula }}
             </p>
           </div>
 
           <div class="q-mb-md">
-            <p><b>Teléfono:</b>
+            <p>
+              <b>Teléfono:</b>
               {{ info.telefono }}
             </p>
           </div>
 
           <div class="q-mb-md">
-            <p><b>Correo electrónico:</b>
+            <p>
+              <b>Correo electrónico:</b>
               {{ info.correo }}
             </p>
           </div>
 
           <div class="q-mb-md">
-            <p><b>Red de Conocimiento:</b>
+            <p>
+              <b>Red de Conocimiento:</b>
               {{ info.redConocimiento.denominacion }}
             </p>
           </div>
 
           <div class="q-mb-md">
-            <p><b>Rol de usuario:</b>
+            <p>
+              <b>Rol de usuario:</b>
               {{ info.rol.denominacion }}
             </p>
           </div>
 
           <div class="q-mb-md">
-            <p><b>Perfil Profesional:</b>
+            <p>
+              <b>Perfil Profesional:</b>
               {{ info.perfilProfesional }}
             </p>
           </div>
 
+          <div class="q-mb-md"></div>
 
-          <div class="q-mb-md">
+          <div class="q-mb-md"></div>
+        </q-card-section>
 
+        <q-separator />
+      </q-card>
+    </q-dialog>
+
+    <!-- Modal agregar imagen -->
+    <q-dialog v-model="agregarF">
+      <q-card style="width: 32%; height: fit-content">
+        <q-card-section class="row items-center q-pb-none">
+
+
+          <div class="text-h6" v-if="foto === undefined">
+            Agregar Foto
           </div>
 
+          <div class="text-h6" v-else>
+            Editar Foto
+          </div>
+          
+          <q-space />
+          <q-btn icon="close" color="negative" flat round dense v-close-popup />
+        </q-card-section>
+
+        <q-separator
+          inset
+          style="height: 5px; margin-top: 5px"
+          color="secondary"
+        />
+
+        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
+            <p>Adjuntar Foto</p>
+            <input type="file" @change="archivo" />
           </div>
         </q-card-section>
 
         <q-separator />
 
+        <q-card-actions align="right">
+          <q-btn
+            :disabled="loading"
+            v-if="foto === undefined"
+            label="Agregar Img"
+            @click="putImagenBd()"
+            color="secondary"
+          />
+          <q-btn
+            :disabled="loading"
+            v-else
+            @click="putImagenBd()"
+
+            label="Actualizar"
+            color="secondary"
+          />
+        </q-card-actions>
       </q-card>
     </q-dialog>
-
   </div>
 </template>
 
 <script setup>
 import { ref } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
-import { useRolStore } from "../stores/Roles.js"
-import { useRedStore } from "../stores/Redes.js"
-import { useQuasar } from 'quasar'
-let infoU = ref(false)
+import { useRolStore } from "../stores/Roles.js";
+import { useRedStore } from "../stores/Redes.js";
+import { useQuasar } from "quasar";
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
+import { useRouter } from "vue-router";
+let router = useRouter();
+const usePrograma = useProgramasFormacionStore();
+let infoU = ref(false);
+let agregarF =ref()
 let agregar = ref(false);
 let cedula = ref("");
 let nombre = ref("");
@@ -224,68 +406,95 @@ let red = ref("");
 let cv = ref("");
 let rol = ref("");
 let usuarios = ref([]);
-let roles = ref([])
-let redes = ref([])
-let separator = ref('cell')
+let roles = ref([]);
+let redes = ref([]);
+let separator = ref("cell");
 let id = ref("");
-let info = ref([])
+let info = ref([]);
 let perfilProfesional = ref("");
+let archivoF = ref("");
 
 let bd = ref("");
 const useUsuari = useUsuarioStore();
-const useRol = useRolStore()
-const useRed = useRedStore()
-const $q = useQuasar()
-let filter = ref('')
-let errores = ref([])
-let loading = ref(false)
-
+const useRol = useRolStore();
+const useRed = useRedStore();
+const $q = useQuasar();
+let filter = ref("");
+let errores = ref([]);
+let loading = ref(false);
+let foto = ref('')
 
 function informacionUsuario(x) {
-  infoU.value = true
-  console.log("hdhdhdhd")
-
-  info.value = x
-  console.log(info.value)
-
+  infoU.value = true;
+  info.value = x;
+  console.log(info.value);
 }
 
-
 const columns = [
-  { name: 'cedula', align: 'center', label: 'Cédula', field: 'cedula', sortable: true },
-  { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", format: val => `${val}`, sortable: true },
-  { name: 'apellidos', align: 'center', label: 'Apellidos', field: 'apellidos', sortable: true },
-  { name: 'redConocimiento', align: 'center', label: 'Red de Conocimiento', field: 'redConocimiento' },
-  { name: 'rol', align: 'center', label: 'Rol', field: 'rol' },
-  { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-  { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
-]
+
+  {
+    name: "nombre",
+    align: "center",
+    label: "Nombre",
+    field: "nombre",
+    format: (val) => `${val}`,
+    sortable: true,
+  },
+  {
+    name: "apellidos",
+    align: "center",
+    label: "Apellidos",
+    field: "apellidos",
+    sortable: true,
+  },
+  {
+    name: "cedula",
+    align: "center",
+    label: "Cédula",
+    field: "cedula",
+    sortable: true,
+  },
+  {
+    name: "redConocimiento",
+    align: "center",
+    label: "Red de Conocimiento",
+    field: "redConocimiento",
+  },
+  { name: "rol", align: "center", label: "Rol", field: "rol" },
+  {
+    name: "estado",
+    align: "center",
+    label: "Estado",
+    field: "estado",
+    sortable: true,
+  },
+  { name: "opciones", align: "center", label: "Opciones", field: "opciones" },
+];
 
 const pagination = ref({
-  rowsPerPage: 6
-})
+  rowsPerPage: 6,
+});
 
-
-buscarRol()
-buscarRed()
-buscar()
-
+buscarRol();
+buscarRed();
+buscar();
 
 async function buscar() {
   usuarios.value = await useUsuari.buscarUsuarios();
+
   console.log(usuarios.value);
-  usuarios.value.reverse()
+  usuarios.value.reverse();
 }
 
 async function buscarRol() {
   const rolesActivos = await useRol.buscarRoles();
-  roles.value = rolesActivos.filter(rol => rol.estado === 1);
+  roles.value = rolesActivos.filter((rol) => rol.estado === 1);
   console.log(roles.value);
 }
 
 async function buscarRed() {
   const redesActivas = await useRed.buscarRedes();
-  redes.value = redesActivas.filter(red => red.estado === 1)
+  redes.value = redesActivas.filter((red) => red.estado === 1);
   console.log(redes.value);
 }
 
@@ -308,77 +517,94 @@ function vaciar() {
 }
 
 function validarVacios() {
-  if (cedula.value === "" && nombre.value === "" && apellido.value === "" && telefono.value === ""
-    && correo.value === "" && clave.value === "" && red.value === "" && rol.value === "" && perfilProfesional.value === "") {
+  if (
+    cedula.value === "" &&
+    nombre.value === "" &&
+    apellido.value === "" &&
+    telefono.value === "" &&
+    correo.value === "" &&
+    clave.value === "" &&
+    red.value === "" &&
+    rol.value === "" &&
+    perfilProfesional.value === ""
+  ) {
     $q.notify({
-      message: 'Campos vacíos',
-      color: 'negative',
-      icon: 'warning',
-      position: 'top',
-      timeout: Math.random() * 3000
-    })
-  } else return true
+      message: "Campos vacíos",
+      color: "negative",
+      icon: "warning",
+      position: "top",
+      timeout: Math.random() * 3000,
+    });
+  } else return true;
 }
 
 function validar() {
   $q.notify({
     message: errores,
-    color: 'negative',
-    position: 'top',
-    icon: 'warning',
-    timeout: Math.random() * 3000
-  })
+    color: "negative",
+    position: "top",
+    icon: "warning",
+    timeout: Math.random() * 3000,
+  });
 }
 
 function archivo(event) {
-  cv.value = event.target.files[0]
-  console.log(cv.value);
+  cv.value = event.target.files[0];
+  archivoF.value = event.target.files[0];
+
 }
 
 async function agregarU() {
-  loading.value = true
+  loading.value = true;
   console.log("entro a agregar");
   console.log(cv.value);
-  await useUsuari.agregarUsuario({
-    cedula: cedula.value,
-    nombre: nombre.value,
-    apellidos: apellido.value,
-    telefono: telefono.value,
-    correo: correo.value,
-    clave: clave.value,
-    redConocimiento: red.value,
-    hojaDeVida: cv.value,
-    rol: rol.value,
-    perfilProfesional: perfilProfesional.value,
-  }).then(() => {
-    agregar.value = false
-    $q.notify({
-      message: 'Usuario agregado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: Math.random() * 3000
+  await useUsuari
+    .agregarUsuario({
+      cedula: cedula.value,
+      nombre: nombre.value,
+      apellidos: apellido.value,
+      telefono: telefono.value,
+      correo: correo.value,
+      clave: clave.value,
+      redConocimiento: red.value,
+      hojaDeVida: cv.value,
+      rol: rol.value,
+      perfilProfesional: perfilProfesional.value,
     })
-    buscar();
-  }).catch((error) => {
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
+    .then(() => {
+      agregar.value = false;
       $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
-        timeout: Math.random() * 3000
-      })
-    } else if (error.response && error.response.data && validarVacios() === true) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
-
-    } else {
-      console.log(error);
-    }
-  });
-  loading.value = false
+        message: "Usuario agregado exitosamente",
+        color: "green",
+        icon: "check",
+        position: "bottom",
+        timeout: Math.random() * 3000,
+      });
+      buscar();
+      vaciar()
+    })
+    .catch((error) => {
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg;
+        $q.notify({
+          message: repetida,
+          color: "negative",
+          position: "top",
+          icon: "warning",
+          timeout: Math.random() * 3000,
+        });
+      } else if (
+        error.response &&
+        error.response.data &&
+        validarVacios() === true
+      ) {
+        errores.value = error.response.data.errors[0].msg;
+        validar();
+      } else {
+        console.log(error);
+      }
+    });
+  loading.value = false;
 }
 
 function editarUsuario(x) {
@@ -398,78 +624,122 @@ function editarUsuario(x) {
 }
 
 async function actualizar() {
-  loading.value = true
-  await useUsuari.actualizarUsuario(
-    id.value,
-    cedula.value,
-    nombre.value,
-    apellido.value,
-    telefono.value,
-    correo.value,
-    red.value,
-    cv.value,
-    rol.value,
-    perfilProfesional.value
-
-  ).then(() => {
-    agregar.value = false
-    $q.notify({
-      message: 'Usuario editado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: Math.random() * 3000
-    })
-    buscar();
-
-  }).catch((error) => {
-    errores.value = ''
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
+  loading.value = true;
+  await useUsuari
+    .actualizarUsuario(
+      id.value,
+      cedula.value,
+      nombre.value,
+      apellido.value,
+      telefono.value,
+      correo.value,
+      red.value,
+      cv.value,
+      rol.value,
+      perfilProfesional.value
+    )
+    .then(() => {
+      agregar.value = false;
       $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
-        timeout: Math.random() * 3000
-      })
-    }
-    else if (error.response && error.response.data && validarVacios() === true) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
-
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
+        message: "Usuario editado exitosamente",
+        color: "green",
+        icon: "check",
+        position: "bottom",
+        timeout: Math.random() * 3000,
+      });
+      buscar();
+    })
+    .catch((error) => {
+      errores.value = "";
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg;
+        $q.notify({
+          message: repetida,
+          color: "negative",
+          position: "top",
+          icon: "warning",
+          timeout: Math.random() * 3000,
+        });
+      } else if (
+        error.response &&
+        error.response.data &&
+        validarVacios() === true
+      ) {
+        errores.value = error.response.data.errors[0].msg;
+        validar();
+      } else {
+        console.log(error);
+      }
+    });
+  loading.value = false;
 }
 
 async function editarEstado(x) {
   console.log("entre a editar estado", x.estado);
   try {
     if (x.estado === 1) {
-      x.estado = 0
+      x.estado = 0;
     } else {
-      x.estado = 1
+      x.estado = 1;
     }
-    const res = await useUsuari.cambiarEstado(x._id, x.estado)
+    const res = await useUsuari.cambiarEstado(x._id, x.estado);
     $q.notify({
-      message: 'Estado editado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: Math.random() * 3000
-    })
-    buscar()
-
+      message: "Estado editado exitosamente",
+      color: "green",
+      icon: "check",
+      position: "bottom",
+      timeout: Math.random() * 3000,
+    });
+    buscar();
   } catch (error) {
     console.log(error);
   }
 }
+
+function putImagen(x) {
+  foto.value = x.foto
+  id.value = x._id
+  console.log(foto.value);
+  agregarF.value = true
+  
+}
+
+async function putImagenBd() {
+  console.log('put imagen');
+  try {
+    const res = await useUsuari.putFoto(id.value, archivoF.value);
+    console.log(res);
+    if (res.data.status === "ok") {
+      console.log('agrego corectamente la foto');
+      agregarF.value =false
+      $q.notify({
+      message: "Foto agregada Exitosamente",
+      color: "green",
+      icon: "check",
+      position: "bottom",
+      timeout: Math.random() * 3000,
+    });
+    buscar()
+    console.log(res.data.prueba);
+    } else {
+      console.log("no estuvo ok");
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+
+const informacionPrograma = async (x) => {
+  console.log("----------------" + x);
+  await usePrograma.informacionPrograma(x);
+  router.push("/usuarios");
+  router.push("/home");
+
+};
 </script>
 
-<style lang="sass" >
+<style lang="sass">
 .my-sticky-header-table
   /* height or max-height is important */
   max-height: 73vh
@@ -501,7 +771,6 @@ async function editarEstado(x) {
     /* height of all previous header rows */
     scroll-margin-top: 48px
     cursor: pointer
-
 </style>
 
 <style scoped>
@@ -514,6 +783,7 @@ async function editarEstado(x) {
   display: flex;
   justify-content: center;
   align-items: center;
+  
   background-color: rgba(255, 255, 255, 0.8);
 }
 </style>

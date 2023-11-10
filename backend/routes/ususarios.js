@@ -80,5 +80,9 @@ router.get('/uploadcloudHoja/:id', [
     validarCampos
 ], httpUsuario.mostrarArchivoCloudHoja) */
 
+router.put("/Usuario/:id", httpUsuario.putFoto)
+
+
+
 export default router
 

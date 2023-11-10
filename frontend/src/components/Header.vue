@@ -10,6 +10,11 @@
           </q-avatar>
           Repositorio
         </q-toolbar-title>
+         <q-avatar size="50px" class="q-mr-md  q-pa-xs q-mb-md">
+          <img  v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+          <img  v-else :src="datos.foto" />
+        </q-avatar> 
+        {{ rol }}
         <q-icon name="logout" title="Cerrar Sesión" size="30px" style="cursor: pointer" @click="cerrarSesion()" />
       </q-toolbar>
     </q-header>
@@ -150,8 +155,11 @@ const drawer = ref(false);
 const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
+let datos = ref({})
 
 const useUsuario = useUsuarioStore();
+datos.value = useUsuario.usuario
+console.log(datos.value.foto);
 const rol = useUsuario.rol;
 
 //console.log(rol);

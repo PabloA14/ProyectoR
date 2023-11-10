@@ -1,5 +1,14 @@
 <template>
     <div>
+        <div class="q-mt-md">
+            <q-breadcrumbs separator=">" >
+              <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+              <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+              <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+              <q-breadcrumbs-el  label="Investigaciónes Del Programa" />
+          </q-breadcrumbs><br>
+        </div>
+        
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Investigación</div>
             <div class="q-pa-md" style="width: 100%;">

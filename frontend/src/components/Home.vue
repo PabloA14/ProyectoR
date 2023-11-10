@@ -15,6 +15,7 @@ import { useUsuarioStore } from "../stores/Usuarios.js"
 let nombre = ref()
 let useUsuario = useUsuarioStore()
 let datos = useUsuario.usuario
+console.log(datos.foto);
 nombre.value = datos.nombre
 
 </script>

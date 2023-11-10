@@ -24,7 +24,7 @@
                                 <q-item-section>
                                     <a :href="programaSeleccionado.disCurricular" style="text-align: center;"
                                         target="_blank">
-                                        <span class="material-symbols-outlined" id="opciones">
+                                        <span class="material-symbols-outlined" id="opciones" style="font-size: 7vh; color: black">
                                             download
                                         </span>
                                     </a>

@@ -1,5 +1,6 @@
 <template>
   <q-page padding>
+    
     <div class="text-h4 text-center q-mb-md">Guías de Aprendizaje</div>
     <div class="q-pa-md" style="width: 100%">
       <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="dataGuias"
@@ -8,10 +9,10 @@
           <q-td :props="props">
             <div class="opciones">
 
-              <q-icon title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
+              <q-icon   title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
                 style="margin-right: 25px;cursor: pointer;" @click="informacionGuia(props.row)" />
 
-              <q-icon title="Editar Guía" color="orange" @click="editarGuia(props.row)"
+              <q-icon v-if="rol != 'instructor'" title="Editar Guía" color="orange" @click="editarGuia(props.row)"
                 name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
               <a :href="props.row.documento" target="_blank">
@@ -23,6 +24,8 @@
           </q-td>
         </template>
 
+              <!-- ´boton search buscar -->
+
         <template v-slot:top-right>
           <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
             <template v-slot:append>
@@ -32,7 +35,7 @@
         </template>
         <template v-slot:top-left>
 
-          <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
+          <q-btn  v-if="rol != 'instructor' " color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
         </template>
       </q-table>
 
@@ -89,7 +92,11 @@ import { ref } from "vue";
 import { usegiasStore } from "../stores/guias"
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
+import { useUsuarioStore } from "../stores/Usuarios.js";
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
 
+console.log(rol);
 let filter = ref('')
 let separator = ref('cell')
 
