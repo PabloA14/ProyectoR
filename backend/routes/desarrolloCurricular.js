@@ -4,6 +4,7 @@ import { Router } from "express";
 const routes = Router()
 
 routes.post("/", httpDesarrollo.postDesarrollo)
+routes.post("/guias/:id",httpDesarrollo.postDesarrolloGuia)
 routes.get("/", httpDesarrollo.getDesarrollosTodo)
 routes.get("/:Codigo", httpDesarrollo.getCodigo)
 routes.put("/:id", httpDesarrollo.putDesarrollo)

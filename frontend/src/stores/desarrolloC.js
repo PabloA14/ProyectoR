@@ -20,6 +20,17 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
     }
   };
 
+  const postProyectoGuias = async (id,idGuias)=>{
+    try {
+      let res=await axios.post(`${LinkBD}/api/desarrollo/guias/${id}`,{
+        idGuias:idGuias
+      })
+      return res
+    } catch (error) {
+      throw error
+    }
+  }
+
   const putProyecto = async (id, proyectoFormativo) => {
     console.log(id, proyectoFormativo)
 
@@ -54,6 +65,7 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
 
   return {
     postMatriz,
+    postProyectoGuias,
     putProyecto,
     putplaneacionPedagogica
   }

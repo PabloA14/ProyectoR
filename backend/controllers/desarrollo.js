@@ -3,6 +3,7 @@ import Programa from '../models/programasFormacion.js'
 
 import DesarrolloC from "../models/desarrollo.js"
 import { v2 as cloudinary } from "cloudinary";
+import desarrollo from "../models/desarrollo.js";
 
 
 const httpDesarrolloC = {
@@ -25,6 +26,25 @@ const httpDesarrolloC = {
 
         } catch (error) {
             return res.status(500).json({ msj: "ha ocurrido un error en el servidor al momnento de inserat" })
+        }
+    },
+
+    postDesarrolloGuia: async (req,res)=>{
+        try {
+            const {id} =req.params
+            const {idGuias} = req.body
+           
+                let guia = await DesarrolloC.updateOne(
+                    {_id:id},
+                    {$addToSet:{idGuias:idGuias}}
+                )
+                if(guia.modifiedCount!==0){
+                    return res.status(202).json(guia)
+                }else{
+                    return res.status(402).json({msg:'Algo fallo'})
+                }  
+        } catch (error) {
+            console.log(error);
         }
     },
 

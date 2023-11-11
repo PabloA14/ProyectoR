@@ -252,9 +252,10 @@
 
           <q-btn flat round dense>
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir">bubble</span>
-            </router-link>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase='analisis'" >bubble</span>
+            </router-link> 
           </q-btn>
+         
         </div>
         <small>Ver Fase de Análisis</small>
       </div>
@@ -265,7 +266,7 @@
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase='planeacion'" >bubble</span>
             </router-link>
           </q-btn>
         </div>
@@ -278,7 +279,7 @@
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase='ejecucion'" >bubble</span>
             </router-link>
           </q-btn>
         </div>
@@ -292,7 +293,7 @@
 
         <q-btn flat round dense class="ir">
           <router-link to="guiasAprendizaje">
-            <span class="material-symbols-outlined" id="ir">bubble</span>
+            <span class="material-symbols-outlined" id="ir" @click="useGuia.fase='evaluacion'" >bubble</span>
           </router-link>
         </q-btn>
       </div>
@@ -359,9 +360,11 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useDesarrolloCurricular } from "../stores/desarrolloC.js";
 import { useRouter } from "vue-router";
+import {usegiasStore} from "../stores/guias.js" ;
 import { useQuasar } from "quasar";
 import { ref } from "vue";
 const useUsuario = useUsuarioStore();
+const useGuia = usegiasStore();
 let agregado = ref("");
 let usePrograma = useProgramasFormacionStore();
 let router = useRouter();
@@ -373,6 +376,7 @@ let useInfoPrograma = useProgramasFormacionStore();
 let inf = ref("");
 const $q = useQuasar();
 let archivo = ref("");
+
 let matriz = ref(
   useInfoPrograma.programa.desarrolloCurricular.matrizcorrelacion
 );

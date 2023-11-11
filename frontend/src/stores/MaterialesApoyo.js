@@ -23,6 +23,7 @@ export const useApoyo = defineStore("matApoyo", () => {
         try {
             const formData = new FormData();
 
+            
             //formData.append('codigo', codigo);
             formData.append('nombre', nombre);
             formData.append('enlace', enlace)
