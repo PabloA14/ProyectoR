@@ -14,6 +14,7 @@ const httpUsuario = {
     });
 
     const {
+      foto,
       cedula,
       nombre,
       apellidos,
@@ -53,6 +54,7 @@ const httpUsuario = {
 
       const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
       const usuario = new Usuario({
+        foto,
         cedula,
         nombre,
         apellidos,
@@ -75,7 +77,7 @@ const httpUsuario = {
         console.log(usuario);
         console.log(usuario.foto);
 
-        res.status(200).json({ msg: "Registro exitoso", usuario  });
+        res.status(200).json({ msg: "Registro exitoso", usuario });
       }
     } catch (error) {
       console.error(error);
@@ -251,7 +253,21 @@ const httpUsuario = {
       console.log(`Error al actualizar el usuario: ${error}`);
       res.status(500).json({ error: "Error interno del servidor" });
     }
-  }
+  },
+
+  mostrarImagenCloud: async (req, res) => {
+    const { id } = req.params
+
+    try {
+      let holder = await Usuario.findById(id)
+      if (holder.photo) {
+        return res.json({ url: holder.foto })
+      }
+      res.status(400).json({ msg: 'Falta Imagen' })
+    } catch (error) {
+      res.status(400).json({ error })
+    }
+  },
 
   /* cargarArchivoCloudHoja: async (req, res, next) => {
     cloudinary.config({
@@ -300,15 +316,14 @@ const httpUsuario = {
     } catch (error) {
       res.status(400).json({ error, general: "Controlador" });
     }
-  }, */,
-
+  }, */
   putFoto: async (req, res) => {
     console.log("put foto del Usuario")
     cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_NAME,
-        api_key: process.env.CLOUDINARY_KEY,
-        api_secret: process.env.CLOUDINARY_SECRET,
-        secure: true,
+      cloud_name: process.env.CLOUDINARY_NAME,
+      api_key: process.env.CLOUDINARY_KEY,
+      api_secret: process.env.CLOUDINARY_SECRET,
+      secure: true,
     });
 
     const { id } = req.params
@@ -317,45 +332,44 @@ const httpUsuario = {
     console.log({ foto })
 
     try {
-        if (!foto || !foto.tempFilePath) {
-            return res.status(400).json({ msg: "No hay foto en la peticion" });
-        }
-        const extension = foto.name.split(".").pop();
-        const { tempFilePath } = foto;
-        console.log(tempFilePath);
+      if (!foto || !foto.tempFilePath) {
+        return res.status(400).json({ msg: "No hay foto en la peticion" });
+      }
+      const { tempFilePath } = foto;
+      console.log(tempFilePath);
 
-        cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension }, 
+      cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "image" },
         async function (error, result) {
-            if (result) {
-                let holder = await Usuario.findById(id);
-                console.log('---------------------------');
-                console.log(holder   + "holder")
-                console.log('***********************');
-                if (holder && holder.foto) {
-                    const nombreTemp = holder.foto.split("/");
-                    const nombreArchivo = nombreTemp[nombreTemp.length - 1]; 
-                    const [public_id] = nombreArchivo.split(".");
-                    cloudinary.uploader.destroy(public_id);
-                }
-                console.log(result.url);
-                let prueba = await Usuario.findByIdAndUpdate(id, {
-                    foto: result.url
-                });
-                prueba.save()
-                res.status(200).json({  msj : "todo salio correcto" , status: "ok", prueba   });
-                console.log(prueba);
-            } else {
-                res.json(error);
+          if (result) {
+            let holder = await Usuario.findById(id);
+            console.log('---------------------------');
+            console.log(holder + "holder")
+            console.log('***********************');
+            if (holder && holder.foto) {
+              const nombreTemp = holder.foto.split("/");
+              const nombreArchivo = nombreTemp[nombreTemp.length - 1];
+              const [public_id] = nombreArchivo.split(".");
+              cloudinary.uploader.destroy(public_id);
             }
+            console.log(result.url);
+            let prueba = await Usuario.findByIdAndUpdate(id, {
+              foto: result.url
+            });
+            prueba.save()
+            res.status(200).json({ msj: "todo salio correcto", status: "ok", prueba });
+            console.log(prueba);
+          } else {
+            res.json(error);
+          }
         })
 
 
 
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: "Error en el servidor" });
+      console.error(error);
+      res.status(500).json({ msg: "Error en el servidor" });
     }
-}
+  }
 };
 
 export default httpUsuario;

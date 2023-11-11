@@ -3,19 +3,43 @@
     <q-header elevated class="text-white" style="background-color: #39a900">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
+        <q-avatar style="margin-left: 10px;">
+          <img src="../imagenes/Logo-sena-blanco-sin-fondo.png" />
+        </q-avatar>
 
-        <q-toolbar-title>
-          <q-avatar>
-            <img src="../imagenes/Logo-sena-blanco-sin-fondo.png" />
-          </q-avatar>
+        <q-toolbar-title id="titulo">
           Repositorio
         </q-toolbar-title>
-         <q-avatar size="50px" class="q-mr-md  q-pa-xs q-mb-md">
-          <img  v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
-          <img  v-else :src="datos.foto" />
-        </q-avatar> 
-        {{ rol }}
-        <q-icon name="logout" title="Cerrar Sesión" size="30px" style="cursor: pointer" @click="cerrarSesion()" />
+        <div style="padding: 10px;">
+          <q-avatar style="cursor: pointer;">
+            <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+            <img v-else :src="datos.foto" />
+            <q-menu>
+              <q-list style="min-width: 100px">
+                <q-item clickable v-close-popup>
+                  <q-item-section @click="cerrarSesion()">
+                    <q-item-label>
+                      <q-icon name="exit_to_app" />
+                      <span style="margin-left: 10px;">Cerrar Sesión</span>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-item clickable v-close-popup>
+                  <q-item-section>
+                    <q-item-label>
+                      <q-icon name="account_circle" />
+                      <span style="margin-left: 10px;">Perfil</span>
+                    </q-item-label>
+                  </q-item-section>
+                </q-item>
+                <q-separator />
+              </q-list>
+            </q-menu>
+          </q-avatar>
+
+
+        </div>
+        <!-- <p style="margin: 0 auto;margin-right: 20px;text-transform: capitalize;">{{ rol }}</p> -->
       </q-toolbar>
     </q-header>
 

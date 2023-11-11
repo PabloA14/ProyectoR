@@ -52,6 +52,8 @@ router.put("/datosPersonales/:id", [
     validarCampos
 ], httpUsuario.putUsuario)
 
+
+
 router.patch("/:id", httpUsuario.patchUsuario)
 
 router.post("/login", [
@@ -59,6 +61,11 @@ router.post("/login", [
     check("clave", "Ingrese la contraseña").trim().not().isEmpty(),
     validarCampos
 ], httpUsuario.loginUsuario)
+
+router.get("/uploadcloud/:id", [
+    check('id', 'No es un ID válido').isMongoId(),
+    validarCampos
+], httpUsuario.mostrarImagenCloud)
 
 /* router.post('/uploadcloudFoto/:id', [
     check('id', 'No es un ID válido').isMongoId(),

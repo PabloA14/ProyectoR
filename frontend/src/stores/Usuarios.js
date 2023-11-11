@@ -57,11 +57,29 @@ export const useUsuarioStore = defineStore("usuario", () => {
   };
 
   const actualizarDatosPersonales = async (
-    id, cedula, nombre, apellidos, telefono, correo, perfilProfesional) => {
+    id, cedula, nombre, apellidos, telefono, correo, hojaDeVida, perfilProfesional) => {
     try {
-      let datos = await axios.put(`${LinkBD}/api/usuario/datosPersonales/${id}`, {
-        cedula, nombre, apellidos, telefono, correo, perfilProfesional
+      const formData = new FormData();
+
+      formData.append('cedula', cedula);
+      formData.append('nombre', nombre);
+      formData.append('apellidos', apellidos);
+      formData.append('telefono', telefono);
+      formData.append('correo', correo);
+      formData.append('perfilProfesional', perfilProfesional);
+
+      // Agregar la hoja de vida al FormData si está presente
+      if (hojaDeVida) {
+        formData.append('hojaDeVida', hojaDeVida);
+      }
+
+      // Realizar la solicitud PUT usando axios y FormData
+      const datos = await axios.put(`${LinkBD}/api/usuario/datosPersonales/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
+
       return datos;
     } catch (error) {
       console.log(error);
@@ -117,23 +135,23 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
   };
 
-  
+
   const putFoto = async (id, foto) => {
     console.log(id, foto);
     try {
-     const formData = new FormData()
-     formData.append('foto', foto)
-     const res = await axios.put(`${LinkBD}/api/usuario/Usuario/${id}`, formData, {
-       headers: {
-         "Content-Type": "multipart/form-data"
-       },
-     });
-     console.log('----------****-----------');
-     return res;
-   } catch (error) {
-     console.log(error);
-   }  
- };
+      const formData = new FormData()
+      formData.append('foto', foto)
+      const res = await axios.put(`${LinkBD}/api/usuario/Usuario/${id}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+      });
+      console.log('----------****-----------');
+      return res;
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return {
     buscarUsuarios,

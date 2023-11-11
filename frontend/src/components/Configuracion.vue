@@ -2,28 +2,72 @@
     <div>
         <q-page class="q-pa-md">
             <div class="text-h4 text-center q-mb-md">Información Personal
-                <q-btn style="margin: 0 auto; float: right;" color="secondary" icon="edit" label="Editar" class="q-mb-md"
-                    @click="agregar = true; editarUsuario(datos)" />
-            </div>
+            </div><br>
 
-            <div class="text-h5 text-left q-mb-md">Datos personales</div>
-            <div class="text-h7 text-left q-mb-md"><b>Nombres:</b> {{ datos.nombre }}</div>
-            <div class="text-h7 text-left q-mb-md"><b>Apellidos:</b> {{ datos.apellidos }}</div>
-            <div class="text-h7 text-left q-mb-md"><b>Número de identificación:</b> {{ datos.cedula }}</div>
+            <div class="row" style="display: grid; place-items: center;">
+                <q-card class="my-card q-mt-xl" flat bordered>
+                    <q-card-section horizontal>
+                        <q-card-section class="q-pt-xs" id="section">
+                            <div class="row" style="display: flex;justify-content: center;align-items: center;">
+                                <q-avatar size="100px">
+                                    <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+                                    <img :src="datos.foto" />
+                                </q-avatar>
+                            </div><br>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="text-h6 q-mt-sm q-mb-xs">Datos personales</div>
+                                </div>
 
-            <q-separator /><br>
+                                <div class="col-4">
+                                    <div class="text-h6 q-mt-sm q-mb-xs">Contacto</div>
+                                </div>
 
-            <div class="text-h5 text-left q-mb-md">Contacto</div>
-            <div class="text-h7 text-left q-mb-md"><b>Teléfono:</b> {{ datos.telefono }}</div>
-            <div class="text-h7 text-left q-mb-md"><b>Correo electrónico:</b> {{ datos.correo }}</div>
+                                <div class="col-4">
+                                    <div class="text-h6 q-mt-sm q-mb-xs">Educación</div>
+                                </div>
+                            </div>
 
-            <q-separator /><br>
+                            <q-separator style="height: 5px;margin-top: 5px;" color="secondary" /><br>
 
-            <div class="text-h5 text-left q-mb-md">Educación</div>
-            <div class="text-h7 text-left q-mb-md"><b>Perfil Profesional:</b> {{ datos.perfilProfesional }}</div>
-            <div class="text-h7 text-left q-mb-md"><b>Hoja de vida</b></div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <div class="text-h7 text-left q-mb-md"><b>Número de identificación:</b> {{ datos.cedula
+                                    }}</div>
+                                    <div class="text-h7 text-left q-mb-md"><b>Nombres:</b> {{ datos.nombre }}</div>
+                                    <div class="text-h7 text-left q-mb-md"><b>Apellidos:</b> {{ datos.apellidos }}</div>
+                                </div>
 
-            <q-separator /><br>
+                                <div class="col-4">
+                                    <div class="text-h7 text-left q-mb-md"><b>Teléfono:</b> {{ datos.telefono }}</div>
+                                    <div class="text-h7 text-left q-mb-md"><b>Correo electrónico:</b> {{ datos.correo }}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="text-h7 text-left q-mb-md"><b>Perfin profesional:</b> {{
+                                        datos.perfilProfesional }}</div>
+                                    <div class="text-h7 text-left q-mb-md"><b>Hoja de Vida:</b>
+                                    </div>
+                                    <a :href="datos.hojaDeVida" target="_blank">
+                                        <q-icon title="Descargar" color="green" name="fa-solid fa-download" size="25px"
+                                            style="cursor: pointer;" />
+                                    </a>
+                                </div>
+                            </div>
+
+                        </q-card-section>
+
+                    </q-card-section>
+
+                    <q-separator />
+
+                    <q-card-actions>
+                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
+                            class="q-mb-md" @click="agregar = true; editarUsuario(datos)" />
+                    </q-card-actions>
+                </q-card>
+            </div><br><br>
 
             <div v-if="rol === 'administrador'">
                 <div class="text-h4 text-center q-mb-md">Configuración de Interfaz</div>
@@ -41,7 +85,7 @@
             </div>
 
             <q-dialog v-model="agregar">
-                <q-card style="width: 32%; height: fit-content">
+                <q-card style="width: 36.5%; height: fit-content">
                     <q-card-section class="row items-center q-pb-none">
                         <div class="text-h6">
                             Editar datos personales
@@ -76,12 +120,9 @@
                             <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
                         </div>
 
-                        <div class="q-mb-md">
-                            <q-file label="Hoja de Vida" type="file" color="secondary" v-model="cv">
-                                <template v-slot:prepend>
-                                    <q-icon name="attach_file" />
-                                </template>
-                            </q-file>
+                        <div style="text-align: left;" class="q-mb-md">
+                            <p style="color: rgb(122, 122, 121)">Hoja de Vida</p>
+                            <input type="file" @change="archivo" />
                         </div>
 
                         <div class="q-mb-md">
@@ -92,7 +133,7 @@
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn label="Actualizar" @click="actualizar()" color="secondary" />
+                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()" color="secondary" />
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -114,6 +155,7 @@ let datos = useUsuario.usuario
 
 let agregar = ref(false)
 const $q = useQuasar()
+let loading = ref(false)
 let errores = ref([])
 
 let cedula = ref("");
@@ -149,6 +191,11 @@ function validar() {
     })
 }
 
+function archivo(event) {
+    cv.value = event.target.files[0];
+    console.log(cv.value);
+}
+
 function editarUsuario(datos) {
     console.log("Entró a editar", datos);
     id.value = datos._id;
@@ -157,11 +204,12 @@ function editarUsuario(datos) {
     apellido.value = datos.apellidos;
     telefono.value = datos.telefono;
     correo.value = datos.correo;
-    //cv.value = x.hojaDeVida;
+    cv.value = datos.hojaDeVida;
     perfilProfesional.value = datos.perfilProfesional;
     agregar.value = true;
 }
 async function actualizar() {
+    loading.value = true
     await useUsuario.actualizarDatosPersonales(
         id.value,
         cedula.value,
@@ -169,7 +217,7 @@ async function actualizar() {
         apellido.value,
         telefono.value,
         correo.value,
-        //cv.value,
+        cv.value,
         perfilProfesional.value
 
     ).then(() => {
@@ -202,7 +250,43 @@ async function actualizar() {
             console.log(error);
         }
     })
+    loading.value = false
 }
 
 
 </script>
+
+<style scoped>
+.my-card {
+    margin-top: -1%;
+    color: rgb(0, 0, 0);
+    border-radius: 1px;
+    width: 60%;
+}
+
+.my-card .text-h6 {
+    color: rgb(0, 0, 0);
+    font-weight: 800;
+    margin-bottom: 9%;
+    font-size: 3vh;
+    text-align: center;
+    margin-top: 5%;
+    margin-bottom: 10%;
+
+}
+
+.my-card .text-caption {
+    font-size: 2.5vh;
+    color: rgb(63, 63, 63);
+    text-align: center;
+}
+
+#section {
+    margin: 2% 5%;
+}
+
+#agregar {
+    justify-content: center;
+    text-align: center;
+}
+</style>

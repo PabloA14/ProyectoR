@@ -4,80 +4,43 @@
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="useUsuari.loading === true">
-          <q-spinner
-            style="margin-left: 10px"
-            color="black"
-            size="7em"
-            :thickness="10"
-          />
+          <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
         </div>
-        <q-table
-          v-if="useUsuari.loading === false"
-          class="my-sticky-header-table"
-          :separator="separator"
-          bordered
-          :filter="filter"
-          :rows="usuarios"
-          :columns="columns"
-          row-key="name"
-          :pagination="pagination"
-        >
+        <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
 
 
-              <q-icon
-                title="Detalle de Usuario"
-                name="fa-solid fa-eye"
-                color="primary"
-                size="20px"
-                style="margin-right: 25px; cursor: pointer"
-                @click="informacionUsuario(props.row)"
-              />
-              <q-icon
-              title="Foto de Pefil"
-              size="30px"
-              style="padding-right:3vh ; color: green"
-            >
-              <span class="material-symbols-outlined" @click="putImagen(props.row)">
-                face
-              </span>
-            </q-icon>
+              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
+                style="margin-right: 25px; cursor: pointer" @click="informacionUsuario(props.row)" />
+              <!-- <q-icon title="Foto de Pefil" size="30px" style="padding-right:3vh ; color: green">
+                <span class="material-symbols-outlined" @click="putImagen(props.row)">
+                  face
+                </span>
+              </q-icon> -->
 
-              <q-icon
-                title="Editar Usuario"
-                color="orange"
-                name="fa-solid fa-pen-to-square fa-xl"
-                size="20px"
-                style="margin-right: 10px; cursor: pointer"
-                @click="editarUsuario(props.row)"
-              />
-              <q-icon
-                title="Cambiar Estado"
-                color="green"
-                name="fa-solid fa-check fa-xl"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-if="props.row.estado == 0"
-                @click="editarEstado(props.row)"
-              />
-              <q-icon
-                title="Cambiar Estado"
-                color="red"
-                name="fa-solid fa-x"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-else
-                @click="editarEstado(props.row)"
-              />
+              <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                style="margin-right: 10px; cursor: pointer" @click="editarUsuario(props.row)" />
+              <q-icon title="Cambiar Estado" color="green" name="fa-solid fa-check fa-xl" size="20px"
+                style="margin-left: 10px; cursor: pointer" v-if="props.row.estado == 0"
+                @click="editarEstado(props.row)" />
+              <q-icon title="Cambiar Estado" color="red" name="fa-solid fa-x" size="20px"
+                style="margin-left: 10px; cursor: pointer" v-else @click="editarEstado(props.row)" />
             </q-td>
+          </template>
+
+          <template v-slot:body-cell-foto="props">
+            <q-avatar size="45px">
+              <img v-if="props.row.foto === undefined || props.foto === null" src="../imagenes/usuario.png"
+                alt="imagenes">
+              <img :src="props.row.foto" />
+            </q-avatar>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1"
-                >Activo</span
-              >
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
@@ -95,29 +58,17 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input
-              color="secondary"
-              dense
-              debounce="300"
-              v-model="filter"
-              placeholder="Buscar"
-            >
+            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn
-              color="secondary"
-              icon="add"
-              label="Agregar"
-              class="q-mb-md"
-              @click="
-                agregar = true;
-                nuevo();
-              "
-            />
+            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+              agregar = true;
+            nuevo();
+            " />
           </template>
         </q-table>
       </div>
@@ -133,20 +84,11 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input
-              label="Cédula*"
-              type="number"
-              color="secondary"
-              v-model="cedula"
-            />
+            <q-input label="Cédula*" type="number" color="secondary" v-model="cedula" />
           </div>
 
           <div class="q-mb-md">
@@ -158,45 +100,23 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Teléfono*"
-              type="number"
-              color="secondary"
-              v-model="telefono"
-            />
+            <q-input label="Teléfono*" type="number" color="secondary" v-model="telefono" />
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Correo Electrónico*"
-              color="secondary"
-              v-model="correo"
-            />
+            <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <q-input
-              label="Contraseña*"
-              type="password"
-              color="secondary"
-              v-model="clave"
-            />
+            <q-input label="Contraseña*" type="password" color="secondary" v-model="clave" />
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Red de Conocimiento*"
-              color="secondary"
-              v-model="red"
-              :options="
-                redes.map((red) => ({
-                  label: red.denominacion,
-                  value: red._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select label="Red de Conocimiento*" color="secondary" v-model="red" :options="redes.map((red) => ({
+              label: red.denominacion,
+              value: red._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
@@ -206,54 +126,29 @@
                 <q-icon name="attach_file" />
               </template>
             </q-input> -->
-            <p>Hoja de Vida</p>
             <p style="color: rgb(122, 122, 121);">Hoja de Vida</p>
             <input type="file" @change="archivo" />
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Rol*"
-              color="secondary"
-              v-model="rol"
-              :options="
-                roles.map((rol) => ({
-                  label: rol.denominacion,
-                  value: rol._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select label="Rol*" color="secondary" v-model="rol" :options="roles.map((rol) => ({
+              label: rol.denominacion,
+              value: rol._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
           <div class="q-mb-md">
-            <q-input
-              label="Perfil Profesional*"
-              color="secondary"
-              v-model="perfilProfesional"
-            />
+            <q-input label="Perfil Profesional*" color="secondary" v-model="perfilProfesional" />
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            v-if="bd == 1"
-            label="Agregar"
-            @click="agregarU()"
-            color="secondary"
-          />
-          <q-btn
-            :disabled="loading"
-            v-else
-            label="Actualizar"
-            @click="actualizar()"
-            color="secondary"
-          />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -262,8 +157,8 @@
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <q-avatar size="100px" class="q-mr-md">
-            <img  v-if="info.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
-            <img  v-else :src="info.foto" />
+            <img v-if="info.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+            <img v-else :src="info.foto" />
           </q-avatar>
           <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
 
@@ -271,11 +166,7 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
@@ -330,57 +221,40 @@
     </q-dialog>
 
     <!-- Modal agregar imagen -->
-    <q-dialog v-model="agregarF">
+    <!-- <q-dialog v-model="agregarF">
       <q-card style="width: 32%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
 
 
-          <div class="text-h6" v-if="foto === undefined">
+          <div class="text-h6" v-if="foto === undefined || foto === null">
             Agregar Foto
           </div>
 
           <div class="text-h6" v-else>
             Editar Foto
           </div>
-          
+
           <q-space />
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          inset
-          style="height: 5px; margin-top: 5px"
-          color="secondary"
-        />
+        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <p>Adjuntar Foto</p>
-            <input type="file" @change="archivo" />
+            <input type="file" @change="fotos" />
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            v-if="foto === undefined"
-            label="Agregar Img"
-            @click="putImagenBd()"
-            color="secondary"
-          />
-          <q-btn
-            :disabled="loading"
-            v-else
-            @click="putImagenBd()"
-
-            label="Actualizar"
-            color="secondary"
-          />
+          <q-btn :disabled="loading" v-if="foto === undefined || foto === null" label="Agregar Img" @click="putImagenBd()"
+            color="secondary" />
+          <q-btn :disabled="loading" v-else @click="putImagenBd()" label="Actualizar" color="secondary" />
         </q-card-actions>
       </q-card>
-    </q-dialog>
+    </q-dialog> -->
   </div>
 </template>
 
@@ -390,12 +264,9 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useRolStore } from "../stores/Roles.js";
 import { useRedStore } from "../stores/Redes.js";
 import { useQuasar } from "quasar";
-import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
-import { useRouter } from "vue-router";
-let router = useRouter();
-const usePrograma = useProgramasFormacionStore();
+
 let infoU = ref(false);
-let agregarF =ref()
+let agregarF = ref()
 let agregar = ref(false);
 let cedula = ref("");
 let nombre = ref("");
@@ -432,7 +303,20 @@ function informacionUsuario(x) {
 }
 
 const columns = [
-
+  {
+    name: "foto",
+    align: "center",
+    label: "Foto",
+    field: "foto",
+    sortable: false,
+  },
+  {
+    name: "cedula",
+    align: "center",
+    label: "Cédula",
+    field: "cedula",
+    sortable: true,
+  },
   {
     name: "nombre",
     align: "center",
@@ -446,13 +330,6 @@ const columns = [
     align: "center",
     label: "Apellidos",
     field: "apellidos",
-    sortable: true,
-  },
-  {
-    name: "cedula",
-    align: "center",
-    label: "Cédula",
-    field: "cedula",
     sortable: true,
   },
   {
@@ -551,9 +428,11 @@ function validar() {
 
 function archivo(event) {
   cv.value = event.target.files[0];
-  archivoF.value = event.target.files[0];
-
 }
+
+/* function fotos(event) {
+  archivoF.value = event.target.files[0];
+} */
 
 async function agregarU() {
   loading.value = true;
@@ -561,6 +440,7 @@ async function agregarU() {
   console.log(cv.value);
   await useUsuari
     .agregarUsuario({
+      foto: foto.value,
       cedula: cedula.value,
       nombre: nombre.value,
       apellidos: apellido.value,
@@ -697,47 +577,40 @@ async function editarEstado(x) {
   }
 }
 
-function putImagen(x) {
+/* function putImagen(x) {
   foto.value = x.foto
   id.value = x._id
   console.log(foto.value);
   agregarF.value = true
-  
+
 }
 
 async function putImagenBd() {
   console.log('put imagen');
+  loading.value = true
   try {
     const res = await useUsuari.putFoto(id.value, archivoF.value);
     console.log(res);
     if (res.data.status === "ok") {
-      console.log('agrego corectamente la foto');
-      agregarF.value =false
+      agregarF.value = false
       $q.notify({
-      message: "Foto agregada Exitosamente",
-      color: "green",
-      icon: "check",
-      position: "bottom",
-      timeout: Math.random() * 3000,
-    });
-    buscar()
-    console.log(res.data.prueba);
+        message: "Foto agregada Exitosamente",
+        color: "green",
+        icon: "check",
+        position: "bottom",
+        timeout: Math.random() * 3000,
+      });
+      buscar()
+      console.log(res.data.prueba);
     } else {
       console.log("no estuvo ok");
     }
   } catch (error) {
     console.error(error);
   }
+  loading.value = false
 }
-
-
-const informacionPrograma = async (x) => {
-  console.log("----------------" + x);
-  await usePrograma.informacionPrograma(x);
-  router.push("/usuarios");
-  router.push("/home");
-
-};
+ */
 </script>
 
 <style lang="sass">
@@ -784,7 +657,7 @@ const informacionPrograma = async (x) => {
   display: flex;
   justify-content: center;
   align-items: center;
-  
+
   background-color: rgba(255, 255, 255, 0.8);
 }
 </style>
