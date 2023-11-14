@@ -122,21 +122,22 @@ let idPrograma = usePrograma.programa._id
 const programafiltrao = computed(() => {
   if (buscarCodigo.value === "" ) {
     ambientesPrograma.value = usePrograma.programa.ambienteFormacion
+    console.log('**********');
+    console.log(ambientesPrograma.value);
     error.value=false
     errorD.value =''
   } else{
-    useAmbiente.buscarCodigo(buscarCodigo.value).then((res) => {
-      if (res ===undefined) {
+    let filtrado= ambientesPrograma.value.filter(a=>a.codigo.includes(buscarCodigo.value))
+    if(filtrado.length===0){
         error.value=true
         errorD.value ='no se encontro ningun resultado'
         ambientesPrograma.value =''
     }else {
         errorD.value =''
         error.value=false
-        console.log(res);
-        ambientesPrograma.value =res
-    } 
-    });
+        console.log(filtrado);
+        ambientesPrograma.value =filtrado
+    } ;
 
   }
     
@@ -204,14 +205,5 @@ async function agregarN() {
         })
     loading.value = false
 }
-
-/* const informacionPrograma = async (x) => {
-  console.log("----------------");
-  codigo.value = x.codigo;
-  console.log(codigo.value)
-  await usePrograma.informacionPrograma(codigo.value)
-  router.push("/InformacionPrograma")
-} */
-
 
 </script>
