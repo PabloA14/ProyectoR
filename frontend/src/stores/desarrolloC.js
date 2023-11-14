@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import axios from 'axios';
 import { LinkBD } from "../routes/variables.js";
-import { ref } from "vue";
+//import { ref } from "vue";
 
 export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
   
@@ -17,6 +17,7 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
       return res;
     } catch (error) {
       console.log(error);
+      throw error
     }
   };
 
@@ -45,6 +46,7 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
       return res;
     } catch (error) {
       console.log(error);
+      throw error
     } 
   };
 
@@ -60,6 +62,7 @@ export const useDesarrolloCurricular = defineStore("DesarrolloC", () => {
       return res;
     } catch (error) {
       console.log(error);
+      throw error
     }  
   };
 

@@ -11,22 +11,22 @@ const httpInvestigaciones = {
             api_secret: process.env.CLOUDINARY_SECRET,
             secure: true,
         });
-    
+
         const { codigo, denominacion, descripcion, fecha, idPrograma } = req.body;
         let documentoUrl = null;
-    
+
         try {
             // Verificar si se proporciona un documento
             if (req.files && req.files.documentos) {
                 const { documentos } = req.files;
-    
+
                 if (!documentos.tempFilePath) {
                     return res.status(400).json({ msg: "No hay archivos en la petición" });
                 }
-    
+
                 const extension = documentos.name.split(".").pop();
                 const { tempFilePath } = documentos;
-    
+
                 // Subir el documento a Cloudinary
                 const result = await cloudinary.uploader.upload(tempFilePath, {
                     width: 250,
@@ -34,10 +34,10 @@ const httpInvestigaciones = {
                     resource_type: "raw",
                     format: extension
                 });
-    
+
                 documentoUrl = result.url;
             }
-    
+
             const investigacion = new Investigacion({
                 codigo,
                 denominacion,
@@ -46,7 +46,7 @@ const httpInvestigaciones = {
                 documentos: documentoUrl,
                 idPrograma
             });
-    
+
             const cod = await Investigacion.findOne({ codigo: codigo });
             if (cod) {
                 return res.status(400).json({ msg: 'La investigación ya se encuentra registrada', cod, denominacion });
@@ -59,7 +59,7 @@ const httpInvestigaciones = {
             res.status(500).json({ mensaje: 'Error en el servidor' });
         }
     },
-    
+
     getinvestigaciones: async (req, res) => {
         const investigacion = await Investigacion.find().populate("idPrograma")
         res.json({ investigacion })

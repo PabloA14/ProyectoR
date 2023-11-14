@@ -22,10 +22,9 @@
 
                             <q-item clickable>
                                 <q-item-section>
-                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;
-                                    font-size: 5vh;color: black;"
+                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;color: black;"
                                         target="_blank">
-                                        <span class="material-symbols-outlined" id="opciones" style="font-size: 7vh; color: black">
+                                        <span class="material-symbols-outlined" id="opciones" style="font-size: 6vh; color: black">
                                             download
                                         </span>
                                     </a>
@@ -46,7 +45,7 @@
                     </q-menu>
                 </q-btn>
 
-                <q-dialog v-model="agregar">
+                <!-- <q-dialog v-model="agregar">
                     <q-card style="width: 40%; height: fit-content">
                         <q-card-section class="row items-center q-pb-none">
                             <div class="text-h6">
@@ -75,7 +74,7 @@
                             <q-btn label="Agregar" @click="agregarDis()" color="secondary" />
                         </q-card-actions>
                     </q-card>
-                </q-dialog>
+                </q-dialog> -->
             </div>
             <small>Descargar diseño curricular</small>
         </div>
@@ -135,27 +134,6 @@ console.log(instructor);
 
 
 let agregar = ref(false)
-let dis = ref('')
-
-function archivo(event) {
-    dis.value = event.target.files[0]
-    console.log(dis.value);
-}
-
-async function agregarDis() {
-    console.log("entró");
-    console.log(dis.value);
-    const id = "6532e4ad96ea85c476b11f6d"
-    const data = await usePrograma.postDiseno(id, dis.value)
-        .then(() => {
-            agregar.value = false
-            console.log(data)
-        }).catch((error) => {
-            console.log(error)
-        })
-
-}
-
 
 </script>
   

@@ -8,7 +8,6 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
   let programa = ref({})
   let instructores =ref({})
 
-
   const getProgramas = async () => {
     try {
       loading.value = true
@@ -98,7 +97,6 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   }
 
-
   const actualizarProgramaFormacion = async (id, codigo, denominacionPrograma, nivelFormacion, version) => {
     try {
       const datos = await axios.put(`${LinkBD}/api/programasFormacion/${id}`, {
@@ -162,7 +160,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   };
 
-  const postDiseno = async (id, disCurricular) => {
+  /* const postDiseno = async (id, disCurricular) => {
     try {
       const formData = new FormData()
       formData.append('disCurricular', disCurricular)
@@ -175,7 +173,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     } catch (error) {
       console.log(error);
     }
-  };
+  }; */
 
   return {
     getProgramas,
@@ -183,7 +181,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     actualizarProgramaFormacion,
     cambiarEstado,
     asignarMateriales,
-    postDiseno,
+    //postDiseno,
     loading,
     programa,
     instructores,

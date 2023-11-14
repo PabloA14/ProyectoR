@@ -2,11 +2,7 @@ import Programa from '../models/programasFormacion.js'
 //import DesarrolloCurricular from '../models/desarrollo.js'
 import Material from "../models/materialesFor.js"
 import Ambiente from "../models/ambientesFormacion.js"
-
-
-
 import { v2 as cloudinary } from "cloudinary";
-import ambientesFormacion from '../models/ambientesFormacion.js';
 
 const httpprogramas = {
 
@@ -40,7 +36,7 @@ const httpprogramas = {
         console.log({ disCurricular })
         try {
             if (!disCurricular || !disCurricular.tempFilePath) {
-                return res.status(400), json({ msj: 'no hay archivo en la peticion' })
+                return res.status(400), json({ msg: 'no hay archivo en la peticion' })
             }
             const extension = disCurricular.name.split(".").pop()
             const { tempFilePath } = disCurricular;
@@ -106,6 +102,7 @@ const httpprogramas = {
             res.json({ error });
         }
     },
+    
     putProgramas: async (req, res) => {
         console.log('putProgramas')
 
@@ -258,59 +255,6 @@ const httpprogramas = {
             console.error('Error al obtener materiales del programa:', error);
             res.status(500).json({ msg: 'Error interno del servidor' });
         }
-    },
-
-    postDiseno: async (req, res) => {
-        cloudinary.config({
-            cloud_name: process.env.CLOUDINARY_NAME,
-            api_key: process.env.CLOUDINARY_KEY,
-            api_secret: process.env.CLOUDINARY_SECRET,
-            secure: true,
-        });
-
-        const { id } = req.params;
-        const { disCurricular } = req.files
-
-        try {
-            if (!disCurricular || !disCurricular.tempFilePath) {
-                return res.status(400).json({ msg: "No hay archivos en la peticion" });
-            }
-            const extension = disCurricular.name.split(".").pop();
-
-            const { tempFilePath } = disCurricular;
-            console.log(tempFilePath);
-
-            cloudinary.uploader.upload(
-                tempFilePath,
-                { width: 250, crop: "limit", resource_type: "raw", format: extension },
-                async function (error, result) {
-                    if (result) {
-                        let holder = await Programa.findById(id);
-
-                        if (holder.disCurricular) {
-                            const nombreTemp = holder.disCurricular.split("/");
-                            const nombreArchivo = nombreTemp[nombreTemp.length - 1]; // hgbkoyinhx9ahaqmpcwl jpg
-                            const [public_id] = nombreArchivo.split(".");
-                            cloudinary.uploader.destroy(public_id);
-                        }
-                        holder = await Programa.findByIdAndUpdate(id, {
-                            disCurricular: result.url
-                        });
-                        //responder
-                        res.json({ url: result.url });
-                    } else {
-                        res.json(error);
-                    }
-                }
-            );
-
-
-        } catch (error) {
-            console.error(error);
-            res.status(500).json({ msg: "Error en el servidor" });
-        }
-
-
     },
 
     postProgramaInstructor: async (req, res) => {

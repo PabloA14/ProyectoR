@@ -29,20 +29,20 @@ const httpDesarrolloC = {
         }
     },
 
-    postDesarrolloGuia: async (req,res)=>{
+    postDesarrolloGuia: async (req, res) => {
         try {
-            const {id} =req.params
-            const {idGuias} = req.body
-           
-                let guia = await DesarrolloC.updateOne(
-                    {_id:id},
-                    {$addToSet:{idGuias:idGuias}}
-                )
-                if(guia.modifiedCount!==0){
-                    return res.status(202).json(guia)
-                }else{
-                    return res.status(402).json({msg:'Algo fallo'})
-                }  
+            const { id } = req.params
+            const { idGuias } = req.body
+
+            let guia = await DesarrolloC.updateOne(
+                { _id: id },
+                { $addToSet: { idGuias: idGuias } }
+            )
+            if (guia.modifiedCount !== 0) {
+                return res.status(202).json(guia)
+            } else {
+                return res.status(402).json({ msg: 'Algo fallo' })
+            }
         } catch (error) {
             console.log(error);
         }
@@ -114,27 +114,27 @@ const httpDesarrolloC = {
             const { tempFilePath } = matrizcorrelacion;
             console.log(tempFilePath);
 
-            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension }, 
-            async function (error, result) {
-                if (result) {
-                    let holder = await DesarrolloC.findById(id);
-                    console.log(holder   + "holder")
+            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension },
+                async function (error, result) {
+                    if (result) {
+                        let holder = await DesarrolloC.findById(id);
+                        console.log(holder + "holder")
 
-                    if (holder && holder.matrizcorrelacion) {
-                        const nombreTemp = holder.matrizcorrelacion.split("/");
-                        const nombreArchivo = nombreTemp[nombreTemp.length - 1]; 
-                        const [public_id] = nombreArchivo.split(".");
-                        cloudinary.uploader.destroy(public_id);
+                        if (holder && holder.matrizcorrelacion) {
+                            const nombreTemp = holder.matrizcorrelacion.split("/");
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1];
+                            const [public_id] = nombreArchivo.split(".");
+                            cloudinary.uploader.destroy(public_id);
+                        }
+                        let prueba = await DesarrolloC.findByIdAndUpdate(id, {
+                            matrizcorrelacion: result.url
+                        });
+                        prueba.save()
+                        res.status(200).json({ msj: "todo salio correcto", status: "ok", prueba, });
+                    } else {
+                        res.json(error);
                     }
-                    let prueba = await DesarrolloC.findByIdAndUpdate(id, {
-                        matrizcorrelacion: result.url
-                    });
-                    prueba.save()
-                    res.status(200).json({  msj : "todo salio correcto" , status: "ok", prueba ,  });
-                } else {
-                    res.json(error);
-                }
-            })
+                })
 
 
 
@@ -143,8 +143,7 @@ const httpDesarrolloC = {
             res.status(500).json({ msg: "Error en el servidor" });
         }
     }
-,
-
+    ,
     putProyecto: async (req, res) => {
         console.log("put matriz correlacion del desarrollo curricular")
         cloudinary.config({
@@ -168,27 +167,78 @@ const httpDesarrolloC = {
             const { tempFilePath } = proyectoFormativo;
             console.log(tempFilePath);
 
-            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension }, 
-            async function (error, result) {
-                if (result) {
-                    let holder = await DesarrolloC.findById(id);
-                    console.log(holder   + "holder")
+            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension },
+                async function (error, result) {
+                    if (result) {
+                        let holder = await DesarrolloC.findById(id);
+                        console.log(holder + "holder")
 
-                    if (holder && holder.proyectoFormativo) {
-                        const nombreTemp = holder.proyectoFormativo.split("/");
-                        const nombreArchivo = nombreTemp[nombreTemp.length - 1]; 
-                        const [public_id] = nombreArchivo.split(".");
-                        cloudinary.uploader.destroy(public_id);
+                        if (holder && holder.proyectoFormativo) {
+                            const nombreTemp = holder.proyectoFormativo.split("/");
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1];
+                            const [public_id] = nombreArchivo.split(".");
+                            cloudinary.uploader.destroy(public_id);
+                        }
+                        let prueba = await DesarrolloC.findByIdAndUpdate(id, {
+                            proyectoFormativo: result.url
+                        });
+                        prueba.save()
+                        res.status(200).json({ msj: "todo salio correcto", status: "ok", prueba });
+                    } else {
+                        res.json(error);
                     }
-                    let prueba = await DesarrolloC.findByIdAndUpdate(id, {
-                        proyectoFormativo: result.url
-                    });
-                    prueba.save()
-                    res.status(200).json({  msj : "todo salio correcto" , status: "ok", prueba ,  });
-                } else {
-                    res.json(error);
-                }
-            })
+                })
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Error en el servidor" });
+        }
+    }
+    ,
+    putplaneacionPedagogica: async (req, res) => {
+        console.log("put planeacionPedagogica del desarrollo curricular")
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { id } = req.params
+        console.log({ id })
+        const { planeacionPedagogica } = req.files
+        console.log({ planeacionPedagogica })
+
+        try {
+            if (!planeacionPedagogica || !planeacionPedagogica.tempFilePath) {
+                return res.status(400).json({ msg: "No hay archivos en la peticion" });
+            }
+            const extension = planeacionPedagogica.name.split(".").pop();
+
+            const { tempFilePath } = planeacionPedagogica;
+            console.log(tempFilePath);
+
+            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension },
+                async function (error, result) {
+                    if (result) {
+                        let holder = await DesarrolloC.findById(id);
+                        console.log(holder + "holder")
+
+                        if (holder && holder.planeacionPedagogica) {
+                            const nombreTemp = holder.planeacionPedagogica.split("/");
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1];
+                            const [public_id] = nombreArchivo.split(".");
+                            cloudinary.uploader.destroy(public_id);
+                        }
+                        let prueba = await DesarrolloC.findByIdAndUpdate(id, {
+                            planeacionPedagogica: result.url
+                        });
+                        prueba.save()
+                        res.status(200).json({ msj: "todo salio correcto", status: "ok", prueba, });
+                    } else {
+                        res.json(error);
+                    }
+                })
 
 
 
@@ -197,59 +247,6 @@ const httpDesarrolloC = {
             res.status(500).json({ msg: "Error en el servidor" });
         }
     }
-,
-putplaneacionPedagogica: async (req, res) => {
-    console.log("put planeacionPedagogica del desarrollo curricular")
-    cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_NAME,
-        api_key: process.env.CLOUDINARY_KEY,
-        api_secret: process.env.CLOUDINARY_SECRET,
-        secure: true,
-    });
-
-    const { id } = req.params
-    console.log({ id })
-    const { planeacionPedagogica } = req.files
-    console.log({ planeacionPedagogica })
-
-    try {
-        if (!planeacionPedagogica || !planeacionPedagogica.tempFilePath) {
-            return res.status(400).json({ msg: "No hay archivos en la peticion" });
-        }
-        const extension = planeacionPedagogica.name.split(".").pop();
-
-        const { tempFilePath } = planeacionPedagogica;
-        console.log(tempFilePath);
-
-        cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension }, 
-        async function (error, result) {
-            if (result) {
-                let holder = await DesarrolloC.findById(id);
-                console.log(holder   + "holder")
-
-                if (holder && holder.planeacionPedagogica) {
-                    const nombreTemp = holder.planeacionPedagogica.split("/");
-                    const nombreArchivo = nombreTemp[nombreTemp.length - 1]; 
-                    const [public_id] = nombreArchivo.split(".");
-                    cloudinary.uploader.destroy(public_id);
-                }
-                let prueba = await DesarrolloC.findByIdAndUpdate(id, {
-                    planeacionPedagogica: result.url
-                });
-                prueba.save()
-                res.status(200).json({  msj : "todo salio correcto" , status: "ok", prueba ,  });
-            } else {
-                res.json(error);
-            }
-        })
-
-
-
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ msg: "Error en el servidor" });
-    }
-}
 
 
 }

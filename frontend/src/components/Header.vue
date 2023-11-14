@@ -12,22 +12,22 @@
         </q-toolbar-title>
         <div style="padding: 10px;">
           <q-avatar style="cursor: pointer;">
-            <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+            <img v-if="datos.foto === ''" src="../imagenes/usuario.png" alt="imagenes">
             <img v-else :src="datos.foto" />
             <q-menu>
               <q-list style="min-width: 100px">
                 <q-item clickable v-close-popup>
                   <q-item-section @click="cerrarSesion()">
                     <q-item-label>
-                      <q-icon name="exit_to_app" />
+                      <q-icon name="logout" size="20px" />
                       <span style="margin-left: 10px;">Cerrar Sesión</span>
                     </q-item-label>
                   </q-item-section>
                 </q-item>
-                <q-item clickable v-close-popup>
+                <q-item to="configuracion" style="color: black;" clickable v-close-popup>
                   <q-item-section>
                     <q-item-label>
-                      <q-icon name="account_circle" />
+                      <q-icon name="account_circle" size="20px" />
                       <span style="margin-left: 10px;">Perfil</span>
                     </q-item-label>
                   </q-item-section>

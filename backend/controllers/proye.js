@@ -1,6 +1,4 @@
 import Proyectos from "../models/proyectos.js"
-import Programa from "../models/programasFormacion.js"
-
 
 const httpProyectos = {
     postProyecto: async (req, res) => {

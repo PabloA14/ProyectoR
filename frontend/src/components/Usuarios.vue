@@ -32,8 +32,8 @@
 
           <template v-slot:body-cell-foto="props">
             <q-avatar size="45px">
-              <img v-if="props.row.foto === undefined || props.foto === null" src="../imagenes/usuario.png"
-                alt="imagenes">
+              <img v-if="props.row.foto === undefined || props.row.foto === null
+                || props.row.foto === ''" src="../imagenes/usuario.png" alt="imagenes">
               <img :src="props.row.foto" />
             </q-avatar>
           </template>
@@ -157,7 +157,8 @@
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <q-avatar size="100px" class="q-mr-md">
-            <img v-if="info.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+            <img v-if="info.foto === undefined || info.foto == null || info.foto == ''" src="../imagenes/usuario.png"
+              alt="imagenes">
             <img v-else :src="info.foto" />
           </q-avatar>
           <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
