@@ -33,7 +33,7 @@ routes.put("/proyectoFormativo/updated/D/:id", [
 routes.put("/planecion/updated/Pedagogica/D/:id", [
     check("planeacionPedagogica").custom((value, { req }) => {
         if (!req.files || Object.keys(req.files).length === 0) {
-            throw new Error('Debe adjuntar el Hatsune Miku');
+            throw new Error('Debe adjuntar el file---');
         }
         return true;
     }),
