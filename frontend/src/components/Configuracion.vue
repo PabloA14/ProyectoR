@@ -84,8 +84,8 @@
                 </div>
             </div>
 
-            <q-dialog v-model="agregar">
-                <q-card style="width: 36.5%; height: fit-content">
+            <q-dialog v-model="agregar" class="card">
+                <q-card id="ok">
                     <q-card-section class="row items-center q-pb-none">
                         <div class="text-h6">
                             Editar datos personales
@@ -288,5 +288,16 @@ async function actualizar() {
 #agregar {
     justify-content: center;
     text-align: center;
+}
+
+#ok {
+    width: 32%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #ok {
+        width: 100%;
+    }
 }
 </style>

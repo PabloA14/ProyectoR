@@ -35,13 +35,14 @@
           </q-input>
         </template>
         <template v-slot:top-left>
-          <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="Modagregar" />
+          <q-btn color="secondary" icon="add" label="Agregar" v-if="useUsuari.rol === 'gestor'" class="q-mb-md"
+            @click="Modagregar" />
         </template>
       </q-table>
     </div>
 
     <q-dialog v-model="modalAgg">
-      <q-card style="width: 32%; height: fit-content">
+      <q-card id="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Agregar Instructor</div>
           <q-space />
@@ -52,29 +53,31 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <div class="q-mb-md">
+            <q-select color="secondary" label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
+              :options="instructores.map(i => ({ label: i.nombre, value: i._id }))" emit-value map-options>
+            </q-select>
 
+            <q-select disabled v-if="instructores.length === 0" color="secondary" label="No hay instructores disponibles">
+            </q-select>
 
-              <select name="" id="" v-model="instructor">
+            <!-- <select name="" id="" v-model="instructor">
 
-                <option :value="a._id" v-for="a in instructores" :key="a">
-                  <small>
-                    <b>
-                      {{ a.nombre }}
-                      {{ a.apellidos }}
+              <option :value="a._id" v-for="a in instructores" :key="a">
+                <small>
+                  <b>
+                    {{ a.nombre }}
+                    {{ a.apellidos }}
+                  </b>
+                </small>
 
-                    </b>
+              </option>
 
-                  </small>
-
-                </option>
-
-                <option v-if="instructores.length === 0" value="" disabled>
-                  No hay instructores dispnibles en este momento
-                </option>
-              </select> -->
-            </div>
+              <option v-if="instructores.length === 0" value="" disabled>
+                No hay instructores disponibles en este momento
+              </option>
+            </select> -->
           </div>
+
         </q-card-section>
 
         <q-separator />
@@ -119,12 +122,11 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useUserStore } from "../almacenaje/informacion.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
-import { useRouter } from "vue-router";
 import { useQuasar } from "quasar";
 
 
 const $q = useQuasar();
-let router = useRouter()
+//let router = useRouter()
 let modalAgg = ref();
 let filter = ref('');
 let modalEliminar = ref();
@@ -191,21 +193,27 @@ async function obtenerInstructores() {
 
 
 async function agregarInstructor() {
-  console.log('agregar instructor');
-  loading.value = true
-  await usePrograma.agregarInstructores(usePrograma.programa._id, instructor.value)
-    .then((res) => {
-      console.log(res);
-      console.log('todo bien');
-      informacionPrograma(programaSeleccionado.codigo)
-      console.log(instructores.value);
-      instructor.value = ''
-
-    }).catch((error) => {
-      console.log(error);
-    })
-  loading.value = false
+  loading.value = true;
+  try {
+    if (!instructor.value) {
+      $q.notify({
+        message: "Debe seleccionar un instructor",
+        color: "negative",
+        icon: "warning",
+        position: "top",
+        timeout: Math.random() * 3100,
+      });
+      return
+    }
+    await usePrograma.agregarInstructores(usePrograma.programa._id, instructor.value);
+    await informacionPrograma(programaSeleccionado.codigo);
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
 }
+
 
 function decodeJWT(token) {
   try {
@@ -247,7 +255,7 @@ const informacionPrograma = async (x) => {
   console.log("--------------- informacion programa-");
   console.log(x);
   const res = await usePrograma.informacionPrograma(x).then((res) => {
-    router.push("/instructores")
+    //router.push("/instructores")
     console.log(res);
     usuarios.value = res.data.instructores
     modalAgg.value = false
@@ -267,9 +275,20 @@ const informacionPrograma = async (x) => {
         instructores.value.splice(index, 1);
       }
     })
-
+    instructor.value = ''
+    instructores.value.reverse()
   }).catch((error) => {
-    console.log(error);
+    if (instructor.value === '') {
+      $q.notify({
+        message: "Debe seleccionar un instructor",
+        color: "negative",
+        icon: "warning",
+        position: "top",
+        timeout: Math.random() * 3100,
+      })
+    } else {
+      console.log(error);
+    }
   })
 }
 
@@ -277,15 +296,14 @@ const informacionPrograma = async (x) => {
 </script>
 
 <style scoped>
-.spinner-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
+#card {
+  width: 35%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  #card {
+    width: 100%;
+  }
 }
 </style>
