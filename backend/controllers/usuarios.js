@@ -352,10 +352,10 @@ const httpUsuario = {
               cloudinary.uploader.destroy(public_id);
             }
             console.log(result.url);
-            let prueba = await Usuario.findByIdAndUpdate(id, {
-              foto: result.url
-            });
-            prueba.save()
+            let prueba = await Usuario.findByIdAndUpdate(id, { 
+              $set: { foto: result.url }
+            }, { new: true });
+
             res.status(200).json({ msj: "todo salio correcto", status: "ok", prueba });
             console.log(prueba);
           } else {

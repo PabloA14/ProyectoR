@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-page class="q-pa-md">
+    <q-page class="q-pa-md">                                                                                                                                                                                                       
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="useUsuari.loading === true">
@@ -8,7 +8,7 @@
         </div>
         <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
           :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
-          <template v-slot:body-cell-opciones="props">
+          <template v-slot:body-cell-opciones="props">                                                                                                                                                                     
             <q-td :props="props">
 
 
@@ -596,7 +596,7 @@ async function putImagenBd() {
       agregarF.value = false
       $q.notify({
         message: "Foto agregada Exitosamente",
-        color: "green",
+        color: "green",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
         icon: "check",
         position: "bottom",
         timeout: Math.random() * 3000,

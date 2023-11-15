@@ -1,19 +1,24 @@
 <template>
     <div>
         <q-page class="q-pa-md">
-            <div class="text-h4 text-center q-mb-md">Información Personal
-            </div><br>
+            <div class="text-h4 text-center q-mb-md">Información Personal</div>
+            <br />
 
-            <div class="row" style="display: grid; place-items: center;">
+            <div class="row" style="display: grid; place-items: center">
                 <q-card class="my-card q-mt-xl" flat bordered>
                     <q-card-section horizontal>
                         <q-card-section class="q-pt-xs" id="section">
-                            <div class="row" style="display: flex;justify-content: center;align-items: center;">
+                            <div class="row" style="
+                      display: flex;
+                      justify-content: center;
+                      align-items: center;
+                    ">
                                 <q-avatar size="100px">
-                                    <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes">
+                                    <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes" />
                                     <img :src="datos.foto" />
                                 </q-avatar>
-                            </div><br>
+                            </div>
+                            <br />
                             <div class="row">
                                 <div class="col-4">
                                     <div class="text-h6 q-mt-sm q-mb-xs">Datos personales</div>
@@ -28,46 +33,85 @@
                                 </div>
                             </div>
 
-                            <q-separator style="height: 5px;margin-top: 5px;" color="secondary" /><br>
+                            <q-separator style="height: 5px; margin-top: 5px" color="secondary" /><br />
 
                             <div class="row">
                                 <div class="col-4">
-                                    <div class="text-h7 text-left q-mb-md"><b>Número de identificación:</b> {{ datos.cedula
-                                    }}</div>
-                                    <div class="text-h7 text-left q-mb-md"><b>Nombres:</b> {{ datos.nombre }}</div>
-                                    <div class="text-h7 text-left q-mb-md"><b>Apellidos:</b> {{ datos.apellidos }}</div>
-                                </div>
-
-                                <div class="col-4">
-                                    <div class="text-h7 text-left q-mb-md"><b>Teléfono:</b> {{ datos.telefono }}</div>
-                                    <div class="text-h7 text-left q-mb-md"><b>Correo electrónico:</b> {{ datos.correo }}
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Número de identificación:</b> {{ datos.cedula }}
+                                    </div>
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Nombres:</b> {{ datos.nombre }}
+                                    </div>
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Apellidos:</b> {{ datos.apellidos }}
                                     </div>
                                 </div>
 
                                 <div class="col-4">
-                                    <div class="text-h7 text-left q-mb-md"><b>Perfin profesional:</b> {{
-                                        datos.perfilProfesional }}</div>
-                                    <div class="text-h7 text-left q-mb-md"><b>Hoja de Vida:</b>
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Teléfono:</b> {{ datos.telefono }}
+                                    </div>
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Correo electrónico:</b> {{ datos.correo }}
+                                    </div>
+                                </div>
+
+                                <div class="col-4">
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Perfin profesional:</b> {{ datos.perfilProfesional }}
+                                    </div>
+                                    <div class="text-h7 text-left q-mb-md">
+                                        <b>Hoja de Vida:</b>
                                     </div>
                                     <a :href="datos.hojaDeVida" target="_blank">
                                         <q-icon title="Descargar" color="green" name="fa-solid fa-download" size="25px"
-                                            style="cursor: pointer;" />
+                                            style="cursor: pointer" />
                                     </a>
                                 </div>
                             </div>
-
                         </q-card-section>
-
                     </q-card-section>
 
                     <q-separator />
 
                     <q-card-actions>
                         <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
-                            class="q-mb-md" @click="agregar = true; editarUsuario(datos)" />
+                            class="q-mb-md" @click="
+                                agregar = true;
+                            editarUsuario(datos);" />
+
+                        <q-btn style="float: ; margin: auto auto" color="primary" icon="fa-solid fa-user"
+                            label="Foto Perfil" class="q-mb-md" @click="
+                                EditarFoto= true; seleccionarFoto(datos)" />
                     </q-card-actions>
                 </q-card>
-            </div><br><br>
+            </div>
+            <br /><br />
+
+        <!-- modal de Editar Foto -->
+            <q-dialog v-model="EditarFoto" class="card">
+                <q-card id="ok">
+                    <q-card-section class="row items-center q-pb-none">
+                        <div class="text-h6">Editar Foto de Perfil</div>
+                        <q-space />
+                        <q-btn icon="close" color="negative" flat round dense v-close-popup />
+                    </q-card-section>
+
+                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+                    <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
+                        <div style="text-align: left" class="q-mb-md">
+                            <input type="file" @change="archivoFoto" />
+                        </div>
+                    </q-card-section>
+
+                    <q-separator />
+
+                    <q-card-actions align="right">
+                        <q-btn :disable="loading" label="Actualizar" @click="actualizarFoto()" color="secondary" />
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
 
             <div v-if="rol === 'administrador'">
                 <div class="text-h4 text-center q-mb-md">Configuración de Interfaz</div>
@@ -75,7 +119,8 @@
                 <div class="text-h5 text-left q-mb-md">Selector de color</div>
                 <div>
                     <ul>
-                        <li>Modificar el color de la interfaz del usuario:
+                        <li>
+                            Modificar el color de la interfaz del usuario:
                             <div class="q-pa-md row items-start q-gutter-md">
                                 <q-color class="my-picker" />
                             </div>
@@ -84,20 +129,17 @@
                 </div>
             </div>
 
+                    <!-- modal de Editar agregar -->
+
             <q-dialog v-model="agregar" class="card">
                 <q-card id="ok">
                     <q-card-section class="row items-center q-pb-none">
-                        <div class="text-h6">
-                            Editar datos personales
-                        </div>
+                        <div class="text-h6">Editar datos personales</div>
                         <q-space />
                         <q-btn icon="close" color="negative" flat round dense v-close-popup />
                     </q-card-section>
 
-                    <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
 
                     <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                         <div class="q-mb-md">
@@ -120,7 +162,7 @@
                             <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
                         </div>
 
-                        <div style="text-align: left;" class="q-mb-md">
+                        <div style="text-align: left" class="q-mb-md">
                             <p style="color: rgb(122, 122, 121)">Hoja de Vida</p>
                             <input type="file" @change="archivo" />
                         </div>
@@ -137,64 +179,75 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
-
-
         </q-page>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { useUsuarioStore } from "../stores/Usuarios.js"
-import { useQuasar } from 'quasar'
+import { ref } from "vue";
+import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useQuasar } from "quasar";
+
+let useUsuario = useUsuarioStore();
+let rol = useUsuario.rol;
+let datos = useUsuario.usuario;
 
 
-let useUsuario = useUsuarioStore()
-let rol = useUsuario.rol
-let datos = useUsuario.usuario
-
-let agregar = ref(false)
-const $q = useQuasar()
-let loading = ref(false)
-let errores = ref([])
-
+let agregar = ref(false);
+const $q = useQuasar();
+let loading = ref(false);
+let errores = ref([]);
+let EditarFoto  = ref(false)
 let cedula = ref("");
 let nombre = ref("");
 let apellido = ref("");
 let telefono = ref("");
 let correo = ref("");
-let cv = ref("");
-let id = ref("")
+let cv = ref("");                                                                                                
+let id = ref("");
+let img = ref("");
+
 let perfilProfesional = ref("");
 
-
 function validarVacios() {
-    if (cedula.value === "" && nombre.value === "" && apellido.value === "" && telefono.value === ""
-        && correo.value === "" && perfilProfesional.value === "") {
+    if (
+        cedula.value === "" &&
+        nombre.value === "" &&
+        apellido.value === "" &&
+        telefono.value === "" &&
+        correo.value === "" &&
+        perfilProfesional.value === ""
+    ) {
         $q.notify({
-            message: 'Campos vacíos',
-            color: 'negative',
-            icon: 'warning',
-            position: 'top',
-            timeout: Math.random() * 3000
-        })
-    } else return true
+            message: "Campos vacíos",
+            color: "negative",
+            icon: "warning",
+            position: "top",
+            timeout: Math.random() * 3000,
+        });
+    } else return true;
 }
 
 function validar() {
     $q.notify({
         message: errores,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
-        timeout: Math.random() * 3000
-    })
+        color: "negative",
+        position: "top",
+        icon: "warning",
+        timeout: Math.random() * 3000,
+    });
 }
 
 function archivo(event) {
     cv.value = event.target.files[0];
     console.log(cv.value);
 }
+
+function archivoFoto(event) {
+    console.log('----------------');
+    img.value = event.target.files[0];
+    console.log(img.value);
+}              
 
 function editarUsuario(datos) {
     console.log("Entró a editar", datos);
@@ -209,50 +262,118 @@ function editarUsuario(datos) {
     agregar.value = true;
 }
 async function actualizar() {
-    loading.value = true
-    await useUsuario.actualizarDatosPersonales(
-        id.value,
-        cedula.value,
-        nombre.value,
-        apellido.value,
-        telefono.value,
-        correo.value,
-        cv.value,
-        perfilProfesional.value
-
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Datos personales editados exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: Math.random() * 3000
-        })
-
-    }).catch((error) => {
-        errores.value = ''
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    loading.value = true;
+    await useUsuario
+        .actualizarDatosPersonales(
+            id.value,
+            cedula.value,
+            nombre.value,
+            apellido.value,
+            telefono.value,
+            correo.value,
+            cv.value,
+            perfilProfesional.value
+        )
+        .then((res) => {
+            agregar.value = false;
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
-                timeout: Math.random() * 3000
-            })
-        }
-        else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
-
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+                message: "Datos personales editados exitosamente",
+                color: "green",
+                icon: "check",
+                position: "bottom",
+                timeout: Math.random() * 3000,
+            });
+            const data = res.data.usuario;
+            nombre.value = data.nombre;
+            datos.nombre = data.nombre;
+            datos.cedula = data.cedula;
+            datos.apellidos = data.apellidos;
+            datos.telefono = data.telefono;
+            datos.perfilProfesional = data.perfilProfesional;
+            datos.correo = data.correo;
+        })
+        .catch((error) => {
+            errores.value = "";
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg;
+                $q.notify({
+                    message: repetida,
+                    color: "negative",
+                    position: "top",
+                    icon: "warning",
+                    timeout: Math.random() * 3000,
+                });
+            } else if (
+                error.response &&
+                error.response.data &&
+                validarVacios() === true
+            ) {
+                errores.value = error.response.data.errors[0].msg;
+                validar();
+            } else {
+                console.log(error);
+            }
+        });
+    loading.value = false;
 }
 
+
+function seleccionarFoto(datos) {
+    console.log(datos);
+
+        id.value = datos._id;
+        console.log(id.value);
+
+
+}
+
+async function  actualizarFoto (){
+    console.log();
+    await  useUsuario.putFoto(id.value , img.value)
+    .then((res) => {
+            agregar.value = false;
+            $q.notify({
+                message: "Foto Editada correctamente",
+                color: "green",
+                icon: "check",
+                position: "bottom",
+                timeout: Math.random() * 3000,
+            });
+            const data = res.data.prueba;
+            //nombre.foto = data.foto
+            EditarFoto.value = false
+            img.value=''
+            datos.foto = data.foto
+            console.log(datos.foto);
+
+        })
+        .catch((error) => {
+            errores.value = "";
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg;
+                $q.notify({
+                    message: repetida,
+                    color: "negative",
+                    position: "top",
+                    icon: "warning",
+                    timeout: Math.random() * 3000,
+                });
+            } else if (
+                error.response &&
+                error.response.data &&
+                validarVacios() === true
+            ) {
+                errores.value = error.response.data.errors[0].msg;
+                validar();
+            } else {
+                console.log(error);
+            }
+        });
+
+
+  
+
+}
 
 </script>
 
@@ -272,7 +393,6 @@ async function actualizar() {
     text-align: center;
     margin-top: 5%;
     margin-bottom: 10%;
-
 }
 
 .my-card .text-caption {
