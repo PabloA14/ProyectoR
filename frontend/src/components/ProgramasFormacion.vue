@@ -1,8 +1,7 @@
 <template>
   <div>
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md" style="text-transform: capitalize;">
-        {{ redConocimiento }}/ {{ rol }}
+      <div class="text-h4 text-center q-mb-md" style="text-transform: capitalize; font-weight: bold">        {{ redConocimiento }}
       </div>
 
       <div class="q-pa-md" style="width: 100%">
