@@ -8,47 +8,39 @@
         </q-breadcrumbs><br>
 
         <div class="text-h4 text-center q-mb-md">Materiales de Formación</div>
-        <br>
 
-        <div class="row">
-            <div class="col-6">
-                <q-input style="width: fit-content;min-width: 40%;" v-model="buscarCodigo"
-                    placeholder="Buscar por código..." dense color="secondary" outlined>
-                    <template v-slot:prepend>
-                        <q-icon name="search" />
-                    </template>
-                </q-input>
+        <div class="q-pa-md" style="width: 100%;">
+            <div class="spinner-container" v-if="usePrograma.loading === true">
+                <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
             </div>
-            <div class="col-6 text-right">
-                <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
-                    agregar = true; nuevo()" />
-            </div>
-        </div>
+            <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                :filter="filter" :rows="materialesPrograma" :columns="columns" row-key="name" :pagination="pagination">
 
-        <span v-if="materialesPrograma.length === 0">No se han agregado materiales</span>
+                <template v-slot:top-right>
+                    <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                </template>
 
+                <template v-slot:body-cell-descripcion="props">
+                    <q-td :props="props" style="white-space: pre-line;">
+                        {{ props.row.descripcion }}
+                    </q-td>
+                </template>
 
-        <div style="overflow-y: auto;height: 60vh;">
-            <q-list bordered class="rounded-borders">
-                <q-expansion-item switch-toggle-side v-for="mat in materialesPrograma" :key="mat"
-                    :label="'Código: ' + mat.codigo" :caption="mat.nombre">
-                    <q-card>
-                        <q-card-section>
-                            <div>
-                                Tipo: {{ mat.tipo }}
-                            </div><br>
-                            <div>
-                                Descripción: {{ mat.descripcion }}
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                    <q-separator inset style="height: 5px;margin-top: 5px;" color="secondary" /><br>
-                </q-expansion-item>
-            </q-list>
+                <template v-slot:top-left>
+                    <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        agregar = true;
+                    nuevo();
+                    " />
+                </template>
+            </q-table>
         </div>
 
         <q-dialog v-model="agregar">
-            <q-card style="width: 40%; height: fit-content">
+            <q-card id="card">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         Agregar Materiales de Formación
@@ -99,11 +91,26 @@ let loading = ref(false)
 const useMaterial = useMaterialStore()
 const usePrograma = useProgramasFormacionStore()
 
+let filter = ref('')
+let separator = ref('cell')
+
+const pagination = ref({
+    rowsPerPage: 6
+})
+
+const columns = [
+    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
+    { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
+    { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
+]
+
 buscarMateriales()
 
 materialesPrograma.value = usePrograma.programa.materialesformacion
 
 let idPrograma = usePrograma.programa._id
+
 
 async function buscarMat() {
     await usePrograma.informacionPrograma(usePrograma.programa.codigo)
@@ -120,7 +127,6 @@ console.log(usePrograma.programa);
 async function buscarMateriales() {
     const materialesActivos = await useMaterial.buscarMateriales();
     material.value = materialesActivos.filter(mat => mat.estado === 1);
-    console.log(material.value);
 }
 
 function nuevo() {
@@ -139,6 +145,12 @@ async function agregarN() {
                 icon: 'check',
                 position: 'bottom',
                 timeout: Math.random() * 3000
+            })
+            let objetoAEliminar = materialSeleccionado.value;
+            material.value.forEach((element, index) => {
+                if (element._id === objetoAEliminar) {
+                    material.value.splice(index, 1);
+                }
             })
             buscarMat()
         }).catch((error) => {
@@ -179,5 +191,16 @@ async function agregarN() {
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+#card {
+    width: 40%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
 }
 </style>

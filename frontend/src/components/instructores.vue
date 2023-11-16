@@ -54,10 +54,11 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <q-select color="secondary" label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
-              :options="instructores.map(i => ({ label: i.nombre, value: i._id }))" emit-value map-options>
+              :options="instructores.map(i => ({ label: `${i.nombre} ${i.apellidos}`, value: i._id }))" emit-value
+              map-options>
             </q-select>
 
-            <q-select disabled v-if="instructores.length === 0" color="secondary" label="No hay instructores disponibles">
+            <q-select disable v-if="instructores.length === 0" color="secondary" label="No hay instructores disponibles">
             </q-select>
 
             <!-- <select name="" id="" v-model="instructor">
@@ -82,38 +83,13 @@
 
         <q-separator />
 
-        <q-card-actions class="flex-center" align="right">
+        <q-card-actions align="right">
           <q-btn :disable="loading" v-if="instructores.length > 0" @click="agregarInstructor()" color="secondary"
             label="Agregar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
   </q-page>
-  <!-- <q-dialog v-model="modalEliminar">
-      <q-card style="width: 32%; height: fit-content">
-        <q-card-section class="row items-center q-pb-none">
-          <div class="text-h6">Eliminar Instructor</div>
-          <q-space />
-          <q-btn icon="close" color="negative" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
-        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-          <div class="text-h5 text-center q-mt-md">
-            ¿Esta seguro que desea eliminar a '**+** ' de la lista de
-            instructores ?
-          </div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-actions class="flex-center" align="right">
-          <q-btn color="secondary " label="Confirmar" />
-          <q-btn color="negative" label="Rechazar" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
 </template>
 
 <script setup>
@@ -162,9 +138,7 @@ const columns = [
 async function buscar() {
   await usePrograma.informacionPrograma(usePrograma.programa.codigo)
   usuarios.value = usePrograma.programa.instructores
-  //console.log(usuarios.value);
 }
-
 
 async function obtenerInstructores() {
   await useUsuari.buscarUsuarios().then((res) => {
@@ -184,13 +158,10 @@ async function obtenerInstructores() {
         instructores.value.push(nuevoInstructor);
       }
     });
-
     console.log("Nuevos instructores:", instructores.value);
   });
   instructor.value = null;
 }
-
-
 
 async function agregarInstructor() {
   loading.value = true;
@@ -213,7 +184,6 @@ async function agregarInstructor() {
     loading.value = false;
   }
 }
-
 
 function decodeJWT(token) {
   try {
@@ -255,8 +225,6 @@ const informacionPrograma = async (x) => {
   console.log("--------------- informacion programa-");
   console.log(x);
   const res = await usePrograma.informacionPrograma(x).then((res) => {
-    //router.push("/instructores")
-    console.log(res);
     usuarios.value = res.data.instructores
     modalAgg.value = false
     $q.notify({
@@ -276,28 +244,17 @@ const informacionPrograma = async (x) => {
       }
     })
     instructor.value = ''
-    instructores.value.reverse()
+    usuarios.value.reverse()
   }).catch((error) => {
-    if (instructor.value === '') {
-      $q.notify({
-        message: "Debe seleccionar un instructor",
-        color: "negative",
-        icon: "warning",
-        position: "top",
-        timeout: Math.random() * 3100,
-      })
-    } else {
-      console.log(error);
-    }
+    console.log(error);
   })
 }
-
 
 </script>
 
 <style scoped>
 #card {
-  width: 35%;
+  width: 40%;
   height: fit-content;
 }
 
