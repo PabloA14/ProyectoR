@@ -48,7 +48,7 @@
         </q-page>
 
         <q-dialog v-model="agregar">
-            <q-card class="dialog" style="width: 32%; height: fit-content">
+            <q-card class="dialog" id="card">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         {{ bd === 0 ? "Editar Red" : "Agregar Red" }}
@@ -273,5 +273,16 @@ async function editarEstado(red) {
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+#card {
+    width: 32%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
 }
 </style>

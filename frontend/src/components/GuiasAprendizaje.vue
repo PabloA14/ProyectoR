@@ -1,6 +1,13 @@
 <template>
   <q-page padding>
-    
+
+    <q-breadcrumbs separator=">">
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el to="/desarrolloCurricular" label="Desarrollo Curricular" />
+      <q-breadcrumbs-el>Fase de {{ fase }}</q-breadcrumbs-el>
+    </q-breadcrumbs><br>
+
     <div class="text-h4 text-center q-mb-md">Guías de Aprendizaje</div>
     <div class="q-pa-md" style="width: 100%">
       <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="dataGuias"
@@ -9,10 +16,10 @@
           <q-td :props="props">
             <div class="opciones">
 
-              <q-icon   title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
+              <q-icon title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
                 style="margin-right: 25px;cursor: pointer;" @click="informacionGuia(props.row)" />
 
-              <q-icon v-if="rol != 'instructor'" title="Editar Guía" color="orange" @click="editarGuia(props.row)"
+              <q-icon title="Editar Guía" color="orange" @click="editarGuia(props.row)"
                 name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
               <a :href="props.row.documento" target="_blank">
@@ -24,7 +31,7 @@
           </q-td>
         </template>
 
-              <!-- ´boton search buscar -->
+        <!-- ´boton search buscar -->
 
         <template v-slot:top-right>
           <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
@@ -35,13 +42,13 @@
         </template>
         <template v-slot:top-left>
 
-          <q-btn  v-if="rol != 'instructor' " color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
+          <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
         </template>
       </q-table>
 
       <!-- Modal -->
       <q-dialog v-model="mostrarModal">
-        <q-card style="width: 32%; height: fit-content">
+        <q-card id="card">
           <q-card-section class="row items-center q-pb-none">
 
             <div class="text-h6">
@@ -93,7 +100,7 @@ import { usegiasStore } from "../stores/guias"
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
 import { useUsuarioStore } from "../stores/Usuarios.js";
-import {useProgramasFormacionStore} from "../stores/ProgramasFormacion.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useDesarrolloCurricular } from "../stores/desarrolloC";
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -148,9 +155,9 @@ async function buscar() {
     dataGuias.value = await usegias.buscarguia()
     dataGuias.value.reverse()
     console.log("Guias FRON:", dataGuias.value);
-    let filtrado= dataGuias.value.filter(a=>a.fase===fase.value)
-    dataGuias.value=filtrado
-  }catch{
+    let filtrado = dataGuias.value.filter(a => a.fase === fase.value)
+    dataGuias.value = filtrado
+  } catch {
     console.error("Error al buscar Guias:");
   }
 }
@@ -179,11 +186,11 @@ async function agregarN() {
     codigo: codigo.value,
     nombre: nombre.value,
     documento: archivo.value,
-    fase : fase.value
+    fase: fase.value
 
   }).then((res) => {
     console.log(res);
-    let des=useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id,res.data.guia._id)
+    let des = useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id, res.data.guia._id)
     console.log(des);
     mostrarModal.value = false
     $q.notify({
@@ -245,7 +252,7 @@ async function actualizar() {
     })
     buscar();
   }).catch((error) => {
-    
+
     errores.value = ''
     if (error.response && error.response.data.msg) {
       const repetida = error.response.data.msg
@@ -288,4 +295,17 @@ const informacionGuia = async (x) => {
 }
 
 </script>
+
+<style scoped>
+#card {
+  width: 32%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  #card {
+    width: 100%;
+  }
+}
+</style>
  

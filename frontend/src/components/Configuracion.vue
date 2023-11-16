@@ -82,14 +82,14 @@
                             editarUsuario(datos);" />
 
                         <q-btn style="float: ; margin: auto auto" color="primary" icon="fa-solid fa-user"
-                            label="Foto Perfil" class="q-mb-md" @click="
-                                EditarFoto= true; seleccionarFoto(datos)" />
+                            label="Foto de Perfil" class="q-mb-md" @click="
+                                EditarFoto = true; seleccionarFoto(datos)" />
                     </q-card-actions>
                 </q-card>
             </div>
             <br /><br />
 
-        <!-- modal de Editar Foto -->
+            <!-- modal de Editar Foto -->
             <q-dialog v-model="EditarFoto" class="card">
                 <q-card id="ok">
                     <q-card-section class="row items-center q-pb-none">
@@ -129,7 +129,7 @@
                 </div>
             </div>
 
-                    <!-- modal de Editar agregar -->
+            <!-- modal de Editar agregar -->
 
             <q-dialog v-model="agregar" class="card">
                 <q-card id="ok">
@@ -197,13 +197,13 @@ let agregar = ref(false);
 const $q = useQuasar();
 let loading = ref(false);
 let errores = ref([]);
-let EditarFoto  = ref(false)
+let EditarFoto = ref(false)
 let cedula = ref("");
 let nombre = ref("");
 let apellido = ref("");
 let telefono = ref("");
 let correo = ref("");
-let cv = ref("");                                                                                                
+let cv = ref("");
 let id = ref("");
 let img = ref("");
 
@@ -247,7 +247,7 @@ function archivoFoto(event) {
     console.log('----------------');
     img.value = event.target.files[0];
     console.log(img.value);
-}              
+}
 
 function editarUsuario(datos) {
     console.log("Entró a editar", datos);
@@ -261,6 +261,7 @@ function editarUsuario(datos) {
     perfilProfesional.value = datos.perfilProfesional;
     agregar.value = true;
 }
+
 async function actualizar() {
     loading.value = true;
     await useUsuario
@@ -291,6 +292,7 @@ async function actualizar() {
             datos.telefono = data.telefono;
             datos.perfilProfesional = data.perfilProfesional;
             datos.correo = data.correo;
+            datos.hojaDeVida = data.hojaDeVida
         })
         .catch((error) => {
             errores.value = "";
@@ -320,17 +322,14 @@ async function actualizar() {
 
 function seleccionarFoto(datos) {
     console.log(datos);
-
-        id.value = datos._id;
-        console.log(id.value);
-
-
+    id.value = datos._id;
+    console.log(id.value);
 }
 
-async function  actualizarFoto (){
-    console.log();
-    await  useUsuario.putFoto(id.value , img.value)
-    .then((res) => {
+async function actualizarFoto() {
+    loading.value = true
+    await useUsuario.putFoto(id.value, img.value)
+        .then((res) => {
             agregar.value = false;
             $q.notify({
                 message: "Foto Editada correctamente",
@@ -342,37 +341,19 @@ async function  actualizarFoto (){
             const data = res.data.prueba;
             //nombre.foto = data.foto
             EditarFoto.value = false
-            img.value=''
+            img.value = ''
             datos.foto = data.foto
             console.log(datos.foto);
-
         })
         .catch((error) => {
-            errores.value = "";
-            if (error.response && error.response.data.msg) {
-                const repetida = error.response.data.msg;
-                $q.notify({
-                    message: repetida,
-                    color: "negative",
-                    position: "top",
-                    icon: "warning",
-                    timeout: Math.random() * 3000,
-                });
-            } else if (
-                error.response &&
-                error.response.data &&
-                validarVacios() === true
-            ) {
-                errores.value = error.response.data.errors[0].msg;
-                validar();
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
             } else {
                 console.log(error);
             }
-        });
-
-
-  
-
+        })
+    loading.value = false
 }
 
 </script>

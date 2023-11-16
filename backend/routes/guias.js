@@ -8,6 +8,12 @@ const routes = Router()
 routes.post("/", [
     check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
+    check("documento").custom((value, { req }) => {
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error('El archivo es obligatorio');
+        }
+        return true;
+    }),
     validarCampos
 ], httpGuias.postGuia)
 

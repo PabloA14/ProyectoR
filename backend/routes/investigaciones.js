@@ -9,6 +9,12 @@ routes.post("/", [
     check("denominacion", "El nombre es obligatorio").trim().not().isEmpty(),
     check("descripcion", "La descripción es obligatorio").trim().not().isEmpty(),
     check("fecha", "El año es obligatorio").trim().not().isEmpty(),
+    check("documentos").custom((value, { req }) => {
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error('El archivo es obligatorio');
+        }
+        return true;
+    }),
     validarCampos
 ], httpInvestigaciones.postInvestigacion)
 

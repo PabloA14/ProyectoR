@@ -2,8 +2,6 @@ import httpUsuario from "../controllers/usuarios.js";
 import { Router } from "express";
 import { check } from "express-validator"
 import { validarCampos } from "../middlewares/validar_campos.js";
-//import { validarExistaArchivo } from "../middlewares/validar-exista-archivo.js";
-
 
 const router = Router()
 
@@ -53,7 +51,6 @@ router.put("/datosPersonales/:id", [
 ], httpUsuario.putUsuario)
 
 
-
 router.patch("/:id", httpUsuario.patchUsuario)
 
 router.post("/login", [
@@ -67,27 +64,17 @@ router.get("/uploadcloud/:id", [
     validarCampos
 ], httpUsuario.mostrarImagenCloud)
 
-/* router.post('/uploadcloudFoto/:id', [
-    check('id', 'No es un ID válido').isMongoId(),
-    validarCampos
-], httpUsuario.cargarArchivoCloudFoto)
 
-router.post('/uploadcloudHoja/:id', [
-    check('id', 'No es un ID válido').isMongoId(),
+router.put("/Usuario/:id",
+[
+    check("foto").custom((value, { req }) => {
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error('Adjunte la foto');
+        }
+        return true;
+    }),
     validarCampos
-], httpUsuario.cargarArchivoCloudHoja) */
-
-/* router.get('/uploadcloudFoto/:id', [
-    check('id', 'No es un ID válido').isMongoId(),
-    validarCampos
-], httpUsuario.mostrarArchivoCloudFoto)
-
-router.get('/uploadcloudHoja/:id', [
-    check('id', 'No es un ID válido').isMongoId(),
-    validarCampos
-], httpUsuario.mostrarArchivoCloudHoja) */
-
-router.put("/Usuario/:id", httpUsuario.putFoto)
+], httpUsuario.putFoto)
 
 
 

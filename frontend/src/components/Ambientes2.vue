@@ -7,54 +7,41 @@
             <q-breadcrumbs-el label="Ambientes de Formación" />
         </q-breadcrumbs><br>
 
-        <div class="text-h4 text-center q-mb-md">Ambientes de Formación</div><br>
+        <div class="text-h4 text-center q-mb-md">Ambientes de Formación</div>
 
-        <div class="row">
-            <div class="col-6">
-                <q-input @input="programafiltrao"  style="width: fit-content;min-width: 40%;" 
-                v-model="buscarCodigo"
-                placeholder="Buscar por código..." 
-                dense color="secondary" outlined>
-                <template v-slot:prepend>
-                        <q-icon name="search" />
+        <div class="q-pa-md" style="width: 100%;">
+            <div class="spinner-container" v-if="usePrograma.loading === true">
+                <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+            </div>
+            <q-table v-if="usePrograma.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+                :filter="filter" :rows="ambientesPrograma" :columns="columns" row-key="name" :pagination="pagination">
+
+                <template v-slot:top-right>
+                    <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
                 </template>
-                </q-input >
-            </div>
-            
-            <div class="col-6 text-right">
-                <q-btn color="secondary" 
-                icon="add" label="Agregar" 
-                class="q-mb-md" 
-                @click="
-                agregar = true; nuevo()" />
-            </div>
 
+                <template v-slot:body-cell-descripcion="props">
+                    <q-td :props="props" style="white-space: pre-line;">
+                        {{ props.row.descripcion }}
+                    </q-td>
+                </template>
+
+                <template v-if="rol === 'gestor'" v-slot:top-left>
+                    <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        agregar = true;
+                    nuevo();
+                    " />
+                </template>
+            </q-table>
         </div>
 
-        <span v-if="ambientesPrograma.length === 0">No se han agregado ambientes</span>
-
-        <span v-if="error=true">{{errorD}}</span>
-        <div style="overflow-y: auto;height: 60vh;">
-            <q-list bordered class="rounded-borders">
-                <q-expansion-item switch-toggle-side v-for="amb in ambientesPrograma" :key="amb"
-                    :label="'Código: ' + amb.codigo" :caption="amb.nombre">
-                    <q-card>
-                        <q-card-section>
-                            <div>
-                                Tipo: {{ amb.tipo }}
-                            </div><br>
-                            <div>
-                                Descripción: {{ amb.descripcion }}
-                            </div>
-                        </q-card-section>
-                    </q-card>
-                    <q-separator inset style="height: 5px;margin-top: 5px;" color="secondary" /><br>
-                </q-expansion-item>
-            </q-list>
-        </div>
 
         <q-dialog v-model="agregar">
-            <q-card style="width: 40%; height: fit-content">
+            <q-card id="card">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         Agregar Ambientes de Formación
@@ -92,20 +79,19 @@
 </template>
 
 <script setup>
-import { ref , computed} from "vue";
+import { ref } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
+import { useUsuarioStore } from "../stores/Usuarios.js";
 
-let buscarCodigo = ref('')
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
 let ambienteSeleccionado = ref("")
 let ambiente = ref([])
 let ambientesPrograma = ref([])
 let agregar = ref(false)
 const $q = useQuasar()
-let error =ref(false)
-let errorD =ref()
-let prueba =ref([])
 let loading = ref(false)
 const useAmbiente = useAmbienteStore()
 const usePrograma = useProgramasFormacionStore()
@@ -113,37 +99,25 @@ const usePrograma = useProgramasFormacionStore()
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
 
+let filter = ref('')
+let separator = ref('cell')
+
+const pagination = ref({
+    rowsPerPage: 6
+})
+
+const columns = [
+    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
+    { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
+    { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
+]
+
 buscarAmbientes()
 
 ambientesPrograma.value = usePrograma.programa.ambienteFormacion
 
 let idPrograma = usePrograma.programa._id
-
-const programafiltrao = computed(() => {
-  if (buscarCodigo.value === "" ) {
-    ambientesPrograma.value = usePrograma.programa.ambienteFormacion
-    console.log('**********');
-    console.log(ambientesPrograma.value);
-    error.value=false
-    errorD.value =''
-  } else{
-    let filtrado= ambientesPrograma.value.filter(a=>a.codigo.includes(buscarCodigo.value))
-    if(filtrado.length===0){
-        error.value=true
-        errorD.value ='no se encontro ningun resultado'
-        ambientesPrograma.value =''
-    }else {
-        errorD.value =''
-        error.value=false
-        console.log(filtrado);
-        ambientesPrograma.value =filtrado
-    } ;
-
-  }
-    
-}
-)
-
 
 async function buscarAmb() {
     await usePrograma.informacionPrograma(usePrograma.programa.codigo)
@@ -207,3 +181,28 @@ async function agregarN() {
 }
 
 </script>
+
+<style scoped>
+#card {
+    width: 40%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
+}
+
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+</style>

@@ -10,7 +10,7 @@
         <q-toolbar-title id="titulo">
           Repositorio
         </q-toolbar-title>
-        <div style="padding: 10px;">
+        <div style="padding: 10px;text-transform: capitalize;">
           {{ rol }}
 
           <q-avatar style="cursor: pointer;">
@@ -27,7 +27,7 @@
                     </q-item-label>
                   </q-item-section>
                 </q-item>
-                
+
                 <q-item clickable v-close-popup>
                   <q-item-section @click="cerrarSesion()">
                     <q-item-label>

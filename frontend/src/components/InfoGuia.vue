@@ -1,5 +1,14 @@
 <template>
   <q-page padding>
+
+    <q-breadcrumbs separator=">">
+      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el to="/desarrolloCurricular" label="Desarrollo Curricular" />
+      <q-breadcrumbs-el to="/guiasAprendizaje">Fase de {{ useGuia.guia.fase }}</q-breadcrumbs-el>
+      <q-breadcrumbs-el :label="useGuia.guia.nombre" />
+    </q-breadcrumbs><br>
+
     <div class="spinner-container" v-if="instrumento === true && useInst.loading === true">
       <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
     </div>
@@ -26,8 +35,8 @@
     <div v-if="instrumento === true && useInst.loading === false">
       <div class="text-h4 text-center q-mb-md q-mt-xl">Instrumentos de Evaluación</div>
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter"
-          :rows="instrumentosFiltrados" :columns="columnsInstrumento" row-key="name" :pagination="pagination">
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="instrumentos"
+          :columns="columnsInstrumento" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <div class="opciones">
@@ -67,8 +76,8 @@
       <div class="text-h4 text-center q-mb-md q-mt-xl">Materiales de Apoyo</div>
 
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter"
-          :rows="materialesFiltrados" :columns="columnsMaterial" row-key="name" :pagination="pagination">
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="materiales"
+          :columns="columnsMaterial" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <div class="opciones">
@@ -109,7 +118,7 @@
 
     <!-- Modal MATERIALES -->
     <q-dialog v-model="agregarMaterial">
-      <q-card style="width: 32%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
 
           <div class="text-h6">
@@ -155,7 +164,7 @@
 
     <!-- Modal INSTRUMENTOS -->
     <q-dialog v-model="agregarInst">
-      <q-card style="width: 32%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
 
           <div class="text-h6">
@@ -199,12 +208,14 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted} from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useInstrumento } from "../stores/Instrumentos.js"
 import { usegiasStore } from "../stores/guias"
 import { useApoyo } from "../stores/MaterialesApoyo.js"
 import { useQuasar } from 'quasar'
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 
+const usePrograma = useProgramasFormacionStore()
 let material = ref('')
 let instrumento = ref('')
 let instrumentos = ref([])
@@ -529,5 +540,16 @@ async function actualizarMaterial() {
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+.card {
+  width: 32%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    width: 100%;
+  }
 }
 </style>

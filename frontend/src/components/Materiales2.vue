@@ -30,7 +30,7 @@
                     </q-td>
                 </template>
 
-                <template v-slot:top-left>
+                <template v-if="rol==='gestor'" v-slot:top-left>
                     <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
                         agregar = true;
                     nuevo();
@@ -81,7 +81,10 @@ import { ref } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useMaterialStore } from "../stores/Materiales.js"
 import { useQuasar } from 'quasar'
+import { useUsuarioStore } from "../stores/Usuarios.js";
 
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
 let materialSeleccionado = ref("")
 let material = ref([])
 let materialesPrograma = ref([])
@@ -90,6 +93,7 @@ const $q = useQuasar()
 let loading = ref(false)
 const useMaterial = useMaterialStore()
 const usePrograma = useProgramasFormacionStore()
+let materialesBd = usePrograma.programa.materialesformacion
 
 let filter = ref('')
 let separator = ref('cell')
@@ -145,12 +149,6 @@ async function agregarN() {
                 icon: 'check',
                 position: 'bottom',
                 timeout: Math.random() * 3000
-            })
-            let objetoAEliminar = materialSeleccionado.value;
-            material.value.forEach((element, index) => {
-                if (element._id === objetoAEliminar) {
-                    material.value.splice(index, 1);
-                }
             })
             buscarMat()
         }).catch((error) => {

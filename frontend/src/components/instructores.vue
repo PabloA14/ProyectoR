@@ -20,6 +20,20 @@
           </q-td>
         </template>
 
+        <template v-slot:body-cell-foto="props">
+          <q-avatar size="45px">
+            <img v-if="props.row.foto === undefined || props.row.foto === null
+              || props.row.foto === ''" src="../imagenes/usuario.png" alt="imagenes">
+            <img :src="props.row.foto" />
+          </q-avatar>
+        </template>
+
+        <template v-slot:body-cell-nombre="props">
+          <q-td :props="props" style="white-space: pre-line;">
+            {{ props.row.nombre }}  {{ props.row.apellidos }}
+          </q-td>
+        </template>
+
         <template v-slot:body-cell-estado="props">
           <q-td :props="props">
             <span class="text-green" v-if="props.row.estado == 1">Activo</span>
@@ -121,13 +135,18 @@ let instructoresBd = usePrograma.instructores
 
 const columns = [
   {
+    name: "foto",
+    align: "center",
+    label: "Foto",
+    field: "foto",
+    sortable: false,
+  },
+  {
     name: "nombre",
     align: "center",
     label: "Instructor",
-    field: "nombre",
     sortable: true,
   },
-  { name: "Apellidos", label: "Apellidos ", align: "center", field: "apellidos", sortable: true },
   { name: "correo", label: "Email", field: "correo", align: "center" },
   { name: "telefono", label: "Teléfono", field: "telefono", align: "center" },
   { name: "estado", label: "Estado ", field: "estado", sortable: true, align: "center" },
@@ -254,7 +273,7 @@ const informacionPrograma = async (x) => {
 
 <style scoped>
 #card {
-  width: 40%;
+  width: 32%;
   height: fit-content;
 }
 

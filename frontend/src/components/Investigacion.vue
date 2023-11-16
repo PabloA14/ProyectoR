@@ -1,7 +1,7 @@
 <template>
     <div>
 
-        
+
         <q-page class="q-pa-md">
             <q-breadcrumbs separator=">">
                 <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
@@ -31,6 +31,12 @@
                         </q-td>
                     </template>
 
+                    <template v-slot:body-cell-descripcion="props">
+                        <q-td :props="props" style="white-space: pre-line;">
+                            {{ props.row.descripcion }}
+                        </q-td>
+                    </template>
+
                     <template v-slot:body-cell-documento="props">
                         <q-td :props="props">
                             <a :href="props.row.documentos" target="_blank">
@@ -54,7 +60,7 @@
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        <q-btn v-if="rol === 'gestor'" color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
                             agregar = true;
                         nuevo();
                         " />
@@ -64,7 +70,7 @@
         </q-page>
 
         <q-dialog v-model="agregar">
-            <q-card style="width: 32%; height: fit-content">
+            <q-card id="card">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         {{ bd === 0 ? "Editar Investigación" : "Agregar Investigación" }}
@@ -121,7 +127,10 @@ import { ref, computed } from "vue";
 import { useInveStore } from "../stores/Investigaciones.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useQuasar } from 'quasar'
+import { useUsuarioStore } from "../stores/Usuarios.js";
 
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
 let agregar = ref(false)
 let codigo = ref("")
 let nombre = ref("")
@@ -147,7 +156,7 @@ const pagination = ref({
 const columns = [
     { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'denominacion', align: 'center', label: 'Nombre', field: "denominacion", sortable: true },
-    { name: 'descripcion', align: 'center', label: 'Descripción', field: "descripcion", sortable: false },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
     { name: 'documento', align: 'center', label: 'Documento', field: "documentos", sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
@@ -249,14 +258,6 @@ async function agregarN() {
             errores.value = error.response.data.errors[0].msg
             validar()
 
-        } else if (error.response.data.error) {
-            $q.notify({
-                message: 'falta archivo',
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
-                timeout: Math.random() * 3000
-            })
         } else {
             console.log(error);
         }
@@ -277,6 +278,7 @@ function editarInves(i) {
 }
 
 async function actualizar() {
+    loading.value = true
     await useInvestigacion.actualizarInves(
         id.value,
         codigo.value,
@@ -315,6 +317,7 @@ async function actualizar() {
             console.log(error);
         }
     })
+    loading.value = false
 }
 
 
@@ -331,5 +334,16 @@ async function actualizar() {
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+#card {
+    width: 32%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
 }
 </style>

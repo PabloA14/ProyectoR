@@ -1,7 +1,8 @@
 <template>
   <div>
     <q-page class="q-pa-md">
-      <div class="text-h4 text-center q-mb-md" style="text-transform: capitalize; font-weight: bold">        {{ redConocimiento }}
+      <div class="text-h4 text-center q-mb-md" style="text-transform: capitalize; font-weight: bold"> {{ redConocimiento
+      }}
       </div>
 
       <div class="q-pa-md" style="width: 100%">
@@ -84,7 +85,7 @@
     </q-page>
 
     <q-dialog v-model="agregar">
-      <q-card style="width: 32%; height: fit-content">
+      <q-card id="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
             {{ bd === 0 ? "Editar Programa" : "Agregar Programa" }}
@@ -492,5 +493,16 @@ const informacionPrograma = async (x) => {
   justify-content: center;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+#card {
+  width: 32%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  #card {
+    width: 100%;
+  }
 }
 </style>

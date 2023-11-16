@@ -269,54 +269,6 @@ const httpUsuario = {
     }
   },
 
-  /* cargarArchivoCloudHoja: async (req, res, next) => {
-    cloudinary.config({
-      cloud_name: process.env.CLOUDINARY_NAME,
-      api_key: process.env.CLOUDINARY_KEY,
-      api_secret: process.env.CLOUDINARY_SECRET,
-      secure: true,
-    });
-
-    const { id } = req.params;
-    try {
-      //subir archivo
-      if (
-        !req.files ||
-        Object.keys(req.files).length === 0 ||
-        !req.files.hojaDeVida
-      ) {
-        return res.status(400).json({ msg: "No hay archivos en la peticion" });
-      }
-      next();
-
-      const { tempFilePath } = req.files.hojaDeVida;
-      cloudinary.uploader.upload(
-        tempFilePath,
-        { width: 250, crop: "limit" },
-        async function (error, result) {
-          if (result) {
-            let holder = await Usuario.findById(id);
-
-            if (holder.hojaDeVida) {
-              const nombreTemp = holder.hojaDeVida.split("/");
-              const nombreArchivo = nombreTemp[nombreTemp.length - 1]; // hgbkoyinhx9ahaqmpcwl jpg
-              const [public_id] = nombreArchivo.split(".");
-              cloudinary.uploader.destroy(public_id);
-            }
-            holder = await Usuario.findByIdAndUpdate(id, {
-              hojaDeVida: result.url,
-            });
-            //responder
-            res.json({ url: result.url });
-          } else {
-            res.json(error);
-          }
-        }
-      );
-    } catch (error) {
-      res.status(400).json({ error, general: "Controlador" });
-    }
-  }, */
   putFoto: async (req, res) => {
     console.log("put foto del Usuario")
     cloudinary.config({
@@ -362,8 +314,6 @@ const httpUsuario = {
             res.json(error);
           }
         })
-
-
 
     } catch (error) {
       console.error(error);

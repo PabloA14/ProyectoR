@@ -49,7 +49,7 @@ export const useUsuarioStore = defineStore("usuario", () => {
         },
       });
 
-      return datos;                                          
+      return datos;
     } catch (error) {
       console.log(error);
       throw error;
@@ -137,8 +137,6 @@ export const useUsuarioStore = defineStore("usuario", () => {
 
 
   const putFoto = async (id, foto) => {
-    console.log(id, foto);
-    console.log('.......................................');
     try {
       const formData = new FormData()
       formData.append('foto', foto)
@@ -147,14 +145,12 @@ export const useUsuarioStore = defineStore("usuario", () => {
           "Content-Type": "multipart/form-data"
         },
       });
-      console.log(usuario.value);
-      console.log('----------****-----------');
-      usuario.value=res.data.prueba
-      console.log(usuario.value);
+      usuario.value = res.data.prueba
       return res;
 
     } catch (error) {
       console.log(error);
+      throw error
     }
   };
 

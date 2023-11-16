@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-page class="q-pa-md">                                                                                                                                                                                                       
+    <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="useUsuari.loading === true">
@@ -8,7 +8,7 @@
         </div>
         <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
           :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
-          <template v-slot:body-cell-opciones="props">                                                                                                                                                                     
+          <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
 
 
@@ -75,7 +75,7 @@
     </q-page>
 
     <q-dialog v-model="agregar">
-      <q-card style="width: 32%; height: fit-content">
+      <q-card id="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
             {{ bd === 0 ? "Editar Usuario" : "Agregar Usuario" }}
@@ -221,41 +221,6 @@
       </q-card>
     </q-dialog>
 
-    <!-- Modal agregar imagen -->
-    <!-- <q-dialog v-model="agregarF">
-      <q-card style="width: 32%; height: fit-content">
-        <q-card-section class="row items-center q-pb-none">
-
-
-          <div class="text-h6" v-if="foto === undefined || foto === null">
-            Agregar Foto
-          </div>
-
-          <div class="text-h6" v-else>
-            Editar Foto
-          </div>
-
-          <q-space />
-          <q-btn icon="close" color="negative" flat round dense v-close-popup />
-        </q-card-section>
-
-        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
-        <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-          <div class="q-mb-md">
-            <input type="file" @change="fotos" />
-          </div>
-        </q-card-section>
-
-        <q-separator />
-
-        <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="foto === undefined || foto === null" label="Agregar Img" @click="putImagenBd()"
-            color="secondary" />
-          <q-btn :disabled="loading" v-else @click="putImagenBd()" label="Actualizar" color="secondary" />
-        </q-card-actions>
-      </q-card>
-    </q-dialog> -->
   </div>
 </template>
 
@@ -267,7 +232,6 @@ import { useRedStore } from "../stores/Redes.js";
 import { useQuasar } from "quasar";
 
 let infoU = ref(false);
-let agregarF = ref()
 let agregar = ref(false);
 let cedula = ref("");
 let nombre = ref("");
@@ -285,7 +249,6 @@ let separator = ref("cell");
 let id = ref("");
 let info = ref([]);
 let perfilProfesional = ref("");
-let archivoF = ref("");
 
 let bd = ref("");
 const useUsuari = useUsuarioStore();
@@ -431,10 +394,6 @@ function archivo(event) {
   cv.value = event.target.files[0];
 }
 
-/* function fotos(event) {
-  archivoF.value = event.target.files[0];
-} */
-
 async function agregarU() {
   loading.value = true;
   console.log("entro a agregar");
@@ -578,40 +537,7 @@ async function editarEstado(x) {
   }
 }
 
-/* function putImagen(x) {
-  foto.value = x.foto
-  id.value = x._id
-  console.log(foto.value);
-  agregarF.value = true
 
-}
-
-async function putImagenBd() {
-  console.log('put imagen');
-  loading.value = true
-  try {
-    const res = await useUsuari.putFoto(id.value, archivoF.value);
-    console.log(res);
-    if (res.data.status === "ok") {
-      agregarF.value = false
-      $q.notify({
-        message: "Foto agregada Exitosamente",
-        color: "green",                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
-        icon: "check",
-        position: "bottom",
-        timeout: Math.random() * 3000,
-      });
-      buscar()
-      console.log(res.data.prueba);
-    } else {
-      console.log("no estuvo ok");
-    }
-  } catch (error) {
-    console.error(error);
-  }
-  loading.value = false
-}
- */
 </script>
 
 <style lang="sass">
@@ -660,5 +586,16 @@ async function putImagenBd() {
   align-items: center;
 
   background-color: rgba(255, 255, 255, 0.8);
+}
+
+#card {
+  width: 32%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  #card {
+    width: 100%;
+  }
 }
 </style>

@@ -155,7 +155,8 @@
 
                   <q-item clickable v-if="planeacionPedagogica != undefined && rol == 'gestor'">
                     <q-item-section>
-                      <span @click="editarPlaneacion = true" class="material-symbols-outlined" style="font-size: 5vh; text-align: center">edit</span>
+                      <span @click="editarPlaneacion = true" class="material-symbols-outlined"
+                        style="font-size: 5vh; text-align: center">edit</span>
                     </q-item-section>
                   </q-item>
 
@@ -180,7 +181,7 @@
 
           <q-btn flat round dense>
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'analisis'">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Análisis'">bubble</span>
             </router-link>
           </q-btn>
 
@@ -194,7 +195,7 @@
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'planeacion'">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Planeación'">bubble</span>
             </router-link>
           </q-btn>
         </div>
@@ -207,11 +208,11 @@
 
           <q-btn flat round dense class="ir">
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'ejecucion'">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Ejecución'">bubble</span>
             </router-link>
           </q-btn>
         </div>
-        <small>Ver Fase de ejecucion</small>
+        <small>Ver Fase de Ejecución</small>
       </div>
     </div>
 
@@ -221,11 +222,11 @@
 
         <q-btn flat round dense class="ir">
           <router-link to="guiasAprendizaje">
-            <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'evaluacion'">bubble</span>
+            <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Evaluación'">bubble</span>
           </router-link>
         </q-btn>
       </div>
-      <small>Ver Fase de evaluación</small>
+      <small>Ver Fase de Evaluación</small>
     </div>
 
     <!-- MODAL AGREGAR -->

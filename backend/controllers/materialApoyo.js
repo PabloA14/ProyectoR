@@ -42,14 +42,6 @@ const httpMatAp = {
                 codigo, nombre, enlace, guia, documento: documentoUrl,
             });
 
-            /* const cod = await MaterialApoyo.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'El material ya se encuentra registrado', cod });
-            } else {
-                await matApoyo.save();
-                res.status(200).json({ msg: "Registro exitoso", matApoyo });
-            } */
-
             await matApoyo.save();
             res.status(200).json({ msg: "Registro exitoso", matApoyo });
 
@@ -62,22 +54,6 @@ const httpMatAp = {
     getMaterialApoyo: async (req, res) => {
         const mat = await MaterialApoyo.find().populate("guia")
         res.status(200).json({ mat })
-    },
-
-    getMaterialApCodigo: async (req, res) => {
-        const codigo = req.params.codigo
-        try {
-            const cod = await MaterialApoyo.findOne({ codigo: codigo }).populate('guia')
-            console.log(cod);
-            if (!cod) {
-                res.status(400).json({ sms: `sin coincidencias para el material ${codigo}` })
-            } else {
-                res.status(200).json({ sms: `Se encontro el material correctamente `, cod })
-            }
-        } catch (error) {
-            res.json({ error })
-            console.log(error);
-        }
     },
 
     putMaterialApoyo: async (req, res) => {
@@ -120,11 +96,6 @@ const httpMatAp = {
                 updatedFields.documento = result.url;
             }
 
-            /* const existingMat = await MaterialApoyo.findOne({ codigo: codigo });
-            if (existingMat && existingMat._id.toString() !== matId) {
-                return res.status(400).json({ msg: 'El material ya se encuentra registrado' });
-            } */
-
             const updatedMaterialesAp = await MaterialApoyo.findOneAndUpdate(
                 { _id: matId },
                 {
@@ -141,5 +112,7 @@ const httpMatAp = {
     }
 
 }
+
+
 
 export default httpMatAp
