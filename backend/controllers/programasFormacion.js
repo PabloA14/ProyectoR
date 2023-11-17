@@ -79,6 +79,54 @@ const httpprogramas = {
         }
     },
 
+    putDiseno: async (req, res) => {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { id } = req.params
+        const { disCurricular } = req.files
+
+        try {
+            if (!disCurricular || !disCurricular.tempFilePath) {
+                return res.status(400).json({ msg: "No hay archivo en la peticion" });
+            }
+
+            const extension = disCurricular.name.split(".").pop();
+            const { tempFilePath } = disCurricular;
+
+            cloudinary.uploader.upload(tempFilePath, { width: 250, crop: "limit", resource_type: "raw", format: extension },
+                async function (error, result) {
+                    if (result) {
+                        let holder = await Programa.findById(id);
+
+                        if (holder && holder.disCurricular) {
+                            const nombreTemp = holder.disCurricular.split("/");
+                            const nombreArchivo = nombreTemp[nombreTemp.length - 1];
+                            const [public_id] = nombreArchivo.split(".");
+                            cloudinary.uploader.destroy(public_id);
+                        }
+
+                        let prueba = await Programa.findByIdAndUpdate(id, {
+                            disCurricular: result.url
+                        });
+                        
+                        prueba.save()
+                        res.status(200).json({ msj: "Edición exitosa", status: "ok", prueba });
+                    } else {
+                        res.json(error);
+                    }
+                })
+
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ msg: "Error en el servidor" });
+        }
+    },
+
     getProgramaCod: async (req, res) => {
         console.log("getcod");
         const codigo = req.params.codigo;
@@ -102,7 +150,7 @@ const httpprogramas = {
             res.json({ error });
         }
     },
-    
+
     putProgramas: async (req, res) => {
         console.log('putProgramas')
 

@@ -20,10 +20,10 @@ export const useRedStore = defineStore("redes", () => {
         }
     };
     const actualizarRedes = async (
-        id, codigo, denominacion) => {
+        id, denominacion) => {
         try {
             let datos = await axios.put(`${LinkBD}/api/redes/${id}`, {
-                codigo, denominacion
+                denominacion
             });
             return datos;
         } catch (error) {
@@ -58,5 +58,5 @@ export const useRedStore = defineStore("redes", () => {
         cambiarEstado,
         loading
     }
-    
+
 });

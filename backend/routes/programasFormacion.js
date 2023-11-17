@@ -20,7 +20,6 @@ router.post("/", [
 
 router.post("/agregar/instructor/:id", httpprogramas.postProgramaInstructor)
 
-//router.get("/traer", httpprogramas.getProgramaCod)
 router.get("/traer/:codigo", httpprogramas.getProgramaCod)
 
 router.get("/materiales/:id", httpprogramas.getMaterialesPrograma)
@@ -34,6 +33,15 @@ router.put("/:id", [
     validarCampos
 ], httpprogramas.putProgramas)
 
+router.put("/editarDiseno/:id", [
+    check("disCurricular").custom((value, { req }) => {
+        if (!req.files || Object.keys(req.files).length === 0) {
+            throw new Error('Debe adjuntar el archivo');
+        }
+        return true;
+    }),
+    validarCampos
+], httpprogramas.putDiseno)
 
 router.put("/editarDesarrollo/:id", httpprogramas.putDesarrollo)
 

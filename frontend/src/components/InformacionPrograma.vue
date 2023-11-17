@@ -9,7 +9,11 @@
             <b style="text-transform:capitalize;">{{ nombre }}</b>
         </div>
 
-        <div class="bloques">
+        <div class="spinner-container" v-if="usePrograma.loading === true">
+            <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+        </div>
+
+        <div v-if="usePrograma.loading === false" class="bloques">
             <div class="row" id="row">
                 <q-toolbar-title class="title">
                     Diseño Curricular
@@ -22,16 +26,16 @@
 
                             <q-item clickable>
                                 <q-item-section>
-                                    <a :href="programaSeleccionado.disCurricular" style="text-align: center;color: black;"
-                                        target="_blank">
-                                        <span class="material-symbols-outlined" id="opciones" style="font-size: 6vh; color: black">
+                                    <a :href="disCurri" style="text-align: center;color: black;" target="_blank">
+                                        <span class="material-symbols-outlined" id="opciones"
+                                            style="font-size: 6vh; color: black">
                                             download
                                         </span>
                                     </a>
 
                                 </q-item-section>
                             </q-item>
-                            <q-item clickable v-if="useUsuario.rol != 'instructor'">
+                            <q-item @click="agregar = true" clickable v-if="useUsuario.rol != 'instructor'">
                                 <q-item-section>
                                     <span class="material-symbols-outlined" style="font-size: 4.5vh;" id="opciones">
                                         edit
@@ -45,20 +49,17 @@
                     </q-menu>
                 </q-btn>
 
-                <!-- <q-dialog v-model="agregar">
-                    <q-card style="width: 40%; height: fit-content">
+                <q-dialog v-model="agregar">
+                    <q-card id="card">
                         <q-card-section class="row items-center q-pb-none">
                             <div class="text-h6">
-                                Agregar Diseño Curricular
+                                Editar Diseño Curricular
                             </div>
                             <q-space />
                             <q-btn icon="close" color="negative" flat round dense v-close-popup />
                         </q-card-section>
 
-                        <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+                        <q-separator inset style="height: 5px;margin-top: 5px;" color="secondary" />
 
                         <q-card-section style="max-height: 65vh" class="scroll">
 
@@ -71,10 +72,11 @@
                         <q-separator />
 
                         <q-card-actions align="right">
-                            <q-btn label="Agregar" @click="agregarDis()" color="secondary" />
+                            <q-btn label="Editar" :disabled="loading" @click="agregarDis()" color="secondary" />
                         </q-card-actions>
                     </q-card>
-                </q-dialog> -->
+                </q-dialog>
+
             </div>
             <small>Descargar diseño curricular</small>
         </div>
@@ -120,20 +122,73 @@
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
+import { useQuasar } from 'quasar'
+import { useRouter } from "vue-router";
 
 const useUsuario = useUsuarioStore();
-const rol = useUsuario.rol;
-
-console.log(rol)
 const usePrograma = useProgramasFormacionStore();
-let instructor = usePrograma.instructores
 let nombre = ref(usePrograma.programa.denominacionPrograma)
+let disCurri = ref(usePrograma.programa.disCurricular)
 let programaSeleccionado = usePrograma.programa
 console.log(programaSeleccionado);
-console.log(instructor);
 
-
+let codigo = ref(usePrograma.programa.codigo);
 let agregar = ref(false)
+let dis = ref('')
+let router = useRouter()
+const $q = useQuasar()
+let errores = ref([])
+let loading = ref(false)
+let id = ref(usePrograma.programa._id)
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: "negative",
+        position: "top",
+        icon: "warning",
+        timeout: Math.random() * 3000,
+    });
+}
+
+function archivo(event) {
+    dis.value = event.target.files[0];
+}
+
+async function agregarDis() {
+    loading.value = true
+    await usePrograma.putDiseno(id.value, dis.value)
+        .then(() => {
+            agregar.value = false
+            $q.notify({
+                message: "Diseño Curricular editado exitosamente",
+                color: "green",
+                icon: "check",
+                position: "bottom",
+                timeout: Math.random() * 3000,
+            });
+            informacionPrograma(codigo.value)
+            router.push("/InformacionPrograma");
+        }).catch((error) => {
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg;
+                validar();
+            } else {
+                console.log(error);
+            }
+        })
+    loading.value = false
+}
+
+async function informacionPrograma(x) {
+    codigo.value = x;
+    const a = await usePrograma.informacionPrograma(codigo.value).then(() => {
+        disCurri.value = a.data.disCurricular
+    }).catch((error) => {
+        console.log(error);
+    });
+}
+
 
 </script>
   
@@ -143,35 +198,11 @@ let agregar = ref(false)
     margin: 2vh;
 }
 
-#cardP {
-    margin: 1%;
-    background-color: #38a90063;
-    text-align: center;
-}
-
-#cardP:hover {
-    background-color: #38a90094;
-    cursor: pointer;
-}
-
-#img {
-    width: 100%;
-    height: 100%;
-}
-
 
 #ir {
     font-weight: 800;
     font-size: 6vh;
     color: black;
-}
-
-.title {
-    border-bottom: solid 2px rgba(128, 128, 128, 0.174);
-    font-weight: 800;
-}
-
-#ir {
     border: solid;
     padding: 2vh;
     border-radius: 5px;
@@ -180,5 +211,34 @@ let agregar = ref(false)
     background-color: #39a900;
     color: white;
     font-size: 3.8vh;
+}
+
+.title {
+    border-bottom: solid 2px rgba(128, 128, 128, 0.174);
+    font-weight: 800;
+}
+
+#card {
+    width: 38%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
+}
+
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(255, 255, 255, 0.8);
 }
 </style>

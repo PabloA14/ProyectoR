@@ -3,21 +3,14 @@ import Material from "../models/materialesFor.js"
 const httpMateriales = {
 
     postMaterial: async (req, res) => {
-        const { codigo, nombre, descripcion, tipo } = req.body
+        const { nombre, descripcion, tipo } = req.body
         try {
             const material = new Material({
-                codigo, nombre, descripcion, tipo
+                nombre, descripcion, tipo
             })
 
-            const cod = await Material.findOne({ codigo: codigo })
-            if (cod) {
-                return res.status(400).json({ sms: "el material de aprendizaje ya se encuentra en el sistema con el codigo", cod, nombre })
-
-            } else {
-                await material.save()
-                return res.status(200).json({ msg: 'El material de aprendizaje registrado con exito', material });
-
-            }
+            await material.save()
+            return res.status(200).json({ msg: 'El material de aprendizaje registrado con exito', material });
 
         } catch (error) {
             console.log(error);
@@ -30,31 +23,12 @@ const httpMateriales = {
         res.status(200).json({ material })
     },
 
-    getCodigoMaterial: async (req, res) => {
-        const Codigo = req.params.Codigo
-        try {
-            const cod = await Material.find({ codigo: Codigo })
-            console.log(cod);
-            if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para el codigo de ese material de aprendizaje   ${Codigo}` })
-            } else {
-                res.status(200).json({ cod })
-            }
-        } catch (error) {
-            res.json({ error })
-            console.log(error);
-        }
-    },
-
+    
     putMaterial: async (req, res) => {
         const materialId = req.params.id
         const { codigo, nombre, descripcion, tipo } = req.body
         try {
-            const existingMaterial = await Material.findOne({ codigo: codigo });
-            if (existingMaterial && existingMaterial._id.toString() !== materialId) {
-                return res.status(400).json({ msg: 'El código ya está registrado para otro material' });
-            }
-
+            
             const updatedFields = {
                 codigo, nombre, descripcion, tipo
             };

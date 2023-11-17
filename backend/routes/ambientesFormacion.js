@@ -7,7 +7,6 @@ import { validarCampos } from "../middlewares/validar_campos.js";
 const router = Router()
 
 router.post("/", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     check("centroformacion", "El centro de formación es obligatorio").trim().not().isEmpty(),
     check("tipo", "El tipo de ambiente es obligatorio").trim().not().isEmpty(),
@@ -16,11 +15,8 @@ router.post("/", [
 ], httpAmbiente.postambiente)
 
 router.get("/", httpAmbiente.getAmbientes)
-router.get("/:codigo", httpAmbiente.getCodigo)
-
 
 router.put("/:id", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("nombre", "El nombre es obligatorio").trim().not().isEmpty(),
     check("centroformacion", "El centro de formación es obligatorio").trim().not().isEmpty(),
     check("tipo", "El tipo de ambiente es obligatorio").trim().not().isEmpty(),

@@ -178,7 +178,7 @@ async function iniciarSesion() {
 
 .izquierda {
     flex: 1;
-    background-image: url('../imagenes/login.jpg');
+    background-image: url('../imagenes/login2.jpg');
     background-size: cover;
     background-position: center;
 }

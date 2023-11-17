@@ -6,7 +6,7 @@ import { ref } from "vue";
 export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () => {
   let loading = ref(false)
   let programa = ref({})
-  let instructores =ref({})
+  let instructores = ref({})
 
   const getProgramas = async () => {
     try {
@@ -160,20 +160,20 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     }
   };
 
-  /* const postDiseno = async (id, disCurricular) => {
+  const putDiseno = async (id, disCurricular) => {
     try {
       const formData = new FormData()
       formData.append('disCurricular', disCurricular)
-      const res = await axios.post(`${LinkBD}/api/programasFormacion/postDisCurricular/${id}`, formData, {
+      const res = await axios.put(`${LinkBD}/api/programasFormacion/editarDiseno/${id}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data"
         },
       });
       return res;
     } catch (error) {
-      console.log(error);
+      throw error
     }
-  }; */
+  };
 
   return {
     getProgramas,
@@ -181,7 +181,7 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
     actualizarProgramaFormacion,
     cambiarEstado,
     asignarMateriales,
-    //postDiseno,
+    putDiseno,
     loading,
     programa,
     instructores,

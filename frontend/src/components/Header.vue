@@ -43,7 +43,6 @@
 
 
         </div>
-        <!-- <p style="margin: 0 auto;margin-right: 20px;text-transform: capitalize;">{{ rol }}</p> -->
       </q-toolbar>
     </q-header>
 
@@ -60,8 +59,6 @@
           </div>
 
         </q-card-section>
-        <!-- <i class="fa-solid fa-question" id="interrogacion"></i> -->
-
         <q-card-actions class="flex-center" align="right">
           <q-btn label="Cancelar" color="dark" @click="confirm = false" />
           <q-btn label="Cerrar Sesión" color="negative" @click="logout()" /> </q-card-actions><br />
@@ -187,10 +184,7 @@ let datos = ref({})
 
 const useUsuario = useUsuarioStore();
 datos.value = useUsuario.usuario
-console.log(datos.value.foto);
 const rol = useUsuario.rol;
-
-//console.log(rol);
 
 // Función para cerrar sesión (combina abrir diálogo y realizar cierre)
 const cerrarSesion = () => {

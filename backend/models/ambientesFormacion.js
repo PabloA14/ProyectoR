@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const ambienteSchema = new mongoose.Schema({
-    codigo: { type: String, required: true },
     nombre: { type: String, required: true },
     centroformacion: { type: mongoose.Schema.Types.ObjectId, ref: "CentrosFormacion", required: true },
     tipo: { type: String, required: true },

@@ -61,9 +61,6 @@
           " color="secondary" />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
-                    <div class="q-mb-md">
-                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
-                    </div>
 
                     <div class="q-mb-md">
                         <q-input label="Denominación*" color="secondary" v-model="denominacion" />
@@ -87,7 +84,6 @@ import { useNivelStore } from "../stores/Niveles.js"
 import { useQuasar } from 'quasar'
 
 let agregar = ref(false)
-let codigo = ref("")
 let denominacion = ref("")
 let id = ref("")
 
@@ -105,7 +101,6 @@ const pagination = ref({
 })
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'denominacion', align: 'center', label: 'Denominación', field: "denominacion", sortable: true },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
@@ -119,21 +114,9 @@ function nuevo() {
 }
 
 function vaciar() {
-    codigo.value = ""
     denominacion.value = ""
 }
 
-function validarVacios() {
-    if (codigo.value === "" && denominacion.value === "") {
-        $q.notify({
-            message: 'Campos vacíos',
-            color: 'negative',
-            icon: 'warning',
-            position: 'top',
-            timeout: Math.random() * 3000
-        })
-    } else return true
-}
 
 function validar() {
     $q.notify({
@@ -154,7 +137,6 @@ async function agregarN() {
     loading.value = true
     console.log("entro a agregar");
     await useNivel.agregarNiveles({
-        codigo: codigo.value,
         denominacion: denominacion.value
     }).then(() => {
         agregar.value = false
@@ -176,7 +158,7 @@ async function agregarN() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
+        } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
             validar()
 
@@ -191,7 +173,6 @@ function editarNivel(nivel) {
     console.log("Entró a editar", nivel);
     bd.value = 0;
     id.value = nivel._id;
-    codigo.value = nivel.codigo
     denominacion.value = nivel.denominacion
     agregar.value = true;
 }
@@ -200,7 +181,6 @@ async function actualizar() {
     loading.value = true
     await useNivel.actualizarNiveles(
         id.value,
-        codigo.value,
         denominacion.value
     ).then(() => {
         agregar.value = false
@@ -222,7 +202,7 @@ async function actualizar() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
+        } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
             validar()
 

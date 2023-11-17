@@ -63,10 +63,7 @@
           " color="secondary" />
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-                    <div class="q-mb-md">
-                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
-                    </div>
-
+                   
                     <div class="q-mb-md">
                         <q-input label="Denominación*" color="secondary" v-model="denominacion" />
                     </div>
@@ -89,7 +86,6 @@ import { useRedStore } from "../stores/Redes.js"
 import { useQuasar } from 'quasar'
 
 let agregar = ref(false)
-let codigo = ref("")
 let denominacion = ref("")
 let id = ref("")
 
@@ -107,7 +103,6 @@ const pagination = ref({
 })
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'denominacion', align: 'center', label: 'Denominación', field: "denominacion", sortable: true },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
     { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
@@ -121,21 +116,9 @@ function nuevo() {
 }
 
 function vaciar() {
-    codigo.value = ""
     denominacion.value = ""
 }
 
-function validarVacios() {
-    if (codigo.value === "" && denominacion.value === "") {
-        $q.notify({
-            message: 'Campos vacíos',
-            color: 'negative',
-            icon: 'warning',
-            position: 'top',
-            timeout: Math.random() * 3000
-        })
-    } else return true
-}
 
 function validar() {
     $q.notify({
@@ -159,7 +142,6 @@ async function agregarR() {
     loading.value = true
     console.log("entro a agregar");
     await useRed.agregarRedes({
-        codigo: codigo.value,
         denominacion: denominacion.value
     }).then(() => {
         agregar.value = false
@@ -181,7 +163,7 @@ async function agregarR() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
+        } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
             validar()
 
@@ -196,7 +178,6 @@ function editarRed(red) {
     console.log("Entró a editar", red);
     bd.value = 0;
     id.value = red._id;
-    codigo.value = red.codigo
     denominacion.value = red.denominacion
     agregar.value = true;
 }
@@ -205,7 +186,6 @@ async function actualizar() {
     loading.value = true
     await useRed.actualizarRedes(
         id.value,
-        codigo.value,
         denominacion.value
     ).then(() => {
         agregar.value = false
@@ -227,7 +207,7 @@ async function actualizar() {
                 icon: 'warning',
                 timeout: Math.random() * 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
+        } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
             validar()
 

@@ -3,18 +3,14 @@ import NivelFormacion from "../models/nivelesFormacion.js";
 const httpNivelFormacion = {
 
     postnivelFormacion: async (req, res) => {
-        const { codigo, denominacion } = req.body;
+        const { denominacion } = req.body;
 
         try {
-            const nivelformacion = new NivelFormacion({ codigo, denominacion });
+            const nivelformacion = new NivelFormacion({ denominacion });
 
-            const cod = await NivelFormacion.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'El nivel de formación ya se encuentra registrado', cod, denominacion });
-            } else {
-                await nivelformacion.save()
-                return res.status(200).json({ msg: 'Registro exitoso', nivelformacion });
-            }
+            await nivelformacion.save()
+            return res.status(200).json({ msg: 'Registro exitoso', nivelformacion });
+
         } catch (error) {
             console.error('Error al agregar el nivel de formación:', error);
             res.status(500).json({ mensaje: 'Hubo un error al agregar el nivel de formacion' });
@@ -25,33 +21,14 @@ const httpNivelFormacion = {
         const nivelFormacion = await NivelFormacion.find()
         res.json({ nivelFormacion })
     },
-
-    getCodigonivel: async (req, res) => {
-        try {
-            const nivelBuscado = req.params.codigo;
-            const nivelEncontrado = await NivelFormacion.findOne({ codigo: nivelBuscado });
-            if (!nivelEncontrado) {
-                return res.status(404).json({ mensaje: 'No se encontró el nivel de formacion con el codigo proporcionado' });
-            } else {
-                res.json(nivelEncontrado);
-            }
-
-        } catch (error) {
-            console.error('Error al buscar el nivel de formacion:', error);
-            res.status(500).json({ mensaje: 'Hubo un error al buscar el nivel de formacion' });
-        }
-    },
+    
     putnivelFormacion: async (req, res) => {
         const nivelId = req.params.id
-        const { codigo, denominacion } = req.body;
+        const { denominacion } = req.body;
         try {
-            const existingNivel = await NivelFormacion.findOne({ codigo: codigo });
-            if (existingNivel && existingNivel._id.toString() !== nivelId) {
-                return res.status(400).json({ msg: 'El código ya está registrado para otro nivel' });
-            }
-
+            
             const updatedFields = {
-                codigo, denominacion
+                denominacion
             };
             const updateniveles = await NivelFormacion.findOneAndUpdate(
                 { _id: nivelId },

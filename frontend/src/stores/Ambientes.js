@@ -19,10 +19,10 @@ export const useAmbienteStore = defineStore("ambientes", () => {
         }
     };
     const actualizarAmbientes = async (
-        id, codigo, nombre, centroformacion, tipo, descripcion) => {
+        id, nombre, centroformacion, tipo, descripcion) => {
         try {
             let datos = await axios.put(`${LinkBD}/api/ambientes/${id}`, {
-                codigo, nombre, centroformacion, tipo, descripcion
+                nombre, centroformacion, tipo, descripcion
             });
             return datos;
         } catch (error) {
@@ -49,23 +49,11 @@ export const useAmbienteStore = defineStore("ambientes", () => {
             console.log(error);
         }
     };
-    const buscarCodigo = async (codigo) => {
-        console.log('buscar coigo desde el ambiente de fomacion');
-        try {
-            let ambiente = await axios.get(`${LinkBD}/api/ambientes/${codigo}`);
-            return ambiente;
-        } catch (error) {
-            console.log(error);
-
-        }
-    };
-
     return {
         buscarAmbientes,
         actualizarAmbientes,
         agregarAmbientes,
         cambiarEstado,
-        buscarCodigo,
         loading
     }
 });

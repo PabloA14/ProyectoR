@@ -67,10 +67,7 @@
           " color="secondary" />
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-                    <div class="q-mb-md">
-                        <q-input label="Código" color="secondary" v-model="codigo" />
-                    </div>
-
+                    
                     <div class="q-mb-md">
                         <q-input label="Nombre" color="secondary" v-model="nombre" />
                     </div>
@@ -106,14 +103,11 @@ let agregar = ref(false)
 let errores = ref([])
 
 
-let codigo = ref("")
 let nombre = ref("")
 let tipo = ref("")
 let descripcion = ref("")
 let bd = ref("")
 let id = ref("")
-
-//let expanded = ref(false)
 
 const $q = useQuasar()
 let filter = ref('')
@@ -126,7 +120,6 @@ const pagination = ref({
 
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
@@ -143,14 +136,13 @@ function nuevo() {
 }
 
 function vaciar() {
-    codigo.value = ""
     nombre.value = ""
     tipo.value = ""
     descripcion.value = ""
 }
 
 function validarVacios() {
-    if (codigo.value === "" && nombre.value === "" && tipo.value == "" && descripcion.value == "") {
+    if (nombre.value === "" && tipo.value == "" && descripcion.value == "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -181,7 +173,6 @@ async function agregarR() {
     loading.value = true
     console.log("entro a agregar");
     await useMaterial.agregarMateriales({
-        codigo: codigo.value,
         nombre: nombre.value,
         descripcion: descripcion.value,
         tipo: tipo.value
@@ -220,7 +211,6 @@ function editarMaterial(materiales) {
     console.log("Entró a editar", materiales);
     bd.value = 0;
     id.value = materiales._id;
-    codigo.value = materiales.codigo
     nombre.value = materiales.nombre
     descripcion.value = materiales.descripcion
     tipo.value = materiales.tipo
@@ -231,7 +221,6 @@ async function actualizar() {
     loading.value = true
     await useMaterial.actualizarMateriales(
         id.value,
-        codigo.value,
         nombre.value,
         descripcion.value,
         tipo.value

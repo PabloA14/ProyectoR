@@ -14,8 +14,8 @@
                       align-items: center;
                     ">
                                 <q-avatar size="100px">
-                                    <img v-if="datos.foto === undefined" src="../imagenes/usuario.png" alt="imagenes" />
-                                    <img :src="datos.foto" />
+                                    <img v-if="datos.foto === ''" src="../imagenes/usuario.png" alt="imagenes" />
+                                    <img v-else :src="datos.foto" />
                                 </q-avatar>
                             </div>
                             <br />

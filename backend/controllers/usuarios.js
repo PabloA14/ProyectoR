@@ -279,9 +279,7 @@ const httpUsuario = {
     });
 
     const { id } = req.params
-    console.log({ id })
     const { foto } = req.files
-    console.log({ foto })
 
     try {
       if (!foto || !foto.tempFilePath) {
@@ -304,7 +302,7 @@ const httpUsuario = {
               cloudinary.uploader.destroy(public_id);
             }
             console.log(result.url);
-            let prueba = await Usuario.findByIdAndUpdate(id, { 
+            let prueba = await Usuario.findByIdAndUpdate(id, {
               $set: { foto: result.url }
             }, { new: true });
 

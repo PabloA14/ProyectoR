@@ -107,8 +107,12 @@
             <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
           </div>
 
-          <div class="q-mb-md" v-if="bd == 1">
-            <q-input label="Contraseña*" type="password" color="secondary" v-model="clave" />
+          <div class="q-mb-md">
+            <q-input label="Contraseña*" v-model="clave" color="secondary" :type="isPwd ? 'password' : 'text'">
+              <template v-slot:append>
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+              </template>
+            </q-input>
           </div>
 
           <div class="q-mb-md">
@@ -121,11 +125,6 @@
           </div>
 
           <div class="q-mb-md">
-            <!-- <q-input type="file" @change="archivo" color="secondary" label="Hoja de Vida">
-              <template v-slot:prepend>
-                <q-icon name="attach_file" />
-              </template>
-            </q-input> -->
             <p style="color: rgb(122, 122, 121);">Hoja de Vida</p>
             <input type="file" @change="archivo" />
           </div>
@@ -259,11 +258,11 @@ let filter = ref("");
 let errores = ref([]);
 let loading = ref(false);
 let foto = ref('')
+let isPwd = ref(true)
 
 function informacionUsuario(x) {
   infoU.value = true;
   info.value = x;
-  console.log(info.value);
 }
 
 const columns = [

@@ -75,10 +75,6 @@
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
                     <div class="q-mb-md">
-                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
-                    </div>
-
-                    <div class="q-mb-md">
                         <q-input label="Nombre*" color="secondary" v-model="nombre" />
                     </div>
 
@@ -120,7 +116,6 @@ import { useQuasar } from 'quasar'
 let ambiente = ref([])
 let agregar = ref(false)
 let centros = ref([])
-let codigo = ref("")
 let nombre = ref("")
 let centro = ref("")
 let tipo = ref("")
@@ -141,7 +136,6 @@ const pagination = ref({
 })
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'centro', align: 'center', label: 'Centro de Formación', field: "centroformacion" },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
@@ -159,7 +153,6 @@ function nuevo() {
 }
 
 function vaciar() {
-    codigo.value = ""
     nombre.value = ""
     centro.value = ""
     tipo.value = ""
@@ -167,7 +160,7 @@ function vaciar() {
 }
 
 function validarVacios() {
-    if (codigo.value === "" && nombre.value === "" && centro.value === "" && tipo.value == "" && descripcion.value == "") {
+    if (nombre.value === "" && centro.value === "" && tipo.value == "" && descripcion.value == "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -204,7 +197,6 @@ async function agregarR() {
     cargando.value = true
     console.log("entro a agregar");
     await useAmbiente.agregarAmbientes({
-        codigo: codigo.value,
         nombre: nombre.value,
         centroformacion: centro.value,
         tipo: tipo.value,
@@ -244,7 +236,6 @@ function editarAmbiente(ambientes) {
     console.log("Entró a editar", ambientes);
     bd.value = 0;
     id.value = ambientes._id;
-    codigo.value = ambientes.codigo
     nombre.value = ambientes.nombre
     centro.value = ambientes.centroformacion._id
     tipo.value = ambientes.tipo
@@ -256,7 +247,6 @@ async function actualizar() {
     cargando.value = true
     await useAmbiente.actualizarAmbientes(
         id.value,
-        codigo.value,
         nombre.value,
         centro.value,
         tipo.value,
