@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const retroalimentacionRed = new mongoose.Schema({
-    codigo: { type: String, required: true },
     nombre: { type: String, required: true },
     codigoFicha: { type: String, required: true },
     descripcion: { type: String, required: true },

@@ -1,7 +1,5 @@
 <template>
     <div>
-
-
         <q-page class="q-pa-md">
             <q-breadcrumbs separator=">">
                 <q-breadcrumbs-el to="/programas" label="Programas de Formación" />

@@ -1,25 +1,50 @@
 import Retroalimentacion from "../models/retroalimentacion-red.js"
+import { v2 as cloudinary } from 'cloudinary';
 
 
 const httpProyectos = {
 
     postRetroalimentacion: async (req, res) => {
-        const { codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa } = req.body;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { nombre, codigoFicha, descripcion, fecha, programa } = req.body;
+        let documentoUrl = null;
 
         try {
 
+            if (req.files && req.files.documentos) {
+                const { documentos } = req.files;
+
+                if (!documentos.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documentos.name.split(".").pop();
+                const { tempFilePath } = documentos;
+
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+                documentoUrl = result.url;
+            }
+
+
             const retroalimentacion_red = new Retroalimentacion({
-                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa
+                nombre, codigoFicha, descripcion, fecha, documentos: documentoUrl, programa
             });
 
-            const cod = await Retroalimentacion.findOne({ codigo: codigo })
+            await retroalimentacion_red.save();
+            return res.status(200).json({ msg: 'retroalimentacion de red ingresado satisfactoriamente', retroalimentacion_red });
 
-            if (cod) {
-                return res.status(400).json({ msg: "La retroalimentacion ya se encuentra en el sistema con este codigo", cod, nombre });
-            } else {
-                await retroalimentacion_red.save();
-                return res.status(200).json({ msg: 'retroalimentacion de red ingresado satisfactoriamente', retroalimentacion_red });
-            }
         } catch (error) {
             console.log(error);
             return res.status(500).json({ msg: "Ha ocurrido un error en el server en el servidor de a peticion post" });
@@ -32,36 +57,48 @@ const httpProyectos = {
         res.status(200).json({ retroalimentaciones })
     },
 
-    getCodigoRetroalimentacion: async (req, res) => {
-        const Codigo = req.params.Codigo
-        try {
-            const cod = await Retroalimentacion.find({ codigo: Codigo })
-                .populate("programa")
-            console.log(cod);
-            if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para elProyecto con el codigo de   ${Codigo}` })
-            } else {
-                res.status(200).json({ cod })
-            }
-        } catch (error) {
-            res.json({ error })
-            console.log(error);
-        }
-    },
-
     putRetroalimentacion: async (req, res) => {
 
-        const retroalimenId = req.params.id;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
 
-        const { codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa } = req.body;
+        const retroId = req.params.id;
+        const { nombre, codigoFicha, descripcion, fecha, programa } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, codigoFicha, descripcion, fecha, documentos, programa
+                nombre, codigoFicha, descripcion, fecha, programa
             };
 
+            if (req.files && req.files.documentos) {
+                const { documentos } = req.files;
+
+                if (!documentos.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documentos.name.split(".").pop();
+                const { tempFilePath } = documentos;
+
+                // Subir el nuevo documento a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documento a los campos actualizados
+                updatedFields.documentos = result.url;
+            }
+
             const updatedRetroalimetacion = await Retroalimentacion.findOneAndUpdate(
-                { _id: retroalimenId },
+                { _id: retroId },
                 {
                     $set: updatedFields
                 },
@@ -74,7 +111,6 @@ const httpProyectos = {
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });
         }
     }
-
 }
 
 export default httpProyectos

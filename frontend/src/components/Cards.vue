@@ -74,6 +74,18 @@
         </router-link>
       </q-card>
 
+      <q-card class="my-card" id="cardP">
+        <router-link to="retroalimentacion" class="cardP">
+          <q-card-section>
+            <div class="text-h6" id="name">Retroalimentación de Red</div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            <q-img id="img" src="../imagenes/evaluacion.png" />
+          </q-card-section>
+        </router-link>
+      </q-card>
+
       <q-card v-if="programaSeleccionado.nivelFormacion.denominacion === 'Tecnólogo'" class="my-card" id="cardP">
         <router-link to="registroCalificado" class="cardP">
           <q-card-section>
