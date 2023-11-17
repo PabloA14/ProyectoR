@@ -35,7 +35,7 @@
     <div v-if="instrumento === true && useInst.loading === false">
       <div class="text-h4 text-center q-mb-md q-mt-xl">Instrumentos de Evaluación</div>
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="instrumentos"
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="instrumentosFiltrados"
           :columns="columnsInstrumento" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
@@ -76,7 +76,7 @@
       <div class="text-h4 text-center q-mb-md q-mt-xl">Materiales de Apoyo</div>
 
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="materiales"
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="materialesFiltrados"
           :columns="columnsMaterial" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">

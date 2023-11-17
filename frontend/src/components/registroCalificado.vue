@@ -69,18 +69,19 @@
 
                 <q-separator />
 
-                <q-card-actions>
+                <q-card-actions v-if="rol === 'gestor'">
                     <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar" class="q-mb-md"
                         @click="editarRegistro(mostrarRegistro)" />
 
                 </q-card-actions>
             </q-card>
 
-            <div style="display: flex;justify-content: center;align-items: center;" v-else>
+            <div style="display: flex;justify-content: center;align-items: center;" v-else-if="rol === 'gestor'">
                 <q-btn color="secondary" icon="add" label="Agregar Registro Calificado" class="q-mb-md" @click="
                     agregar = true; nuevo();" />
             </div>
         </div>
+        <b v-if="!mostrarRegistro && rol === 'instructor'">Aún no se ha agregado el Registro Calificado</b>
 
         <q-dialog v-model="agregar">
             <q-card class="modal" style="width: 32%; height: fit-content">
@@ -140,7 +141,10 @@ import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { UsesRegistroCalificado } from "../stores/registroCalificado.js"
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
+import { useUsuarioStore } from "../stores/Usuarios.js";
 
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
 const usePrograma = useProgramasFormacionStore();
 const useRegistro = UsesRegistroCalificado()
 let programaSeleccionado = usePrograma.programa
