@@ -181,7 +181,7 @@
 
           <q-btn flat round dense>
             <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Análisis'">bubble</span>
+              <span class="material-symbols-outlined" id="ir" @click=" useGuia.fase = 'Análisis' , fasePrueba() ">bubble</span>
             </router-link>
           </q-btn>
 
@@ -386,6 +386,16 @@ let archivoProyecto = ref("")
 let archivoPlaneacion = ref("")
 let loading = ref(false)
 let errores = ref([])
+
+
+async function fasePrueba() {
+  if (useGuia.fase === 'Análisis') {
+    console.log('es igual a analisis');
+    
+  }
+
+  
+}
 
 //modales editar
 

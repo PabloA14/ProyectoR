@@ -11,10 +11,17 @@ const httpprogramas = {
         const programas = await Programa.find()
             .populate("RedConocimiento")
             .populate("nivelFormacion")
-            .populate("desarrolloCurricular")
+            .populate({
+                path: "desarrolloCurricular",
+                populate: {
+                    path: "idGuias",
+                    model: "Guia" // Reemplaza con el nombre real del modelo de la guía
+                }
+            })
             .populate("instructores")
             .populate("ambienteFormacion")
             .populate("materialesformacion")
+
         res.status(200).json({ programas })
     },
 
@@ -136,7 +143,13 @@ const httpprogramas = {
                 .findOne({ codigo: codigo })
                 .populate("RedConocimiento")
                 .populate("nivelFormacion")
-                .populate("desarrolloCurricular")
+                .populate({
+                    path: "desarrolloCurricular",
+                    populate: {
+                        path: "idGuias",
+                        model: "Guia" // Reemplaza con el nombre real del modelo de la guía
+                    }
+                })                
                 .populate("instructores")
                 .populate("ambienteFormacion")
                 .populate("materialesformacion")

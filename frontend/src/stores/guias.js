@@ -10,7 +10,6 @@ export const usegiasStore = defineStore("Guia", () => {
     const buscarguia = async () => {
         try {
             const buscar = await axios.get(`${LinkBD}/api/guia`);
-            console.log("Guia recuperados:", buscar.data.guia);
             return buscar.data.guia;
         } catch (error) {
             console.log(error);

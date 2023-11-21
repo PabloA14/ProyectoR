@@ -38,8 +38,9 @@ const httpDesarrolloC = {
                 { _id: id },
                 { $addToSet: { idGuias: idGuias } }
             )
+            let guiaF = await DesarrolloC.findById(id).populate("idGuias");
             if (guia.modifiedCount !== 0) {
-                return res.status(202).json(guia)
+                return res.status(202).json( {msg : 'todo ok' , guia , 'guia final' : guiaF})
             } else {
                 return res.status(402).json({ msg: 'Algo fallo' })
             }
