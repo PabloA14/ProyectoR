@@ -119,10 +119,12 @@
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <b>
-              <p>Diseño Curricular*</p>
-            </b>
-            <input type="file" @change="archivo" />
+            <q-file color="secondary" v-model="disCurricular" @update:disCurricular-value="val => { disCurricular = val[0] }"
+              label="Diseño Curricular*">
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
           </div>
         </q-card-section>
 
@@ -147,12 +149,12 @@ import { useQuasar } from "quasar";
 import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
+
 let desarrolloNulo = ref(false);
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
 let disCurricular = ref("");
 const dataProgram = useUserStore();
-let desarrolloC = ref("");
 let agregarDesarrollo = ref(false);
 let agregar = ref(false);
 let codigo = ref("");
@@ -176,7 +178,6 @@ let codDesarrollo = ref("");
 let router = useRouter();
 
 function desarrolloNuloF() {
-  console.log("desarrollo nulo");
   if (desarrolloNulo.value === true) {
     $q.notify({
       message: "El programa seleccionado aún no tiene información",
@@ -268,7 +269,6 @@ async function buscar() {
 
 async function buscarNiveles() {
   niveles.value = await useNivel.buscarNiveles();
-  // console.log(niveles.value);
 }
 
 function nuevo() {
@@ -312,14 +312,8 @@ function validar() {
   });
 }
 
-function archivo(event) {
-  disCurricular.value = event.target.files[0];
-  console.log(disCurricular.value);
-}
-
 async function agregarP() {
   loading.value = true;
-  console.log("entro a agregar");
   await usePrograma
     .agregarProgramaFormacion({
       codigo: codigo.value,

@@ -75,13 +75,13 @@
 
                     <q-separator />
 
-                    <q-card-actions>
-                        <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar"
-                            class="q-mb-md" @click="
+                    <q-card-actions align="center">
+                        <q-btn style="margin: auto;margin-right: -20%;" color="secondary" icon="edit"
+                            label="Editar" class="q-mb-md" @click="
                                 agregar = true;
                             editarUsuario(datos);" />
 
-                        <q-btn style="float: ; margin: auto auto" color="primary" icon="fa-solid fa-user"
+                        <q-btn style="margin: auto;" color="primary" icon="fa-solid fa-user"
                             label="Foto de Perfil" class="q-mb-md" @click="
                                 EditarFoto = true; seleccionarFoto(datos)" />
                     </q-card-actions>
@@ -112,7 +112,7 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
-            
+
             <!-- modal de Editar agregar -->
 
             <q-dialog v-model="agregar" class="card">
@@ -147,8 +147,12 @@
                         </div>
 
                         <div style="text-align: left" class="q-mb-md">
-                            <p style="color: rgb(122, 122, 121)">Hoja de Vida</p>
-                            <input type="file" @change="archivo" />
+                            <q-file color="secondary" v-model="cv" @update:cv-value="val => { cv = val[0] }"
+                                label="Hoja de Vida">
+                                <template v-slot:prepend>
+                                    <q-icon name="attach_file" />
+                                </template>
+                            </q-file>
                         </div>
 
                         <div class="q-mb-md">
@@ -173,10 +177,7 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useQuasar } from "quasar";
 
 let useUsuario = useUsuarioStore();
-let rol = useUsuario.rol;
 let datos = useUsuario.usuario;
-
-
 let agregar = ref(false);
 const $q = useQuasar();
 let loading = ref(false);
@@ -222,13 +223,7 @@ function validar() {
     });
 }
 
-function archivo(event) {
-    cv.value = event.target.files[0];
-    console.log(cv.value);
-}
-
 function archivoFoto(event) {
-    console.log('----------------');
     img.value = event.target.files[0];
     console.log(img.value);
 }
@@ -305,9 +300,7 @@ async function actualizar() {
 
 
 function seleccionarFoto(datos) {
-    console.log(datos);
     id.value = datos._id;
-    console.log(id.value);
 }
 
 async function actualizarFoto() {

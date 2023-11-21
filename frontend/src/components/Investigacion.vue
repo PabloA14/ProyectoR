@@ -100,12 +100,12 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <!-- <q-input @change="doc" label="Archivo*" type="file" color="secondary">
+                        <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
-                        </q-input> -->
-                        <input type="file" @change="doc" />
+                        </q-file>
                     </div>
                 </q-card-section>
 
@@ -173,13 +173,6 @@ let invesFiltradas = computed(() => {
     );
 });
 
-console.log(invesFiltradas);
-
-function doc(event) {
-    archivo.value = event.target.files[0]
-    console.log(archivo.value);
-}
-
 function nuevo() {
     bd.value = 1;
     vaciar();
@@ -189,6 +182,7 @@ function vaciar() {
     codigo.value = ""
     nombre.value = ""
     descripcion.value = ""
+    archivo.value = ""
     fecha.value = ""
 }
 
@@ -272,6 +266,7 @@ function editarInves(i) {
     nombre.value = i.denominacion
     descripcion.value = i.descripcion
     fecha.value = i.fecha
+    archivo.value = i.documentos
     agregar.value = true;
 }
 

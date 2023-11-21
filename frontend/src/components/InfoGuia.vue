@@ -35,8 +35,8 @@
     <div v-if="instrumento === true && useInst.loading === false">
       <div class="text-h4 text-center q-mb-md q-mt-xl">Instrumentos de Evaluación</div>
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="instrumentosFiltrados"
-          :columns="columnsInstrumento" row-key="name" :pagination="pagination">
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter"
+          :rows="instrumentosFiltrados" :columns="columnsInstrumento" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <div class="opciones">
@@ -76,8 +76,8 @@
       <div class="text-h4 text-center q-mb-md q-mt-xl">Materiales de Apoyo</div>
 
       <div class="q-pa-md  q-mt-xl" style="width: 100%">
-        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter" :rows="materialesFiltrados"
-          :columns="columnsMaterial" row-key="name" :pagination="pagination">
+        <q-table class="my-sticky-header-table" :separator="separator" bordered :filter="filter"
+          :rows="materialesFiltrados" :columns="columnsMaterial" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <div class="opciones">
@@ -144,14 +144,15 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Enlace" type="url" pattern="https://.*" color="secondary" v-model="enlace" />
+            <q-input label="Enlace" color="secondary" v-model="enlace" />
           </div>
 
           <div class="q-mb-md">
-            <b>
-              <p>Archivo</p>
-            </b>
-            <input type="file" @change="docMat">
+            <q-file v-model="documentoMat" color="secondary" @update:documentoMat-value="val => { documentoMat = val[0] }" label="Archivo">
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
           </div>
         </q-card-section>
 
@@ -190,10 +191,11 @@
           </div>
 
           <div class="q-mb-md">
-            <b>
-              <p>Archivo</p>
-            </b>
-            <input type="file" @change="docInst">
+            <q-file color="secondary" v-model="documentoIns" @update:documentoIns-value="val => { documentoIns = val[0] }" label="Archivo">
+              <template v-slot:prepend>
+                <q-icon name="attach_file" />
+              </template>
+            </q-file>
           </div>
         </q-card-section>
 
@@ -300,11 +302,6 @@ async function buscarInstrumentos() {
   } catch (error) {
     console.log(error);
   }
-}
-
-function docInst(event) {
-  documentoIns.value = event.target.files[0]
-  console.log(documentoIns.value);
 }
 
 async function agregarI() {
@@ -419,11 +416,6 @@ async function buscarMaterialesApoyo() {
   } catch (error) {
     console.log(error);
   }
-}
-
-function docMat(event) {
-  documentoMat.value = event.target.files[0]
-  console.log(documentoMat.value);
 }
 
 async function agregarMat() {

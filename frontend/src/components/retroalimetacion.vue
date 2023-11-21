@@ -97,7 +97,12 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <input type="file" @change="doc" />
+                        <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
                 </q-card-section>
 
@@ -165,11 +170,6 @@ let retroFiltradas = computed(() => {
 });
 
 buscar()
-
-function doc(event) {
-    archivo.value = event.target.files[0]
-    console.log(archivo.value);
-}
 
 function nuevo() {
     bd.value = 1;

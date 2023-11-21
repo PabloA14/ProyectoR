@@ -99,7 +99,12 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <input type="file" @change="doc" />
+                        <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
                 </q-card-section>
 
@@ -167,10 +172,6 @@ let proyeFiltrados = computed(() => {
         (x) => x.programa._id === programaId
     );
 });
-
-function doc(event) {
-    archivo.value = event.target.files[0]
-}
 
 function nuevo() {
     bd.value = 1;
@@ -262,6 +263,7 @@ function editarPro(i) {
     descripcion.value = i.descripcion
     fecha.value = i.fecha
     version.value = i.version
+    archivo.value = i.documento
     agregar.value = true;
 }
 

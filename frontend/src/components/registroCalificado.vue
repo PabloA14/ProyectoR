@@ -75,8 +75,8 @@
                 <q-separator />
 
                 <q-card-actions align="center" v-if="rol === 'gestor'">
-                    <q-btn style="margin: auto;margin-right: -20%;" color="secondary" icon="edit" label="Editar" class="q-mb-md"
-                        @click="editarRegistro(mostrarRegistro)" />
+                    <q-btn style="margin: auto;margin-right: -20%;" color="secondary" icon="edit" label="Editar"
+                        class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
 
                     <a style="margin: auto;" :href="mostrarRegistro.documento" target="_blank">
                         <q-btn color="primary" icon="download" label="Descargar" />
@@ -136,8 +136,12 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <p style="color: rgb(122, 122, 121);text-align: left;">Archivo*</p>
-                        <input type="file" @change="doc" />
+                        <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
+                            <template v-slot:prepend>
+                                <q-icon name="attach_file" />
+                            </template>
+                        </q-file>
                     </div>
 
                 </q-card-section>
@@ -248,11 +252,6 @@ function validar() {
         icon: 'warning',
         timeout: Math.random() * 3000
     })
-}
-
-function doc(event) {
-    archivo.value = event.target.files[0];
-    console.log(archivo.value);
 }
 
 async function agregarN() {

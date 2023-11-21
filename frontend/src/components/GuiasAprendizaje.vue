@@ -73,11 +73,14 @@
             </div>
 
             <div class="q-mb-md">
-              <b>
-                <p>Archivo*</p>
-              </b>
-              <input type="file" @change="doc">
+              <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                label="Archivo*">
+                <template v-slot:prepend>
+                  <q-icon name="attach_file" />
+                </template>
+              </q-file>
             </div>
+
           </q-card-section>
 
           <q-card-actions align="right">
@@ -102,16 +105,14 @@ import { useRouter } from "vue-router";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useDesarrolloCurricular } from "../stores/desarrolloC";
+
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
 const useDesarrollo = useDesarrolloCurricular();
 const usePrograma = useProgramasFormacionStore()
-let IdDesarrollo = ref('')
-
 let filter = ref('')
 let separator = ref('cell')
 let Program = ref(usePrograma.programa.desarrolloCurricular.idGuias)
-console.log(Program.value);
 const usegias = usegiasStore()
 let dataGuias = ref([])
 let bd = ref('')
@@ -127,13 +128,11 @@ let errores = ref([])
 let fase = ref(usegias.fase);
 
 filterGuias()
+
 function filterGuias() {
   let filtrado = Program.value.filter(a => a.fase === fase.value)
-    dataGuias.value = filtrado
-
-  
+  dataGuias.value = filtrado
 }
-
 
 const pagination = ref({
   rowsPerPage: 6
@@ -158,18 +157,6 @@ const columns = [
   { name: "opciones", label: "Opciones", field: "opciones", sortable: false, align: 'center' },
 ];
 
-/* //buscar()
-
-async function buscar() {
-  try {
-    dataGuias.value = await usegias.buscarguia()
-    dataGuias.value.reverse()
-  
-  } catch {
-    console.error("Error al buscar Guias:");
-  }
-} */
-
 function nuevo() {
   bd.value = 1;
   vaciar();
@@ -181,14 +168,7 @@ function vaciar() {
   archivo.value = ""
 }
 
-function doc(event) {
-  archivo.value = event.target.files[0]
-  console.log(archivo.value);
-}
-
 async function agregarN() {
-  console.log("entro a agregar");
-
   loading.value = true
   await usegias.agregarGuia({
     codigo: codigo.value,
@@ -197,9 +177,7 @@ async function agregarN() {
     fase: fase.value
 
   }).then((res) => {
-    console.log(res);
-    let des = useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id, res.data.guia._id)
-    console.log(des);
+    useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id, res.data.guia._id)
     mostrarModal.value = false
     $q.notify({
       message: 'Guía de aprendizaje agregada exitosamente',
@@ -209,12 +187,8 @@ async function agregarN() {
       timeout: Math.random() * 3000
     })
     Program.value.push(res.data.guia)
-    console.log('programa final');
-    console.log(Program.value);
-
     filterGuias()
   }).catch((error) => {
-    // Para trae las validaciones
     if (error.response && error.response.data.msg) {
       const repetida = error.response.data.msg
       $q.notify({
@@ -234,6 +208,14 @@ async function agregarN() {
 
   })
   loading.value = false
+}
+
+async function buscar() {
+  try {
+    dataGuias.value = await usegias.buscarguia()
+  } catch {
+    console.error("Error al buscar Guias:");
+  }
 }
 
 function editarGuia(g) {
@@ -262,9 +244,8 @@ async function actualizar() {
       position: 'bottom',
       timeout: Math.random() * 3000
     })
-    buscar();
+    buscar()
   }).catch((error) => {
-
     errores.value = ''
     if (error.response && error.response.data.msg) {
       const repetida = error.response.data.msg
@@ -299,9 +280,7 @@ function validar() {
 }
 
 const informacionGuia = async (x) => {
-  console.log("----------------");
   id.value = x._id;
-  console.log(id.value)
   await usegias.informacionGuia(id.value)
   router.push("/infoGuia")
 }
