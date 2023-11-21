@@ -72,7 +72,7 @@ export const routes = [
             { path: "/infoGuia", component: InfoGuia, name: "infoGuia", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor' , 'instructor'] } },
-            //{ path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
