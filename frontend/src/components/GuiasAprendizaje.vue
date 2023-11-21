@@ -154,7 +154,6 @@ async function buscar() {
   try {
     dataGuias.value = await usegias.buscarguia()
     dataGuias.value.reverse()
-    console.log("Guias FRON:", dataGuias.value);
     let filtrado = dataGuias.value.filter(a => a.fase === fase.value)
     dataGuias.value = filtrado
   } catch {
