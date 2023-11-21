@@ -4,52 +4,69 @@ import { LinkBD } from "../routes/variables.js";
 import { ref } from "vue";
 
 export const useProyectosStore = defineStore("proyecto", () => {
-    let proyectoRecuperado = ref({})
+    let loading = ref(false)
 
     const buscarProyectos = async () => {
         try {
-            console.log("Haciendo la solicitud para buscar proyectos...");
+            loading.value = true
             const buscar = await axios.get(`${LinkBD}/api/proyecto`);
-            proyectoRecuperado.value = buscar.data.guia
-            console.log("Proyectos recuperados store : ------", proyectoRecuperado.value);
+            return buscar.data.proyecto;
         } catch (error) {
-            console.log("Error al buscar proyectos:", error.response);
+            loading.value = true
+            console.log(error);
+        } finally {
+            loading.value = false
         }
     }
 
-    const agregarProyecto = async (info) => {
-        console.log(info);
+    const agregarProyecto = async (info, documento) => {
         try {
-            console.log("Haciendo la solicitud para agregar proyecto...");
-            const agregar = await axios.post(`${LinkBD}/api/proyecto`, info);
-            console.log("Proyecto agregado:", agregar.data);
-            return agregar.data;
+            const formData = new FormData()
+            for (const key in info) {
+                formData.append(key, info[key])
+            }
+            formData.append('documento', documento)
+
+            const newU = await axios.post(`${LinkBD}/api/proyecto`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+            });
+            return newU
         } catch (error) {
-            console.log("Error al agregar proyecto:", error.response);
+            throw error
+        }
+
+    }
+
+    const editarProyecto = async (id, nombre, descripcion, fecha, version, documento) => {
+        try {
+            const formData = new FormData();
+
+            formData.append('nombre', nombre);
+            formData.append('descripcion', descripcion);
+            formData.append('fecha', fecha);
+            formData.append('version', version)
+            formData.append('documento', documento);
+
+            let datos = await axios.put(`${LinkBD}/api/proyecto/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+
+            return datos;
+        } catch (error) {
             throw error;
         }
     }
-
-    const editarProyecto = async (id, info) => {
-        try {
-            console.log(`Haciendo la solicitud para editar proyecto con ID ${id}...`);
-            const editar = await axios.put(`${LinkBD}/api/proyecto/${id}`, info);
-            console.log("Proyecto editado:", editar.data);
-            return editar.data;
-        } catch (error) {
-            console.log(`Error al editar proyecto con ID ${id}:`, error.response);
-            throw error;
-        }
-    }
-
 
     return {
         buscarProyectos,
         agregarProyecto,
         editarProyecto,
-        proyectoRecuperado
+        loading
     }
 
-},{persist: true})
-
+})
 

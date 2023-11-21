@@ -1,11 +1,46 @@
 import Registro from "../models/registroCalificado.js";
+import { v2 as cloudinary } from 'cloudinary';
+
 
 const httpregistro = {
 
     postregistro: async (req, res) => {
-        const { titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha, programa } = req.body;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { titulo, lugardesarrollo, metodologia, creditos, codigosnies, fechaOtorgamiento, fechaVencimiento, programa } = req.body;
+        let documentoURL = null
         try {
-            const registroC = new Registro({ titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha, programa });
+            // Verificar si se proporciona un documento
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                documentoURL = result.url;
+            }
+
+            const registroC = new Registro({
+                titulo, lugardesarrollo, metodologia, creditos, codigosnies, fechaOtorgamiento
+                , fechaVencimiento, documento: documentoURL, programa
+            });
             const cod = await Registro.findOne({ codigosnies: codigosnies });
 
             if (cod) {
@@ -43,13 +78,44 @@ const httpregistro = {
     },
 
     putRegistro: async (req, res) => {
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
         const registroId = req.params.id;
-        const { titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha, programa } = req.body;
+        const { titulo, lugardesarrollo, metodologia, creditos, codigosnies, fechaOtorgamiento, fechaVencimiento, programa } = req.body;
 
         try {
             const updatedFields = {
-                titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha, programa
+                titulo, lugardesarrollo, metodologia, creditos, codigosnies, fechaOtorgamiento, fechaVencimiento, programa
             };
+
+            // Verificar si se proporciona un nuevo documento
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el nuevo documento a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documento a los campos actualizados
+                updatedFields.documento = result.url;
+            }
 
             const existingCodigo = await Registro.findOne({ codigosnies: codigosnies });
             if (existingCodigo && existingCodigo._id.toString() !== registroId) {

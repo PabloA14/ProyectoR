@@ -56,9 +56,14 @@
                                     {{ mostrarRegistro.codigosnies }}
                                 </div>
 
-                                <div class="text-h6 q-mt-sm q-mb-xs">Fecha:</div>
+                                <div class="text-h6 q-mt-sm q-mb-xs">Fecha de Otorgamiento:</div>
                                 <div class="text-caption text" style="margin-top: -5%">
-                                    {{ mostrarRegistro.fecha }}
+                                    {{ mostrarRegistro.fechaOtorgamiento }}
+                                </div>
+
+                                <div class="text-h6 q-mt-sm q-mb-xs">Fecha de Vencimiento:</div>
+                                <div class="text-caption text" style="margin-top: -5%">
+                                    {{ mostrarRegistro.fechaVencimiento }}
                                 </div>
                             </div>
                         </div>
@@ -69,9 +74,13 @@
 
                 <q-separator />
 
-                <q-card-actions v-if="rol === 'gestor'">
-                    <q-btn style="float: ; margin: auto auto" color="secondary" icon="edit" label="Editar" class="q-mb-md"
+                <q-card-actions align="center" v-if="rol === 'gestor'">
+                    <q-btn style="margin: auto;margin-right: -20%;" color="secondary" icon="edit" label="Editar" class="q-mb-md"
                         @click="editarRegistro(mostrarRegistro)" />
+
+                    <a style="margin: auto;" :href="mostrarRegistro.documento" target="_blank">
+                        <q-btn color="primary" icon="download" label="Descargar" />
+                    </a>
 
                 </q-card-actions>
             </q-card>
@@ -84,7 +93,7 @@
         <b v-if="!mostrarRegistro && rol === 'instructor'">Aún no se ha agregado el Registro Calificado</b>
 
         <q-dialog v-model="agregar">
-            <q-card class="modal" style="width: 32%; height: fit-content">
+            <q-card class="modal" id="card">
                 <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">
                         {{ bd === 0 ? "Editar Registro Calificado" : "Agregar Registro Calificado" }}
@@ -117,8 +126,18 @@
                     <div class="q-mb-md">
                         <q-input label="Código SNIES*" type="Number" color="secondary" v-model="codigosnies" />
                     </div>
+
                     <div class="q-mb-md">
-                        <q-input label="Fecha*" type="Date" color="secondary" v-model="fecha" />
+                        <q-input label="Fecha de Otorgamiento*" type="Date" color="secondary" v-model="fechaOtorgamiento" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Fecha de Vencimiento*" type="Date" color="secondary" v-model="fechaVencimiento" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <p style="color: rgb(122, 122, 121);text-align: left;">Archivo*</p>
+                        <input type="file" @change="doc" />
                     </div>
 
                 </q-card-section>
@@ -161,12 +180,13 @@ let metodologia = ref("")
 let lugardesarrollo = ref("")
 let creditos = ref("")
 let codigosnies = ref("")
-let fecha = ref("")
+let fechaOtorgamiento = ref("")
+let fechaVencimiento = ref("")
+let archivo = ref("")
 let id = ref("")
 
 let mostrarRegistro = ref('')
 let infoReg = ref('')
-//let deshabilitado = ref(false)
 
 buscar()
 
@@ -181,7 +201,9 @@ function vaciar() {
     lugardesarrollo.value = ""
     creditos.value = ""
     codigosnies.value = ""
-    fecha.value = ""
+    fechaOtorgamiento.value = ""
+    fechaVencimiento.value = ""
+    archivo.value = ""
 }
 
 async function buscar() {
@@ -207,7 +229,7 @@ async function buscarRegistroCodigo() {
 
 function validarVacios() {
     if (titulo.value === "" && metodologia.value === "" && lugardesarrollo.value == "" && creditos.value == "" && codigosnies.value == ""
-        && fecha.value === "") {
+        && fechaOtorgamiento.value === "" && fechaVencimiento.value === "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -228,6 +250,10 @@ function validar() {
     })
 }
 
+function doc(event) {
+    archivo.value = event.target.files[0];
+    console.log(archivo.value);
+}
 
 async function agregarN() {
     console.log("entro a agregar");
@@ -238,7 +264,9 @@ async function agregarN() {
         metodologia: metodologia.value,
         creditos: creditos.value,
         codigosnies: codigosnies.value,
-        fecha: fecha.value,
+        fechaOtorgamiento: fechaOtorgamiento.value,
+        fechaVencimiento: fechaVencimiento.value,
+        documento: archivo.value,
         programa: idPrograma
     }).then(() => {
         agregar.value = false
@@ -282,7 +310,8 @@ function editarRegistro(mostrarRegistro) {
     metodologia.value = mostrarRegistro.metodologia
     creditos.value = mostrarRegistro.creditos
     codigosnies.value = mostrarRegistro.codigosnies
-    fecha.value = mostrarRegistro.fecha
+    fechaOtorgamiento.value = mostrarRegistro.fechaOtorgamiento
+    fechaVencimiento.value = mostrarRegistro.fechaVencimiento
     agregar.value = true
 }
 
@@ -295,7 +324,9 @@ async function actualizar() {
         metodologia.value,
         creditos.value,
         codigosnies.value,
-        fecha.value
+        fechaOtorgamiento.value,
+        fechaVencimiento.value,
+        archivo.value
     ).then(() => {
         agregar.value = false
         $q.notify({
@@ -380,9 +411,15 @@ console.log(programaSeleccionado);
     background-color: rgba(255, 255, 255, 0.8);
 }
 
+#card {
+    width: 32%;
+    height: fit-content;
+}
+
 @media screen and (max-width: 600px) {
-    .modal {
+    #card {
         width: 100%;
     }
+
 }
 </style>
