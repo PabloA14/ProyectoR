@@ -61,7 +61,7 @@ const httpProyectos = {
             );
 
             if (!updatedPRoyectos) {
-                return res.status(404).json({ msg: 'Proyecto no encontradp' });
+                return res.status(404).json({ msg: 'Proyecto no encontrado' });
             }
             res.status(200).json({ msg: 'Proyecto actualizado exitosamente', red: updatedPRoyectos });
         } catch (error) {

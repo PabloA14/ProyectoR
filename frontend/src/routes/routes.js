@@ -22,6 +22,7 @@ import instructores from "../components/instructores.vue"
 import proyecto from "../components/proyecto.vue"
 import registroCalificado from "../components/registroCalificado.vue"
 import InformacionPrograma from "../components/InformacionPrograma.vue"
+import colorSetings from "../components/colorSetings.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -71,7 +72,7 @@ export const routes = [
             { path: "/infoGuia", component: InfoGuia, name: "infoGuia", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor' , 'instructor'] } },
-            { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
+            //{ path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor','instructor'] } },
@@ -88,6 +89,7 @@ export const routes = [
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor']  } },
+            { path: "/colorSetings", component: colorSetings, name: "colorSetings", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
 
         ],
         beforeEnter: (to, from, next) => {

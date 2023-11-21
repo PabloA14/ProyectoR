@@ -16,9 +16,12 @@ import registroCalificado from "./routes/registroCalificado.js"
 import proyectos from "./routes/proyectos.js"
 import retroalimentacionRed from "./routes/retroalimentacion.js"
 import investigaciones from "./routes/investigaciones.js"
+import colores from "./routes/colorSetings.js"
 import mongoose from "mongoose"
 import cors from "cors"
 import fileUpload from "express-fileupload"
+
+
 
 class Server {
 
@@ -47,6 +50,7 @@ class Server {
         this.app.use("/api/registroCalificado", registroCalificado)
         this.app.use("/api/retroalimentacion", retroalimentacionRed)
         this.app.use('/api/investigaciones', investigaciones)
+        this.app.use('/api/color', colores)
     }
 
     middlewares() {

@@ -155,6 +155,16 @@
           <router-link to="configuracion" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
+                <q-icon class="fa-solid fa-person" />
+              </q-item-section>
+
+              <q-item-section> Perfil </q-item-section>
+            </q-item>
+          </router-link>
+
+          <router-link v-if="rol==='administrador'" to="colorSetings" style="color: black; text-decoration: none">
+            <q-item clickable v-ripple>
+              <q-item-section avatar>
                 <q-icon class="fa-solid fa-gear" />
               </q-item-section>
 
@@ -199,7 +209,7 @@ function logout() {
 }
 </script>
 
-<style scooped>
+<style scoped>
 #interrogacion {
   color: rgb(227, 2, 2);
   font-size: 70px;
