@@ -6,9 +6,19 @@ import { ref } from "vue";
 export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
     let loading = ref(false)
 
-    const agregarRegistroC = async (info) => {
+    const agregarRegistroC = async (info, documento) => {
         try {
-            const newU = await axios.post(`${LinkBD}/api/registroCalificado`, info);
+            const formData = new FormData()
+            for (const key in info) {
+                formData.append(key, info[key])
+            }
+            formData.append('documento', documento)
+
+            const newU = await axios.post(`${LinkBD}/api/registroCalificado`, formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data"
+                },
+            });
             return newU;
         } catch (error) {
             console.log(error);
@@ -39,10 +49,23 @@ export const UsesRegistroCalificado = defineStore("RegistroCalificado", () => {
     };
 
     const actualizarRegistro = async (
-        id, titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha) => {
+        id, titulo, lugardesarrollo, metodologia, creditos, codigosnies, fechaOtorgamiento, fechaVencimiento, documento) => {
         try {
-            let datos = await axios.put(`${LinkBD}/api/registroCalificado/${id}`, {
-                titulo, lugardesarrollo, metodologia, creditos, codigosnies, fecha
+            const formData = new FormData();
+
+            formData.append('titulo', titulo);
+            formData.append('lugardesarrollo', lugardesarrollo);
+            formData.append('metodologia', metodologia);
+            formData.append('creditos', creditos);
+            formData.append('codigosnies', codigosnies);
+            formData.append('fechaOtorgamiento', fechaOtorgamiento);
+            formData.append('fechaVencimiento', fechaVencimiento);
+            formData.append('documento', documento);
+
+            let datos = await axios.put(`${LinkBD}/api/registroCalificado/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
             });
             return datos;
         } catch (error) {

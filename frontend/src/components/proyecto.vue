@@ -1,560 +1,336 @@
 <template>
-  <div class="q-mt-md">
-    <q-breadcrumbs separator=">" >
-      <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
-      <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
-      <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
-      <q-breadcrumbs-el to="/proyecto" label="Proyectos del programa" />
-  </q-breadcrumbs><br>
+    <q-page class="q-pa-md">
+        <q-breadcrumbs separator=">">
+            <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
+            <q-breadcrumbs-el to="/InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+            <q-breadcrumbs-el to="/cards" label="Gestionar Programa" />
+            <q-breadcrumbs-el label="Proyectos" />
+        </q-breadcrumbs><br>
 
-    <div class="text-h4 text-center q-mt-md">Proyectos</div>
-    <div class="spinner-container" v-if="loading">
-      <q-spinner
-        style="margin-left: 10px"
-        color="black"
-        size="7em"
-        :thickness="10"
-      />
-    </div>
-    <div v-else>
-      <div class="row q-ma-lg"></div>
-      <div class="row" id="pro">
-        <div class="col-6">
-          <q-input
-            v-model="searchTerm"
-            debounce="300"
-            placeholder="Buscar..."
-            dense
-            outlined
-          >
-            <template v-slot:prepend>
-              <q-icon name="search" />
-            </template>
-          </q-input>
-        </div>
-        <div class="col-4"></div>
-        <div class="col-2 text-right">
-          <q-btn
-            class="text-right"
-            color="secondary"
-            label="Agregar"
-            icon="add"
-            @click="Modagg"
-          />
-        </div>
-      </div>
+        <div class="text-h4 text-center q-mb-md">Proyectos</div>
 
-      <div class="row" id="pro">
-        <div class="col-12 q-mt-xl">
-          <q-expansion-item
-            v-for="proyecto in invesFiltradas"
-            :key="proyecto._id"
-            style="max-width: 100%"
-            expand-separator
-            icon="perm_identity"
-            :label="`Código: ${proyecto.codigo || 'deberia salir el codigo'}`"
-            :caption="`Proyecto: ${
-              proyecto.nombre || 'deberia salir el nombre del proyecto'
-            }`"
-          >
-            <q-card>
-              <q-card-section>
-                <div class="row">
-                  <div class="col-11">
-                    <b>Descripcion: </b>
-                    {{
-                      proyecto.descripcion || "deberia salir la descripcion "
-                    }}
-                    <br />
-                    <b>version:</b>
-                    {{ proyecto.version }}
-                    <br />
-                    <b>fecha:</b>
-                    {{ proyecto.fecha }}
-                    <br />
-                    <b>documento:</b>
-                    {{ proyecto.documento }}
-                  </div>
-                  <div class="col-1 text-right">
-                    <q-icon
-                      name="edit"
-                      color="red"
-                      size="24px"
-                      style="cursor: pointer"
-                      @click="ModeditModal(proyecto)"
-                    />
-                  </div>
-                </div>
-              </q-card-section>
+        <div class="q-pa-md" style="width: 100%;">
+            <div class="spinner-container" v-if="useProyecto.loading === true">
+                <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
+            </div>
+
+            <q-table v-if="useProyecto.loading == false" class="my-sticky-header-table" :separator="separator" bordered
+                :filter="filter" :rows="proyeFiltrados" :columns="columns" row-key="name" :pagination="pagination">
+                <template v-slot:body-cell-opciones="props">
+                    <q-td :props="props">
+                        <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                            style="margin-right: 10px;cursor: pointer;" @click="editarPro(props.row)" />
+                        <!--  <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                                style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
+                                @click="editarEstado(props.row)" />
+                            <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;"
+                                v-else @click="editarEstado(props.row)" /> -->
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-descripcion="props">
+                    <q-td :props="props" style="white-space: pre-line;">
+                        {{ props.row.descripcion }}
+                    </q-td>
+                </template>
+
+                <template v-slot:body-cell-documento="props">
+                    <q-td :props="props">
+                        <a :href="props.row.documento" target="_blank">
+                            <q-icon color="blue" name="fa-solid fa-download" size="20px" />
+                        </a>
+                    </q-td>
+                </template>
+
+                <!-- <template v-slot:body-cell-estado="props">
+                        <q-td :props="props">
+                            <span class="text-green" v-if="props.row.estado == 1">Activo</span>
+                            <span class="text-red" v-else>Inactivo</span>
+                        </q-td>
+                    </template> -->
+
+                <template v-slot:top-right>
+                    <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <template v-slot:append>
+                            <q-icon name="search" />
+                        </template>
+                    </q-input>
+                </template>
+                <template v-slot:top-left>
+                    <q-btn v-if="rol === 'gestor'" color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        agregar = true;
+                    nuevo();
+                    " />
+                </template>
+            </q-table>
+        </div>
+
+        <q-dialog v-model="agregar">
+            <q-card id="card">
+                <q-card-section class="row items-center q-pb-none">
+                    <div class="text-h6">
+                        {{ bd === 0 ? "Editar Proyecto" : "Agregar Proyecto" }}
+                    </div>
+                    <q-space />
+                    <q-btn icon="close" color="negative" flat round dense v-close-popup />
+                </q-card-section>
+
+                <q-separator inset style="
+            height: 5px;
+            margin-top: 5px;
+          " color="secondary" />
+
+                <q-card-section style="max-height: 65vh" class="scroll">
+
+                    <div class="q-mb-md">
+                        <q-input label="Nombre*" color="secondary" v-model="nombre" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Descripcion*" type="textarea" color="secondary" v-model="descripcion" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Año*" type="number" color="secondary" v-model="fecha" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <q-input label="Versión*" type="number" color="secondary" v-model="version" />
+                    </div>
+
+                    <div class="q-mb-md">
+                        <input type="file" @change="doc" />
+                    </div>
+                </q-card-section>
+
+                <q-separator />
+
+                <q-card-actions align="right">
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                </q-card-actions>
             </q-card>
-            <q-separator
-              style="height: 5px; margin-top: 5px"
-              color="secondary"
-            />
-          </q-expansion-item>
-        </div>
-        <div class="col-12"></div>
-      </div>
+        </q-dialog>
 
-      <q-dialog v-model="modalagregar">
-        <q-card style="width: 32%; height: fit-content">
-          <q-card-section class="row items-center q-pb-none">
-            <div class="text-h6">Agregar Proyecto</div>
-            <q-space />
-            <q-btn
-              icon="close"
-              color="negative"
-              flat
-              round
-              dense
-              v-close-popup
-            />
-          </q-card-section>
 
-          <q-separator
-            inset
-            style="height: 5px; margin-top: 5px"
-            color="secondary"
-          />
 
-          <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-            <div class="q-mb-md">
-              <q-input
-                label="Código"
-                type="number"
-                color="secondary"
-                v-model="codigo"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="Versión"
-                type="number"
-                color="secondary"
-                v-model="version"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input label="Nombre" color="secondary" v-model="nombre" />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="Descripción"
-                color="secondary"
-                v-model="descripcion"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="fecha"
-                type="date"
-                color="secondary"
-                v-model="fecha"
-              />
-            </div>
-            <!-- <div class="q-mb-md">
-              <q-file
-                label="Archivo"
-                type="file"
-                color="secondary"
-                v-model="documento"
-              >
-                <template v-slot:prepend>
-                  <q-icon name="attach_file" />
-                </template>
-              </q-file>
-            </div> -->
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions class="flex-center" align="right">
-            <q-btn
-              color="secondary "
-              label="Guardar"
-              @click="agregarProyecto"
-            />
-            <q-btn color="negative" label="Cancelar" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-
-      <q-dialog v-model="modaleditar">
-        <q-card style="width: 32%; height: fit-content">
-          <q-card-section class="row items-center q-pb-none">
-            <div class="text-h6">Editar Proyecto</div>
-            <q-space />
-            <q-btn
-              icon="close"
-              color="negative"
-              flat
-              round
-              dense
-              v-close-popup
-            />
-          </q-card-section>
-
-          <q-separator
-            inset
-            style="height: 5px; margin-top: 5px"
-            color="secondary"
-          />
-
-          <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-            <div class="q-mb-md">
-              <q-input
-                label="Código"
-                color="secondary"
-                v-model="codigoEditar"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="Versión"
-                color="secondary"
-                v-model="versionEditar"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="Nombre"
-                color="secondary"
-                v-model="nombreEditar"
-              />
-            </div>
-            <div class="q-mb-md">
-              <q-input
-                label="Descripción"
-                color="secondary"
-                v-model="descripcionEditar"
-              />
-            </div>
-
-            <div class="q-mb-md">
-              <q-input
-                label="Fecha De Creacion"
-                color="secondary"
-                type="date"
-                v-model="fechaEditar"
-              />
-            </div>
-            <!-- <div class="q-mb-md">
-              <q-file label="Archivo" type="file" color="secondary">
-                <template v-slot:prepend>
-                  <q-icon name="attach_file" />
-                </template>
-              </q-file>
-            </div> -->
-          </q-card-section>
-
-          <q-separator />
-
-          <q-card-actions class="flex-center" align="right">
-            <q-btn
-              color="secondary"
-              label="Guardar"
-              @click="guardarEdicion"
-            />
-
-            <q-btn color="negative" label="Cancelar" />
-          </q-card-actions>
-        </q-card>
-      </q-dialog>
-    </div>
-  </div>
+    </q-page>
 </template>
+
 <script setup>
 import { ref, computed } from "vue";
-import { useProyectosStore } from "../stores/proyectos";
-import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
-import { useQuasar } from "quasar";
+import { useProyectosStore } from "../stores/proyectos.js"
+import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
+import { useQuasar } from 'quasar'
+import { useUsuarioStore } from "../stores/Usuarios.js";
 
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
+let agregar = ref(false)
+let nombre = ref("")
+let descripcion = ref("")
+let fecha = ref("")
+let version = ref("")
+let archivo = ref("")
+let id = ref("")
 
-const $q = useQuasar();
+const useProyecto = useProyectosStore()
+let proyectos = ref([])
+let bd = ref("");
+const $q = useQuasar()
+let filter = ref('')
+let separator = ref('cell')
+let errores = ref([])
+let loading = ref(false)
+
+const pagination = ref({
+    rowsPerPage: 6
+})
+
+const columns = [
+    { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
+    { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
+    { name: 'version', align: 'center', label: 'Versión', field: "version", sortable: true },
+    { name: 'documento', align: 'center', label: 'Documento', sortable: false },
+    //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
+    { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+]
+
+buscar()
+
 const usePrograma = useProgramasFormacionStore();
-let programaId = usePrograma.programa._id;
+let programaId = usePrograma.programa._id
 
-const useProyectos = useProyectosStore();
-let proyectos = ref([]);
-let modaleditar = ref();
-let modalagregar = ref();
-
-let searchTerm = ref("");
-
-let codigo = ref();
-let version = ref();
-let fecha = ref();
-let nombre = ref();
-let descripcion = ref();
-let loading = ref(false);
-let errores =ref([])
-
-let codigoEditar = ref();
-let versionEditar = ref();
-let nombreEditar = ref();
-let fechaEditar = ref();
-let descripcionEditar = ref();
-
-// let documento = ref();
-
-let proyectoSeleccionado = ref(null);
-buscar();
-
-let invesFiltradas = computed(() => {
-  return proyectos.value.filter((x) => x.programa._id === programaId);
+let proyeFiltrados = computed(() => {
+    return proyectos.value.filter(
+        (x) => x.programa._id === programaId
+    );
 });
 
+function doc(event) {
+    archivo.value = event.target.files[0]
+}
+
+function nuevo() {
+    bd.value = 1;
+    vaciar();
+}
+
+function vaciar() {
+    nombre.value = ""
+    descripcion.value = ""
+    fecha.value = ""
+    version.value = ""
+    archivo.value = ""
+}
+
+function validarVacios() {
+    if (nombre.value === "" && descripcion.value == "" && fecha.value == "" && version.value == "" && archivo.value == "") {
+        $q.notify({
+            message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: Math.random() * 3000
+        })
+    } else return true
+}
+
+function validar() {
+    $q.notify({
+        message: errores,
+        color: 'negative',
+        position: 'top',
+        icon: 'warning',
+        timeout: Math.random() * 3000
+    })
+}
+
 async function buscar() {
-  loading.value = true;
-  try {
-    await useProyectos.buscarProyectos();
-    proyectos.value = useProyectos.proyectoRecuperado;
-    console.log("Proyectos  recuperados frontend:", proyectos.value);
-  } catch (error) {
-    console.error("Error al buscar proyectos:", error);
-  } finally {
-    loading.value = false; // Asegura que el spinner se oculte incluso si hay un error
-  }
+    proyectos.value = await useProyecto.buscarProyectos();
+    proyectos.value.reverse()
 }
 
-async function agregarProyecto() {
-  loading.value = true;
-  console.log("entro a agregar");
-
-  // Agrega tus validaciones personalizadas aquí antes de hacer la llamada a la API
-  if (!codigo.value || !version.value || !fecha.value || !nombre.value || !descripcion.value) {
-    $q.notify({
-      message: "Todos los campos son obligatorios.",
-      color: "negative",
-      icon: "warning",
-      position: "top",
-      timeout: Math.random() * 3000,
-    });
-    loading.value = false;
-    return;
-  }
-
-  await useProyectos
-    .agregarProyecto({
-      codigo: codigo.value,
-      nombre: nombre.value,
-      version: version.value,
-      descripcion: descripcion.value,
-      fecha: fecha.value,
-      version: version.value,
-      documento: "documento prueba",
-      programa: programaId,
-    })
-    .then(() => {
-      modalagregar.value = false;
-      codigo.value = "";
-      version.value = "";
-      nombre.value = "";
-      descripcion.value = "";
-      $q.notify({
-        message: "Proyecto de formación agregado exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: Math.random() * 3100,
-      });
-      buscar();
-    })
-    .catch((error) => {
-      if (error.response && error.response.data.msg) {
-        const repetida = error.response.data.msg;
+async function agregarN() {
+    console.log("entro a agregar");
+    loading.value = true
+    await useProyecto.agregarProyecto({
+        nombre: nombre.value,
+        descripcion: descripcion.value,
+        fecha: fecha.value,
+        version: version.value,
+        documento: archivo.value,
+        programa: programaId
+    }).then(() => {
+        agregar.value = false
         $q.notify({
-          message: repetida,
-          color: "negative",
-          position: "top",
-          icon: "warning",
-          timeout: Math.random() * 3000,
-        });
-      } else if (
-        error.response &&
-        error.response.data &&
-        error.response.data.errors
-      ) {
-        const errorMsgs = error.response.data.errors.map((err) => err.msg);
-        errorMsgs.forEach((errorMsg) => {
-          $q.notify({
-            message: errorMsg,
-            color: "negative",
-            position: "top",
-            icon: "warning",
-            timeout: Math.random() * 3000,
-          });
-        });
-      } else {
+            message: 'Proyecto agregado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'bottom',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+    }).catch((error) => {
         console.log(error);
-      }
-    });
-  loading.value = false;
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+
+        } else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
+    })
+    loading.value = false
 }
 
-
-
-// async function agregarProyecto() {
-//   console.log("entro a agregar");
-//   await useProyectos.agregarProyecto({
-//     codigo: codigo.value,
-//     nombre: nombre.value,
-//     version: version.value,
-//     descripcion: descripcion.value,
-//     fecha: fecha.value,
-//     version: version.value,
-//     documento: "documento prueba",
-//     programa: programaId,
-//   });
-//   modalagregar.value = false;
-//   codigo.value = "";
-//   version.value = "";
-//   nombre.value = "";
-//   descripcion.value = "";
-//   $q.notify({
-//       message: "proyecto agregado correctamente ",
-//       color: "positive",
-//       icon: "warning",
-//       position: "bottom",
-//       timeout: Math.random() * 3100,
-//     }); 
-//   buscar();
-// }
-
-function ModeditModal(proyecto) {
-  console.log(`estas en la funcion editar `);
-  console.log(proyecto);
-  proyectoSeleccionado.value = proyecto;
-  codigoEditar.value = proyecto.codigo;
-  versionEditar.value = proyecto.version;
-  nombreEditar.value = proyecto.nombre;
-  descripcionEditar.value = proyecto.descripcion;
-  fechaEditar.value = proyecto.fecha;
-  modaleditar.value = true;
+function editarPro(i) {
+    bd.value = 0;
+    id.value = i._id;
+    nombre.value = i.nombre
+    descripcion.value = i.descripcion
+    fecha.value = i.fecha
+    version.value = i.version
+    agregar.value = true;
 }
 
-async function guardarEdicion() {
-  loading.value = true;
-  const idProyecto = proyectoSeleccionado.value._id;
-  const nuevosDatos = {
-    codigo: codigoEditar.value,
-    version: versionEditar.value,
-    nombre: nombreEditar.value,
-    descripcion: descripcionEditar.value,
-    fecha: fechaEditar.value,
-  };
-
-  if (!nuevosDatos.codigo || !nuevosDatos.version || !nuevosDatos.fecha || !nuevosDatos.nombre || !nuevosDatos.descripcion) {
-    $q.notify({
-      message: "Todos los campos son obligatorios.",
-      color: "negative",
-      icon: "warning",
-      position: "top",
-      timeout: Math.random() * 3000,
-    });
-    loading.value = false;
-    return;
-  }
- // mira si el código ya está en uso
- const codigoEnUso = proyectos.value.some((proyecto) => proyecto.codigo === nuevosDatos.codigo && proyecto._id !== idProyecto);
-  if (codigoEnUso) {
-    $q.notify({
-      message: "Este código ya está en uso. Por favor, elija otro.",
-      color: "negative",
-      icon: "warning",
-      position: "top",
-      timeout: Math.random() * 3000,
-    });
-    loading.value = false;
-    return;
-  }
-
-  try {
-    await useProyectos.editarProyecto(idProyecto, nuevosDatos);
-    const proyectoIndex = proyectos.value.findIndex((proyecto) => proyecto._id === idProyecto);
-    if (proyectoIndex !== -1) {
-      proyectos.value[proyectoIndex] = { ...proyectos.value[proyectoIndex], ...nuevosDatos };
-    }
-    modaleditar.value = false;
-    $q.notify({
-      message: "Proyecto editado correctamente",
-      color: "positive",
-      icon: "check",
-      position: "bottom",
-      timeout: Math.random() * 3100,
-    });
-  } catch (error) {
-    console.error("Error al editar proyecto:", error);
-
-    if (error.response && error.response.data && error.response.data.errors) {
-      const errorMsgs = error.response.data.errors.map((err) => err.msg);
-      errorMsgs.forEach((errorMsg) => {
+async function actualizar() {
+    loading.value = true
+    await useProyecto.editarProyecto(
+        id.value,
+        nombre.value,
+        descripcion.value,
+        fecha.value,
+        version.value,
+        archivo.value
+    ).then(() => {
+        agregar.value = false
         $q.notify({
-          message: errorMsg,
-          color: "negative",
-          icon: "warning",
-          position: "top",
-          timeout: Math.random() * 3000,
-        });
-      });
-    } else {
-      errores.value.push("Error al editar el proyecto. Por favor, inténtelo de nuevo.");
-    }
-  }
-  loading.value = false;
+            message: 'Proyecto editado exitosamente',
+            color: 'green',
+            icon: 'check',
+            position: 'bottom',
+            timeout: Math.random() * 3000
+        })
+        buscar();
+
+    }).catch((error) => {
+        errores.value = ''
+        if (error.response && error.response.data.msg) {
+            const repetida = error.response.data.msg
+            $q.notify({
+                message: repetida,
+                color: 'negative',
+                position: 'top',
+                icon: 'warning',
+                timeout: Math.random() * 3000
+            })
+        }
+        else if (error.response && error.response.data && validarVacios() === true) {
+            errores.value = error.response.data.errors[0].msg
+            validar()
+
+        } else {
+            console.log(error);
+        }
+    })
+    loading.value = false
 }
 
-
-
-// function guardarEdicion() {
-//   const idProyecto = proyectoSeleccionado.value._id;
-//   const nuevosDatos = {
-//     codigo: codigoEditar.value,
-//     version: versionEditar.value,
-//     nombre: nombreEditar.value,
-//     descripcion: descripcionEditar.value,
-//     fecha: fechaEditar.value,
-//   };
-
-//   useProyectos
-//     .editarProyecto(idProyecto, nuevosDatos)
-//     // .then(() => {
-//     //   modaleditar.value = false; // Cierra el diálogo de edición
-//     //   // Actualiza los datos en la lista de proyectos
-//     //   proyectos.value = proyectos.value.map((proyecto) => {
-//     //     if (proyecto._id === idProyecto) {
-//     //       return { ...proyecto, ...nuevosDatos };
-//     //     }
-//     //     return proyecto;
-//     //   });
-//     // })
-//     .then(() => {
-//       modaleditar.value = false;
-//       buscar();
-//     })
-//     .catch((error) => {
-//       console.error("Error al editar proyecto:", error);
-//     });
-// }
-
-function Modagg() {
-  modalagregar.value = true;
-}
 </script>
+
 <style scoped>
-#pro {
-  margin: 0 50px;
+.spinner-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
-.spinner-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.8);
+#card {
+    width: 32%;
+    height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+    #card {
+        width: 100%;
+    }
 }
 </style>

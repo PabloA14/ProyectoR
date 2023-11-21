@@ -1,19 +1,49 @@
 import Proyectos from "../models/proyectos.js"
+import { v2 as cloudinary } from 'cloudinary';
+
 
 const httpProyectos = {
     postProyecto: async (req, res) => {
-        const { codigo, nombre, descripcion, fecha, version, documento, programa } = req.body;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const { nombre, descripcion, fecha, version, programa } = req.body;
+        let documentoUrl = null;
+
         try {
-            
-            const proyecto = new Proyectos({
-                codigo, nombre, descripcion, fecha, version, documento, programa});
-            const cod = await Proyectos.findOne({ codigo: codigo })
-            if (cod) {
-                return res.status(400).json({ msg: "El proyecto ya se encuentra en el sistema con el codigo", cod, nombre });
-            } else {
-                await proyecto.save();
-                return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto, status :"ok" });
+
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el documento a Cloudinary
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                documentoUrl = result.url;
             }
+
+            const proyecto = new Proyectos({
+                nombre, descripcion, fecha, version, documento: documentoUrl, programa
+            });
+
+            await proyecto.save();
+            return res.status(200).json({ msg: 'Proyecto ingresado satisfactoriamente', proyecto });
+
         } catch (error) {
             console.log(error);
             return res.status(500).json({ msg: "Ha ocurrido un error en el servidor al momento de crear el proyecto" });
@@ -21,56 +51,67 @@ const httpProyectos = {
     },
 
     getProyecto: async (req, res) => {
-        const guia = await Proyectos.find()
+        const proyecto = await Proyectos.find()
             .populate("programa")
-        res.status(200).json({ guia })
+        res.status(200).json({ proyecto })
     },
 
-    getCodigoProyecto: async (req, res) => {
-        const Codigo = req.params.Codigo
-        try {
-            const cod = await Proyectos.find({ codigo: Codigo })
-                .populate("programa")
-            console.log(cod);
-            if (cod.length === 0) {
-                res.status(400).json({ sms: `sin coincidencias para elProyecto con el codigo de   ${Codigo}` })
-            } else {
-                res.status(200).json({ cod })
-            }
-        } catch (error) {
-            res.json({ error })
-            console.log(error);
-        }
-    },
 
     putProyecto: async (req, res) => {
-        const id = req.params.id;
+        cloudinary.config({
+            cloud_name: process.env.CLOUDINARY_NAME,
+            api_key: process.env.CLOUDINARY_KEY,
+            api_secret: process.env.CLOUDINARY_SECRET,
+            secure: true,
+        });
+
+        const proyectoId = req.params.id
+        const { nombre, descripcion, fecha, version, programa } = req.body;
+
         try {
-            const updatedPRoyectos = await Proyectos.findOneAndUpdate(
-                { _id: id },
+            const updatedFields = {
+                nombre, descripcion, fecha, version, programa
+            };
+
+            // Verificar si se proporciona un nuevo documento
+            if (req.files && req.files.documento) {
+                const { documento } = req.files;
+
+                if (!documento.tempFilePath) {
+                    return res.status(400).json({ msg: "No hay archivos en la petición" });
+                }
+
+                const extension = documento.name.split(".").pop();
+                const { tempFilePath } = documento;
+
+                // Subir el nuevo documento a Cloudinary u otro servicio
+                // Aquí se asume Cloudinary, asegúrate de ajustar según tu configuración
+                const result = await cloudinary.uploader.upload(tempFilePath, {
+                    width: 250,
+                    crop: "limit",
+                    resource_type: "raw",
+                    format: extension
+                });
+
+                // Agregar la URL del nuevo documento a los campos actualizados
+                updatedFields.documento = result.url;
+            }
+
+            const updatedProyecto = await Proyectos.findOneAndUpdate(
+                { _id: proyectoId },
                 {
-                    $set: {
-                        codigo:req.body.codigo,
-                        nombre: req.body.nombre,
-                        descripcion: req.body.descripcion,
-                        version: req.body.version,
-                        programa: req.body.programa
-                    }
+                    $set: updatedFields
                 },
                 { new: true }
             );
 
-            if (!updatedPRoyectos) {
-                return res.status(404).json({ msg: 'Proyecto no encontradp' });
-            }
-            res.status(200).json({ msg: 'Proyecto actualizado exitosamente', red: updatedPRoyectos });
+            res.status(200).json({ msg: 'actualizado exitosamente', proyecto: updatedProyecto });
+
         } catch (error) {
             console.error(error);
-            res.status(500).json({ msg: 'Error en el servidor Actualizar Programas' });
+            res.status(500).json({ msg: 'Error al actualizar la información' });
         }
     }
-
-
 }
 
 export default httpProyectos
