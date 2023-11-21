@@ -110,7 +110,8 @@ let IdDesarrollo = ref('')
 
 let filter = ref('')
 let separator = ref('cell')
-
+let Program = ref(usePrograma.programa.desarrolloCurricular.idGuias)
+console.log(Program.value);
 const usegias = usegiasStore()
 let dataGuias = ref([])
 let bd = ref('')
@@ -124,6 +125,15 @@ const $q = useQuasar()
 let router = useRouter()
 let errores = ref([])
 let fase = ref(usegias.fase);
+
+filterGuias()
+function filterGuias() {
+  let filtrado = Program.value.filter(a => a.fase === fase.value)
+    dataGuias.value = filtrado
+
+  
+}
+
 
 const pagination = ref({
   rowsPerPage: 6
@@ -148,18 +158,17 @@ const columns = [
   { name: "opciones", label: "Opciones", field: "opciones", sortable: false, align: 'center' },
 ];
 
-buscar()
+/* //buscar()
 
 async function buscar() {
   try {
     dataGuias.value = await usegias.buscarguia()
     dataGuias.value.reverse()
-    let filtrado = dataGuias.value.filter(a => a.fase === fase.value)
-    dataGuias.value = filtrado
+  
   } catch {
     console.error("Error al buscar Guias:");
   }
-}
+} */
 
 function nuevo() {
   bd.value = 1;
@@ -199,7 +208,11 @@ async function agregarN() {
       position: 'bottom',
       timeout: Math.random() * 3000
     })
-    buscar()
+    Program.value.push(res.data.guia)
+    console.log('programa final');
+    console.log(Program.value);
+
+    filterGuias()
   }).catch((error) => {
     // Para trae las validaciones
     if (error.response && error.response.data.msg) {
