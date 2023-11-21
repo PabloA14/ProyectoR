@@ -112,23 +112,7 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
-
-            <div v-if="rol === 'administrador'">
-                <div class="text-h4 text-center q-mb-md">Configuración de Interfaz</div>
-
-                <div class="text-h5 text-left q-mb-md">Selector de color</div>
-                <div>
-                    <ul>
-                        <li>
-                            Modificar el color de la interfaz del usuario:
-                            <div class="q-pa-md row items-start q-gutter-md">
-                                <q-color class="my-picker" />
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
+            
             <!-- modal de Editar agregar -->
 
             <q-dialog v-model="agregar" class="card">
