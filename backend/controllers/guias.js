@@ -132,7 +132,7 @@ const httpGuias = {
                 { new: true }
             );
 
-            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias });
+            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias , status: 'ok' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });

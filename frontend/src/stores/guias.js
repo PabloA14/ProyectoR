@@ -7,9 +7,11 @@ export const usegiasStore = defineStore("Guia", () => {
     let loading = ref(false)
     let guia = ref({})
     let fase = ref('')
+
     const buscarguia = async () => {
         try {
             const buscar = await axios.get(`${LinkBD}/api/guia`);
+            console.log(buscar.data.guia);
             return buscar.data.guia;
         } catch (error) {
             console.log(error);
@@ -38,8 +40,10 @@ export const usegiasStore = defineStore("Guia", () => {
         }
     };
 
-    const actualizarGuia = async (id, codigo, nombre, documento) => {
+    const actualizarGuia = async (id, codigo, nombre, documento, idPrograma) => {
         try {
+            console.log('actualizarguia');
+
             const formData = new FormData();
 
             formData.append('codigo', codigo);
@@ -52,7 +56,21 @@ export const usegiasStore = defineStore("Guia", () => {
                 }
             });
 
-            return datos;
+            if (datos.data.status === 'ok') {
+                console.log(idPrograma);
+                let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${idPrograma}`)
+                console.log('************');
+                console.log(r);
+                //usePrograma.programa = r
+
+                return r
+            }else{
+                console.log('error');
+
+            }
+
+          
+
         } catch (error) {
             console.log(error);
             throw error;

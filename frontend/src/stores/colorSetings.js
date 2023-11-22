@@ -5,11 +5,16 @@ import { ref } from "vue";
 
 export const useColorStore = defineStore("Color", () => {
     let loading = ref(false)
+    let idMongo = ref ('')
+    let configuracion = ref ([])
+
 
     const agregarConfiguracion = async (info) => {
         try {
             loading.value = true;
             let datos = await axios.post(`${LinkBD}/api/color`, info);
+            configuracion.value=datos
+            console.log(configuracion.value);
             return datos;
         } catch (error) {
             loading.value = true;
@@ -19,10 +24,12 @@ export const useColorStore = defineStore("Color", () => {
         }
     };
 
+
     const traerConfiguracion = async () => {
         try {
             loading.value = true
             const color = await axios.get(`${LinkBD}/api/color`)
+            idMongo.value =color.data.colores[0]._id
             return color.data.colores
         } catch (error) {
             loading.value = true
@@ -34,13 +41,16 @@ export const useColorStore = defineStore("Color", () => {
     }
 
 
-    const editarConfiguracion = async (id, colorletra, colormenu) => {
+    const ColorLEtra = async ( colorletra) => {
         try {
-            loading.value = true;
-            const response = await axios.put(`${LinkBD}/api/color/${id}`, {
-                colorletra: colorletra, colormenu:colormenu
-            });
-            return response;
+            const id = idMongo.value
+            console.log(id);
+            console.log(colorletra);
+             loading.value = true;
+             const response = await axios.put(`${LinkBD}/api/color/${id}`, { colorLetra: colorletra });
+            configuracion.value = response.data.red
+            console.log(configuracion.value);
+            return response.data.red; 
         } catch (error) {
             loading.value = true;
             throw error;
@@ -49,13 +59,33 @@ export const useColorStore = defineStore("Color", () => {
         }
     };
 
+    const colorMenu = async (colormenu) => {
+        try {
+            const id = idMongo.value
+            console.log(id);
+            console.log(colormenu);
+             loading.value = true;
+             const response = await axios.put(`${LinkBD}/api/color/${id}`, { colormenu: colormenu });
+
+            configuracion.value = response.data.red
+            console.log(configuracion.value);
+            return response; 
+        } catch (error) {
+            loading.value = true;
+            throw error;
+        } finally {
+            loading.value = false;
+        }
+    };
 
     return {
         agregarConfiguracion,
         traerConfiguracion,
-        editarConfiguracion,
+        ColorLEtra,
+        colorMenu,
+        configuracion,
         loading
-    };
+        };
 
 
-})
+},{persist:true})

@@ -113,6 +113,8 @@ const usePrograma = useProgramasFormacionStore()
 let filter = ref('')
 let separator = ref('cell')
 let Program = ref(usePrograma.programa.desarrolloCurricular.idGuias)
+const idPrograma = ref(usePrograma.programa.codigo)
+console.log(idPrograma.value);
 const usegias = usegiasStore()
 let dataGuias = ref([])
 let bd = ref('')
@@ -234,8 +236,10 @@ async function actualizar() {
     id.value,
     codigo.value,
     nombre.value,
-    archivo.value
-  ).then(() => {
+    archivo.value,
+    idPrograma.value
+  ).then((res) => {
+    console.log(res);
     mostrarModal.value = false
     $q.notify({
       message: 'Guía de aprendizaje editada exitosamente',
@@ -244,7 +248,10 @@ async function actualizar() {
       position: 'bottom',
       timeout: Math.random() * 3000
     })
-    buscar()
+    usePrograma.programa = res.data
+    Program.value = res.data.desarrolloCurricular.idGuias
+    console.log(Program.value);
+    filterGuias()
   }).catch((error) => {
     errores.value = ''
     if (error.response && error.response.data.msg) {

@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-header elevated class="text-white" style="background-color: #39a900">
+    <q-header elevated class=" header text-white" id="header">
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
         <q-avatar style="margin-left: 10px;">
@@ -155,14 +155,14 @@
           <router-link to="configuracion" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
-                <q-icon class="fa-solid fa-person" />
+                <q-icon class="fa-solid fa-user" />
               </q-item-section>
 
-              <q-item-section> Perfil </q-item-section>
+              <q-item-section>Perfil</q-item-section>
             </q-item>
           </router-link>
 
-          <router-link v-if="rol==='administrador'" to="colorSetings" style="color: black; text-decoration: none">
+          <router-link v-if="rol === 'administrador'" to="colorSetings" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-gear" />
@@ -186,11 +186,16 @@
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { ref } from "vue";
 import { useRouter } from "vue-router";
+import { useColorStore } from "../stores/colorSetings.js";
+
+let colores = useColorStore();
+
 const drawer = ref(false);
 const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
 let datos = ref({})
+let prueba = ref(colores.configuracion.colorLetra)
 
 const useUsuario = useUsuarioStore();
 datos.value = useUsuario.usuario
@@ -207,6 +212,7 @@ function logout() {
   useUsuario.token = ""
   router.push("/");
 }
+
 </script>
 
 <style scoped>
@@ -222,5 +228,10 @@ function logout() {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.header {
+  color: red;
+  background-color: v-bind('prueba');
 }
 </style>

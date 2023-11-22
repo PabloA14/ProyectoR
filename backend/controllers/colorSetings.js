@@ -46,13 +46,15 @@ const httpColores = {
 
     putColor: async (req, res) => {
         const id = req.params.id;
+        const { colorLetra } = req.body;
+        console.log({ colorLetra });
         try {
             const updatedColores = await Color.findOneAndUpdate(
                 { _id: id },
                 {
                     $set: {
                         colorMenu: req.body.colorMenu,
-                        colorLetra: req.body.colorLetra
+                        colorLetra: colorLetra
                     }
                 },
                 { new: true }
@@ -62,6 +64,7 @@ const httpColores = {
                 return res.status(404).json({ msg: 'color no encontrado' });
             }
             res.status(200).json({ msg: 'Color actualizado exitosamente', red: updatedColores });
+            console.log(updatedColores);
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'No se pudo actulizar el color' });

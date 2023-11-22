@@ -150,6 +150,7 @@ import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
 
+
 let desarrolloNulo = ref(false);
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
