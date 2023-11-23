@@ -31,7 +31,7 @@
                 </template>
 
                 <template v-if="rol === 'gestor'" v-slot:top-left>
-                    <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
                         agregar = true;
                     nuevo();
                     " />
@@ -53,12 +53,12 @@
                 <q-separator inset style="
             height: 5px;
             margin-top: 5px;
-          " color="secondary" />
+          " :style="{ backgroundColor: colorMenu , color : colorLetra }" />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
 
                     <div class="q-mb-md">
-                        <q-select label="Seleccionar los ambientes de formación" color="secondary"
+                        <q-select label="Seleccionar los ambientes de formación" 
                             v-model="ambienteSeleccionado"
                             :options="ambiente.map(amb => ({ label: amb.nombre, value: amb._id }))" emit-value map-options>
                         </q-select>
@@ -69,7 +69,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" label="Agregaryyy" @click="agregarN()" />
+                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" label="Agregar  " @click="agregarN()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -208,5 +208,11 @@ async function agregarN() {
     justify-content: center;
     align-items: center;
     background-color: rgba(255, 255, 255, 0.8);
+}
+
+.input {
+  color: red !important ;
+
+  height: fit-content;
 }
 </style>

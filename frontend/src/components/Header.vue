@@ -60,8 +60,8 @@
 
         </q-card-section>
         <q-card-actions class="flex-center" align="right">
-          <q-btn label="Cancelar" :style="{ backgroundColor: colorMenu , color : colorLetra }"   @click="confirm = false" />
-          <q-btn label="Cerrar Sesión" color="negative" @click="logout()" /> </q-card-actions><br />
+          <q-btn label="Cancelar"    @click="confirm = false" />
+          <q-btn label="Cerrar Sesión" :style="{ backgroundColor: colorMenu , color : colorLetra }" @click="logout()" /> </q-card-actions><br />
       </q-card>
     </q-dialog>
 

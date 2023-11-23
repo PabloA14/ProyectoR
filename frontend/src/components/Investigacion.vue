@@ -58,7 +58,7 @@
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn v-if="rol === 'gestor'" color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu , color : colorLetra }"  icon="add" label="Agregar" class="q-mb-md" @click="
                             agregar = true;
                         nuevo();
                         " />
@@ -80,27 +80,27 @@
                 <q-separator inset style="
             height: 5px;
             margin-top: 5px;
-          " color="secondary" />
+          " :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
                     <div class="q-mb-md">
-                        <q-input label="Código*" type="number" color="secondary" v-model="codigo" />
+                        <q-input label="Código*" type="number"  v-model="codigo" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Nombre*" color="secondary" v-model="nombre" />
+                        <q-input label="Nombre*"  v-model="nombre" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripcion*" type="textarea" color="secondary" v-model="descripcion" />
+                        <q-input label="Descripcion*" type="textarea"  v-model="descripcion" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Año*" type="number" color="secondary" v-model="fecha" />
+                        <q-input label="Año*" type="number"  v-model="fecha" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file color="secondary" v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                        <q-file  v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
                             label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
@@ -112,8 +112,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" color="secondary" />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -126,6 +126,11 @@ import { useInveStore } from "../stores/Investigaciones.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
+
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -338,5 +343,10 @@ async function actualizar() {
     #card {
         width: 100%;
     }
+}
+.input {
+  color: red !important ;
+
+  height: fit-content;
 }
 </style>
