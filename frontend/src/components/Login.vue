@@ -16,14 +16,14 @@
                 <q-separator inset class="text-black" />
                 <q-card-section>
                     <q-form class="q-gutter-md" style="margin: auto;">
-                        <q-input color="secondary" filled v-model="documento" label="No. de Documento">
+                        <q-input :color="colorMenu" filled v-model="documento" label="No. de Documento">
                             <template v-slot:prepend>
                                 <q-icon name="person" />
                             </template>
                         </q-input>
 
-                        <q-input color="secondary" filled :type="mostrarContrasena ? 'text' : 'password'"
-                            v-model="contrasena" label="Contraseña">
+                        <q-input filled :type="mostrarContrasena ? 'text' : 'password'" v-model="contrasena"
+                            label="Contraseña">
                             <template v-slot:prepend>
                                 <q-icon name="lock" />
                             </template>
@@ -31,9 +31,8 @@
                                 <i @click="mostrarContrasena = !mostrarContrasena" style="cursor: pointer;" class="fa-solid"
                                     :class="mostrarContrasena ? 'fa-eye' : 'fa-eye-slash'"></i>
                             </template>
-
-
                         </q-input><br>
+
                         <!-- <p class="q-mt-sm">¿olvido su contraseña?</p> -->
                         <p @click="openModal" class="q-mt-sm"
                             style="cursor: pointer; color: rgb(5, 13, 255);text-align: center;">
@@ -44,8 +43,8 @@
                         <div class="row">
                             <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
                                 v-if="useUsuario.loading === true" />
-                            <q-btn v-else color="secondary" class="full-width" label="Ingresar"
-                                @click.prevent="iniciarSesion()" />
+                            <q-btn v-else :style="{ backgroundColor: colorMenu, color: colorLetra }" class="full-width"
+                                label="Ingresar" @click.prevent="iniciarSesion()" />
                         </div><br>
                     </q-form>
                 </q-card-section>
@@ -56,10 +55,7 @@
             <q-card style="min-width: 350px">
                 <q-card-section>
                     <div class="text-h6">Restablecer Contraseña</div>
-                    <q-separator style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
+                    <q-separator style="height: 5px;margin-top: 5px;" :style="{ backgroundColor: colorMenu }" />
                 </q-card-section>
 
                 <q-card-section class="q-pt-none">
@@ -76,7 +72,7 @@
                         <div class="col-1"></div>
                         <div class="col-10">
 
-                            <q-btn class="full-width" color="secondary" label="Restablecer Contraseña" />
+                            <q-btn class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }" label="Restablecer Contraseña" />
 
                             <q-btn class="q-mt-md full-width custom-border" color="negative" label="Cancelar"
                                 v-close-popup />
@@ -96,6 +92,11 @@ import { useRouter } from "vue-router"
 import axios from "axios";
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useQuasar } from 'quasar'
+import { useColorStore } from "../stores/colorSetings.js";
+
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
 
 let useUsuario = useUsuarioStore()
 let router = useRouter();
