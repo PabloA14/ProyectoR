@@ -38,7 +38,7 @@
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        <q-btn id="colorBtn" icon="add" label="Agregar" class="q-mb-md" @click="
                             agregar = true;
                         nuevo();
                         " />
@@ -57,10 +57,11 @@
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
-                <q-separator inset style="
+                <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
             height: 5px;
             margin-top: 5px;
-          " color="secondary" />
+          " />
+          
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                    
@@ -72,8 +73,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }"  :disabled="loading" v-if="bd == 1" label="Agregar--" @click="agregarR()"  />
+                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -84,6 +85,10 @@
 import { ref } from "vue";
 import { useRedStore } from "../stores/Redes.js"
 import { useQuasar } from 'quasar'
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
 
 let agregar = ref(false)
 let denominacion = ref("")
@@ -265,4 +270,14 @@ async function editarEstado(red) {
         width: 100%;
     }
 }
+
+#colorBtn{
+    background-color: v-bind('colorMenu');
+    color: v-bind('colorLetra');
+}
+
+#separador{
+    color: v-bind('colorMenu');
+}
+
 </style>

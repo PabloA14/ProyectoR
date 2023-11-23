@@ -51,7 +51,7 @@
         <q-card-section class="row items-center" style="max-width: 370px;">
           <div class="row">
             <div class="col-5">
-              <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
+              <i :style="{  color : colorMenu }"   class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
             </div>
             <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
               <span class="q-ml-sm " id="t">¿Está seguro de que desea cerrar sesión?</span>
@@ -60,7 +60,7 @@
 
         </q-card-section>
         <q-card-actions class="flex-center" align="right">
-          <q-btn label="Cancelar" color="dark" @click="confirm = false" />
+          <q-btn label="Cancelar" :style="{ backgroundColor: colorMenu , color : colorLetra }"   @click="confirm = false" />
           <q-btn label="Cerrar Sesión" color="negative" @click="logout()" /> </q-card-actions><br />
       </q-card>
     </q-dialog>
@@ -189,6 +189,9 @@ import { useRouter } from "vue-router";
 import { useColorStore } from "../stores/colorSetings.js";
 
 let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
+
 
 const drawer = ref(false);
 const miniState = ref(true);

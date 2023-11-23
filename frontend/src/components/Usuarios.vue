@@ -58,14 +58,14 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+            <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }"  icon="add" label="Agregar" class="q-mb-md" @click="
               agregar = true;
             nuevo();
             " />
@@ -84,31 +84,33 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
+        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        height: 5px;
+        margin-top: 5px;
+      " />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Cédula*" type="number" color="secondary" v-model="cedula" />
+            <q-input label="Cédula*" type="number"  v-model="cedula" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Nombre*" color="secondary" v-model="nombre" />
+            <q-input label="Nombre*"  v-model="nombre" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Apellidos*" color="secondary" v-model="apellido" />
+            <q-input label="Apellidos*"  v-model="apellido" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Teléfono*" type="number" color="secondary" v-model="telefono" />
+            <q-input label="Teléfono*" type="number"  v-model="telefono" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
+            <q-input label="Correo Electrónico*"   v-model="correo" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Contraseña*" v-model="clave" color="secondary" :type="isPwd ? 'password' : 'text'">
+            <q-input label="Contraseña*" v-model="clave"  :type="isPwd ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
@@ -116,7 +118,7 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Red de Conocimiento*" color="secondary" v-model="red" :options="redes.map((red) => ({
+            <q-select label="Red de Conocimiento*"  v-model="red" :options="redes.map((red) => ({
               label: red.denominacion,
               value: red._id,
             }))
@@ -146,8 +148,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()" color="secondary" />
-          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+          <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }"  :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()"  />
+          <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -166,8 +168,10 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
+        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        height: 5px;
+        margin-top: 5px;
+      " />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <p>
@@ -229,6 +233,12 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useRolStore } from "../stores/Roles.js";
 import { useRedStore } from "../stores/Redes.js";
 import { useQuasar } from "quasar";
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
+
+
 
 let infoU = ref(false);
 let agregar = ref(false);

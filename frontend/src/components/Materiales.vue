@@ -35,14 +35,14 @@
                     </template>
 
                     <template v-slot:top-right>
-                        <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <q-input  dense debounce="300" v-model="filter" placeholder="Buscar">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn color="secondary" icon="add" label="Agregar" class="q-mb-md" @click="
+                        <q-btn   :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
                             agregar = true;
                         nuevo();
                         " />
@@ -61,30 +61,29 @@
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
-                <q-separator inset style="
-            height: 5px;
-            margin-top: 5px;
-          " color="secondary" />
-
+                <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+                height: 5px;
+                margin-top: 5px;
+              " />
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                     
                     <div class="q-mb-md">
-                        <q-input label="Nombre" color="secondary" v-model="nombre" />
+                        <q-input label="Nombre"  v-model="nombre" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripción" color="secondary" type="textarea" v-model="descripcion" />
+                        <q-input label="Descripción"  type="textarea" v-model="descripcion" />
                     </div>
 
-                    <q-select v-model="tipo" color="secondary" label="Tipo" :options="options" />
+                    <q-select v-model="tipo" label="Tipo" :options="options" />
 
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarR()" color="secondary" />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" color="secondary" />
+                    <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarR()"  />
+                    <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -95,6 +94,12 @@
 import { ref } from "vue";
 import { useMaterialStore } from "../stores/Materiales.js"
 import { useQuasar } from 'quasar'
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
+
+
 
 const useMaterial = useMaterialStore()
 let material = ref([])

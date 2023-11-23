@@ -33,7 +33,7 @@
                                 </div>
                             </div>
 
-                            <q-separator style="height: 5px; margin-top: 5px" color="secondary" /><br />
+                            <q-separator  :style="{ backgroundColor: colorMenu , color : colorLetra }"  style="height: 5px; margin-top: 5px" /><br />
 
                             <div class="row">
                                 <div class="col-4">
@@ -123,31 +123,33 @@
                         <q-btn icon="close" color="negative" flat round dense v-close-popup />
                     </q-card-section>
 
-                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
-
+                    <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+                    height: 5px;
+                    margin-top: 5px;
+                  " />
                     <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                         <div class="q-mb-md">
-                            <q-input label="Cédula*" type="number" color="secondary" v-model="cedula" />
+                            <q-input label="Cédula*" type="number" v-model="cedula" />
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Nombre*" color="secondary" v-model="nombre" />
+                            <q-input label="Nombre*" v-model="nombre" />
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Apellidos*" color="secondary" v-model="apellido" />
+                            <q-input label="Apellidos*" v-model="apellido" />
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Teléfono*" type="number" color="secondary" v-model="telefono" />
+                            <q-input label="Teléfono*" type="number" v-model="telefono" />
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Correo Electrónico*" color="secondary" v-model="correo" />
+                            <q-input label="Correo Electrónico*" v-model="correo" />
                         </div>
 
                         <div style="text-align: left" class="q-mb-md">
-                            <q-file color="secondary" v-model="cv" @update:cv-value="val => { cv = val[0] }"
+                            <q-file v-model="cv" @update:cv-value="val => { cv = val[0] }"
                                 label="Hoja de Vida">
                                 <template v-slot:prepend>
                                     <q-icon name="attach_file" />
@@ -156,14 +158,14 @@
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Perfil Profesional*" color="secondary" v-model="perfilProfesional" />
+                            <q-input label="Perfil Profesional*"  v-model="perfilProfesional" />
                         </div>
                     </q-card-section>
 
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()" color="secondary" />
+                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -175,6 +177,11 @@
 import { ref } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useQuasar } from "quasar";
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
+
 
 let useUsuario = useUsuarioStore();
 let datos = useUsuario.usuario;

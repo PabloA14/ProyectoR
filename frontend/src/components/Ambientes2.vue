@@ -69,7 +69,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" label="Agregar" @click="agregarN()" color="secondary" />
+                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" label="Agregaryyy" @click="agregarN()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -84,6 +84,10 @@ import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
