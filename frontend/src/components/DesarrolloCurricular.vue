@@ -179,10 +179,8 @@
         <div class="row" id="row">
           <q-toolbar-title class="title"> Fase de Análisis </q-toolbar-title>
 
-          <q-btn flat round dense>
-            <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click=" useGuia.fase = 'Análisis' , fasePrueba() ">bubble</span>
-            </router-link>
+          <q-btn flat round dense @click="irAGuiasAnalisis()">
+            <span class="material-symbols-outlined" id="ir">bubble</span>
           </q-btn>
 
         </div>
@@ -191,12 +189,10 @@
 
       <div class="menus">
         <div class="row" id="row">
-          <q-toolbar-title class="title"> Fase de Planeación </q-toolbar-title>
+          <q-toolbar-title class="title">Fase de Planeación</q-toolbar-title>
 
-          <q-btn flat round dense class="ir">
-            <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Planeación'">bubble</span>
-            </router-link>
+          <q-btn flat round dense @click="irAGuiasPlaneacion()">
+            <span class="material-symbols-outlined" id="ir">bubble</span>
           </q-btn>
         </div>
         <small>Ver Fase de Planeación</small>
@@ -204,12 +200,10 @@
 
       <div class="menus">
         <div class="row" id="row">
-          <q-toolbar-title class="title"> Fase de Ejecución </q-toolbar-title>
+          <q-toolbar-title class="title">Fase de Ejecución</q-toolbar-title>
 
-          <q-btn flat round dense class="ir">
-            <router-link to="guiasAprendizaje">
-              <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Ejecución'">bubble</span>
-            </router-link>
+          <q-btn flat round dense @click="irAGuiasEjecucion()">
+            <span class="material-symbols-outlined" id="ir">bubble</span>
           </q-btn>
         </div>
         <small>Ver Fase de Ejecución</small>
@@ -218,12 +212,10 @@
 
     <div class="menus">
       <div class="row" id="row">
-        <q-toolbar-title class="title"> Fase de Evaluación </q-toolbar-title>
+        <q-toolbar-title class="title">Fase de Evaluación</q-toolbar-title>
 
-        <q-btn flat round dense class="ir">
-          <router-link to="guiasAprendizaje">
-            <span class="material-symbols-outlined" id="ir" @click="useGuia.fase = 'Evaluación'">bubble</span>
-          </router-link>
+        <q-btn flat round dense @click="irAGuiasEvaluacion()">
+          <span class="material-symbols-outlined" id="ir">bubble</span>
         </q-btn>
       </div>
       <small>Ver Fase de Evaluación</small>
@@ -387,14 +379,24 @@ let archivoPlaneacion = ref("")
 let loading = ref(false)
 let errores = ref([])
 
+function irAGuiasAnalisis() {
+  useGuia.fase = 'Análisis'
+  router.push("/guiasAprendizaje")
+}
 
-async function fasePrueba() {
-  if (useGuia.fase === 'Análisis') {
-    console.log('es igual a analisis');
-    
-  }
+function irAGuiasPlaneacion() {
+  useGuia.fase = 'Planeación'
+  router.push("/guiasAprendizaje")
+}
 
-  
+function irAGuiasEjecucion() {
+  useGuia.fase = 'Ejecución'
+  router.push("/guiasAprendizaje")
+}
+
+function irAGuiasEvaluacion() {
+  useGuia.fase = 'Evaluación'
+  router.push("/guiasAprendizaje")
 }
 
 //modales editar

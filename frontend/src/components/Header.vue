@@ -19,7 +19,7 @@
             <q-menu>
               <q-list style="min-width: 100px">
 
-                <q-item to="configuracion" style="color: black;" clickable v-close-popup>
+                <q-item to="perfil" style="color: black;" clickable v-close-popup>
                   <q-item-section>
                     <q-item-label>
                       <q-icon name="account_circle" size="20px" />
@@ -152,7 +152,7 @@
 
           <q-separator />
 
-          <router-link to="configuracion" style="color: black; text-decoration: none">
+          <router-link to="perfil" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-user" />
@@ -168,7 +168,7 @@
                 <q-icon class="fa-solid fa-gear" />
               </q-item-section>
 
-              <q-item-section> Configuración </q-item-section>
+              <q-item-section>Configuración</q-item-section>
             </q-item>
           </router-link>
         </q-list>
@@ -195,7 +195,7 @@ const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
 let datos = ref({})
-let prueba = ref(colores.configuracion.colorLetra)
+let prueba = ref(colores.configuracion.colorMenu)
 
 const useUsuario = useUsuarioStore();
 datos.value = useUsuario.usuario

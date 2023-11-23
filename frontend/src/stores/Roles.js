@@ -20,10 +20,10 @@ export const useRolStore = defineStore("roles", () => {
   };
 
   const actualizarRoles = async (
-    id, codigo, denominacion) => {
+    id, denominacion) => {
     try {
       let datos = await axios.put(`${LinkBD}/api/roles/${id}`, {
-        codigo, denominacion
+        denominacion
       });
       return datos;
     } catch (error) {

@@ -4,19 +4,15 @@ import rolesUsuario from "../models/rolesUsuario.js";
 const httpRoles = {
 
     postRoles: async (req, res) => {
-        const { codigo, denominacion } = req.body
+        const { denominacion } = req.body
         try {
             const roles = new rolesUsuario({
-                codigo,
                 denominacion
             });
-            const cod = await rolesUsuario.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'El rol ya se encuentra registrado', cod, denominacion });
-            } else {
-                await roles.save()
-                return res.status(200).json({ msg: 'Registro exitoso', roles });
-            }
+
+            await roles.save()
+            return res.status(200).json({ msg: 'Registro exitoso', roles });
+
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor' });
@@ -26,7 +22,8 @@ const httpRoles = {
         const roles = await rolesUsuario.find()
         res.status(200).json({ roles })
     },
-    getCodigo: async (req, res) => {
+    
+    /* getCodigo: async (req, res) => {
         const codigo = req.params.codigo
         try {
             const cod = await rolesUsuario.find({ codigo: codigo })
@@ -40,20 +37,15 @@ const httpRoles = {
             res.json({ error })
             console.log(error);
         }
-    },
+    }, */
 
     putRoles: async (req, res) => {
         const rolId = req.params.id
-        const { codigo, denominacion } = req.body
+        const { denominacion } = req.body
         try {
 
-            const existingRol = await rolesUsuario.findOne({ codigo: codigo });
-            if (existingRol && existingRol._id.toString() !== rolId) {
-                return res.status(400).json({ msg: 'El rol ya se encuentra registrado' });
-            }
-
             const updatedFields = {
-                codigo, denominacion
+                denominacion
             };
 
             const updatedRol = await rolesUsuario.findOneAndUpdate(

@@ -114,7 +114,6 @@ let filter = ref('')
 let separator = ref('cell')
 let Program = ref(usePrograma.programa.desarrolloCurricular.idGuias)
 const idPrograma = ref(usePrograma.programa.codigo)
-console.log(idPrograma.value);
 const usegias = usegiasStore()
 let dataGuias = ref([])
 let bd = ref('')
@@ -212,13 +211,13 @@ async function agregarN() {
   loading.value = false
 }
 
-async function buscar() {
+/* async function buscar() {
   try {
     dataGuias.value = await usegias.buscarguia()
   } catch {
     console.error("Error al buscar Guias:");
   }
-}
+} */
 
 function editarGuia(g) {
   console.log("Entró a editar", g);

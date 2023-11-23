@@ -5,16 +5,15 @@ import { validarCampos } from "../middlewares/validar_campos.js";
 
 const router = Router()
 router.get("/", httpRoles.getRoles)
-router.get("/:codigo", httpRoles.getCodigo)
+
+//router.get("/:codigo", httpRoles.getCodigo)
 
 router.post("/", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("denominacion", "La denominación es obligatoria").trim().not().isEmpty(),
     validarCampos
 ], httpRoles.postRoles)
 
 router.put("/:id", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("denominacion", "La denominación es obligatoria").trim().not().isEmpty(),
     validarCampos
 ], httpRoles.putRoles)

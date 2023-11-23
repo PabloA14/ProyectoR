@@ -59,14 +59,12 @@ export const useColorStore = defineStore("Color", () => {
         }
     };
 
-    const colorMenu = async (colormenu) => {
+    const colorMenu = async (colorMenu) => {
         try {
             const id = idMongo.value
-            console.log(id);
-            console.log(colormenu);
+            console.log(colorMenu);
              loading.value = true;
-             const response = await axios.put(`${LinkBD}/api/color/${id}`, { colormenu: colormenu });
-
+             const response = await axios.put(`${LinkBD}/api/color/${id}`, { colorMenu: colorMenu });
             configuracion.value = response.data.red
             console.log(configuracion.value);
             return response; 

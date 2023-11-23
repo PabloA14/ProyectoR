@@ -9,7 +9,7 @@ import Niveles from "../components/Niveles.vue"
 import Roles from "../components/Roles.vue"
 import Materiales from "../components/Materiales.vue"
 import Ambientes from "../components/Ambientes.vue"
-import Configuracion from "../components/Configuracion.vue"
+import Perfil from "../components/Perfil.vue"
 import Investigacion from "../components/Investigacion.vue"
 import Cards from "../components/Cards.vue"
 import DesarrolloCurricular from "../components/DesarrolloCurricular.vue"
@@ -87,7 +87,7 @@ export const routes = [
             { path: "/roles", component: Roles, name: "roles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/materiales", component: Materiales, name: "materiales", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-            { path: "/configuracion", component: Configuracion, name: "configuracion", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
+            { path: "/perfil", component: Perfil, name: "perfil", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor']  } },
             { path: "/colorSetings", component: colorSetings, name: "colorSetings", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
 

@@ -17,7 +17,7 @@ export const usegiasStore = defineStore("Guia", () => {
             console.log(error);
         }
     }
-    
+
 
     const agregarGuia = async (info, documento) => {
 
@@ -59,17 +59,13 @@ export const usegiasStore = defineStore("Guia", () => {
             if (datos.data.status === 'ok') {
                 console.log(idPrograma);
                 let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${idPrograma}`)
-                console.log('************');
-                console.log(r);
-                //usePrograma.programa = r
-
                 return r
-            }else{
+            } else {
                 console.log('error');
 
             }
 
-          
+
 
         } catch (error) {
             console.log(error);
@@ -101,5 +97,5 @@ export const usegiasStore = defineStore("Guia", () => {
         fase
     }
 },
-{ persist: true }
+    { persist: true }
 )

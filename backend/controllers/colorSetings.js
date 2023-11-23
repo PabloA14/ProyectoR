@@ -47,13 +47,14 @@ const httpColores = {
     putColor: async (req, res) => {
         const id = req.params.id;
         const { colorLetra } = req.body;
-        console.log({ colorLetra });
+        const { colorMenu } = req.body;
+        console.log({ colorMenu });
         try {
             const updatedColores = await Color.findOneAndUpdate(
                 { _id: id },
                 {
                     $set: {
-                        colorMenu: req.body.colorMenu,
+                        colorMenu: colorMenu,
                         colorLetra: colorLetra
                     }
                 },

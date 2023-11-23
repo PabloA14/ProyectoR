@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const httpRoles = new mongoose.Schema({
-     codigo: { type: String, require: true },
      denominacion: { type: String, require: true },
      estado: { type: Number, default: 1, required: true },
      createdAt: { type: Date, default: Date.now },
