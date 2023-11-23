@@ -20,7 +20,7 @@
                 </q-toolbar-title>
 
                 <q-btn flat round dense class="ir">
-                    <span class="material-symbols-outlined" id="ir">more_vert</span>
+                    <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">more_vert</span>
                     <q-menu max-height="130px">
                         <q-list style="min-width: 100px">
 
@@ -90,7 +90,7 @@
 
                 <q-btn flat round dense class="ir">
                     <router-link to="desarrolloCurricular">
-                        <span class="material-symbols-outlined" id="ir">bubble</span>
+                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
                     </router-link>
                 </q-btn>
             </div>
@@ -105,7 +105,7 @@
 
                 <q-btn flat round dense class="ir">
                     <router-link to="cards">
-                        <span class="material-symbols-outlined" id="ir">bubble</span>
+                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
                     </router-link>
                 </q-btn>
             </div>
@@ -124,6 +124,10 @@ import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
+import { useColorStore } from "../stores/colorSetings.js";
+let colores = useColorStore();
+let colorMenu = ref(colores.configuracion.colorMenu)
+let colorLetra = ref(colores.configuracion.colorLetra)
 
 const useUsuario = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
