@@ -19,7 +19,7 @@
               <q-icon title="Detalle de Guía" name="fa-solid fa-eye" color="primary" size="25px"
                 style="margin-right: 25px;cursor: pointer;" @click="informacionGuia(props.row)" />
 
-              <q-icon title="Editar Guía" color="orange" @click="editarGuia(props.row)"
+              <q-icon v-if="rol === 'gestor'" title="Editar Guía" color="orange" @click="editarGuia(props.row)"
                 name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
               <a :href="props.row.documento" target="_blank">
@@ -34,7 +34,7 @@
         <!-- ´boton search buscar -->
 
         <template v-slot:top-right>
-          <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+          <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
@@ -42,7 +42,8 @@
         </template>
         <template v-slot:top-left>
 
-          <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
+          <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+            label="Agregar" class="q-mb-md" @click="mostrarModal = true; nuevo()" />
         </template>
       </q-table>
 
@@ -60,23 +61,18 @@
 
           </q-card-section>
 
-          <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+          <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
           height: 5px;
           margin-top: 5px;
         " />
           <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
             <div class="q-mb-md">
-              <q-input label="Código*"  v-model="codigo" />
+              <q-input label="Nombre*" v-model="nombre" />
             </div>
 
             <div class="q-mb-md">
-              <q-input label="Nombre*"  v-model="nombre" />
-            </div>
-
-            <div class="q-mb-md">
-              <q-file  v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
-                label="Archivo*">
+              <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
                 <template v-slot:prepend>
                   <q-icon name="attach_file" />
                 </template>
@@ -86,8 +82,10 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu , color : colorLetra }" v-if="bd == 1" label="Guardar" @click="agregarN" />
-            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu , color : colorLetra }" v-else label="Actualizar" @click="actualizar" />
+            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
+              label="Guardar" @click="agregarN" />
+            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else
+              label="Actualizar" @click="actualizar" />
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -100,7 +98,7 @@
 
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { usegiasStore } from "../stores/guias"
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
@@ -108,9 +106,16 @@ import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useDesarrolloCurricular } from "../stores/desarrolloC";
 import { useColorStore } from "../stores/colorSetings.js";
+
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -124,7 +129,6 @@ const usegias = usegiasStore()
 let dataGuias = ref([])
 let bd = ref('')
 let id = ref('')
-let codigo = ref('')
 let nombre = ref('')
 let archivo = ref('')
 const mostrarModal = ref(false);
@@ -147,14 +151,6 @@ const pagination = ref({
 
 const columns = [
   {
-    name: "codigo",
-    label: "Código",
-    sortable: true,
-    field: 'codigo',
-    align: 'center',
-    sortable: true
-  },
-  {
     name: "nombre",
     label: "Nombre",
     sortable: true,
@@ -170,7 +166,6 @@ function nuevo() {
 }
 
 function vaciar() {
-  codigo.value = ""
   nombre.value = ""
   archivo.value = ""
 }
@@ -178,7 +173,6 @@ function vaciar() {
 async function agregarN() {
   loading.value = true
   await usegias.agregarGuia({
-    codigo: codigo.value,
     nombre: nombre.value,
     documento: archivo.value,
     fase: fase.value
@@ -229,9 +223,8 @@ function editarGuia(g) {
   console.log("Entró a editar", g);
   bd.value = 0;
   id.value = g._id;
-  codigo.value = g.codigo
-  nombre.value = g.nombre,
-    archivo.value = g.documento
+  nombre.value = g.nombre;
+  archivo.value = g.documento
   mostrarModal.value = true;
 }
 
@@ -239,7 +232,6 @@ async function actualizar() {
   loading.value = true
   await usegias.actualizarGuia(
     id.value,
-    codigo.value,
     nombre.value,
     archivo.value,
     idPrograma.value

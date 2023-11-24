@@ -33,7 +33,8 @@
                                 </div>
                             </div>
 
-                            <q-separator  :style="{ backgroundColor: colorMenu , color : colorLetra }"  style="height: 5px; margin-top: 5px" /><br />
+                            <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                                style="height: 5px; margin-top: 5px" /><br />
 
                             <div class="row">
                                 <div class="col-4">
@@ -62,12 +63,13 @@
                                         <b>Perfin profesional:</b> {{ datos.perfilProfesional }}
                                     </div>
                                     <div class="text-h7 text-left q-mb-md">
-                                        <b>Hoja de Vida:</b>
+                                        <b>Hoja de Vida:</b> <a :href="datos.hojaDeVida" target="_blank"
+                                            style="margin-left: 5%;">
+                                            <q-icon title="Descargar" color="green" name="fa-solid fa-download" size="25px"
+                                                style="cursor: pointer" />
+                                        </a>
                                     </div>
-                                    <a :href="datos.hojaDeVida" target="_blank">
-                                        <q-icon title="Descargar" color="green" name="fa-solid fa-download" size="25px"
-                                            style="cursor: pointer" />
-                                    </a>
+
                                 </div>
                             </div>
                         </q-card-section>
@@ -75,14 +77,15 @@
 
                     <q-separator />
 
-                    <q-card-actions align="center">
-                        <q-btn style="margin: auto;margin-right: -20%;" color="secondary" icon="edit"
-                            label="Editar" class="q-mb-md" @click="
+                    <q-card-actions>
+                        <q-btn style="margin: auto;margin-right: -20%;"
+                            :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit" label="Editar"
+                            class="q-mb-md" @click="
                                 agregar = true;
                             editarUsuario(datos);" />
 
-                        <q-btn style="margin: auto;" color="primary" icon="fa-solid fa-user"
-                            label="Foto de Perfil" class="q-mb-md" @click="
+                        <q-btn style="margin: auto;" color="primary" icon="fa-solid fa-user" label="Foto de Perfil"
+                            class="q-mb-md" @click="
                                 EditarFoto = true; seleccionarFoto(datos)" />
                     </q-card-actions>
                 </q-card>
@@ -98,7 +101,8 @@
                         <q-btn icon="close" color="negative" flat round dense v-close-popup />
                     </q-card-section>
 
-                    <q-separator inset style="height: 5px; margin-top: 5px" color="secondary" />
+                    <q-separator inset style="height: 5px; margin-top: 5px"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                     <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
                         <div style="text-align: left" class="q-mb-md">
                             <input type="file" @change="archivoFoto" />
@@ -108,7 +112,8 @@
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn :disable="loading" label="Actualizar" @click="actualizarFoto()" color="secondary" />
+                        <q-btn :disable="loading" label="Actualizar" @click="actualizarFoto()"
+                            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -123,7 +128,7 @@
                         <q-btn icon="close" color="negative" flat round dense v-close-popup />
                     </q-card-section>
 
-                    <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+                    <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
                     height: 5px;
                     margin-top: 5px;
                   " />
@@ -148,9 +153,8 @@
                             <q-input label="Correo Electrónico*" v-model="correo" />
                         </div>
 
-                        <div style="text-align: left" class="q-mb-md">
-                            <q-file v-model="cv" @update:cv-value="val => { cv = val[0] }"
-                                label="Hoja de Vida">
+                        <div class="q-mb-md">
+                            <q-file v-model="cv" @update:cv-value="val => { cv = val[0] }" label="Hoja de Vida">
                                 <template v-slot:prepend>
                                     <q-icon name="attach_file" />
                                 </template>
@@ -158,14 +162,15 @@
                         </div>
 
                         <div class="q-mb-md">
-                            <q-input label="Perfil Profesional*"  v-model="perfilProfesional" />
+                            <q-input label="Perfil Profesional*" v-model="perfilProfesional" />
                         </div>
                     </q-card-section>
 
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()"
+                            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                     </q-card-actions>
                 </q-card>
             </q-dialog>
@@ -174,14 +179,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useQuasar } from "quasar";
 import { useColorStore } from "../stores/colorSetings.js";
-let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
 
+let colores = useColorStore();
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 let useUsuario = useUsuarioStore();
 let datos = useUsuario.usuario;
@@ -236,7 +247,6 @@ function archivoFoto(event) {
 }
 
 function editarUsuario(datos) {
-    console.log("Entró a editar", datos);
     id.value = datos._id;
     cedula.value = datos.cedula;
     nombre.value = datos.nombre;
@@ -327,7 +337,6 @@ async function actualizarFoto() {
             EditarFoto.value = false
             img.value = ''
             datos.foto = data.foto
-            console.log(datos.foto);
         })
         .catch((error) => {
             if (error.response && error.response.data) {

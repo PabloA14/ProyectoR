@@ -34,17 +34,18 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input :style="{ color : colorLetra }"   dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input :style="{ color: colorLetra }" dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }"  icon="add" label="Agregar" class="q-mb-md" @click="
-              agregar = true;
-            nuevo();
-            " />
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
+              @click="
+                agregar = true;
+              nuevo();
+              " />
           </template>
         </q-table>
       </div>
@@ -60,7 +61,7 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
       " />
@@ -68,20 +69,20 @@
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
           <div class="q-mb-md">
-            <q-input label="Código*" type="number" :style="{  color : colorMenu }"  v-model="codigo" />
+            <q-input label="Código*" type="number" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Nombre*" :style="{ color : colorMenu }"  v-model="nombre" />
+            <q-input label="Nombre*" v-model="nombre" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Dirección*" :style="{ color : colorMenu }"  v-model="direccion" />
+            <q-input label="Dirección*" v-model="direccion" />
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Ciudad*" :style="{ color : colorMenu }"  v-model="ciudad"
-              :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))" emit-value map-options>
+            <q-select label="Ciudad*" v-model="ciudad" :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))"
+              emit-value map-options>
             </q-select>
           </div>
 
@@ -91,8 +92,10 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }"  :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarC()"  />
-          <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }"   :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
+            label="Agregar" @click="agregarC()" />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else
+            label="Actualizar" @click="actualizar()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -103,16 +106,20 @@
 
 <script setup>
 
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useCentroStore } from "../stores/centros.js"
 import { useCiudadStore } from "../stores/Ciudades.js"
 import { useQuasar } from 'quasar'
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
-
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 let centro = ref([])
 let ciudades = ref([])
@@ -330,5 +337,4 @@ async function editarEstado(centro) {
   #card {
     width: 100%;
   }
-}
-</style>
+}</style>

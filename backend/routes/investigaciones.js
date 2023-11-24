@@ -5,7 +5,6 @@ import { check } from "express-validator";
 import { validarCampos } from "../middlewares/validar_campos.js";
 
 routes.post("/", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("denominacion", "El nombre es obligatorio").trim().not().isEmpty(),
     check("descripcion", "La descripción es obligatorio").trim().not().isEmpty(),
     check("fecha", "El año es obligatorio").trim().not().isEmpty(),
@@ -19,10 +18,9 @@ routes.post("/", [
 ], httpInvestigaciones.postInvestigacion)
 
 routes.get("/", httpInvestigaciones.getinvestigaciones)
-routes.get("/:codigo", httpInvestigaciones.getCodigo)
+//routes.get("/:codigo", httpInvestigaciones.getCodigo)
 
 routes.put("/:id", [
-    check("codigo", "El código es obligatorio").trim().not().isEmpty(),
     check("denominacion", "El nombre es obligatorio").trim().not().isEmpty(),
     check("descripcion", "La descripción es obligatoria").trim().not().isEmpty(),
     check("fecha", "El año es obligatorio").trim().not().isEmpty(),

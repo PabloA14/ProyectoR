@@ -41,17 +41,18 @@
                     </template>
 
                     <template v-slot:top-right>
-                        <q-input   dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn   :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
-                            agregar = true;
-                        nuevo();
-                        " />
+                        <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar"
+                            class="q-mb-md" @click="
+                                agregar = true;
+                            nuevo();
+                            " />
                     </template>
                 </q-table>
             </div>
@@ -67,7 +68,7 @@
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
-                <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+                <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
                 height: 5px;
                 margin-top: 5px;
               " />
@@ -75,22 +76,23 @@
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
                     <div class="q-mb-md">
-                        <q-input label="Nombre*"  :style="{  color : colorMenu }" v-model="nombre" />
+                        <q-input label="Nombre*" v-model="nombre" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-select label="Centro de Formación*"  :style="{  color : colorMenu }" v-model="centro"
+                        <q-select label="Centro de Formación*" v-model="centro"
                             :options="centros.map(centro => ({ label: centro.nombre, value: centro._id }))" emit-value
                             map-options>
                         </q-select>
                     </div>
 
                     <div class="q-mb-md">
-                        <q-select label="Tipo*"  :style="{  color : colorMenu }" v-model="tipo" :options="options" />
+                        <q-select label="Tipo*" v-model="tipo" :options="options" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripción*" type="textarea"  :style="{  color : colorMenu }" v-model="descripcion" />
+                        <q-input label="Descripción*" type="textarea"
+                            v-model="descripcion" />
                     </div>
 
                 </q-card-section>
@@ -98,8 +100,10 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="cargando" v-if="bd == 1" label="Agregar" @click="agregarR()"  />
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="cargando" v-else label="Actualizar" @click="actualizar()"  />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="cargando" v-if="bd == 1"
+                        label="Agregar" @click="agregarR()" />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="cargando" v-else
+                        label="Actualizar" @click="actualizar()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -108,15 +112,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useCentroStore } from "../stores/centros.js"
 import { useQuasar } from 'quasar'
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 let ambiente = ref([])
 let agregar = ref(false)
@@ -334,5 +343,4 @@ async function editarEstado(ambientes) {
     #card {
         width: 100%;
     }
-}
-</style>
+}</style>

@@ -19,22 +19,21 @@ export const useInveStore = defineStore("investigacion", () => {
         }
     };
 
-    const actualizarInves = async (id, codigo, denominacion, descripcion, fecha, documentos) => {
+    const actualizarInves = async (id, denominacion, descripcion, fecha, documentos) => {
         try {
             const formData = new FormData();
-    
-            formData.append('codigo', codigo);
+
             formData.append('denominacion', denominacion);
             formData.append('descripcion', descripcion);
             formData.append('fecha', fecha);
             formData.append('documentos', documentos);
-            
+
             let datos = await axios.put(`${LinkBD}/api/investigaciones/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
-    
+
             return datos;
         } catch (error) {
             console.log(error);

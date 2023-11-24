@@ -22,7 +22,7 @@ import instructores from "../components/instructores.vue"
 import proyecto from "../components/proyecto.vue"
 import registroCalificado from "../components/registroCalificado.vue"
 import InformacionPrograma from "../components/InformacionPrograma.vue"
-import colorSetings from "../components/colorSetings.vue"
+import colorSettings from "../components/colorSettings.vue"
 
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -89,7 +89,7 @@ export const routes = [
             { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
             { path: "/perfil", component: Perfil, name: "perfil", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor']  } },
-            { path: "/colorSetings", component: colorSetings, name: "colorSetings", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
+            { path: "/colorSettings", component: colorSettings, name: "colorSettings", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
 
         ],
         beforeEnter: (to, from, next) => {

@@ -65,10 +65,11 @@
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }"  icon="add" label="Agregar" class="q-mb-md" @click="
-              agregar = true;
-            nuevo();
-            " />
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
+              @click="
+                agregar = true;
+              nuevo();
+              " />
           </template>
         </q-table>
       </div>
@@ -84,33 +85,33 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
       " />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-input label="Cédula*" type="number"  v-model="cedula" />
+            <q-input label="Cédula*" type="number" v-model="cedula" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Nombre*"  v-model="nombre" />
+            <q-input label="Nombre*" v-model="nombre" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Apellidos*"  v-model="apellido" />
+            <q-input label="Apellidos*" v-model="apellido" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Teléfono*" type="number"  v-model="telefono" />
+            <q-input label="Teléfono*" type="number" v-model="telefono" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Correo Electrónico*"   v-model="correo" />
+            <q-input label="Correo Electrónico*" v-model="correo" />
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Contraseña*" v-model="clave"  :type="isPwd ? 'password' : 'text'">
+            <q-input label="Contraseña*" v-model="clave" :type="isPwd ? 'password' : 'text'">
               <template v-slot:append>
                 <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
@@ -118,7 +119,7 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Red de Conocimiento*"  v-model="red" :options="redes.map((red) => ({
+            <q-select label="Red de Conocimiento*" v-model="red" :options="redes.map((red) => ({
               label: red.denominacion,
               value: red._id,
             }))
@@ -127,12 +128,17 @@
           </div>
 
           <div class="q-mb-md">
-            <p style="color: rgb(122, 122, 121);">Hoja de Vida</p>
-            <input type="file" @change="archivo" />
+            <div class="q-mb-md">
+              <q-file v-model="cv" @update:cv-value="val => { cv = val[0] }" label="Hoja de Vida">
+                <template v-slot:prepend>
+                  <q-icon name="attach_file" />
+                </template>
+              </q-file>
+            </div>
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Rol*" color="secondary" v-model="rol" :options="roles.map((rol) => ({
+            <q-select label="Rol*" v-model="rol" :options="roles.map((rol) => ({
               label: rol.denominacion,
               value: rol._id,
             }))
@@ -141,19 +147,21 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Perfil Profesional*" color="secondary" v-model="perfilProfesional" />
+            <q-input label="Perfil Profesional*" v-model="perfilProfesional" />
           </div>
         </q-card-section>
 
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }"  :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarU()"  />
-          <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
+            label="Agregar" @click="agregarU()" />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else label="Actualizar"
+            @click="actualizar()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <!-- modal informavion -->
+    <!-- modal informacion -->
     <q-dialog v-model="infoU">
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
@@ -168,7 +176,7 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
       " />
@@ -228,17 +236,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useRolStore } from "../stores/Roles.js";
 import { useRedStore } from "../stores/Redes.js";
 import { useQuasar } from "quasar";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
-
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 let infoU = ref(false);
 let agregar = ref(false);
@@ -397,10 +409,6 @@ function validar() {
     icon: "warning",
     timeout: Math.random() * 3000,
   });
-}
-
-function archivo(event) {
-  cv.value = event.target.files[0];
 }
 
 async function agregarU() {

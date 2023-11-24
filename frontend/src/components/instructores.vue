@@ -30,7 +30,7 @@
 
         <template v-slot:body-cell-nombre="props">
           <q-td :props="props" style="white-space: pre-line;">
-            {{ props.row.nombre }}  {{ props.row.apellidos }}
+            {{ props.row.nombre }} {{ props.row.apellidos }}
           </q-td>
         </template>
 
@@ -42,15 +42,15 @@
         </template>
 
         <template v-slot:top-right>
-          <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+          <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
             <template v-slot:append>
               <q-icon name="search" />
             </template>
           </q-input>
         </template>
         <template v-slot:top-left>
-          <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" v-if="useUsuari.rol === 'gestor'" class="q-mb-md"
-            @click="Modagregar" />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar"
+            v-if="useUsuari.rol === 'gestor'" class="q-mb-md" @click="Modagregar" />
         </template>
       </q-table>
     </div>
@@ -63,16 +63,17 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator inset style="height: 5px; margin-top: 5px" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+        <q-separator inset style="height: 5px; margin-top: 5px"
+          :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-select  label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
+            <q-select label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
               :options="instructores.map(i => ({ label: `${i.nombre} ${i.apellidos}`, value: i._id }))" emit-value
               map-options>
             </q-select>
 
-            <q-select disable v-if="instructores.length === 0"  label="No hay instructores disponibles">
+            <q-select disable v-if="instructores.length === 0" label="No hay instructores disponibles">
             </q-select>
 
             <!-- <select name="" id="" v-model="instructor">
@@ -98,8 +99,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disable="loading" v-if="instructores.length > 0" @click="agregarInstructor()" :style="{ backgroundColor: colorMenu , color : colorLetra }"
-            label="Agregar" />
+          <q-btn :disable="loading" v-if="instructores.length > 0" @click="agregarInstructor()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" label="Agregar" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -107,7 +108,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useUserStore } from "../almacenaje/informacion.js";
@@ -115,9 +116,14 @@ import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useQuasar } from "quasar";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 const $q = useQuasar();
 //let router = useRouter()
@@ -277,7 +283,7 @@ const informacionPrograma = async (x) => {
 
 <style scoped>
 #card {
-  width: 32%;
+  width: 38%;
   height: fit-content;
 }
 
@@ -286,9 +292,5 @@ const informacionPrograma = async (x) => {
     width: 100%;
   }
 }
-.input {
-  color: red !important ;
 
-  height: fit-content;
-}
 </style>

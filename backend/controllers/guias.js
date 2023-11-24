@@ -1,5 +1,4 @@
 import Guia from "../models/guias.js"
-import DesarrolloC from "../models/desarrollo.js"
 import { v2 as cloudinary } from 'cloudinary';
 
 
@@ -12,7 +11,7 @@ const httpGuias = {
             api_secret: process.env.CLOUDINARY_SECRET,
             secure: true,
         });
-        const { codigo, nombre, fase, } = req.body
+        const { nombre, fase, } = req.body
         let documentoUrl = null;
 
         try {
@@ -40,17 +39,11 @@ const httpGuias = {
             }
 
             const guia = new Guia({
-                codigo, nombre, fase, documento: documentoUrl,
+                nombre, fase, documento: documentoUrl,
             });
 
-            const cod = await Guia.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'La guía ya se encuentra registrada', cod });
-            } else {
-                await guia.save();
-                    res.status(200).json({ msg: "Registro exitoso", guia });
-
-            }
+            await guia.save();
+            res.status(200).json({ msg: "Registro exitoso", guia });
 
         } catch (error) {
             console.log(error);
@@ -88,11 +81,11 @@ const httpGuias = {
         });
 
         const guiasId = req.params.id;
-        const { codigo, nombre, fase, } = req.body;
+        const { nombre, fase, } = req.body;
 
         try {
             const updatedFields = {
-                codigo, nombre, fase,
+                nombre, fase,
             };
 
             // Verificar si se proporciona un nuevo documento
@@ -119,11 +112,11 @@ const httpGuias = {
                 updatedFields.documento = result.url;
             }
 
-            const existingGuia = await Guia.findOne({ codigo: codigo });
+            /* const existingGuia = await Guia.findOne({ codigo: codigo });
             if (existingGuia && existingGuia._id.toString() !== guiasId) {
                 return res.status(400).json({ msg: 'La guía ya se encuentra registrada' });
             }
-
+ */
             const updatedGuias = await Guia.findOneAndUpdate(
                 { _id: guiasId },
                 {
@@ -132,7 +125,7 @@ const httpGuias = {
                 { new: true }
             );
 
-            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias , status: 'ok' });
+            res.status(200).json({ msg: 'actualizado exitosamente', guia: updatedGuias, status: 'ok' });
         } catch (error) {
             console.error(error);
             res.status(500).json({ msg: 'Error en el servidor Actualizar' });

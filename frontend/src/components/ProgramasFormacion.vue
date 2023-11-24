@@ -22,7 +22,8 @@
                   @click="(desarrolloNulo = true), desarrolloNuloF()"
                   style="font-size: 5vh; background-color: red; color: white">priority_high</q-icon>
 
-                <q-icon v-else :style="{ backgroundColor: colorMenu , color : colorLetra }" class="material-symbols-outlined"  style="
+                <q-icon v-else :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                  class="material-symbols-outlined" style="
                     font-size: 5vh;
                     color: white;
                   " @click="editarDesarrollo(props.row)">add</q-icon>
@@ -74,10 +75,11 @@
           </template>
           <!-- agregar -->
           <template v-slot:top-left>
-            <q-btn v-if="rol == 'gestor'" :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
-              agregar = true;
-            nuevo();
-            " />
+            <q-btn v-if="rol == 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+              label="Agregar" class="q-mb-md" @click="
+                agregar = true;
+              nuevo();
+              " />
           </template>
         </q-table>
       </div>
@@ -93,37 +95,37 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
       " />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-           <div class="q-mb-md">
-            <q-input label="Código*" type="number"  v-model="codigo" />
-          </div>
-
-           <div class="q-mb-md">
-            <q-input label="Denominación*"  v-model="denominacion" />
+          <div class="q-mb-md">
+            <q-input label="Código*" type="number" v-model="codigo" />
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Nivel de Formación*"  v-model="nivel" :options="niveles.map((nivel) => ({
+            <q-input label="Denominación*" v-model="denominacion" />
+          </div>
+
+          <div class="q-mb-md">
+            <q-select label="Nivel de Formación*" v-model="nivel" :options="niveles.map((nivel) => ({
               label: nivel.denominacion,
-               value: nivel._id,
+              value: nivel._id,
             }))
               " emit-value map-options>
             </q-select>
           </div>
-  
-             <div class="q-mb-md">
-            <q-input label="Versión*"  v-model="version" />
+
+          <div class="q-mb-md">
+            <q-input label="Versión*" v-model="version" />
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <q-file    v-model="disCurricular" @update:disCurricular-value="val => { disCurricular = val[0] }"
+            <q-file v-model="disCurricular" @update:disCurricular-value="val => { disCurricular = val[0] }"
               label="Diseño Curricular*">
               <template v-slot:prepend>
-                 <q-icon name="attach_file" />
+                <q-icon name="attach_file" />
               </template>
             </q-file>
           </div>
@@ -132,17 +134,19 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
-          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarP()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
-       </q-card>
+      </q-card>
     </q-dialog>
- 
+
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js";
 import { useNivelStore } from "../stores/Niveles.js";
@@ -152,9 +156,14 @@ import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 let desarrolloNulo = ref(false);
 const useUsuario = useUsuarioStore();
@@ -422,9 +431,6 @@ async function actualizar() {
   loading.value = false;
 }
 
-
-
-
 async function editarDesarrollo(x) {
   idDesarrollo.value = x._id;
   try {
@@ -509,8 +515,8 @@ const informacionPrograma = async (x) => {
 
 
 .input {
-  color: red !important ;
-  
+  color: red !important;
+
   height: fit-content;
 }
 </style>

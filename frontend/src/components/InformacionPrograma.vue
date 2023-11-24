@@ -19,8 +19,9 @@
                     Diseño Curricular
                 </q-toolbar-title>
 
-                <q-btn flat round dense class="ir">
-                    <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">more_vert</span>
+                <q-btn flat round dense>
+                    <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                        id="ir">more_vert</span>
                     <q-menu max-height="130px">
                         <q-list style="min-width: 100px">
 
@@ -59,7 +60,8 @@
                             <q-btn icon="close" color="negative" flat round dense v-close-popup />
                         </q-card-section>
 
-                        <q-separator inset style="height: 5px;margin-top: 5px;" color="secondary" />
+                        <q-separator inset style="height: 5px;margin-top: 5px;"
+                            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                         <q-card-section style="max-height: 65vh" class="scroll">
 
@@ -72,7 +74,8 @@
                         <q-separator />
 
                         <q-card-actions align="right">
-                            <q-btn label="Editar" :disabled="loading" @click="agregarDis()" color="secondary" />
+                            <q-btn label="Editar" :disabled="loading" @click="agregarDis()"
+                                :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                         </q-card-actions>
                     </q-card>
                 </q-dialog>
@@ -81,16 +84,16 @@
             <small>Descargar diseño curricular</small>
         </div>
 
-
         <div class="bloques">
             <div class="row" id="row">
                 <q-toolbar-title class="title">
                     Desarrollo Curricular
                 </q-toolbar-title>
 
-                <q-btn flat round dense class="ir">
+                <q-btn flat round dense>
                     <router-link to="desarrolloCurricular">
-                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
+                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                            id="ir">bubble</span>
                     </router-link>
                 </q-btn>
             </div>
@@ -103,9 +106,10 @@
                     Gestión del Programa
                 </q-toolbar-title>
 
-                <q-btn flat round dense class="ir">
+                <q-btn flat round dense>
                     <router-link to="cards">
-                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
+                        <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                            id="ir">bubble</span>
                     </router-link>
                 </q-btn>
             </div>
@@ -121,13 +125,20 @@
 <script setup>
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useRouter } from "vue-router";
 import { useColorStore } from "../stores/colorSetings.js";
+
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
@@ -212,7 +223,6 @@ async function informacionPrograma(x) {
     border-radius: 5px;
     width: 8vh;
     height: 6vh;
-    background-color: #39a900;
     color: white;
     font-size: 3.8vh;
 }

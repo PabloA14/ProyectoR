@@ -12,7 +12,7 @@ const httpInvestigaciones = {
             secure: true,
         });
 
-        const { codigo, denominacion, descripcion, fecha, idPrograma } = req.body;
+        const { denominacion, descripcion, fecha, idPrograma } = req.body;
         let documentoUrl = null;
 
         try {
@@ -39,7 +39,6 @@ const httpInvestigaciones = {
             }
 
             const investigacion = new Investigacion({
-                codigo,
                 denominacion,
                 descripcion,
                 fecha,
@@ -47,13 +46,9 @@ const httpInvestigaciones = {
                 idPrograma
             });
 
-            const cod = await Investigacion.findOne({ codigo: codigo });
-            if (cod) {
-                return res.status(400).json({ msg: 'La investigación ya se encuentra registrada', cod, denominacion });
-            } else {
-                await investigacion.save();
-                res.status(200).json({ msg: "Registro exitoso", investigacion });
-            }
+            await investigacion.save();
+            res.status(200).json({ msg: "Registro exitoso", investigacion });
+
         } catch (error) {
             console.error('Error al agregar la investigación:', error);
             res.status(500).json({ mensaje: 'Error en el servidor' });
@@ -65,7 +60,7 @@ const httpInvestigaciones = {
         res.json({ investigacion })
     },
 
-    getCodigo: async (req, res) => {
+    /* getCodigo: async (req, res) => {
         try {
             const investigacionBuscada = req.params.codigo;
             const investigacionEncontrada = await Investigacion.findOne({ codigo: investigacionBuscada });
@@ -79,7 +74,7 @@ const httpInvestigaciones = {
             console.error('Error al buscar la investigacion :', error);
             res.status(500).json({ mensaje: 'Hubo un error al buscar la investigacion ' });
         }
-    },
+    }, */
 
     putninvestigacion: async (req, res) => {
         cloudinary.config({
@@ -90,11 +85,11 @@ const httpInvestigaciones = {
         });
 
         const investigacionId = req.params.id;
-        const { codigo, denominacion, descripcion, fecha } = req.body;
+        const { denominacion, descripcion, fecha } = req.body;
 
         try {
             const updatedFields = {
-                codigo, denominacion, descripcion, fecha
+                denominacion, descripcion, fecha
             };
 
             // Verificar si se proporciona un nuevo documentos
@@ -121,10 +116,10 @@ const httpInvestigaciones = {
                 updatedFields.documentos = result.url;
             }
 
-            const existingInves = await Investigacion.findOne({ codigo: codigo });
+            /* const existingInves = await Investigacion.findOne({ codigo: codigo });
             if (existingInves && existingInves._id.toString() !== investigacionId) {
                 return res.status(400).json({ msg: 'La investigación ya se encuentra registrada' });
-            }
+            } */
 
             const updatedInvestigacion = await Investigacion.findOneAndUpdate(
                 { _id: investigacionId },

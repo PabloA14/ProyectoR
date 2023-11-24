@@ -14,17 +14,17 @@
     </div>
 
     <div class="spinner-container" v-if="material === true && useMatApoyo.loading === true">
-      <q-spinner style="margin-left: 10px;"  color="black" size="7em" :thickness="10" />
+      <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
     </div>
     <div class="row q-mt-md">
       <div class="col"></div>
       <div class="col">
-        <q-btn flat outlined :style="{ color : colorMenu }" label="Instrumentos de Evaluación" class="btn"
+        <q-btn flat outlined :style="{ color: colorMenu }" label="Instrumentos de Evaluación" class="btn"
           @click="instrumento = true, material = false" />
       </div>
       <div class="col"></div>
       <div class="col">
-        <q-btn flat outlined :style="{ color : colorMenu }" label="Materiales de Apoyo " class="btn"
+        <q-btn flat outlined :style="{ color: colorMenu }" label="Materiales de Apoyo " class="btn"
           @click="instrumento = false, material = true" />
 
       </div>
@@ -41,7 +41,7 @@
             <q-td :props="props">
               <div class="opciones">
 
-                <q-icon title="Editar Instrumento" color="orange" @click="editarIns(props.row)"
+                <q-icon v-if="rol === 'gestor'" title="Editar Instrumento" color="orange" @click="editarIns(props.row)"
                   name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
                 <a :href="props.row.documento" target="_blank" :class="{ 'disabled-mat': props.row.documento === null }">
@@ -54,17 +54,18 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input  dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }"    icon="add" label="Agregar" class="q-mb-md" @click="
-              agregarInst = true;
-            nuevoInstrumento();
-            " />
+            <q-btn v-if="rol==='gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
+              @click="
+                agregarInst = true;
+              nuevoInstrumento();
+              " />
           </template>
         </q-table>
       </div>
@@ -100,17 +101,18 @@
           </template>
 
           <template v-slot:top-right>
-            <q-input  dense debounce="300" v-model="filter" placeholder="Buscar">
+            <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
               <template v-slot:append>
                 <q-icon name="search" />
               </template>
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn  :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
-              agregarMaterial = true;
-            nuevoMaterial();
-            " />
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
+              @click="
+                agregarMaterial = true;
+              nuevoMaterial();
+              " />
           </template>
         </q-table>
       </div>
@@ -130,11 +132,11 @@
 
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
-      " />        
-      <small style="padding: 4%;">Campos obligatorios*</small>
+      " />
+        <small style="padding: 4%;">Campos obligatorios*</small>
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
@@ -147,11 +149,11 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Enlace"  v-model="enlace" />
+            <q-input label="Enlace" v-model="enlace" />
           </div>
 
           <div class="q-mb-md">
-            <q-file v-model="documentoMat"  @update:documentoMat-value="val => { documentoMat = val[0] }" label="Archivo">
+            <q-file v-model="documentoMat" @update:documentoMat-value="val => { documentoMat = val[0] }" label="Archivo">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -160,8 +162,10 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading"  v-if="bd == 1" label="Guardar" @click="agregarMat" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
-          <q-btn :disabled="loading"  v-else label="Actualizar" @click="actualizarMaterial" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+          <q-btn :disabled="loading" v-if="bd == 1" label="Guardar" @click="agregarMat"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizarMaterial"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -180,7 +184,7 @@
 
         </q-card-section>
 
-        <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
         height: 5px;
         margin-top: 5px;
       " />
@@ -193,11 +197,11 @@
           </div> -->
 
           <div class="q-mb-md">
-            <q-input label="Nombre*"  v-model="nombreInst" />
+            <q-input label="Nombre*" v-model="nombreInst" />
           </div>
 
           <div class="q-mb-md">
-            <q-file  v-model="documentoIns" @update:documentoIns-value="val => { documentoIns = val[0] }" label="Archivo">
+            <q-file v-model="documentoIns" @update:documentoIns-value="val => { documentoIns = val[0] }" label="Archivo">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -206,8 +210,10 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu , color : colorLetra }" v-if="bd == 1" label="Guardar" @click="agregarI" />
-          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu , color : colorLetra }" v-else label="Actualizar" @click="actualizarInstrumento" />
+          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
+            label="Guardar" @click="agregarI" />
+          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else label="Actualizar"
+            @click="actualizarInstrumento" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -223,9 +229,21 @@ import { useApoyo } from "../stores/MaterialesApoyo.js"
 import { useQuasar } from 'quasar'
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useColorStore } from "../stores/colorSetings.js";
+import { useUsuarioStore } from "../stores/Usuarios.js";
+
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+const useUsuario = useUsuarioStore();
+const rol = useUsuario.rol;
+
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 const usePrograma = useProgramasFormacionStore()
 let material = ref('')

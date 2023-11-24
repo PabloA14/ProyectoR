@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const httpGuias = new mongoose.Schema({
-    codigo: { type: String, required: true },
     nombre: { type: String, required: true },
     fase: { type: String, required: false },
     documento: { type: String, required: true },

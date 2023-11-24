@@ -14,14 +14,14 @@
             <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
         </div>
 
-
         <div class="row" style="display: grid; place-items: center;" v-if="useRegistro.loading === false">
             <q-card class="my-card q-mt-xl" flat bordered v-if="mostrarRegistro">
                 <div class="text-h5 q-mt-sm q-mb-md" style="text-align: center">
                     <b style="text-transform: capitalize;">{{ programaSeleccionado.denominacionPrograma }}</b>
                 </div>
 
-                <q-separator inset style="height: 5px; margin-top: 5px" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+                <q-separator inset style="height: 5px; margin-top: 5px"
+                    :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                 <q-card-section horizontal>
                     <q-card-section class="q-pt-xs" id="section">
@@ -74,8 +74,9 @@
 
                 <q-separator />
 
-                <q-card-actions align="center" v-if="rol === 'gestor'">
-                    <q-btn style="margin: auto;margin-right: -20%;" :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="edit" label="Editar"
+                <q-card-actions align="center">
+                    <q-btn v-if="rol === 'gestor'" style="margin: auto;margin-right: -20%;"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit" label="Editar"
                         class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
 
                     <a style="margin: auto;" :href="mostrarRegistro.documento" target="_blank">
@@ -86,8 +87,9 @@
             </q-card>
 
             <div style="display: flex;justify-content: center;align-items: center;" v-else-if="rol === 'gestor'">
-                <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar Registro Calificado" class="q-mb-md" @click="
-                    agregar = true; nuevo();" />
+                <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+                    label="Agregar Registro Calificado" class="q-mb-md" @click="
+                        agregar = true; nuevo();" />
             </div>
         </div>
         <b v-if="!mostrarRegistro && rol === 'instructor'">Aún no se ha agregado el Registro Calificado</b>
@@ -102,42 +104,42 @@
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
-                <q-separator inset style="height: 5px; margin-top: 5px" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+                <q-separator inset style="height: 5px; margin-top: 5px"
+                    :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
 
                     <div class="q-mb-md">
-                        <q-input label="Título que otorga el programa*"  v-model="titulo" />
+                        <q-input label="Título que otorga el programa*" v-model="titulo" />
                     </div>
 
 
                     <div class="q-mb-md">
-                        <q-input label="Lugar De Desarrollo*"  v-model="lugardesarrollo" />
+                        <q-input label="Lugar De Desarrollo*" v-model="lugardesarrollo" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Metodología*"  v-model="metodologia" />
+                        <q-input label="Metodología*" v-model="metodologia" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Creditos*" type="number"  v-model="creditos" />
+                        <q-input label="Creditos*" type="number" v-model="creditos" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Código SNIES*" type="Number"  v-model="codigosnies" />
+                        <q-input label="Código SNIES*" type="Number" v-model="codigosnies" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Fecha de Otorgamiento*" type="Date"  v-model="fechaOtorgamiento" />
+                        <q-input label="Fecha de Otorgamiento*" type="Date" v-model="fechaOtorgamiento" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Fecha de Vencimiento*" type="Date"  v-model="fechaVencimiento" />
+                        <q-input label="Fecha de Vencimiento*" type="Date" v-model="fechaVencimiento" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file      v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
-                            label="Archivo*">
+                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -149,8 +151,10 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -162,14 +166,20 @@
 
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { UsesRegistroCalificado } from "../stores/registroCalificado.js"
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useColorStore } from "../stores/colorSetings.js";
-let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
 
+let colores = useColorStore();
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -375,6 +385,7 @@ console.log(programaSeleccionado);
     margin-top: -1%;
     color: rgb(0, 0, 0);
     border-radius: 1px;
+    width: 55%;
 }
 
 .my-card .text-h6 {
@@ -394,14 +405,8 @@ console.log(programaSeleccionado);
     text-align: center;
 }
 
-.input {
-  color: red !important ;
-
-  height: fit-content;
-}
-
 #section {
-    margin: 2% 5%;
+    margin: 1.5% 5%;
 }
 
 #agregar {
@@ -428,6 +433,10 @@ console.log(programaSeleccionado);
 
 @media screen and (max-width: 600px) {
     #card {
+        width: 100%;
+    }
+
+    .my-card {
         width: 100%;
     }
 

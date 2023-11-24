@@ -1,6 +1,6 @@
 <template>
   <q-layout>
-    <q-header elevated class=" header text-white" id="header">
+    <q-header :style="{ backgroundColor: colorMenu, color: colorLetra }" elevated>
       <q-toolbar>
         <q-btn dense flat round icon="menu" @click="drawer = !drawer" />
         <q-avatar style="margin-left: 10px;">
@@ -51,7 +51,7 @@
         <q-card-section class="row items-center" style="max-width: 370px;">
           <div class="row">
             <div class="col-5">
-              <i :style="{  color : colorMenu }"   class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
+              <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
             </div>
             <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
               <span class="q-ml-sm " id="t">¿Está seguro de que desea cerrar sesión?</span>
@@ -60,8 +60,9 @@
 
         </q-card-section>
         <q-card-actions class="flex-center" align="right">
-          <q-btn label="Cancelar"    @click="confirm = false" />
-          <q-btn label="Cerrar Sesión" :style="{ backgroundColor: colorMenu , color : colorLetra }" @click="logout()" /> </q-card-actions><br />
+          <q-btn label="Cancelar" color="negative" @click="confirm = false" />
+          <q-btn label="Cerrar Sesión" :style="{ backgroundColor: colorMenu, color: colorLetra }" @click="logout()" />
+        </q-card-actions><br />
       </q-card>
     </q-dialog>
 
@@ -162,7 +163,7 @@
             </q-item>
           </router-link>
 
-          <router-link v-if="rol === 'administrador'" to="colorSetings" style="color: black; text-decoration: none">
+          <router-link v-if="rol === 'administrador'" to="colorSettings" style="color: black; text-decoration: none">
             <q-item clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-gear" />
@@ -184,21 +185,25 @@
 
 <script setup>
 import { useUsuarioStore } from "../stores/Usuarios.js";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useColorStore } from "../stores/colorSetings.js";
 
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 const drawer = ref(false);
 const miniState = ref(true);
 const confirm = ref(false);
 const router = useRouter();
 let datos = ref({})
-let prueba = ref(colores.configuracion.colorMenu)
 
 const useUsuario = useUsuarioStore();
 datos.value = useUsuario.usuario
@@ -231,10 +236,5 @@ function logout() {
   display: flex;
   justify-content: center;
   align-items: center;
-}
-
-.header {
-  color: red;
-  background-color: v-bind('prueba');
 }
 </style>

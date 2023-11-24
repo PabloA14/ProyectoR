@@ -16,7 +16,7 @@
                 <q-separator inset class="text-black" />
                 <q-card-section>
                     <q-form class="q-gutter-md" style="margin: auto;">
-                        <q-input :color="colorMenu" filled v-model="documento" label="No. de Documento">
+                        <q-input filled v-model="documento" label="No. de Documento">
                             <template v-slot:prepend>
                                 <q-icon name="person" />
                             </template>
@@ -63,7 +63,7 @@
                         <br>
                         restablecer su contraseña:
                     </p>
-                    <q-input color="secondary" dense v-model="address" autofocus @keyup.enter="prompt = false"
+                    <q-input dense v-model="address" autofocus @keyup.enter="prompt = false"
                         placeholder="Correo electrónico" />
                 </q-card-section>
 
@@ -72,7 +72,8 @@
                         <div class="col-1"></div>
                         <div class="col-10">
 
-                            <q-btn class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }" label="Restablecer Contraseña" />
+                            <q-btn class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                                label="Restablecer Contraseña" />
 
                             <q-btn class="q-mt-md full-width custom-border" color="negative" label="Cancelar"
                                 v-close-popup />
@@ -87,7 +88,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useRouter } from "vue-router"
 import axios from "axios";
 import { useUsuarioStore } from "../stores/Usuarios.js"
@@ -95,19 +96,25 @@ import { useQuasar } from 'quasar'
 import { useColorStore } from "../stores/colorSetings.js";
 
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref("")
+let colorLetra = ref("")
 
 let useUsuario = useUsuarioStore()
 let router = useRouter();
 let ruta = ref("")
 const $q = useQuasar()
 
-let documento = ref('');
+let documento = ref('')
 let contrasena = ref('')
 const modalVisible = ref(false);
 
 let mostrarContrasena = ref(false);
+
+onBeforeMount(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 function openModal() {
     modalVisible.value = true;

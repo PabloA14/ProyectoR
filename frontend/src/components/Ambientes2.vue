@@ -17,7 +17,7 @@
                 :filter="filter" :rows="ambientesPrograma" :columns="columns" row-key="name" :pagination="pagination">
 
                 <template v-slot:top-right>
-                    <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                    <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
@@ -31,10 +31,11 @@
                 </template>
 
                 <template v-if="rol === 'gestor'" v-slot:top-left>
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
-                        agregar = true;
-                    nuevo();
-                    " />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar"
+                        class="q-mb-md" @click="
+                            agregar = true;
+                        nuevo();
+                        " />
                 </template>
             </q-table>
         </div>
@@ -53,13 +54,12 @@
                 <q-separator inset style="
             height: 5px;
             margin-top: 5px;
-          " :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+          " :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
 
                     <div class="q-mb-md">
-                        <q-select label="Seleccionar los ambientes de formación" 
-                            v-model="ambienteSeleccionado"
+                        <q-select label="Seleccionar los ambientes de formación" v-model="ambienteSeleccionado"
                             :options="ambiente.map(amb => ({ label: amb.nombre, value: amb._id }))" emit-value map-options>
                         </q-select>
                     </div>
@@ -69,7 +69,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" label="Agregar  " @click="agregarN()" />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading"
+                        label="Agregar  " @click="agregarN()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -79,15 +80,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useAmbienteStore } from "../stores/Ambientes.js"
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -111,7 +118,6 @@ const pagination = ref({
 })
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
@@ -211,8 +217,8 @@ async function agregarN() {
 }
 
 .input {
-  color: red !important ;
+    color: red !important;
 
-  height: fit-content;
+    height: fit-content;
 }
 </style>

@@ -31,7 +31,7 @@
                     </template>
 
                     <template v-slot:top-right>
-                        <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
@@ -57,24 +57,26 @@
                     <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
-                <q-separator :style="{ backgroundColor: colorMenu , color : colorLetra }"  inset id="separador"  style="
+                <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador" style="
             height: 5px;
             margin-top: 5px;
           " />
-          
+
 
                 <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
-                   
+
                     <div class="q-mb-md">
-                        <q-input label="Denominación*" color="secondary" v-model="denominacion" />
+                        <q-input label="Denominación*" v-model="denominacion" />
                     </div>
                 </q-card-section>
 
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }"  :disabled="loading" v-if="bd == 1" label="Agregar--" @click="agregarR()"  />
-                    <q-btn :style="{ backgroundColor: colorMenu , color : colorLetra }" :disabled="loading" v-else label="Actualizar" @click="actualizar()"  />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
+                        label="Agregar" @click="agregarR()" />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else
+                        label="Actualizar" @click="actualizar()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -82,13 +84,19 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRedStore } from "../stores/Redes.js"
 import { useQuasar } from 'quasar'
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 let agregar = ref(false)
 let denominacion = ref("")
@@ -271,13 +279,12 @@ async function editarEstado(red) {
     }
 }
 
-#colorBtn{
+#colorBtn {
     background-color: v-bind('colorMenu');
     color: v-bind('colorLetra');
 }
 
-#separador{
+#separador {
     color: v-bind('colorMenu');
 }
-
 </style>

@@ -40,13 +40,12 @@ export const usegiasStore = defineStore("Guia", () => {
         }
     };
 
-    const actualizarGuia = async (id, codigo, nombre, documento, idPrograma) => {
+    const actualizarGuia = async (id, nombre, documento, idPrograma) => {
         try {
             console.log('actualizarguia');
 
             const formData = new FormData();
 
-            formData.append('codigo', codigo);
             formData.append('nombre', nombre);
             formData.append('documento', documento);
 

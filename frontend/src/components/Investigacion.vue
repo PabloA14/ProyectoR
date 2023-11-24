@@ -51,17 +51,18 @@
                     </template> -->
 
                     <template v-slot:top-right>
-                        <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                        <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
                             <template v-slot:append>
                                 <q-icon name="search" />
                             </template>
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu , color : colorLetra }"  icon="add" label="Agregar" class="q-mb-md" @click="
-                            agregar = true;
-                        nuevo();
-                        " />
+                        <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+                            label="Agregar" class="q-mb-md" @click="
+                                agregar = true;
+                            nuevo();
+                            " />
                     </template>
                 </q-table>
             </div>
@@ -80,28 +81,24 @@
                 <q-separator inset style="
             height: 5px;
             margin-top: 5px;
-          " :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
+          " :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
+
                     <div class="q-mb-md">
-                        <q-input label="Código*" type="number"  v-model="codigo" />
+                        <q-input label="Nombre*" v-model="nombre" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Nombre*"  v-model="nombre" />
+                        <q-input label="Descripcion*" type="textarea" v-model="descripcion" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripcion*" type="textarea"  v-model="descripcion" />
+                        <q-input label="Año*" type="number" v-model="fecha" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Año*" type="number"  v-model="fecha" />
-                    </div>
-
-                    <div class="q-mb-md">
-                        <q-file  v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
-                            label="Archivo*">
+                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -112,8 +109,10 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }"  />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -121,21 +120,25 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useInveStore } from "../stores/Investigaciones.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
 
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
 let agregar = ref(false)
-let codigo = ref("")
 let nombre = ref("")
 let descripcion = ref("")
 let fecha = ref("")
@@ -157,7 +160,6 @@ const pagination = ref({
 })
 
 const columns = [
-    { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
     { name: 'denominacion', align: 'center', label: 'Nombre', field: "denominacion", sortable: true },
     { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
@@ -170,7 +172,6 @@ buscar()
 
 const usePrograma = useProgramasFormacionStore();
 let programaId = usePrograma.programa._id
-console.log(programaId);
 
 let invesFiltradas = computed(() => {
     return investigaciones.value.filter(
@@ -184,7 +185,6 @@ function nuevo() {
 }
 
 function vaciar() {
-    codigo.value = ""
     nombre.value = ""
     descripcion.value = ""
     archivo.value = ""
@@ -192,7 +192,7 @@ function vaciar() {
 }
 
 function validarVacios() {
-    if (codigo.value === "" && nombre.value === "" && descripcion.value == "" && fecha.value == "" && archivo.value == "") {
+    if (nombre.value === "" && descripcion.value == "" && fecha.value == "" && archivo.value == "") {
         $q.notify({
             message: 'Campos vacíos',
             color: 'negative',
@@ -223,7 +223,6 @@ async function agregarN() {
     console.log("entro a agregar");
     loading.value = true
     await useInvestigacion.agregarInves({
-        codigo: codigo.value,
         denominacion: nombre.value,
         descripcion: descripcion.value,
         fecha: fecha.value,
@@ -267,7 +266,6 @@ function editarInves(i) {
     console.log("Entró a editar", i);
     bd.value = 0;
     id.value = i._id;
-    codigo.value = i.codigo
     nombre.value = i.denominacion
     descripcion.value = i.descripcion
     fecha.value = i.fecha
@@ -279,7 +277,6 @@ async function actualizar() {
     loading.value = true
     await useInvestigacion.actualizarInves(
         id.value,
-        codigo.value,
         nombre.value,
         descripcion.value,
         fecha.value,
@@ -344,9 +341,10 @@ async function actualizar() {
         width: 100%;
     }
 }
-.input {
-  color: red !important ;
 
-  height: fit-content;
+.input {
+    color: red !important;
+
+    height: fit-content;
 }
 </style>

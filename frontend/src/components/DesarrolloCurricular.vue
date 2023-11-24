@@ -2,12 +2,8 @@
   <q-page padding>
     <q-breadcrumbs separator=">">
       <q-breadcrumbs-el to="/programas" label="Programas de Formación" />
-      <q-breadcrumbs-el
-        to="InformacionPrograma"
-        :label="usePrograma.programa.denominacionPrograma"
-      />
-      <q-breadcrumbs-el label="Desarrollo Curricular" /> </q-breadcrumbs
-    ><br />
+      <q-breadcrumbs-el to="InformacionPrograma" :label="usePrograma.programa.denominacionPrograma" />
+      <q-breadcrumbs-el label="Desarrollo Curricular" /> </q-breadcrumbs><br />
     <div class="text-h4 text-center q-mb-md">Desarrollo Curricular</div>
     <div>
       <!-- matriz correlacion -->
@@ -18,72 +14,42 @@
           </q-toolbar-title>
 
           <q-btn flat round dense>
-            <q-btn
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              label=""
-            >
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" label="">
               <q-icon name="more_vert" />
               <!-- opciones -->
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <q-item
-                    clickable
-                    v-if="matriz === undefined && rol === 'gestor'"
-                  >
+                  <q-item clickable v-if="matriz === undefined && rol === 'gestor'">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        style="font-size: 5vh"
-                        @click="
-                          agregarMatriz();
-                          agregar = true;
-                        "
-                        >add</span
-                      >
+                      <span class="material-symbols-outlined" style="font-size: 5vh" @click="
+                        agregarMatriz();
+                      agregar = true;
+                      ">add</span>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="matriz === undefined && rol === 'instructor'"
-                  >
+                  <q-item clickable v-if="matriz === undefined && rol === 'instructor'">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        @click="matrizNull()"
-                        style="font-size: 5vh; color: red"
-                        >priority_high</span
-                      >
+                      <span class="material-symbols-outlined" @click="matrizNull()"
+                        style="font-size: 5vh; color: red">priority_high</span>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-if="matriz != undefined">
                     <q-item-section>
-                      <a
-                        target="_blank"
-                        :href="matriz"
-                        style="text-align: center; font-size: 5vh; color: black"
-                      >
+                      <a target="_blank" :href="matriz" style="text-align: center; font-size: 5vh; color: black">
                         <span class="material-symbols-outlined">download</span>
                       </a>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="matriz != undefined && rol == 'gestor'"
-                  >
+                  <q-item clickable v-if="matriz != undefined && rol == 'gestor'">
                     <q-item-section>
-                      <span
-                        @click="editarMatriz = true"
-                        class="material-symbols-outlined"
-                        style="
+                      <span @click="editarMatriz = true" class="material-symbols-outlined" style="
                           font-size: 4.5vh;
                           text-align: center;
                           color: rgb(0, 0, 0);
-                        "
-                        >edit</span
-                      >
+                        ">edit</span>
                     </q-item-section>
                   </q-item>
 
@@ -101,70 +67,41 @@
           <q-toolbar-title class="title">Proyecto Formativo </q-toolbar-title>
 
           <q-btn flat round dense>
-            <q-btn
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              label=""
-            >
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" label="">
               <q-icon name="more_vert" />
 
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <q-item
-                    clickable
-                    v-if="proyectoFormativo === undefined && rol === 'gestor'"
-                  >
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'gestor'">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        style="font-size: 5vh"
-                        @click="
-                          addProyecto();
-                          agregar = true;
-                        "
-                        >add</span
-                      >
+                      <span class="material-symbols-outlined" style="font-size: 5vh" @click="
+                        addProyecto();
+                      agregar = true;
+                      ">add</span>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="
-                      proyectoFormativo === undefined && rol === 'instructor'
-                    "
-                  >
+                  <q-item clickable v-if="proyectoFormativo === undefined && rol === 'instructor'
+                    ">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        @click="proyectoNull()"
-                        style="font-size: 5vh; color: red"
-                        >priority_high</span
-                      >
+                      <span class="material-symbols-outlined" @click="proyectoNull()"
+                        style="font-size: 5vh; color: red">priority_high</span>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-if="proyectoFormativo != undefined">
                     <q-item-section>
-                      <a
-                        target="_blank"
-                        :href="proyectoFormativo"
-                        style="text-align: center; font-size: 5vh; color: black"
-                      >
+                      <a target="_blank" :href="proyectoFormativo"
+                        style="text-align: center; font-size: 5vh; color: black">
                         <span class="material-symbols-outlined">download</span>
                       </a>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="proyectoFormativo != undefined && rol == 'gestor'"
-                  >
+                  <q-item clickable v-if="proyectoFormativo != undefined && rol == 'gestor'">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        @click="editarProyecto = true"
-                        style="font-size: 4.5vh; text-align: center"
-                        >edit</span
-                      >
+                      <span class="material-symbols-outlined" @click="editarProyecto = true"
+                        style="font-size: 4.5vh; text-align: center">edit</span>
                     </q-item-section>
                   </q-item>
 
@@ -185,71 +122,41 @@
           </q-toolbar-title>
 
           <q-btn flat round dense>
-            <q-btn
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              label=""
-            >
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" label="">
               <q-icon name="more_vert" />
               <q-menu max-height="130px">
                 <q-list style="min-width: 100px">
-                  <q-item
-                    clickable
-                    v-if="
-                      planeacionPedagogica === undefined && rol === 'gestor'
-                    "
-                  >
+                  <q-item clickable v-if="planeacionPedagogica === undefined && rol === 'gestor'
+                    ">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        style="font-size: 5vh; color: black"
-                        @click="
-                          addplaneacionPedagogica();
-                          agregar = true;
-                        "
-                        >add</span
-                      >
+                      <span class="material-symbols-outlined" style="font-size: 5vh; color: black" @click="
+                        addplaneacionPedagogica();
+                      agregar = true;
+                      ">add</span>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="
-                      planeacionPedagogica === undefined && rol === 'instructor'
-                    "
-                  >
+                  <q-item clickable v-if="planeacionPedagogica === undefined && rol === 'instructor'
+                    ">
                     <q-item-section>
-                      <span
-                        class="material-symbols-outlined"
-                        @click="planeacionNull()"
-                        style="font-size: 5vh; color: red"
-                        >priority_high</span
-                      >
+                      <span class="material-symbols-outlined" @click="planeacionNull()"
+                        style="font-size: 5vh; color: red">priority_high</span>
                     </q-item-section>
                   </q-item>
 
                   <q-item clickable v-if="planeacionPedagogica != undefined">
                     <q-item-section>
-                      <a
-                        target="_blank"
-                        :href="planeacionPedagogica"
-                        style="text-align: center; font-size: 5vh; color: black"
-                      >
+                      <a target="_blank" :href="planeacionPedagogica"
+                        style="text-align: center; font-size: 5vh; color: black">
                         <span class="material-symbols-outlined">download</span>
                       </a>
                     </q-item-section>
                   </q-item>
 
-                  <q-item
-                    clickable
-                    v-if="planeacionPedagogica != undefined && rol == 'gestor'"
-                  >
+                  <q-item clickable v-if="planeacionPedagogica != undefined && rol == 'gestor'">
                     <q-item-section>
-                      <span
-                        @click="editarPlaneacion = true"
-                        class="material-symbols-outlined"
-                        style="font-size: 5vh; text-align: center"
-                        >edit</span
-                      >
+                      <span @click="editarPlaneacion = true" class="material-symbols-outlined"
+                        style="font-size: 5vh; text-align: center">edit</span>
                     </q-item-section>
                   </q-item>
 
@@ -273,12 +180,8 @@
           <q-toolbar-title class="title"> Fase de Análisis </q-toolbar-title>
 
           <q-btn flat round dense @click="irAGuiasAnalisis()">
-            <span
-              class="material-symbols-outlined"
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              id="ir"
-              >bubble</span
-            >
+            <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+              id="ir">bubble</span>
           </q-btn>
         </div>
         <small>Ver Fase de Análisis</small>
@@ -289,12 +192,8 @@
           <q-toolbar-title class="title">Fase de Planeación</q-toolbar-title>
 
           <q-btn flat round dense @click="irAGuiasPlaneacion()">
-            <span
-              class="material-symbols-outlined"
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              id="ir"
-              >bubble</span
-            >
+            <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+              id="ir">bubble</span>
           </q-btn>
         </div>
         <small>Ver Fase de Planeación</small>
@@ -305,7 +204,8 @@
           <q-toolbar-title class="title">Fase de Ejecución</q-toolbar-title>
 
           <q-btn flat round dense @click="irAGuiasEjecucion()">
-            <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
+            <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+              id="ir">bubble</span>
           </q-btn>
         </div>
         <small>Ver Fase de Ejecución</small>
@@ -317,7 +217,8 @@
         <q-toolbar-title class="title">Fase de Evaluación</q-toolbar-title>
 
         <q-btn flat round dense @click="irAGuiasEvaluacion()">
-          <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu , color : colorLetra }" id="ir">bubble</span>
+          <span class="material-symbols-outlined" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+            id="ir">bubble</span>
         </q-btn>
       </div>
       <small>Ver Fase de Evaluación</small>
@@ -325,13 +226,13 @@
 
     <!-- MODAL AGREGAR -->
     <q-dialog v-model="agregar">
-      <q-card style="width: 40%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">
             {{
               inf === 0
-                ? "Agregar Matriz De Correlación"
-                : inf === 1
+              ? "Agregar Matriz De Correlación"
+              : inf === 1
                 ? "Agregar Proyecto Formativo"
                 : "Agregar Planeación Pedagógica"
             }}
@@ -341,37 +242,21 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
-        <q-card-section
-          v-if="inf === 0"
-          style="max-height: 65vh"
-          class="scroll"
-        >
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
+        <q-card-section v-if="inf === 0" style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
             <input type="file" @change="archivoM" />
           </div>
         </q-card-section>
 
-        <q-card-section
-          v-if="inf === 1"
-          style="max-height: 65vh"
-          class="scroll"
-        >
+        <q-card-section v-if="inf === 1" style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
             <input type="file" @change="archivoP" />
           </div>
         </q-card-section>
 
-        <q-card-section
-          v-if="inf === 2"
-          style="max-height: 65vh"
-          class="scroll"
-        >
+        <q-card-section v-if="inf === 2" style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
             <input type="file" @change="archivoPlan" />
           </div>
@@ -380,35 +265,19 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            v-if="inf === 0"
-            label="Agregar Matriz "
-            @click="guardarMatriz()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          />
-          <q-btn
-            :disabled="loading"
-            v-if="inf === 1"
-            label="Agregar Proyecto"
-            @click="saveProyecto()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          />
-          <q-btn
-            :disabled="loading"
-            v-if="inf === 2"
-            label="Agregar Planeación "
-            @click="savePlaneacionPedagogica()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-            color="secondary"
-          />
+          <q-btn :disabled="loading" v-if="inf === 0" label="Agregar" @click="guardarMatriz()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+          <q-btn :disabled="loading" v-if="inf === 1" label="Agregar" @click="saveProyecto()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+          <q-btn :disabled="loading" v-if="inf === 2" label="Agregar" @click="savePlaneacionPedagogica()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" color="secondary" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- MODAL EDITAR MATRIZ -->
     <q-dialog v-model="editarMatriz">
-      <q-card style="width: 40%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Editar Matriz de Correlación</div>
 
@@ -416,12 +285,8 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
         <q-card-section style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
             <input type="file" @change="archivoM" />
@@ -431,19 +296,15 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            label="Editar M"
-            @click="guardarMatriz()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          />
+          <q-btn :disabled="loading" label="Editar" @click="guardarMatriz()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- MODAL EDITAR PROYECTO -->
     <q-dialog v-model="editarProyecto">
-      <q-card style="width: 40%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Editar Proyecto Formativo</div>
 
@@ -451,12 +312,8 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
         <q-card-section style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
             <input type="file" @change="archivoP" />
@@ -466,19 +323,15 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            label="Editar Proyecto"
-            @click="saveProyecto()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          />
+          <q-btn :disabled="loading" label="Editar" @click="saveProyecto()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
     </q-dialog>
 
     <!-- MODAL EDITAR PLANEACIÓN PEDAGÓGICA -->
     <q-dialog v-model="editarPlaneacion">
-      <q-card style="width: 40%; height: fit-content">
+      <q-card class="card">
         <q-card-section class="row items-center q-pb-none">
           <div class="text-h6">Editar Planeación Pedagógica</div>
 
@@ -486,12 +339,8 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
 
         <q-card-section style="max-height: 65vh" class="scroll">
           <div class="q-mb-md">
@@ -502,12 +351,8 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :disabled="loading"
-            label="Editar Planeación"
-            @click="savePlaneacionPedagogica()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          />
+          <q-btn :disabled="loading" label="Editar" @click="savePlaneacionPedagogica()"
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -521,11 +366,12 @@ import { useDesarrolloCurricular } from "../stores/desarrolloC.js";
 import { useRouter } from "vue-router";
 import { usegiasStore } from "../stores/guias.js";
 import { useQuasar } from "quasar";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useColorStore } from "../stores/colorSetings.js";
+
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu);
-let colorLetra = ref(colores.configuracion.colorLetra);
+let colorMenu = ref('')
+let colorLetra = ref('')
 const useUsuario = useUsuarioStore();
 const useGuia = usegiasStore();
 let agregado = ref("");
@@ -533,7 +379,6 @@ let usePrograma = useProgramasFormacionStore();
 let router = useRouter();
 let agregar = ref();
 const rol = useUsuario.rol;
-console.log(rol);
 const useDesarrollo = useDesarrolloCurricular();
 let useInfoPrograma = useProgramasFormacionStore();
 let inf = ref("");
@@ -543,6 +388,12 @@ let archivoProyecto = ref("");
 let archivoPlaneacion = ref("");
 let loading = ref(false);
 let errores = ref([]);
+
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 function irAGuiasAnalisis() {
   useGuia.fase = "Análisis";
@@ -817,8 +668,18 @@ function planeacionNull() {
   border-radius: 5px;
   width: 8vh;
   height: 6vh;
-  background-color: #39a900;
   color: white;
   font-size: 3.8vh;
+}
+
+.card {
+  width: 38%;
+  height: fit-content;
+}
+
+@media screen and (max-width: 600px) {
+  .card {
+    width: 100%;
+  }
 }
 </style>

@@ -23,7 +23,7 @@
                         <ul>
                             <li>
                                 Color de titulos y Subtitulos (LISTO)
-                                <p :style="{ color: letra }">Color letra  {{ letra }}</p>
+                                <p :style="{ color: letra }">Color letra {{ letra }}</p>
 
                                 <br>
                                 <br>
@@ -54,18 +54,16 @@ import { ref } from "vue";
 import { useColorStore } from "../stores/colorSetings.js";
 
 let colores = useColorStore();
-
 let prueba = ref()
 let color = ref("");
 let colorBD = ref('')
-let colorInterfaz =ref('')
+let colorInterfaz = ref('')
 let letra = ref(colores.configuracion.colorLetra)
 let interfaz = ref(colores.configuracion.colorMenu)
-console.log(interfaz.value);
 
 
-console.log(letra.value);
 traer()
+
 async function traer() {
     await colores.traerConfiguracion()
         .then((res) => {
@@ -88,8 +86,7 @@ async function editarColor() {
 }
 
 async function editarColorInterfaz() {
-    console.log('interfaz usuario');
-     await colores.colorMenu(colorInterfaz.value)
+    await colores.colorMenu(colorInterfaz.value)
         .then((res) => {
             console.log(res)
             traer()
@@ -97,7 +94,7 @@ async function editarColorInterfaz() {
         }).catch((error) => {
             console.log(error);
 
-        }) 
+        })
 }
 
 </script>

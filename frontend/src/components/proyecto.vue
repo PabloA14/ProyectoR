@@ -50,17 +50,18 @@
                     </template> -->
 
                 <template v-slot:top-right>
-                    <q-input color="secondary" dense debounce="300" v-model="filter" placeholder="Buscar">
+                    <q-input dense debounce="300" v-model="filter" placeholder="Buscar">
                         <template v-slot:append>
                             <q-icon name="search" />
                         </template>
                     </q-input>
                 </template>
                 <template v-slot:top-left>
-                    <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu , color : colorLetra }" icon="add" label="Agregar" class="q-mb-md" @click="
-                        agregar = true;
-                    nuevo();
-                    " />
+                    <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+                        label="Agregar" class="q-mb-md" @click="
+                            agregar = true;
+                        nuevo();
+                        " />
                 </template>
             </q-table>
         </div>
@@ -78,29 +79,28 @@
                 <q-separator inset style="
             height: 5px;
             margin-top: 5px;
-          " :style="{ backgroundColor: colorMenu , color : colorLetra }"/>
+          " :style="{ backgroundColor: colorMenu, color: colorLetra }" />
 
                 <q-card-section style="max-height: 65vh" class="scroll">
 
                     <div class="q-mb-md">
-                        <q-input label="Nombre*"  v-model="nombre" />
+                        <q-input label="Nombre*" v-model="nombre" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripcion*" type="textarea"  v-model="descripcion" />
+                        <q-input label="Descripcion*" type="textarea" v-model="descripcion" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Año*" type="number"  v-model="fecha" />
+                        <q-input label="Año*" type="number" v-model="fecha" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Versión*" type="number"  v-model="version" />
+                        <q-input label="Versión*" type="number" v-model="version" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file  v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
-                            label="Archivo*">
+                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -111,8 +111,10 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
-                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()" :style="{ backgroundColor: colorMenu , color : colorLetra }" />
+                    <q-btn :disabled="loading" v-if="bd == 1" label="Agregar" @click="agregarN()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
+                    <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizar()"
+                        :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -123,15 +125,21 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useProyectosStore } from "../stores/proyectos.js"
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { useQuasar } from 'quasar'
 import { useUsuarioStore } from "../stores/Usuarios.js";
 import { useColorStore } from "../stores/colorSetings.js";
 let colores = useColorStore();
-let colorMenu = ref(colores.configuracion.colorMenu)
-let colorLetra = ref(colores.configuracion.colorLetra)
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+    await colores.traerConfiguracion()
+    colorMenu.value = colores.configuracion.colorMenu
+    colorLetra.value = colores.configuracion.colorLetra
+})
 
 const useUsuario = useUsuarioStore();
 const rol = useUsuario.rol;
@@ -341,8 +349,8 @@ async function actualizar() {
 }
 
 .input {
-  color: red !important ;
+    color: red !important;
 
-  height: fit-content;
+    height: fit-content;
 }
 </style>

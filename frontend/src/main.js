@@ -31,18 +31,17 @@ app.use(Quasar, {
     }
 })
 
-pinia.use(createPersistedState(createPersistedState({
-    paths: [
-        'instructores',
-        'proyectoRecuperado',
-        'fase',
-        'configuracion'
-    ],
-}),
-    { storage: window.localStorage }));
-
-
-
+pinia.use(
+    createPersistedState({
+        storage: window.localStorage
+        /* paths: [
+            'instructores',
+            'proyectoRecuperado',
+            'fase',
+            'configuracion'
+        ] */
+    })
+)
 
 app.use(pinia)
 app.use(router)
