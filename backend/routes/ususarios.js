@@ -74,9 +74,14 @@ router.put("/Usuario/:id",
         return true;
     }),
     validarCampos
-], httpUsuario.putFoto)
+], httpUsuario.putFoto);
 
+router.put("/envio/email",[
+    check("correo","Debe ingresar el correo").trim().not().isEmpty(),
+    validarCampos
+],httpUsuario.envioEmail);
 
+router.put("/nueva/contrasena",httpUsuario.nuevaContrasena);
 
 export default router
 

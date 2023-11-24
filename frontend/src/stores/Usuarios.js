@@ -135,7 +135,6 @@ export const useUsuarioStore = defineStore("usuario", () => {
     }
   };
 
-
   const putFoto = async (id, foto) => {
     try {
       const formData = new FormData()
@@ -151,8 +150,39 @@ export const useUsuarioStore = defineStore("usuario", () => {
     } catch (error) {
       console.log(error);
       throw error
+    };
+  };
+
+  const envioCorreo = async (correo) =>{
+    try {
+      loading.value = true
+      const res= await axios.put(`${LinkBD}/api/usuario/envio/email`,
+      {correo:correo}
+      )
+      return res
+    } catch (error) {
+      loading.value = true
+      throw error
+    }finally{
+      loading.value = false
     }
   };
+
+  const nuevaContrasena =async (nuevaContrasena,reset)=>{
+    try {
+      loading.value = true
+      const res= await axios.put(`${LinkBD}/api/usuario/nueva/contrasena`,
+      {nuevaContrasena:nuevaContrasena},
+      {headers:{reset:reset}}
+      )
+      return res
+    } catch (error) {
+      loading.value = true
+      throw error
+    }finally{
+      loading.value = false
+    }
+  }
 
   return {
     buscarUsuarios,
@@ -165,7 +195,9 @@ export const useUsuarioStore = defineStore("usuario", () => {
     logeo,
     loading,
     usuario,
-    putFoto
+    putFoto,
+    envioCorreo,
+    nuevaContrasena
   }
 },
   { persist: true }

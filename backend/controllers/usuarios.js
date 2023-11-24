@@ -1,7 +1,9 @@
 import Usuario from "../models/usuarios.js";
-import { generarJWT } from "../middlewares/validar-jwt.js";
+import { generarJWT, validarJWT } from "../middlewares/validar-jwt.js";
 import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcrypt";
+import sendEmail from "../middlewares/send-email.js"
+import jwt from "jsonwebtoken"
 
 const httpUsuario = {
 
@@ -317,7 +319,85 @@ const httpUsuario = {
       console.error(error);
       res.status(500).json({ msg: "Error en el servidor" });
     }
+  },
+
+  envioEmail: async (req, res) => {
+    try {
+      const { correo } = req.body;
+      const usuario = await Usuario.findOne({ correo: correo })
+        .populate('rol')
+        .populate('redConocimiento')
+      if (!usuario) {
+        return res.status(404).json(`El correo ${correo} no se encuentra en la base de datos`);
+      }
+
+      let msg = "Consulte su correo electronico";
+      let link;
+      const token = jwt.sign({ id: usuario.id, rol: usuario.rol, red: usuario.redConocimiento },
+        process.env.CLAVE_SECRETA_CORREO,
+        { expiresIn: '20m' }
+      );
+      link = `${process.env.CLIENT_URL}#/nueva/contrasena?reset=${token}`;
+      usuario.recuperacion = token;
+      await usuario.save();
+      try {
+        await sendEmail.sendMail({
+          from: `"Recuperar contraseña" <repositoriosena123@gmail.com>`,
+          to: usuario.correo,
+          subject: "Hola",
+          html: `<div>
+  <h1>Recuperar contraseña</h1>
+  <a href="${link}">${link}</a>
+  </div>`
+        })
+      } catch (error) {
+        console.log('eroor 2', error);
+        return res.status(400).json({ msg: 'Ha ocurrido un error' })
+      }
+      return res.status(202).json({ msg, link })
+    } catch (error) {
+      console.log('eroor 1', error);
+      return res.status(500).json({ msg: 'Ha ocurrido un error' })
+    }
+  },
+
+  nuevaContrasena: async (req, res) => {
+    const { nuevaContrasena } = req.body;
+    const recuperacion = req.headers.reset;
+    if (!recuperacion || !nuevaContrasena) {
+      return res.status(404).json({ msg: "Campos requerido o invalidos" });
+    }
+    try {
+      const usuario = await Usuario.findOne({ recuperacion:recuperacion });
+      if (!usuario) {
+        return res.status(404).json({ msg: 'Token Invalido' })
+      };
+
+      const jtoken = jwt.verify(recuperacion, process.env.CLAVE_SECRETA_CORREO);
+      console.log(jtoken);
+      if (!jtoken) {
+        return res.status(400).json({ msg: 'Token invalido' })
+      }
+
+      if (typeof nuevaContrasena !== 'string') {
+        return res.status(400).json({ msg: 'La nueva contraseña no es valida' })
+      }
+
+      const salt = bcrypt.genSaltSync();
+      const hashedPassword = bcrypt.hashSync(nuevaContrasena, salt);
+      usuario.clave = hashedPassword
+      usuario.recuperacion = '';
+      await usuario.save();
+
+      return res.status(200).json({ msg: 'Contraseña actualizada con exito', nuevaContrasena })
+    } catch (error) {
+      console.log(error);
+      return res.status(400).json({ msg: 'Algo salio mal' })
+    }
   }
+
 };
+
+
 
 export default httpUsuario;

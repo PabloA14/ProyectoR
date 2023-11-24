@@ -52,7 +52,7 @@
         </div>
 
         <q-dialog v-model="modalVisible" persistent>
-            <q-card style="min-width: 350px">
+            <q-card id="cardContra">
                 <q-card-section>
                     <div class="text-h6">Restablecer Contraseña</div>
                     <q-separator style="height: 5px;margin-top: 5px;" :style="{ backgroundColor: colorMenu }" />
@@ -63,7 +63,7 @@
                         <br>
                         restablecer su contraseña:
                     </p>
-                    <q-input dense v-model="address" autofocus @keyup.enter="prompt = false"
+                    <q-input dense v-model="correo" autofocus @keyup.enter="prompt = false"
                         placeholder="Correo electrónico" />
                 </q-card-section>
 
@@ -72,9 +72,8 @@
                         <div class="col-1"></div>
                         <div class="col-10">
 
-                            <q-btn class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                            <q-btn @click="envioCorreo() " class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }"
                                 label="Restablecer Contraseña" />
-
                             <q-btn class="q-mt-md full-width custom-border" color="negative" label="Cancelar"
                                 v-close-popup />
                         </div>
@@ -102,13 +101,15 @@ let colorLetra = ref("")
 let useUsuario = useUsuarioStore()
 let router = useRouter();
 let ruta = ref("")
-const $q = useQuasar()
+const $q = useQuasar();
 
 let documento = ref('')
 let contrasena = ref('')
 const modalVisible = ref(false);
 
 let mostrarContrasena = ref(false);
+
+let correo = ref('');
 
 onBeforeMount(async () => {
     await colores.traerConfiguracion()
@@ -167,6 +168,28 @@ async function iniciarSesion() {
                 console.log(error);
             }
         })
+};
+
+async function envioCorreo() {
+    try {
+        let envio = await useUsuario.envioCorreo(correo.value)
+        $q.notify({
+                    message: envio.data.msg,
+                    color: 'green',
+                    icon: 'check',
+                    position: 'bottom',
+                    timeout: Math.random() * 3000
+                })
+    } catch (error) {
+        console.log(error);
+        $q.notify({
+                    message: error.response.data,
+                    color: 'negative',
+                    icon: 'warning',
+                    position: 'top',
+                    timeout: Math.random() * 3000
+                })
+    }
 }
 
 
@@ -216,6 +239,10 @@ async function iniciarSesion() {
     border: 1px solid red;
 }
 
+#cardContra {
+    width: 28%;
+}
+
 @media screen and (max-width: 600px) {
     .container {
         flex-direction: column;
@@ -223,6 +250,10 @@ async function iniciarSesion() {
 
     .izquierda {
         display: none;
+    }
+
+    #cardContra {
+        width: 100%;
     }
 }
 </style>
