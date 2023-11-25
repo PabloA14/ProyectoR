@@ -442,17 +442,14 @@ nuevaInfoInstructor(codigo.value);
 
 function archivoM(event) {
   archivo.value = event.target.files[0];
-  console.log(archivo.value);
 }
 
 function archivoP(event) {
   archivoProyecto.value = event.target.files[0];
-  console.log(archivoProyecto.value);
 }
 
 function archivoPlan(event) {
   archivoPlaneacion.value = event.target.files[0];
-  console.log(archivoPlaneacion.value);
 }
 
 function agregarMatriz() {
@@ -474,7 +471,7 @@ function validar() {
     color: "negative",
     position: "top",
     icon: "warning",
-    timeout: Math.random() * 3000,
+    timeout: 3000,
   });
 }
 
@@ -482,12 +479,9 @@ async function guardarMatriz() {
   loading.value = true;
   try {
     const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
-    console.log(res);
     if (res.data.status === "ok") {
-      console.log(res);
       agregado.value = "Matriz de Correlación";
       informacionPrograma(codigo.value);
-      console.log(codigo.value);
     } else {
       console.log("no estuvo ok");
     }
@@ -509,12 +503,9 @@ async function saveProyecto() {
       _id.value,
       archivoProyecto.value
     );
-    console.log(res);
-    console.log("------------------------------");
     if (res.data.status === "ok") {
       agregado.value = "Proyecto Formativo";
       informacionPrograma(codigo.value);
-      console.log(codigo.value);
     } else {
       console.log("no estuvo ok");
     }
@@ -536,11 +527,11 @@ async function savePlaneacionPedagogica() {
       _id.value,
       archivoPlaneacion.value
     );
-    console.log(res);
+
     if (res.data.status === "ok") {
       agregado.value = "Planeación Pedagógica";
       informacionPrograma(codigo.value);
-      console.log(codigo.value);
+
     } else {
       console.log("no estuvo ok");
     }
@@ -557,7 +548,6 @@ async function savePlaneacionPedagogica() {
 
 async function informacionPrograma(x) {
   codigo.value = x;
-  console.log(codigo.value);
   const a = await usePrograma.informacionPrograma(codigo.value);
   agregar.value = false;
   editarMatriz.value = false;
@@ -572,7 +562,7 @@ async function informacionPrograma(x) {
         color: "green",
         icon: "check",
         position: "bottom",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
       });
       if (a.data.desarrolloCurricular.matrizcorrelacion != undefined) {
         matriz.value = a.data.desarrolloCurricular.matrizcorrelacion;
@@ -622,7 +612,7 @@ function matrizNull() {
     color: "negative",
     icon: "warning",
     position: "top",
-    timeout: Math.random() * 3500,
+    timeout: 3000,
   });
 }
 
@@ -632,7 +622,7 @@ function proyectoNull() {
     color: "negative",
     icon: "warning",
     position: "top",
-    timeout: Math.random() * 3500,
+    timeout: 3000,
   });
 }
 
@@ -642,7 +632,7 @@ function planeacionNull() {
     color: "negative",
     icon: "warning",
     position: "top",
-    timeout: Math.random() * 3500,
+    timeout: 3000,
   });
 }
 </script>

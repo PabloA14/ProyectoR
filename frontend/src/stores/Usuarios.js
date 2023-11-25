@@ -5,6 +5,7 @@ import { ref } from "vue";
 
 export const useUsuarioStore = defineStore("usuario", () => {
   let loading = ref(false)
+  let cargando = ref(false)
   let rol = ref('')
   let token = ref('')
   let usuario = ref({})
@@ -153,33 +154,33 @@ export const useUsuarioStore = defineStore("usuario", () => {
     };
   };
 
-  const envioCorreo = async (correo) =>{
+  const envioCorreo = async (correo) => {
     try {
-      loading.value = true
-      const res= await axios.put(`${LinkBD}/api/usuario/envio/email`,
-      {correo:correo}
+      cargando.value = true
+      const res = await axios.put(`${LinkBD}/api/usuario/envio/email`,
+        { correo: correo }
       )
       return res
     } catch (error) {
-      loading.value = true
+      cargando.value = true
       throw error
-    }finally{
-      loading.value = false
+    } finally {
+      cargando.value = false
     }
   };
 
-  const nuevaContrasena =async (nuevaContrasena,reset)=>{
+  const nuevaContrasena = async (nuevaContrasena, reset) => {
     try {
       loading.value = true
-      const res= await axios.put(`${LinkBD}/api/usuario/nueva/contrasena`,
-      {nuevaContrasena:nuevaContrasena},
-      {headers:{reset:reset}}
+      const res = await axios.put(`${LinkBD}/api/usuario/nueva/contrasena`,
+        { nuevaContrasena: nuevaContrasena },
+        { headers: { reset: reset } }
       )
       return res
     } catch (error) {
       loading.value = true
       throw error
-    }finally{
+    } finally {
       loading.value = false
     }
   }
@@ -197,7 +198,8 @@ export const useUsuarioStore = defineStore("usuario", () => {
     usuario,
     putFoto,
     envioCorreo,
-    nuevaContrasena
+    nuevaContrasena,
+    cargando
   }
 },
   { persist: true }

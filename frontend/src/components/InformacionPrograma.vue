@@ -162,7 +162,7 @@ function validar() {
         color: "negative",
         position: "top",
         icon: "warning",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
     });
 }
 
@@ -180,7 +180,7 @@ async function agregarDis() {
                 color: "green",
                 icon: "check",
                 position: "bottom",
-                timeout: Math.random() * 3000,
+                timeout: 3000,
             });
             informacionPrograma(codigo.value)
             router.push("/InformacionPrograma");

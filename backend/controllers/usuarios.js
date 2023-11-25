@@ -1,5 +1,5 @@
 import Usuario from "../models/usuarios.js";
-import { generarJWT, validarJWT } from "../middlewares/validar-jwt.js";
+import { generarJWT } from "../middlewares/validar-jwt.js";
 import { v2 as cloudinary } from "cloudinary";
 import bcrypt from "bcrypt";
 import sendEmail from "../middlewares/send-email.js"
@@ -294,9 +294,7 @@ const httpUsuario = {
         async function (error, result) {
           if (result) {
             let holder = await Usuario.findById(id);
-            console.log('---------------------------');
-            console.log(holder + "holder")
-            console.log('***********************');
+
             if (holder && holder.foto) {
               const nombreTemp = holder.foto.split("/");
               const nombreArchivo = nombreTemp[nombreTemp.length - 1];
@@ -328,10 +326,10 @@ const httpUsuario = {
         .populate('rol')
         .populate('redConocimiento')
       if (!usuario) {
-        return res.status(404).json(`El correo ${correo} no se encuentra en la base de datos`);
+        return res.status(404).json(`El correo proporcionado no se encuentra registrado`);
       }
 
-      let msg = "Consulte su correo electronico";
+      let msg = "Por favor consulte su correo electrónico";
       let link;
       const token = jwt.sign({ id: usuario.id, rol: usuario.rol, red: usuario.redConocimiento },
         process.env.CLAVE_SECRETA_CORREO,
@@ -342,16 +340,18 @@ const httpUsuario = {
       await usuario.save();
       try {
         await sendEmail.sendMail({
-          from: `"Recuperar contraseña" <repositoriosena123@gmail.com>`,
+          from: `<repositoriosena123@gmail.com>`,
           to: usuario.correo,
-          subject: "Hola",
+          subject: "Solicitud de recuperación de contraseña",
           html: `<div>
-  <h1>Recuperar contraseña</h1>
+  <b>Estimado usuario, haga click en el siguente enlace para comenzar la recuperación de su contraseña:</b><br>
   <a href="${link}">${link}</a>
+  <h3>SI NO SOLICITÓ ESTE SERVICIO, POR FAVOR HACER CASO OMISO A ESTE CORREO</h>
+
   </div>`
         })
       } catch (error) {
-        console.log('eroor 2', error);
+        console.log('error', error);
         return res.status(400).json({ msg: 'Ha ocurrido un error' })
       }
       return res.status(202).json({ msg, link })
@@ -368,7 +368,7 @@ const httpUsuario = {
       return res.status(404).json({ msg: "Campos requerido o invalidos" });
     }
     try {
-      const usuario = await Usuario.findOne({ recuperacion:recuperacion });
+      const usuario = await Usuario.findOne({ recuperacion: recuperacion });
       if (!usuario) {
         return res.status(404).json({ msg: 'Token Invalido' })
       };
@@ -392,7 +392,7 @@ const httpUsuario = {
       return res.status(200).json({ msg: 'Contraseña actualizada con exito', nuevaContrasena })
     } catch (error) {
       console.log(error);
-      return res.status(400).json({ msg: 'Algo salio mal' })
+      return res.status(400).json({ msg: 'Token de restablecimiento expirado' })
     }
   }
 

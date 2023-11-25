@@ -61,8 +61,8 @@
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn v-if="rol==='gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
-              @click="
+            <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
+              label="Agregar" class="q-mb-md" @click="
                 agregarInst = true;
               nuevoInstrumento();
               " />
@@ -300,7 +300,6 @@ buscarMaterialesApoyo()
 buscarInstrumentos()
 
 function vaciarInst() {
-  //codigo.value = ""
   nombreInst.value = ""
   documentoIns.value = ""
 }
@@ -326,17 +325,14 @@ async function buscarInstrumentos() {
   try {
     instrumentos.value = await useInst.buscarInstrumentos()
     instrumentos.value.reverse()
-    console.log(instrumentos.value);
   } catch (error) {
     console.log(error);
   }
 }
 
 async function agregarI() {
-  console.log("entro a agregar");
   loading.value = true
   await useInst.agregarInstrumento({
-    //codigo: codigo.value,
     nombre: nombreInst.value,
     documento: documentoIns.value,
     guia: useGuia.guia._id
@@ -347,11 +343,10 @@ async function agregarI() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     buscarInstrumentos();
   }).catch((error) => {
-    console.log(error);
     if (error.response && error.response.data) {
       errores.value = error.response.data.errors[0].msg
       validar()
@@ -362,7 +357,7 @@ async function agregarI() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     } else {
       console.log(error);
@@ -375,7 +370,6 @@ function editarIns(i) {
   console.log("Entró a editar", i);
   bd.value = 0;
   idIns.value = i._id;
-  //codigo.value = i.codigo
   nombreInst.value = i.nombre
   documentoIns.value = i.documento
   agregarInst.value = true;
@@ -385,7 +379,6 @@ async function actualizarInstrumento() {
   loading.value = true
   await useInst.actualizarInstrumento(
     idIns.value,
-    //codigo.value,
     nombreInst.value,
     documentoIns.value
   ).then(() => {
@@ -395,7 +388,7 @@ async function actualizarInstrumento() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     buscarInstrumentos();
 
@@ -415,7 +408,6 @@ async function actualizarInstrumento() {
 //MATERIALES
 
 function vaciarMat() {
-  //codigo.value = ""
   nombre.value = ""
   enlace.value = ""
   documentoMat.value = ""
@@ -432,7 +424,7 @@ function validar() {
     color: 'negative',
     position: 'top',
     icon: 'warning',
-    timeout: Math.random() * 3000
+    timeout: 3000
   })
 }
 
@@ -440,7 +432,6 @@ async function buscarMaterialesApoyo() {
   try {
     materiales.value = await useMatApoyo.buscarMatApoyo()
     materiales.value.reverse()
-    console.log(materiales.value);
   } catch (error) {
     console.log(error);
   }
@@ -450,7 +441,6 @@ async function agregarMat() {
   console.log("entro a agregar");
   loading.value = true
   await useMatApoyo.agregarMatApoyo({
-    //codigo: codigo.value,
     nombre: nombre.value,
     enlace: enlace.value,
     documento: documentoMat.value,
@@ -462,7 +452,7 @@ async function agregarMat() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     buscarMaterialesApoyo();
   }).catch((error) => {
@@ -477,7 +467,7 @@ async function agregarMat() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     } else {
       console.log(error);
@@ -487,10 +477,8 @@ async function agregarMat() {
 }
 
 function editarMat(i) {
-  console.log("Entró a editar", i);
   bd.value = 0;
   idMat.value = i._id;
-  //codigo.value = i.codigo
   nombre.value = i.nombre
   enlace.value = i.enlace
   documentoMat.value = i.documento
@@ -501,7 +489,6 @@ async function actualizarMaterial() {
   loading.value = true
   await useMatApoyo.actualizarMatApoyo(
     idMat.value,
-    //codigo.value,
     nombre.value,
     enlace.value,
     documentoMat.value
@@ -512,7 +499,7 @@ async function actualizarMaterial() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     buscarMaterialesApoyo();
 

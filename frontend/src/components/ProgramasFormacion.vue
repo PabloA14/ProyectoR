@@ -200,7 +200,7 @@ function desarrolloNuloF() {
       color: "negative",
       icon: "warning",
       position: "top",
-      timeout: Math.random() * 3000,
+      timeout: 3000,
     });
   }
 }
@@ -313,7 +313,7 @@ function validarVacios() {
       color: "negative",
       icon: "warning",
       position: "top",
-      timeout: Math.random() * 3000,
+      timeout: 3000,
     });
   } else return true;
 }
@@ -324,7 +324,7 @@ function validar() {
     color: "negative",
     position: "top",
     icon: "warning",
-    timeout: Math.random() * 3000,
+    timeout: 3000,
   });
 }
 
@@ -346,7 +346,7 @@ async function agregarP() {
         color: "green",
         icon: "check",
         position: "bottom",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
       });
       buscar();
     })
@@ -358,7 +358,7 @@ async function agregarP() {
           color: "negative",
           position: "top",
           icon: "warning",
-          timeout: Math.random() * 3000,
+          timeout: 3000,
         });
       } else if (
         error.response &&
@@ -402,7 +402,7 @@ async function actualizar() {
         color: "green",
         icon: "check",
         position: "bottom",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
       });
       buscar();
     })
@@ -415,7 +415,7 @@ async function actualizar() {
           color: "negative",
           position: "top",
           icon: "warning",
-          timeout: Math.random() * 3000,
+          timeout: 3000,
         });
       } else if (
         error.response &&
@@ -446,7 +446,7 @@ async function editarDesarrollo(x) {
             color: "green",
             icon: "check",
             position: "bottom",
-            timeout: Math.random() * 3000,
+            timeout: 3000,
           });
           buscar();
         });
@@ -472,7 +472,7 @@ async function editarEstado(x) {
       color: "green",
       icon: "check",
       position: "bottom",
-      timeout: Math.random() * 3000,
+      timeout: 3000,
     });
     buscar();
   } catch (error) {

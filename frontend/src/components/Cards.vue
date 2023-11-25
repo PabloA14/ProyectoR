@@ -132,7 +132,6 @@ console.log(programaSeleccionado);
   margin: 6%;
   background-color: #38a90063;
   text-align: center;
-
 }
 
 #cardP:hover {

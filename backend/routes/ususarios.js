@@ -66,22 +66,25 @@ router.get("/uploadcloud/:id", [
 
 
 router.put("/Usuario/:id",
-[
-    check("foto").custom((value, { req }) => {
-        if (!req.files || Object.keys(req.files).length === 0) {
-            throw new Error('Adjunte la foto');
-        }
-        return true;
-    }),
-    validarCampos
-], httpUsuario.putFoto);
+    [
+        check("foto").custom((value, { req }) => {
+            if (!req.files || Object.keys(req.files).length === 0) {
+                throw new Error('Adjunte la foto');
+            }
+            return true;
+        }),
+        validarCampos
+    ], httpUsuario.putFoto);
 
-router.put("/envio/email",[
-    check("correo","Debe ingresar el correo").trim().not().isEmpty(),
+router.put("/envio/email", [
+    check("correo", "Debe proporcionar el correo").trim().not().isEmpty(),
     validarCampos
-],httpUsuario.envioEmail);
+], httpUsuario.envioEmail);
 
-router.put("/nueva/contrasena",httpUsuario.nuevaContrasena);
+router.put("/nueva/contrasena", [
+    check("nuevaContrasena", "La contraseña debe tener al menos 8 caracteres").trim().isLength({ min: 8 }),
+    validarCampos
+], httpUsuario.nuevaContrasena);
 
 export default router
 

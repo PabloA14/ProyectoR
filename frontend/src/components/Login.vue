@@ -2,7 +2,7 @@
     <div class="container">
         <div class="izquierda"></div>
         <div class="derecha">
-            <q-card white bordered class="my-card" style="width: 65%;height: auto;">
+            <q-card white bordered id="card">
                 <q-card-section>
                     <div class="row">
                         <div class="col-3">
@@ -53,32 +53,32 @@
 
         <q-dialog v-model="modalVisible" persistent>
             <q-card id="cardContra">
-                <q-card-section>
+                <q-card-section class="row items-center q-pb-none">
                     <div class="text-h6">Restablecer Contraseña</div>
-                    <q-separator style="height: 5px;margin-top: 5px;" :style="{ backgroundColor: colorMenu }" />
+                    <q-space />
+                    <q-btn icon="close" color="negative" flat round dense v-close-popup />
                 </q-card-section>
 
+                <q-separator inset style="height: 5px;margin-top: 5px;" :style="{ backgroundColor: colorMenu }" /><br>
+
                 <q-card-section class="q-pt-none">
-                    <p>Ingrese su dirección de correo electrónico para
-                        <br>
-                        restablecer su contraseña:
-                    </p>
-                    <q-input dense v-model="correo" autofocus @keyup.enter="prompt = false"
+                    Ingrese su dirección de correo electrónico para
+                    restablecer su contraseña:
+
+                    <q-input style="margin-top: 5%;" filled dense v-model="correo" autofocus @keyup.enter="prompt = false"
                         placeholder="Correo electrónico" />
                 </q-card-section>
 
-                <q-card-actions class="flex-center column ">
-                    <div class="row">
-                        <div class="col-1"></div>
-                        <div class="col-10">
+                <q-card-actions align="center">
 
-                            <q-btn @click="envioCorreo() " class="full-width" :style="{ backgroundColor: colorMenu, color: colorLetra }"
-                                label="Restablecer Contraseña" />
-                            <q-btn class="q-mt-md full-width custom-border" color="negative" label="Cancelar"
-                                v-close-popup />
-                        </div>
-                        <div class="col-1"></div>
+                    <div class="row">
+                        <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
+                            v-if="useUsuario.cargando === true" />
+
+                        <q-btn v-else @click="envioCorreo()" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                            label="Restablecer Contraseña" />
                     </div>
+
                 </q-card-actions>
                 <br>
             </q-card>
@@ -128,7 +128,7 @@ function validar() {
             color: 'negative',
             icon: 'warning',
             position: 'top',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
     } else return true
 }
@@ -151,7 +151,7 @@ async function iniciarSesion() {
                     color: 'negative',
                     icon: 'warning',
                     position: 'top',
-                    timeout: Math.random() * 3000
+                    timeout: 3000
                 })
             } else if (error.response && error.response.data.msg) {
                 const credencialesInvalidas = error.response.data.msg
@@ -161,7 +161,7 @@ async function iniciarSesion() {
                     color: 'negative',
                     position: 'top',
                     icon: 'warning',
-                    timeout: Math.random() * 3000
+                    timeout: 3000
                 })
 
             } else {
@@ -174,21 +174,36 @@ async function envioCorreo() {
     try {
         let envio = await useUsuario.envioCorreo(correo.value)
         $q.notify({
-                    message: envio.data.msg,
-                    color: 'green',
-                    icon: 'check',
-                    position: 'bottom',
-                    timeout: Math.random() * 3000
-                })
+            message: envio.data.msg,
+            color: 'green',
+            icon: 'check',
+            position: 'top',
+            timeout: 3000
+        })
+        modalVisible.value = false
+        correo.value = ''
     } catch (error) {
+        if (error.response && error.response.data.errors) {
+
+            const faltaCorreo = error.response.data.errors[0].msg
+
+            $q.notify({
+                message: faltaCorreo,
+                color: 'negative',
+                icon: 'warning',
+                position: 'top',
+                timeout: 3000
+            })
+        } else {
+            $q.notify({
+                message: error.response.data,
+                color: 'negative',
+                icon: 'warning',
+                position: 'top',
+                timeout: 3000
+            })
+        }
         console.log(error);
-        $q.notify({
-                    message: error.response.data,
-                    color: 'negative',
-                    icon: 'warning',
-                    position: 'top',
-                    timeout: Math.random() * 3000
-                })
     }
 }
 
@@ -235,12 +250,13 @@ async function envioCorreo() {
     font-size: 30px;
 }
 
-.custom-border {
-    border: 1px solid red;
+#card {
+    width: 65%;
+    height: auto;
 }
 
 #cardContra {
-    width: 28%;
+    width: 35%;
 }
 
 @media screen and (max-width: 600px) {
@@ -250,6 +266,10 @@ async function envioCorreo() {
 
     .izquierda {
         display: none;
+    }
+
+    #card {
+        width: fit-content;
     }
 
     #cardContra {

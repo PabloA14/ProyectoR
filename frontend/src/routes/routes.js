@@ -28,25 +28,10 @@ import colorSettings from "../components/colorSettings.vue"
 
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useUserStore } from "../almacenaje/informacion.js"
-
-
 import { createRouter, createWebHashHistory } from 'vue-router';
 
-
-const prueba = () => {
-    const useUsuario = useUsuarioStore()
-
-    const token = useUsuario.token
-
-    if (useUsuario.logeo == "" || useUsuario.logeo === undefined) {
-        return false;
-    }
-    if (!token) return false
-    return true
-};
-
-const prueba2 = (to, from, next) => {
-    if (prueba()) {
+const auth = (to, from, next) => {
+    if (checkAuth()) {
         const userUsuario = useUsuarioStore()
         const rol = userUsuario.rol
         if (!to.meta.rol.includes(rol)) {
@@ -58,41 +43,48 @@ const prueba2 = (to, from, next) => {
     }
 }
 
+const checkAuth = () => {
+    const useUsuario = useUsuarioStore()
+
+    const token = useUsuario.token
+
+    if (useUsuario.logeo == "" || useUsuario.logeo === undefined) {
+        return false;
+    }
+    if (!token) return false
+    return true
+};
+
 export const routes = [
     { path: "/", component: Login, name: "login" },
     { path: "/nueva/contrasena", component: Recuperar, name: "recuperar" },
-{
-    path: "/header", component: Header, children: [
-        { path: "/home", component: Home, name: "home", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
-        { path: "/InformacionPrograma", component: InformacionPrograma, name: "InformacionPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-
-        //cards 
-        { path: "/cards", component: Cards, name: "cards", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/infoGuia", component: InfoGuia, name: "infoGuia", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/instructores", component: instructores, name: "instructores", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/registroCalificado", component: registroCalificado, name: "registroCalificado", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-
-        //no cards
-        { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/programas", component: Programas, name: "programas", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/redes", component: Redes, name: "redes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/centroF", component: Centros, name: "centrosF", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/niveles", component: Niveles, name: "niveles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/roles", component: Roles, name: "roles", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/materiales", component: Materiales, name: "materiales", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-        { path: "/perfil", component: Perfil, name: "perfil", beforeEnter: prueba2, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
-        { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: prueba2, meta: { rol: ['gestor', 'instructor'] } },
-        { path: "/colorSettings", component: colorSettings, name: "colorSettings", beforeEnter: prueba2, meta: { rol: ['administrador'] } },
-
-    ],
+    {
+        path: "/header", component: Header, children: [
+            { path: "/home", component: Home, name: "home", beforeEnter: auth, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
+            { path: "/InformacionPrograma", component: InformacionPrograma, name: "InformacionPrograma", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/cards", component: Cards, name: "cards", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/desarrolloCurricular", component: DesarrolloCurricular, name: "DesarrolloCurricular", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/guiasAprendizaje", component: GuiasAprendizaje, name: "guiasAprendizaje", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/infoGuia", component: InfoGuia, name: "infoGuia", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/instructores", component: instructores, name: "instructores", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/registroCalificado", component: registroCalificado, name: "registroCalificado", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/usuarios", component: Usuarios, name: "usuarios", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/programas", component: Programas, name: "programas", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/redes", component: Redes, name: "redes", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/centroF", component: Centros, name: "centrosF", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/niveles", component: Niveles, name: "niveles", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/roles", component: Roles, name: "roles", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/materiales", component: Materiales, name: "materiales", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/ambientes", component: Ambientes, name: "ambientes", beforeEnter: auth, meta: { rol: ['administrador'] } },
+            { path: "/perfil", component: Perfil, name: "perfil", beforeEnter: auth, meta: { rol: ['administrador', 'gestor', 'instructor'] } },
+            { path: "/investigacion", component: Investigacion, name: "investigacion", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/colorSettings", component: colorSettings, name: "colorSettings", beforeEnter: auth, meta: { rol: ['administrador'] } },
+        ],
         beforeEnter: (to, from, next) => {
             const useUsuario = useUserStore()
             const token = sessionStorage.getItem('token')

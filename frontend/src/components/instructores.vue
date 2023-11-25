@@ -187,7 +187,7 @@ async function obtenerInstructores() {
         instructores.value.push(nuevoInstructor);
       }
     });
-    console.log("Nuevos instructores:", instructores.value);
+    //console.log("Nuevos instructores:", instructores.value);
   });
   instructor.value = null;
 }
@@ -201,7 +201,7 @@ async function agregarInstructor() {
         color: "negative",
         icon: "warning",
         position: "top",
-        timeout: Math.random() * 3100,
+        timeout: 3000,
       });
       return
     }
@@ -234,13 +234,10 @@ if (decodedToken) {
 }
 
 async function cargarUsuarios() {
-  //loading.value = true;
   buscar();
   obtenerInstructores();
-  //loading.value = false;
 }
 cargarUsuarios();
-
 
 function Modagregar() {
   modalAgg.value = true;
@@ -251,7 +248,6 @@ function Modeliminar() {
 }
 
 const informacionPrograma = async (x) => {
-  console.log("--------------- informacion programa-");
   console.log(x);
   const res = await usePrograma.informacionPrograma(x).then((res) => {
     usuarios.value = res.data.instructores
@@ -261,14 +257,13 @@ const informacionPrograma = async (x) => {
       color: "positive",
       icon: "check",
       position: "bottom",
-      timeout: Math.random() * 3100,
+      timeout: 3000,
     });
     arrayInstructores.push(instructor.value)
     let objetoAEliminar = instructor.value;
 
     instructores.value.forEach((element, index) => {
       if (element._id === objetoAEliminar) {
-        console.log('Elemento encontrado y eliminado:', element);
         instructores.value.splice(index, 1);
       }
     })
@@ -292,5 +287,4 @@ const informacionPrograma = async (x) => {
     width: 100%;
   }
 }
-
 </style>

@@ -4,8 +4,8 @@
             <div class="text-h4 text-center q-mb-md">Información Personal</div>
             <br />
 
-            <div class="row" style="display: grid; place-items: center">
-                <q-card class="my-card q-mt-xl" flat bordered>
+            <div style="display: grid; place-items: center">
+                <q-card id="mostrarInfo" class="my-card" flat bordered>
                     <q-card-section horizontal>
                         <q-card-section class="q-pt-xs" id="section">
                             <div class="row" style="
@@ -20,15 +20,15 @@
                             </div>
                             <br />
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <div class="text-h6 q-mt-sm q-mb-xs">Datos personales</div>
                                 </div>
 
-                                <div class="col-4">
+                                <div id="contacto" class="col-xs-12 col-sm-4">
                                     <div class="text-h6 q-mt-sm q-mb-xs">Contacto</div>
                                 </div>
 
-                                <div class="col-4">
+                                <div id="educacion" class="col-xs-12 col-sm-4">
                                     <div class="text-h6 q-mt-sm q-mb-xs">Educación</div>
                                 </div>
                             </div>
@@ -37,7 +37,7 @@
                                 style="height: 5px; margin-top: 5px" /><br />
 
                             <div class="row">
-                                <div class="col-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <div class="text-h7 text-left q-mb-md">
                                         <b>Número de identificación:</b> {{ datos.cedula }}
                                     </div>
@@ -49,7 +49,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <div class="text-h7 text-left q-mb-md">
                                         <b>Teléfono:</b> {{ datos.telefono }}
                                     </div>
@@ -58,7 +58,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-4">
+                                <div class="col-xs-12 col-sm-4">
                                     <div class="text-h7 text-left q-mb-md">
                                         <b>Perfin profesional:</b> {{ datos.perfilProfesional }}
                                     </div>
@@ -77,16 +77,14 @@
 
                     <q-separator />
 
-                    <q-card-actions>
-                        <q-btn style="margin: auto;margin-right: -20%;"
-                            :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit" label="Editar"
+                    <q-card-actions align="center" style="margin-top: 1%;gap: 5%;">
+                        <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit" label="Editar"
                             class="q-mb-md" @click="
                                 agregar = true;
                             editarUsuario(datos);" />
 
-                        <q-btn style="margin: auto;" color="primary" icon="fa-solid fa-user" label="Foto de Perfil"
-                            class="q-mb-md" @click="
-                                EditarFoto = true; seleccionarFoto(datos)" />
+                        <q-btn color="primary" icon="fa-solid fa-user" label="Foto de Perfil" class="q-mb-md" @click="
+                            EditarFoto = true; seleccionarFoto(datos)" />
                     </q-card-actions>
                 </q-card>
             </div>
@@ -226,7 +224,7 @@ function validarVacios() {
             color: "negative",
             icon: "warning",
             position: "top",
-            timeout: Math.random() * 3000,
+            timeout: 3000,
         });
     } else return true;
 }
@@ -237,13 +235,12 @@ function validar() {
         color: "negative",
         position: "top",
         icon: "warning",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
     });
 }
 
 function archivoFoto(event) {
     img.value = event.target.files[0];
-    console.log(img.value);
 }
 
 function editarUsuario(datos) {
@@ -278,7 +275,7 @@ async function actualizar() {
                 color: "green",
                 icon: "check",
                 position: "bottom",
-                timeout: Math.random() * 3000,
+                timeout: 3000,
             });
             const data = res.data.usuario;
             nombre.value = data.nombre;
@@ -299,7 +296,7 @@ async function actualizar() {
                     color: "negative",
                     position: "top",
                     icon: "warning",
-                    timeout: Math.random() * 3000,
+                    timeout: 3000,
                 });
             } else if (
                 error.response &&
@@ -330,7 +327,7 @@ async function actualizarFoto() {
                 color: "green",
                 icon: "check",
                 position: "bottom",
-                timeout: Math.random() * 3000,
+                timeout: 3000,
             });
             const data = res.data.prueba;
             //nombre.foto = data.foto
@@ -392,6 +389,18 @@ async function actualizarFoto() {
 @media screen and (max-width: 600px) {
     #ok {
         width: 100%;
+    }
+
+    .my-card {
+        width: 100%;
+    }
+
+    #contacto {
+        display: none;
+    }
+
+    #educacion {
+        display: none;
     }
 }
 </style>

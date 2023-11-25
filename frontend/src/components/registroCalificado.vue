@@ -26,7 +26,7 @@
                 <q-card-section horizontal>
                     <q-card-section class="q-pt-xs" id="section">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-xs-12 col-sm-6">
 
                                 <div class="text-h6 q-mt-sm q-mb-xs">Título que otorga:</div>
                                 <div class="text-caption text" style="margin-top: -5%">
@@ -45,7 +45,7 @@
 
                             </div>
 
-                            <div class="col-6">
+                            <div class="col-xs-12 col-sm-6">
                                 <div class="text-h6 q-mt-sm q-mb-xs">Numero de créditos:</div>
                                 <div class="text-caption text" style="margin-top: -5%">
                                     {{ mostrarRegistro.creditos }}
@@ -74,12 +74,11 @@
 
                 <q-separator />
 
-                <q-card-actions align="center">
-                    <q-btn v-if="rol === 'gestor'" style="margin: auto;margin-right: -20%;"
-                        :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit" label="Editar"
-                        class="q-mb-md" @click="editarRegistro(mostrarRegistro)" />
+                <q-card-actions align="center" style="gap: 5%;">
+                    <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="edit"
+                        label="Editar" @click="editarRegistro(mostrarRegistro)" />
 
-                    <a style="margin: auto;" :href="mostrarRegistro.documento" target="_blank">
+                    <a :href="mostrarRegistro.documento" target="_blank">
                         <q-btn color="primary" icon="download" label="Descargar" />
                     </a>
 
@@ -254,7 +253,7 @@ function validarVacios() {
             color: 'negative',
             icon: 'warning',
             position: 'top',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
     } else return true
 }
@@ -265,7 +264,7 @@ function validar() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
     })
 }
 
@@ -289,7 +288,7 @@ async function agregarN() {
             color: 'green',
             icon: 'check',
             position: 'bottom',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
         buscar();
         buscarRegistroCodigo()
@@ -301,7 +300,7 @@ async function agregarN() {
                 color: 'negative',
                 position: 'top',
                 icon: 'warning',
-                timeout: Math.random() * 3000
+                timeout: 3000
             })
 
         } else if (error.response && error.response.data && validarVacios() === true) {
@@ -348,7 +347,7 @@ async function actualizar() {
             color: 'green',
             icon: 'check',
             position: 'bottom',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
         buscar();
         renderTrigger.value += 1;
@@ -362,7 +361,7 @@ async function actualizar() {
                 color: 'negative',
                 position: 'top',
                 icon: 'warning',
-                timeout: Math.random() * 3000
+                timeout: 3000
             })
         }
         else if (error.response && error.response.data && validarVacios() === true) {
@@ -433,6 +432,10 @@ console.log(programaSeleccionado);
 
 @media screen and (max-width: 600px) {
     #card {
+        width: 100%;
+    }
+
+    .my-card {
         width: 100%;
     }
 

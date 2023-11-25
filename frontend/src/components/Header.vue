@@ -48,17 +48,11 @@
 
     <q-dialog v-model="confirm" persistent>
       <q-card>
-        <q-card-section class="row items-center" style="max-width: 370px;">
-          <div class="row">
-            <div class="col-5">
-              <i class="fa-solid fa-circle-exclamation" id="interrogacion"></i>
-            </div>
-            <div class="col-7 " style="margin-top: 15px; font-size: 15px;">
-              <span class="q-ml-sm " id="t">¿Está seguro de que desea cerrar sesión?</span>
-            </div>
-          </div>
-
+        <q-card-section class="q-gutter-md">
+          <i class="fa-solid fa-triangle-exclamation" id="interrogacion"></i>
+          <p style="font-size: 15px;">¿Está seguro de que desea cerrar sesión?</p>
         </q-card-section>
+
         <q-card-actions class="flex-center" align="right">
           <q-btn label="Cancelar" color="negative" @click="confirm = false" />
           <q-btn label="Cerrar Sesión" :style="{ backgroundColor: colorMenu, color: colorLetra }" @click="logout()" />
@@ -209,13 +203,12 @@ const useUsuario = useUsuarioStore();
 datos.value = useUsuario.usuario
 const rol = useUsuario.rol;
 
-// Función para cerrar sesión (combina abrir diálogo y realizar cierre)
 const cerrarSesion = () => {
-  confirm.value = true; // Mostrar el diálogo de confirmación
+  confirm.value = true
 };
 
 function logout() {
-  confirm.value = false; // Cerrar el diálogo
+  confirm.value = false
   useUsuario.usuario = {}
   useUsuario.token = ""
   router.push("/");
@@ -232,9 +225,9 @@ function logout() {
   align-items: center;
 }
 
-#t {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+@media screen and (max-width: 600px) {
+  #titulo {
+    visibility: hidden;
+  }
 }
 </style>

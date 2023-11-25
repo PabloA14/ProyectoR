@@ -138,7 +138,7 @@ function validar() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
     })
 }
 
@@ -159,7 +159,7 @@ async function agregarN() {
             color: 'green',
             icon: 'check',
             position: 'bottom',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
         buscar();
     }).catch((error) => {
@@ -170,7 +170,7 @@ async function agregarN() {
                 color: 'negative',
                 position: 'top',
                 icon: 'warning',
-                timeout: Math.random() * 3000
+                timeout: 3000
             })
         } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
@@ -203,7 +203,7 @@ async function actualizar() {
             color: 'green',
             icon: 'check',
             position: 'bottom',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
         buscar();
     }).catch((error) => {
@@ -214,7 +214,7 @@ async function actualizar() {
                 color: 'negative',
                 position: 'top',
                 icon: 'warning',
-                timeout: Math.random() * 3000
+                timeout: 3000
             })
         } else if (error.response && error.response.data) {
             errores.value = error.response.data.errors[0].msg
@@ -241,7 +241,7 @@ async function editarEstado(nivel) {
             color: 'green',
             icon: 'check',
             position: 'bottom',
-            timeout: Math.random() * 3000
+            timeout: 3000
         })
         buscar()
 

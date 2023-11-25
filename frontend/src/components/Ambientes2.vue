@@ -162,7 +162,7 @@ async function agregarN() {
                 color: 'green',
                 icon: 'check',
                 position: 'bottom',
-                timeout: Math.random() * 3000
+                timeout: 3000
             })
             buscarAmb()
         }).catch((error) => {
@@ -172,7 +172,7 @@ async function agregarN() {
                     color: 'negative',
                     icon: 'warning',
                     position: 'top',
-                    timeout: Math.random() * 3000
+                    timeout: 3000
                 })
             } else if (error.response && error.response.data.msg) {
                 const fallo = error.response.data.msg
@@ -181,7 +181,7 @@ async function agregarN() {
                     color: 'negative',
                     position: 'top',
                     icon: 'warning',
-                    timeout: Math.random() * 3000
+                    timeout: 3000
                 })
             } else {
                 console.log(error);

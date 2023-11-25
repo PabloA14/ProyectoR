@@ -185,7 +185,7 @@ async function agregarN() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     Program.value.push(res.data.guia)
     filterGuias()
@@ -197,7 +197,7 @@ async function agregarN() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     } else if (error.response && error.response.data) {
       errores.value = error.response.data.errors[0].msg
@@ -243,7 +243,7 @@ async function actualizar() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     usePrograma.programa = res.data
     Program.value = res.data.desarrolloCurricular.idGuias
@@ -258,7 +258,7 @@ async function actualizar() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     }
     else if (error.response && error.response.data) {
@@ -279,7 +279,7 @@ function validar() {
     color: 'negative',
     position: 'top',
     icon: 'warning',
-    timeout: Math.random() * 3000
+    timeout: 3000
   })
 }
 

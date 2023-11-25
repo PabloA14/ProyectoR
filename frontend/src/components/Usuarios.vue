@@ -495,7 +495,7 @@ function validarVacios() {
       color: "negative",
       icon: "warning",
       position: "top",
-      timeout: Math.random() * 3000,
+      timeout: 3000,
     });
   } else return true;
 }
@@ -506,7 +506,7 @@ function validar() {
     color: "negative",
     position: "top",
     icon: "warning",
-    timeout: Math.random() * 3000,
+    timeout: 3000,
   });
 }
 
@@ -535,7 +535,7 @@ async function agregarU() {
         color: "green",
         icon: "check",
         position: "bottom",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
       });
       buscar();
       vaciar();
@@ -548,7 +548,7 @@ async function agregarU() {
           color: "negative",
           position: "top",
           icon: "warning",
-          timeout: Math.random() * 3000,
+          timeout: 3000,
         });
       } else if (
         error.response &&
@@ -602,7 +602,7 @@ async function actualizar() {
         color: "green",
         icon: "check",
         position: "bottom",
-        timeout: Math.random() * 3000,
+        timeout: 3000,
       });
       buscar();
     })
@@ -615,7 +615,7 @@ async function actualizar() {
           color: "negative",
           position: "top",
           icon: "warning",
-          timeout: Math.random() * 3000,
+          timeout: 3000,
         });
       } else if (
         error.response &&
@@ -645,7 +645,7 @@ async function editarEstado(x) {
       color: "green",
       icon: "check",
       position: "bottom",
-      timeout: Math.random() * 3000,
+      timeout: 3000,
     });
     buscar();
   } catch (error) {

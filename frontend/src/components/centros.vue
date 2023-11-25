@@ -174,7 +174,7 @@ function validarVacios() {
       color: 'negative',
       icon: 'warning',
       position: 'top',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
   } else return true
 }
@@ -185,7 +185,7 @@ function validar() {
     color: 'negative',
     position: 'top',
     icon: 'warning',
-    timeout: Math.random() * 3000
+    timeout: 3000
   })
 }
 
@@ -214,7 +214,7 @@ async function agregarC() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     agregar.value = false
     buscar();
@@ -226,7 +226,7 @@ async function agregarC() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     } else if (error.response && error.response.data && validarVacios() === true) {
       errores.value = error.response.data.errors[0].msg
@@ -264,7 +264,7 @@ async function actualizar() {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     agregar.value = false
     buscar();
@@ -276,7 +276,7 @@ async function actualizar() {
         color: 'negative',
         position: 'top',
         icon: 'warning',
-        timeout: Math.random() * 3000
+        timeout: 3000
       })
     } else if (error.response && error.response.data && validarVacios() === true) {
       errores.value = error.response.data.errors[0].msg
@@ -303,7 +303,7 @@ async function editarEstado(centro) {
       color: 'green',
       icon: 'check',
       position: 'bottom',
-      timeout: Math.random() * 3000
+      timeout: 3000
     })
     buscar()
 
