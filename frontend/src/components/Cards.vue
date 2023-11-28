@@ -107,6 +107,17 @@
 <script setup>
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
 import { ref } from 'vue'
+import { useColorStore } from "../stores/colorSetings.js";
+
+let colores = useColorStore();
+let colorMenu = ref('')
+let colorLetra = ref('')
+
+onMounted(async () => {
+  await colores.traerConfiguracion()
+  colorMenu.value = colores.configuracion.colorMenu
+  colorLetra.value = colores.configuracion.colorLetra
+})
 
 const usePrograma = useProgramasFormacionStore();
 let nombre = ref(usePrograma.programa.denominacionPrograma)
@@ -135,7 +146,7 @@ console.log(programaSeleccionado);
 }
 
 #cardP:hover {
-  background-color: #38a90094;
+  background-color: v-bind(colorMenu);
   cursor: pointer;
   box-shadow: 0px 0px 20px 5px #38a900d5;
 
