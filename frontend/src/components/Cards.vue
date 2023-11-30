@@ -106,7 +106,7 @@
 
 <script setup>
 import { useProgramasFormacionStore } from "../stores/ProgramasFormacion.js"
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useColorStore } from "../stores/colorSetings.js";
 
 let colores = useColorStore();
@@ -146,10 +146,9 @@ console.log(programaSeleccionado);
 }
 
 #cardP:hover {
-  background-color: v-bind(colorMenu);
+  background-color: #39a900;
   cursor: pointer;
   box-shadow: 0px 0px 20px 5px #38a900d5;
-
 }
 
 .card-container {
