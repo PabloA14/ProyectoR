@@ -270,7 +270,7 @@ async function envioCorreo() {
     }
 
     #card {
-        width: fit-content;
+        width: auto;
     }
 
     #cardContra {
