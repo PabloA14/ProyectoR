@@ -10,7 +10,6 @@ export const useRedStore = defineStore("redes", () => {
         try {
             loading.value = true
             const buscar = await axios.get(`${LinkBD}/api/redes`);
-            console.log(buscar);
             return buscar.data.redes;
         } catch (error) {
             loading.value = true

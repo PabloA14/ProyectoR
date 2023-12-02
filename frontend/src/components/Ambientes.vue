@@ -80,19 +80,18 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-select label="Centro de Formación*" v-model="centro"
+                        <q-select clearable label="Centro de Formación*" v-model="centro"
                             :options="centros.map(centro => ({ label: centro.nombre, value: centro._id }))" emit-value
                             map-options>
                         </q-select>
                     </div>
 
                     <div class="q-mb-md">
-                        <q-select label="Tipo*" v-model="tipo" :options="options" />
+                        <q-select clearable label="Tipo*" v-model="tipo" :options="options" />
                     </div>
 
                     <div class="q-mb-md">
-                        <q-input label="Descripción*" type="textarea"
-                            v-model="descripcion" />
+                        <q-input label="Descripción*" type="textarea" v-model="descripcion" />
                     </div>
 
                 </q-card-section>
@@ -197,57 +196,91 @@ function validar() {
 
 async function buscar() {
     ambiente.value = await useAmbiente.buscarAmbientes();
-    console.log(ambiente.value);
     ambiente.value.reverse()
 }
 
 async function buscarCentro() {
     const centrosActivos = await useCentro.buscarCentros();
     centros.value = centrosActivos.filter(c => c.estado === 1);
-    console.log(centros.value);
+}
+
+function validarFrontend() {
+    if (!nombre.value.trim()) {
+        $q.notify({
+            message: 'El nombre es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!centro.value) {
+        $q.notify({
+            message: 'El centro de formación es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!tipo.value) {
+        $q.notify({
+            message: 'El tipo es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!descripcion.value.trim()) {
+        $q.notify({
+            message: 'La descripción es obligatoria',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else return true
 }
 
 async function agregarR() {
-    cargando.value = true
-    console.log("entro a agregar");
-    await useAmbiente.agregarAmbientes({
-        nombre: nombre.value,
-        centroformacion: centro.value,
-        tipo: tipo.value,
-        descripcion: descripcion.value
-    }).then(() => {
-        $q.notify({
-            message: 'Ambiente agregado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        agregar.value = false
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        cargando.value = true
+        await useAmbiente.agregarAmbientes({
+            nombre: nombre.value,
+            centroformacion: centro.value,
+            tipo: tipo.value,
+            descripcion: descripcion.value
+        }).then(() => {
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Ambiente agregado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            agregar.value = false
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            } else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    cargando.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        cargando.value = false
+    }
 }
 
 function editarAmbiente(ambientes) {
-    console.log("Entró a editar", ambientes);
     bd.value = 0;
     id.value = ambientes._id;
     nombre.value = ambientes.nombre
@@ -258,46 +291,47 @@ function editarAmbiente(ambientes) {
 }
 
 async function actualizar() {
-    cargando.value = true
-    await useAmbiente.actualizarAmbientes(
-        id.value,
-        nombre.value,
-        centro.value,
-        tipo.value,
-        descripcion.value
-    ).then(() => {
-        $q.notify({
-            message: 'Ambiente editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        agregar.value = false
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        cargando.value = true
+        await useAmbiente.actualizarAmbientes(
+            id.value,
+            nombre.value,
+            centro.value,
+            tipo.value,
+            descripcion.value
+        ).then(() => {
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Ambiente editado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            agregar.value = false
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            } else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    cargando.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        cargando.value = false
+    }
 }
 
 async function editarEstado(ambientes) {
-    console.log("entre a editar estado", ambientes.estado);
     try {
         if (ambientes.estado === 1) {
             ambientes.estado = 0
@@ -343,4 +377,5 @@ async function editarEstado(ambientes) {
     #card {
         width: 100%;
     }
-}</style>
+}
+</style>

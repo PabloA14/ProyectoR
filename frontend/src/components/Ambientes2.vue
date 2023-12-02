@@ -59,7 +59,7 @@
                 <q-card-section style="max-height: 65vh" class="scroll">
 
                     <div class="q-mb-md">
-                        <q-select label="Seleccionar los ambientes de formación" v-model="ambienteSeleccionado"
+                        <q-select clearable label="Seleccionar los ambientes de formación" v-model="ambienteSeleccionado"
                             :options="ambiente.map(amb => ({ label: amb.nombre, value: amb._id }))" emit-value map-options>
                         </q-select>
                     </div>
@@ -69,8 +69,8 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading"
-                        label="Agregar  " @click="agregarN()" />
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" label="Agregar  "
+                        @click="agregarN()" />
                 </q-card-actions>
             </q-card>
         </q-dialog>
@@ -107,9 +107,6 @@ let loading = ref(false)
 const useAmbiente = useAmbienteStore()
 const usePrograma = useProgramasFormacionStore()
 
-let programaSeleccionado = usePrograma.programa
-console.log(programaSeleccionado);
-
 let filter = ref('')
 let separator = ref('cell')
 
@@ -139,55 +136,57 @@ async function buscarAmb() {
         })
 }
 
-console.log(usePrograma.programa);
-
 async function buscarAmbientes() {
     const ambientesActivos = await useAmbiente.buscarAmbientes();
     ambiente.value = ambientesActivos.filter(amb => amb.estado === 1);
-    console.log(ambiente.value);
 }
 
 function nuevo() {
     ambienteSeleccionado.value = ""
 }
 
-async function agregarN() {
-    loading.value = true
-    console.log("entro a agregar");
-    await usePrograma.asignarAmbientes(idPrograma, ambienteSeleccionado.value)
-        .then(() => {
-            agregar.value = false
-            $q.notify({
-                message: 'Ambiente de formación agregado exitosamente',
-                color: 'green',
-                icon: 'check',
-                position: 'bottom',
-                timeout: 3000
-            })
-            buscarAmb()
-        }).catch((error) => {
-            if (ambienteSeleccionado.value === "") {
-                $q.notify({
-                    message: 'Debe seleccionar un ambiente',
-                    color: 'negative',
-                    icon: 'warning',
-                    position: 'top',
-                    timeout: 3000
-                })
-            } else if (error.response && error.response.data.msg) {
-                const fallo = error.response.data.msg
-                $q.notify({
-                    message: fallo,
-                    color: 'negative',
-                    position: 'top',
-                    icon: 'warning',
-                    timeout: 3000
-                })
-            } else {
-                console.log(error);
-            }
+function validar() {
+    if (!ambienteSeleccionado.value) {
+        $q.notify({
+            message: 'Debe seleccionar un ambiente',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
         })
-    loading.value = false
+    } else return true
+}
+
+async function agregarN() {
+    if (validar() === true) {
+        loading.value = true
+        await usePrograma.asignarAmbientes(idPrograma, ambienteSeleccionado.value)
+            .then(() => {
+                agregar.value = false
+                $q.notify({
+                    message: 'Ambiente de formación agregado exitosamente',
+                    color: 'green',
+                    icon: 'check',
+                    position: 'bottom',
+                    timeout: 3000
+                })
+                buscarAmb()
+            }).catch((error) => {
+                if (error.response && error.response.data.msg) {
+                    const fallo = error.response.data.msg
+                    $q.notify({
+                        message: fallo,
+                        color: 'negative',
+                        position: 'top',
+                        icon: 'warning',
+                        timeout: 3000
+                    })
+                } else {
+                    console.log(error);
+                }
+            })
+        loading.value = false
+    }
 }
 
 </script>

@@ -151,44 +151,47 @@ async function buscar() {
 
 buscar()
 
-async function agregarR() {
-    loading.value = true
-    console.log("entro a agregar");
-    await useRed.agregarRedes({
-        denominacion: denominacion.value
-    }).then(() => {
-        agregar.value = false
+function validarFrontend() {
+    if (denominacion.value.trim() === '') {
         $q.notify({
-            message: 'Red de conocimiento agregada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'La denominación es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
             timeout: 3000
         })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else return true
+}
+
+async function agregarR() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRed.agregarRedes({
+            denominacion: denominacion.value
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Red de conocimiento agregada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 function editarRed(red) {
-    console.log("Entró a editar", red);
     bd.value = 0;
     id.value = red._id;
     denominacion.value = red.denominacion
@@ -196,43 +199,35 @@ function editarRed(red) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useRed.actualizarRedes(
-        id.value,
-        denominacion.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Red de conocimiento editada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRed.actualizarRedes(
+            id.value,
+            denominacion.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Red de conocimiento editada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 async function editarEstado(red) {
-    console.log("entre a editar estado", red.estado);
     try {
         if (red.estado === 1) {
             red.estado = 0

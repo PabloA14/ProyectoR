@@ -146,45 +146,59 @@ async function buscar() {
     roles.value.reverse()
 }
 
-async function agregarN() {
-    loading.value = true
-    console.log("entro a agregar");
-    await useRol.agregarRoles({
-        denominacion: denominacion.value
-    }).then(() => {
-        agregar.value = false
+function validarFrontend() {
+    if (denominacion.value.trim() === "") {
         $q.notify({
-            message: 'Rol de usuario agregado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'La denominación es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
             timeout: 3000
         })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else {
+        return true
+    }
+}
+
+async function agregarN() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRol.agregarRoles({
+            denominacion: denominacion.value
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Rol de usuario agregado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            } else if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 
 function editarRol(rol) {
-    console.log("Entró a editar", rol);
     bd.value = 0;
     id.value = rol._id;
     denominacion.value = rol.denominacion
@@ -192,42 +206,44 @@ function editarRol(rol) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useRol.actualizarRoles(
-        id.value,
-        denominacion.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Rol de usuario editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-
-    }).catch((error) => {
-        errores.value = ''
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRol.actualizarRoles(
+            id.value,
+            denominacion.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Rol de usuario editado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        }
-        else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+        }).catch((error) => {
+            errores.value = ''
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            }
+            else if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
+
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 async function editarEstado(rol) {

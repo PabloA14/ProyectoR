@@ -27,7 +27,6 @@ export const useCentroStore = defineStore("Centros", () => {
       });
       return datos;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };
@@ -37,7 +36,6 @@ export const useCentroStore = defineStore("Centros", () => {
       const newU = await axios.post(`${LinkBD}/api/centrosF`, info);
       return newU;
     } catch (error) {
-      console.log(error);
       throw error;
     }
   };

@@ -76,7 +76,7 @@
                         <q-input label="Descripción*" type="textarea" v-model="descripcion" />
                     </div>
 
-                    <q-select v-model="tipo" label="Tipo*" :options="options" />
+                    <q-select clearable v-model="tipo" label="Tipo*" :options="options" />
 
                 </q-card-section>
 
@@ -123,7 +123,7 @@ let id = ref("")
 
 const $q = useQuasar()
 let filter = ref('')
-let separator = ref('horizontal')
+let separator = ref('cell')
 let loading = ref(false)
 
 const pagination = ref({
@@ -177,50 +177,69 @@ function validar() {
 
 async function buscar() {
     material.value = await useMaterial.buscarMateriales();
-    console.log(material.value);
     material.value.reverse()
 }
 
-async function agregarR() {
-    loading.value = true
-    console.log("entro a agregar");
-    await useMaterial.agregarMateriales({
-        nombre: nombre.value,
-        descripcion: descripcion.value,
-        tipo: tipo.value
-    }).then(() => {
-        agregar.value = false
+
+function validarFrontend() {
+    if (!nombre.value.trim()) {
         $q.notify({
-            message: 'Material agregado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'El nombre es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
             timeout: 3000
         })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else if (!descripcion.value.trim()) {
+        $q.notify({
+            message: 'La descripción es obligatoria',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!tipo.value) {
+        $q.notify({
+            message: 'El tipo es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else return true
+}
+
+async function agregarR() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useMaterial.agregarMateriales({
+            nombre: nombre.value,
+            descripcion: descripcion.value,
+            tipo: tipo.value
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Material agregado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 function editarMaterial(materiales) {
-    console.log("Entró a editar", materiales);
     bd.value = 0;
     id.value = materiales._id;
     nombre.value = materiales.nombre
@@ -230,45 +249,37 @@ function editarMaterial(materiales) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useMaterial.actualizarMateriales(
-        id.value,
-        nombre.value,
-        descripcion.value,
-        tipo.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Material editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useMaterial.actualizarMateriales(
+            id.value,
+            nombre.value,
+            descripcion.value,
+            tipo.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Material editado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 async function editarEstado(materiales) {
-    console.log("entre a editar estado", materiales.estado);
     try {
         if (materiales.estado === 1) {
             materiales.estado = 0

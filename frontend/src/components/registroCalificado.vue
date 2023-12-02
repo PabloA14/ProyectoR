@@ -138,7 +138,8 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
+                        <q-file clearable v-model="archivo" @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -202,7 +203,6 @@ let fechaOtorgamiento = ref("")
 let fechaVencimiento = ref("")
 let archivo = ref("")
 let id = ref("")
-
 let mostrarRegistro = ref('')
 let infoReg = ref('')
 
@@ -242,7 +242,6 @@ async function buscarRegistroCodigo() {
     console.log(codigosnies.value);
     const res = await useRegistro.buscarRegistrosCodigo(codigosnies.value)
     mostrarRegistro.value = res
-    console.log(mostrarRegistro.value);
 }
 
 function validarVacios() {
@@ -268,54 +267,139 @@ function validar() {
     })
 }
 
-async function agregarN() {
-    console.log("entro a agregar");
-    loading.value = true
-    await useRegistro.agregarRegistroC({
-        titulo: titulo.value,
-        lugardesarrollo: lugardesarrollo.value,
-        metodologia: metodologia.value,
-        creditos: creditos.value,
-        codigosnies: codigosnies.value,
-        fechaOtorgamiento: fechaOtorgamiento.value,
-        fechaVencimiento: fechaVencimiento.value,
-        documento: archivo.value,
-        programa: idPrograma
-    }).then(() => {
-        agregar.value = false
+function validarFrontend() {
+    if (!titulo.value.trim()) {
         $q.notify({
-            message: 'Registro Calificado agregado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'El título es obligatorio',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
             timeout: 3000
         })
-        buscar();
-        buscarRegistroCodigo()
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else if (!lugardesarrollo.value.trim()) {
+        $q.notify({
+            message: 'El lugar de desarrollo es obligatorio',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!metodologia.value.trim()) {
+        $q.notify({
+            message: 'La metodología es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!creditos.value) {
+        $q.notify({
+            message: 'Los creditos son obligatorios',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!codigosnies.value) {
+        $q.notify({
+            message: 'El código SNIES es obligatorio',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!fechaOtorgamiento.value) {
+        $q.notify({
+            message: 'La fecha de otorgamiento es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (fechaOtorgamiento.value >= fechaVencimiento.value) {
+        $q.notify({
+            message: 'La fecha de otorgamiento debe ser anterior a la fecha de vencimiento',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!fechaVencimiento.value) {
+        $q.notify({
+            message: 'La fecha de vencimiento es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (fechaVencimiento.value <= fechaOtorgamiento.value) {
+        $q.notify({
+            message: 'La fecha de vencimiento debe ser posterior a la fecha de otorgamiento',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else if (!archivo.value) {
+        $q.notify({
+            message: 'El archivo es obligatorio',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
+            timeout: 3000
+        })
+    } else return true
+}
+
+async function agregarN() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRegistro.agregarRegistroC({
+            titulo: titulo.value,
+            lugardesarrollo: lugardesarrollo.value,
+            metodologia: metodologia.value,
+            creditos: creditos.value,
+            codigosnies: codigosnies.value,
+            fechaOtorgamiento: fechaOtorgamiento.value,
+            fechaVencimiento: fechaVencimiento.value,
+            documento: archivo.value,
+            programa: idPrograma
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Registro Calificado agregado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
+            buscar();
+            buscarRegistroCodigo()
+        }).catch((error) => {
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
 
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            } else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
+
 }
 
 function editarRegistro(mostrarRegistro) {
-    console.log("entró a editar", mostrarRegistro)
     bd.value = 0;
     id.value = mostrarRegistro._id
     titulo.value = mostrarRegistro.titulo
@@ -329,53 +413,54 @@ function editarRegistro(mostrarRegistro) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useRegistro.actualizarRegistro(
-        id.value,
-        titulo.value,
-        lugardesarrollo.value,
-        metodologia.value,
-        creditos.value,
-        codigosnies.value,
-        fechaOtorgamiento.value,
-        fechaVencimiento.value,
-        archivo.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Registro Calificado editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-        renderTrigger.value += 1;
-
-    }).catch((error) => {
-        errores.value = ''
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRegistro.actualizarRegistro(
+            id.value,
+            titulo.value,
+            lugardesarrollo.value,
+            metodologia.value,
+            creditos.value,
+            codigosnies.value,
+            fechaOtorgamiento.value,
+            fechaVencimiento.value,
+            archivo.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Registro Calificado editado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        }
-        else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+            renderTrigger.value += 1;
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+        }).catch((error) => {
+            errores.value = ''
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            }
+            else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
+
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
+
 }
-
-console.log(programaSeleccionado);
 
 </script>
 

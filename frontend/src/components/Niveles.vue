@@ -147,44 +147,49 @@ async function buscar() {
     niveles.value.reverse()
 }
 
-async function agregarN() {
-    loading.value = true
-    console.log("entro a agregar");
-    await useNivel.agregarNiveles({
-        denominacion: denominacion.value
-    }).then(() => {
-        agregar.value = false
+function validarFrontend() {
+    if (denominacion.value.trim() === "") {
         $q.notify({
-            message: 'Nivel de formación agregado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'La denominación es obligatoria',
+            color: 'negative',
+            position: 'top',
+            icon: 'warning',
             timeout: 3000
         })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else {
+        return true
+    }
+}
+
+async function agregarN() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useNivel.agregarNiveles({
+            denominacion: denominacion.value
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Nivel de formación agregado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 function editarNivel(nivel) {
-    console.log("Entró a editar", nivel);
     bd.value = 0;
     id.value = nivel._id;
     denominacion.value = nivel.denominacion
@@ -192,43 +197,35 @@ function editarNivel(nivel) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useNivel.actualizarNiveles(
-        id.value,
-        denominacion.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Nivel de formación editado exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-    }).catch((error) => {
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useNivel.actualizarNiveles(
+            id.value,
+            denominacion.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Nivel de formación editado exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        } else if (error.response && error.response.data) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
+        }).catch((error) => {
+            if (error.response && error.response.data) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 async function editarEstado(nivel) {
-    console.log("entre a editar estado", nivel.estado);
     try {
         if (nivel.estado === 1) {
             nivel.estado = 0
@@ -274,4 +271,5 @@ async function editarEstado(nivel) {
     #card {
         width: 100%;
     }
-}</style>
+}
+</style>

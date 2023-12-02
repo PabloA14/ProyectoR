@@ -4,89 +4,43 @@
       <div class="text-h4 text-center q-mb-md">Usuarios</div>
       <div class="q-pa-md" style="width: 100%">
         <div class="spinner-container" v-if="useUsuari.loading === true">
-          <q-spinner
-            style="margin-left: 10px"
-            color="black"
-            size="7em"
-            :thickness="10"
-          />
+          <q-spinner style="margin-left: 10px" color="black" size="7em" :thickness="10" />
         </div>
-        <q-table
-          v-if="useUsuari.loading === false"
-          class="my-sticky-header-table"
-          :separator="separator"
-          bordered
-          :filter="filter"
-          :rows="usuarios"
-          :columns="columns"
-          row-key="name"
-          :pagination="pagination"
-        >
+        <q-table v-if="useUsuari.loading === false" class="my-sticky-header-table" :separator="separator" bordered
+          :filter="filter" :rows="usuarios" :columns="columns" row-key="name" :pagination="pagination">
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
-              <q-icon
-                title="Detalle de Usuario"
-                name="fa-solid fa-eye"
-                color="primary"
-                size="20px"
-                style="margin-right: 25px; cursor: pointer"
-                @click="informacionUsuario(props.row)"
-              />
+              <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
+                style="margin-right: 25px; cursor: pointer" @click="informacionUsuario(props.row)" />
               <!-- <q-icon title="Foto de Pefil" size="30px" style="padding-right:3vh ; color: green">
                 <span class="material-symbols-outlined" @click="putImagen(props.row)">
                   face
                 </span>
               </q-icon> -->
 
-              <q-icon
-                title="Editar Usuario"
-                color="orange"
-                name="fa-solid fa-pen-to-square fa-xl"
-                size="20px"
-                style="margin-right: 10px; cursor: pointer"
-                @click="editarUsuario(props.row)"
-              />
-              <q-icon
-                title="Cambiar Estado"
-                color="green"
-                name="fa-solid fa-check fa-xl"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-if="props.row.estado == 0"
-                @click="editarEstado(props.row)"
-              />
-              <q-icon
-                title="Cambiar Estado"
-                color="red"
-                name="fa-solid fa-x"
-                size="20px"
-                style="margin-left: 10px; cursor: pointer"
-                v-else
-                @click="editarEstado(props.row)"
-              />
+              <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                style="margin-right: 10px; cursor: pointer" @click="editarUsuario(props.row)" />
+              <q-icon title="Cambiar Estado" color="green" name="fa-solid fa-check fa-xl" size="20px"
+                style="margin-left: 10px; cursor: pointer" v-if="props.row.estado == 0"
+                @click="editarEstado(props.row)" />
+              <q-icon title="Cambiar Estado" color="red" name="fa-solid fa-x" size="20px"
+                style="margin-left: 10px; cursor: pointer" v-else @click="editarEstado(props.row)" />
             </q-td>
           </template>
 
           <template v-slot:body-cell-foto="props">
             <q-avatar size="45px">
-              <img
-                v-if="
-                  props.row.foto === undefined ||
-                  props.row.foto === null ||
-                  props.row.foto === ''
-                "
-                src="../imagenes/usuario.png"
-                alt="imagenes"
-              />
+              <img v-if="props.row.foto === undefined ||
+                props.row.foto === null ||
+                props.row.foto === ''
+                " src="../imagenes/usuario.png" alt="imagenes" />
               <img :src="props.row.foto" />
             </q-avatar>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
-              <span class="text-green" v-if="props.row.estado == 1"
-                >Activo</span
-              >
+              <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
             </q-td>
           </template>
@@ -111,16 +65,11 @@
             </q-input>
           </template>
           <template v-slot:top-left>
-            <q-btn
-              :style="{ backgroundColor: colorMenu, color: colorLetra }"
-              icon="add"
-              label="Agregar"
-              class="q-mb-md"
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
               @click="
                 agregar = true;
-                nuevo();
-              "
-            />
+              nuevo();
+              " />
           </template>
         </q-table>
       </div>
@@ -136,12 +85,8 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <q-input label="Cédula*" type="number" v-model="cedula" />
@@ -164,48 +109,28 @@
           </div>
 
           <div class="q-mb-md" v-if="bd === 1">
-            <q-input
-              label="Contraseña*"
-              v-model="clave"
-              :type="isPwd ? 'password' : 'text'"
-            >
+            <q-input label="Contraseña*" v-model="clave" :type="isPwd ? 'password' : 'text'">
               <template v-slot:append>
-                <q-icon
-                  :name="isPwd ? 'visibility_off' : 'visibility'"
-                  class="cursor-pointer"
-                  @click="isPwd = !isPwd"
-                />
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
               </template>
             </q-input>
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Red de Conocimiento*"
-              v-model="red"
-              :options="
-                redes.map((red) => ({
-                  label: red.denominacion,
-                  value: red._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select clearable label="Red de Conocimiento*" v-model="red" :options="redes.map((red) => ({
+              label: red.denominacion,
+              value: red._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
           <div class="q-mb-md">
             <div class="q-mb-md">
-              <q-file
-                v-model="cv"
-                @update:cv-value="
-                  (val) => {
-                    cv = val[0];
-                  }
-                "
-                label="Hoja de Vida"
-              >
+              <q-file clearable v-model="cv" @update:cv-value="(val) => {
+                cv = val[0];
+              }
+                " label="Hoja de Vida">
                 <template v-slot:prepend>
                   <q-icon name="attach_file" />
                 </template>
@@ -214,18 +139,11 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select
-              label="Rol*"
-              v-model="rol"
-              :options="
-                roles.map((rol) => ({
-                  label: rol.denominacion,
-                  value: rol._id,
-                }))
-              "
-              emit-value
-              map-options
-            >
+            <q-select clearable label="Rol*" v-model="rol" :options="roles.map((rol) => ({
+              label: rol.denominacion,
+              value: rol._id,
+            }))
+              " emit-value map-options>
             </q-select>
           </div>
 
@@ -237,20 +155,10 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-            :disabled="loading"
-            v-if="bd == 1"
-            label="Agregar"
-            @click="agregarU()"
-          />
-          <q-btn
-            :style="{ backgroundColor: colorMenu, color: colorLetra }"
-            :disabled="loading"
-            v-else
-            label="Actualizar"
-            @click="actualizar()"
-          />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
+            label="Agregar" @click="agregarU()" />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else label="Actualizar"
+            @click="actualizar()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -259,13 +167,8 @@
       <q-card style="width: 45%; height: fit-content">
         <q-card-section class="row items-center q-pb-none">
           <q-avatar size="100px" class="q-mr-md">
-            <img
-              v-if="
-                info.foto === undefined || info.foto == null || info.foto == ''
-              "
-              src="../imagenes/usuario.png"
-              alt="imagenes"
-            />
+            <img v-if="info.foto === undefined || info.foto == null || info.foto == ''
+              " src="../imagenes/usuario.png" alt="imagenes" />
             <img v-else :src="info.foto" />
           </q-avatar>
           <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
@@ -274,12 +177,8 @@
           <q-btn icon="close" color="negative" flat round dense v-close-popup />
         </q-card-section>
 
-        <q-separator
-          :style="{ backgroundColor: colorMenu, color: colorLetra }"
-          inset
-          id="separador"
-          style="height: 5px; margin-top: 5px"
-        />
+        <q-separator :style="{ backgroundColor: colorMenu, color: colorLetra }" inset id="separador"
+          style="height: 5px; margin-top: 5px" />
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
             <p>
@@ -443,21 +342,17 @@ buscar();
 
 async function buscar() {
   usuarios.value = await useUsuari.buscarUsuarios();
-
-  console.log(usuarios.value);
   usuarios.value.reverse();
 }
 
 async function buscarRol() {
   const rolesActivos = await useRol.buscarRoles();
   roles.value = rolesActivos.filter((rol) => rol.estado === 1);
-  console.log(roles.value);
 }
 
 async function buscarRed() {
   const redesActivas = await useRed.buscarRedes();
   redes.value = redesActivas.filter((red) => red.estado === 1);
-  console.log(redes.value);
 }
 
 function nuevo() {
@@ -510,62 +405,162 @@ function validar() {
   });
 }
 
+function validarFrontendAgregar() {
+  const emailValido = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+  if (!cedula.value) {
+    $q.notify({
+      message: 'La cédula es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (cedula.value.length < 8 || cedula.value.length > 10) {
+    $q.notify({
+      message: 'La cédula debe tener máximo 10 dígitos',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!nombre.value.trim()) {
+    $q.notify({
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!apellido.value.trim()) {
+    $q.notify({
+      message: 'Los apellidos son obligatorios',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!telefono.value) {
+    $q.notify({
+      message: 'El teléfono es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!correo.value.trim()) {
+    $q.notify({
+      message: 'El correo electrónico es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!emailValido.test(correo.value.trim())) {
+    $q.notify({
+      message: 'El correo electrónico no es válido',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!clave.value.trim()) {
+    $q.notify({
+      message: 'La contraseña es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (clave.value.trim().length < 8) {
+    $q.notify({
+      message: 'La contraseña debe tener al menos 8 caracteres',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!red.value) {
+    $q.notify({
+      message: 'La red de conocimiento es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!rol.value) {
+    $q.notify({
+      message: 'El rol de usuario es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!perfilProfesional.value.trim()) {
+    $q.notify({
+      message: 'El perfil profesional es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else return true
+}
+
 async function agregarU() {
-  loading.value = true;
-  console.log("entro a agregar");
-  console.log(cv.value);
-  await useUsuari
-    .agregarUsuario({
-      foto: foto.value,
-      cedula: cedula.value,
-      nombre: nombre.value,
-      apellidos: apellido.value,
-      telefono: telefono.value,
-      correo: correo.value,
-      clave: clave.value,
-      redConocimiento: red.value,
-      hojaDeVida: cv.value,
-      rol: rol.value,
-      perfilProfesional: perfilProfesional.value,
-    })
-    .then(() => {
-      agregar.value = false;
-      $q.notify({
-        message: "Usuario agregado exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: 3000,
-      });
-      buscar();
-      vaciar();
-    })
-    .catch((error) => {
-      if (error.response && error.response.data.msg) {
-        const repetida = error.response.data.msg;
+  if (validarFrontendAgregar() === true) {
+    loading.value = true;
+    await useUsuari
+      .agregarUsuario({
+        foto: foto.value,
+        cedula: cedula.value,
+        nombre: nombre.value,
+        apellidos: apellido.value,
+        telefono: telefono.value,
+        correo: correo.value,
+        clave: clave.value,
+        redConocimiento: red.value,
+        hojaDeVida: cv.value,
+        rol: rol.value,
+        perfilProfesional: perfilProfesional.value,
+      })
+      .then(() => {
+        agregar.value = false;
         $q.notify({
-          message: repetida,
-          color: "negative",
-          position: "top",
-          icon: "warning",
+          message: "Usuario agregado exitosamente",
+          color: "green",
+          icon: "check",
+          position: "bottom",
           timeout: 3000,
         });
-      } else if (
-        error.response &&
-        error.response.data &&
-        validarVacios() === true
-      ) {
-        errores.value = error.response.data.errors[0].msg;
-        validar();
-      } else {
-        console.log(error);
-      }
-    });
-  loading.value = false;
+        buscar();
+        vaciar();
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.msg) {
+          const repetida = error.response.data.msg;
+          $q.notify({
+            message: repetida,
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+          });
+        } else if (
+          error.response &&
+          error.response.data &&
+          validarVacios() === true
+        ) {
+          errores.value = error.response.data.errors[0].msg;
+          validar();
+        } else {
+          console.log(error);
+        }
+      });
+    loading.value = false;
+  }
 }
 
 function editarUsuario(x) {
-  console.log("Entró a editar", x);
   bd.value = 0;
   id.value = x._id;
   cedula.value = x.cedula;
@@ -580,59 +575,145 @@ function editarUsuario(x) {
   agregar.value = true;
 }
 
-async function actualizar() {
-  loading.value = true;
-  await useUsuari
-    .actualizarUsuario(
-      id.value,
-      cedula.value,
-      nombre.value,
-      apellido.value,
-      telefono.value,
-      correo.value,
-      red.value,
-      cv.value,
-      rol.value,
-      perfilProfesional.value
-    )
-    .then(() => {
-      agregar.value = false;
-      $q.notify({
-        message: "Usuario editado exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: 3000,
-      });
-      buscar();
+function validarFrontendEditar() {
+  const emailValido = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+  if (!cedula.value) {
+    $q.notify({
+      message: 'La cédula es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
     })
-    .catch((error) => {
-      errores.value = "";
-      if (error.response && error.response.data.msg) {
-        const repetida = error.response.data.msg;
+  } else if (cedula.value.length < 8 || cedula.value.length > 10) {
+    $q.notify({
+      message: 'La cédula debe tener máximo 10 dígitos',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!nombre.value.trim()) {
+    $q.notify({
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!apellido.value.trim()) {
+    $q.notify({
+      message: 'Los apellidos son obligatorios',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!telefono.value) {
+    $q.notify({
+      message: 'El teléfono es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!correo.value.trim()) {
+    $q.notify({
+      message: 'El correo electrónico es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!emailValido.test(correo.value.trim())) {
+    $q.notify({
+      message: 'El correo electrónico no es válido',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!red.value) {
+    $q.notify({
+      message: 'La red de conocimiento es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!rol.value) {
+    $q.notify({
+      message: 'El rol de usuario es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!perfilProfesional.value.trim()) {
+    $q.notify({
+      message: 'El perfil profesional es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else return true
+}
+
+async function actualizar() {
+  if (validarFrontendEditar() === true) {
+    loading.value = true;
+    await useUsuari
+      .actualizarUsuario(
+        id.value,
+        cedula.value,
+        nombre.value,
+        apellido.value,
+        telefono.value,
+        correo.value,
+        red.value,
+        cv.value,
+        rol.value,
+        perfilProfesional.value
+      )
+      .then(() => {
+        agregar.value = false;
         $q.notify({
-          message: repetida,
-          color: "negative",
-          position: "top",
-          icon: "warning",
+          message: "Usuario editado exitosamente",
+          color: "green",
+          icon: "check",
+          position: "bottom",
           timeout: 3000,
         });
-      } else if (
-        error.response &&
-        error.response.data &&
-        validarVacios() === true
-      ) {
-        errores.value = error.response.data.errors[0].msg;
-        validar();
-      } else {
-        console.log(error);
-      }
-    });
-  loading.value = false;
+        buscar();
+      })
+      .catch((error) => {
+        errores.value = "";
+        if (error.response && error.response.data.msg) {
+          const repetida = error.response.data.msg;
+          $q.notify({
+            message: repetida,
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+          });
+        } else if (
+          error.response &&
+          error.response.data &&
+          validarVacios() === true
+        ) {
+          errores.value = error.response.data.errors[0].msg;
+          validar();
+        } else {
+          console.log(error);
+        }
+      });
+    loading.value = false;
+  }
 }
 
 async function editarEstado(x) {
-  console.log("entre a editar estado", x.estado);
   try {
     if (x.estado === 1) {
       x.estado = 0;

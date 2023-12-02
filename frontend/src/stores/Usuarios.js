@@ -125,7 +125,6 @@ export const useUsuarioStore = defineStore("usuario", () => {
       token.value = datos.data.token
       usuario.value = datos.data.user
 
-      console.log(datos);
       return datos;
     } catch (error) {
       loading.value = true

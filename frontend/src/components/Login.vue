@@ -6,7 +6,10 @@
                 <q-card-section>
                     <div class="row">
                         <div class="col-3">
-                            <img id="img" src='../imagenes/logosena.png'>
+                            <!-- <img id="img" src='../imagenes/logosena.png'> -->
+                            <svg width="100%" height="100%" viewBox="0 0 100 100">
+                                <image href="../imagenes/logo_nuevo.svg" width="100%" height="100%" />
+                            </svg>
                         </div>
                         <div class="col-9">
                             <div id="titulo" class="text-h6" style="text-align: center;">Iniciar Sesión</div>
@@ -121,10 +124,27 @@ function openModal() {
     modalVisible.value = true;
 }
 
-function validar() {
-    if (documento.value === "" && contrasena.value === "") {
+function validarFrontend() {
+    if (documento.value.trim() == "" && contrasena.value.trim() == "") {
         $q.notify({
             message: 'Campos vacíos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    }
+    else if (!documento.value.trim()) {
+        $q.notify({
+            message: 'Ingrese la cédula',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!contrasena.value.trim()) {
+        $q.notify({
+            message: 'Ingrese la contraseña',
             color: 'negative',
             icon: 'warning',
             position: 'top',
@@ -134,77 +154,92 @@ function validar() {
 }
 
 async function iniciarSesion() {
-    useUsuario.logeo(documento.value, contrasena.value)
-        .then((res) => {
-            const token = res.data.token;
-            sessionStorage.setItem('token', token);
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            ruta.value = "/home";
-            router.push(ruta.value);
-        }).catch((error) => {
-            if (error.response && error.response.data.errors && validar() === true) {
+    if (validarFrontend() === true) {
+        await useUsuario.logeo(documento.value, contrasena.value)
+            .then((res) => {
+                const token = res.data.token;
+                sessionStorage.setItem('token', token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+                ruta.value = "/home";
+                router.push(ruta.value);
+            }).catch((error) => {
+                if (error.response && error.response.data.errors) {
 
-                const camposVacios = error.response.data.errors[0].msg
+                    const camposVacios = error.response.data.errors[0].msg
 
-                $q.notify({
-                    message: camposVacios,
-                    color: 'negative',
-                    icon: 'warning',
-                    position: 'top',
-                    timeout: 3000
-                })
-            } else if (error.response && error.response.data.msg) {
-                const credencialesInvalidas = error.response.data.msg
+                    $q.notify({
+                        message: camposVacios,
+                        color: 'negative',
+                        icon: 'warning',
+                        position: 'top',
+                        timeout: 3000
+                    })
+                } else if (error.response && error.response.data.msg) {
+                    const credencialesInvalidas = error.response.data.msg
 
-                $q.notify({
-                    message: credencialesInvalidas,
-                    color: 'negative',
-                    position: 'top',
-                    icon: 'warning',
-                    timeout: 3000
-                })
+                    $q.notify({
+                        message: credencialesInvalidas,
+                        color: 'negative',
+                        position: 'top',
+                        icon: 'warning',
+                        timeout: 3000
+                    })
 
-            } else {
-                console.log(error);
-            }
-        })
+                }
+            })
+    }
 };
 
-async function envioCorreo() {
-    try {
-        let envio = await useUsuario.envioCorreo(correo.value)
+
+function validarHayCorreo() {
+    if (correo.value.trim() === "") {
         $q.notify({
-            message: envio.data.msg,
-            color: 'green',
-            icon: 'check',
+            message: 'Debe proporcionar el correo',
+            color: 'negative',
+            icon: 'warning',
             position: 'top',
             timeout: 3000
         })
-        modalVisible.value = false
-        correo.value = ''
-    } catch (error) {
-        if (error.response && error.response.data.errors) {
+    } else {
+        return true
+    }
+}
 
-            const faltaCorreo = error.response.data.errors[0].msg
-
+async function envioCorreo() {
+    if (validarHayCorreo() === true) {
+        try {
+            let envio = await useUsuario.envioCorreo(correo.value)
             $q.notify({
-                message: faltaCorreo,
-                color: 'negative',
-                icon: 'warning',
+                message: envio.data.msg,
+                color: 'green',
+                icon: 'check',
                 position: 'top',
                 timeout: 3000
             })
-        } else {
-            $q.notify({
-                message: error.response.data,
-                color: 'negative',
-                icon: 'warning',
-                position: 'top',
-                timeout: 3000
-            })
+            modalVisible.value = false
+            correo.value = ''
+        } catch (error) {
+            if (error.response && error.response.data.errors) {
+
+                const faltaCorreo = error.response.data.errors[0].msg
+
+                $q.notify({
+                    message: faltaCorreo,
+                    color: 'negative',
+                    icon: 'warning',
+                    position: 'top',
+                    timeout: 3000
+                })
+            } else {
+                $q.notify({
+                    message: error.response.data,
+                    color: 'negative',
+                    icon: 'warning',
+                    position: 'top',
+                    timeout: 3000
+                })
+            }
         }
-        console.log(error);
-
     }
 }
 
@@ -238,9 +273,10 @@ async function envioCorreo() {
 }
 
 #img {
-    height: 75px;
-    width: 75px;
+    height: 100%;
+    width: 100%;
 }
+
 
 .text-black {
     color: black;
@@ -270,7 +306,7 @@ async function envioCorreo() {
     }
 
     #card {
-        width: auto;
+        width: 90%;
     }
 
     #cardContra {

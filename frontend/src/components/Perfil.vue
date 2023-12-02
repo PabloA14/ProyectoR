@@ -255,61 +255,132 @@ function editarUsuario(datos) {
     agregar.value = true;
 }
 
-async function actualizar() {
-    loading.value = true;
-    await useUsuario
-        .actualizarDatosPersonales(
-            id.value,
-            cedula.value,
-            nombre.value,
-            apellido.value,
-            telefono.value,
-            correo.value,
-            cv.value,
-            perfilProfesional.value
-        )
-        .then((res) => {
-            agregar.value = false;
-            $q.notify({
-                message: "Datos personales editados exitosamente",
-                color: "green",
-                icon: "check",
-                position: "bottom",
-                timeout: 3000,
-            });
-            const data = res.data.usuario;
-            nombre.value = data.nombre;
-            datos.nombre = data.nombre;
-            datos.cedula = data.cedula;
-            datos.apellidos = data.apellidos;
-            datos.telefono = data.telefono;
-            datos.perfilProfesional = data.perfilProfesional;
-            datos.correo = data.correo;
-            datos.hojaDeVida = data.hojaDeVida
+function validarFrontend() {
+    const emailValido = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/
+    if (!cedula.value) {
+        $q.notify({
+            message: 'La cédula es obligatoria',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
         })
-        .catch((error) => {
-            errores.value = "";
-            if (error.response && error.response.data.msg) {
-                const repetida = error.response.data.msg;
+    } else if (cedula.value.length < 8 || cedula.value.length > 10) {
+        $q.notify({
+            message: 'La cédula debe tener máximo 10 dígitos',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!nombre.value.trim()) {
+        $q.notify({
+            message: 'El nombre es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!apellido.value.trim()) {
+        $q.notify({
+            message: 'Los apellidos son obligatorios',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!telefono.value) {
+        $q.notify({
+            message: 'El teléfono es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!correo.value.trim()) {
+        $q.notify({
+            message: 'El correo electrónico es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!emailValido.test(correo.value.trim())) {
+        $q.notify({
+            message: 'El correo electrónico no es válido',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!perfilProfesional.value.trim()) {
+        $q.notify({
+            message: 'El perfil profesional es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else return true
+}
+
+async function actualizar() {
+    if (validarFrontend() === true) {
+        loading.value = true;
+        await useUsuario
+            .actualizarDatosPersonales(
+                id.value,
+                cedula.value,
+                nombre.value,
+                apellido.value,
+                telefono.value,
+                correo.value,
+                cv.value,
+                perfilProfesional.value
+            )
+            .then((res) => {
+                agregar.value = false;
                 $q.notify({
-                    message: repetida,
-                    color: "negative",
-                    position: "top",
-                    icon: "warning",
+                    message: "Datos personales editados exitosamente",
+                    color: "green",
+                    icon: "check",
+                    position: "bottom",
                     timeout: 3000,
                 });
-            } else if (
-                error.response &&
-                error.response.data &&
-                validarVacios() === true
-            ) {
-                errores.value = error.response.data.errors[0].msg;
-                validar();
-            } else {
-                console.log(error);
-            }
-        });
-    loading.value = false;
+                const data = res.data.usuario;
+                nombre.value = data.nombre;
+                datos.nombre = data.nombre;
+                datos.cedula = data.cedula;
+                datos.apellidos = data.apellidos;
+                datos.telefono = data.telefono;
+                datos.perfilProfesional = data.perfilProfesional;
+                datos.correo = data.correo;
+                datos.hojaDeVida = data.hojaDeVida
+            })
+            .catch((error) => {
+                errores.value = "";
+                if (error.response && error.response.data.msg) {
+                    const repetida = error.response.data.msg;
+                    $q.notify({
+                        message: repetida,
+                        color: "negative",
+                        position: "top",
+                        icon: "warning",
+                        timeout: 3000,
+                    });
+                } else if (
+                    error.response &&
+                    error.response.data &&
+                    validarVacios() === true
+                ) {
+                    errores.value = error.response.data.errors[0].msg;
+                    validar();
+                } else {
+                    console.log(error);
+                }
+            });
+        loading.value = false;
+    }
 }
 
 
@@ -317,33 +388,49 @@ function seleccionarFoto(datos) {
     id.value = datos._id;
 }
 
+function validarHayFoto() {
+    if (img.value === "") {
+        $q.notify({
+            message: 'Debe adjuntar la foto',
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+        });
+    } else {
+        return true
+    }
+}
+
 async function actualizarFoto() {
-    loading.value = true
-    await useUsuario.putFoto(id.value, img.value)
-        .then((res) => {
-            agregar.value = false;
-            $q.notify({
-                message: "Foto Editada correctamente",
-                color: "green",
-                icon: "check",
-                position: "bottom",
-                timeout: 3000,
-            });
-            const data = res.data.prueba;
-            //nombre.foto = data.foto
-            EditarFoto.value = false
-            img.value = ''
-            datos.foto = data.foto
-        })
-        .catch((error) => {
-            if (error.response && error.response.data) {
-                errores.value = error.response.data.errors[0].msg
-                validar()
-            } else {
-                console.log(error);
-            }
-        })
-    loading.value = false
+    if (validarHayFoto() === true) {
+        loading.value = true
+        await useUsuario.putFoto(id.value, img.value)
+            .then((res) => {
+                agregar.value = false;
+                $q.notify({
+                    message: "Foto Editada correctamente",
+                    color: "green",
+                    icon: "check",
+                    position: "bottom",
+                    timeout: 3000,
+                });
+                const data = res.data.prueba;
+                //nombre.foto = data.foto
+                EditarFoto.value = false
+                img.value = ''
+                datos.foto = data.foto
+            })
+            .catch((error) => {
+                if (error.response && error.response.data) {
+                    errores.value = error.response.data.errors[0].msg
+                    validar()
+                } else {
+                    console.log(error);
+                }
+            })
+        loading.value = false
+    }
 }
 
 </script>
@@ -353,7 +440,7 @@ async function actualizarFoto() {
     margin-top: -1%;
     color: rgb(0, 0, 0);
     border-radius: 1px;
-    width: 60%;
+    width: 70%;
 }
 
 .my-card .text-h6 {

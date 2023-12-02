@@ -153,7 +153,8 @@
           </div>
 
           <div class="q-mb-md">
-            <q-file v-model="documentoMat" @update:documentoMat-value="val => { documentoMat = val[0] }" label="Archivo">
+            <q-file clearable v-model="documentoMat" @update:documentoMat-value="val => { documentoMat = val[0] }"
+              label="Archivo">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -201,7 +202,8 @@
           </div>
 
           <div class="q-mb-md">
-            <q-file v-model="documentoIns" @update:documentoIns-value="val => { documentoIns = val[0] }" label="Archivo">
+            <q-file v-model="documentoIns" clearable @update:documentoIns-value="val => { documentoIns = val[0] }"
+              label="Archivo">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
               </template>
@@ -260,8 +262,6 @@ onMounted(() => {
   instrumento.value = true
 })
 
-console.log(useGuia.guia);
-
 const agregarMaterial = ref(false)
 let loading = ref(false)
 const $q = useQuasar()
@@ -271,7 +271,6 @@ let bd = ref('')
 //variables materiales
 
 let idMat = ref('')
-//let codigo = ref('')
 let nombre = ref('')
 let enlace = ref('')
 let documentoMat = ref('')
@@ -330,44 +329,49 @@ async function buscarInstrumentos() {
   }
 }
 
-async function agregarI() {
-  loading.value = true
-  await useInst.agregarInstrumento({
-    nombre: nombreInst.value,
-    documento: documentoIns.value,
-    guia: useGuia.guia._id
-  }).then(() => {
-    agregarInst.value = false
+function validarInstrumento() {
+  if (!nombreInst.value.trim()) {
     $q.notify({
-      message: 'Instrumento de evaluación agregado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      position: 'top',
+      icon: 'warning',
       timeout: 3000
     })
-    buscarInstrumentos();
-  }).catch((error) => {
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
+  } else return true
+}
 
-    } else if (error.response.data.error) {
+async function agregarI() {
+  if (validarInstrumento() === true) {
+    loading.value = true
+    await useInst.agregarInstrumento({
+      nombre: nombreInst.value,
+      documento: documentoIns.value,
+      guia: useGuia.guia._id
+    }).then(() => {
+      agregarInst.value = false
       $q.notify({
-        message: 'falta archivo',
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
+        message: 'Instrumento de evaluación agregado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
         timeout: 3000
       })
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
+      buscarInstrumentos();
+    }).catch((error) => {
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
+
+      } else {
+        console.log(error);
+      }
+    })
+    loading.value = false
+  }
 }
 
 function editarIns(i) {
-  console.log("Entró a editar", i);
   bd.value = 0;
   idIns.value = i._id;
   nombreInst.value = i.nombre
@@ -376,33 +380,36 @@ function editarIns(i) {
 }
 
 async function actualizarInstrumento() {
-  loading.value = true
-  await useInst.actualizarInstrumento(
-    idIns.value,
-    nombreInst.value,
-    documentoIns.value
-  ).then(() => {
-    agregarInst.value = false
-    $q.notify({
-      message: 'Instrumento de evaluación editado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
+  if (validarInstrumento() === true) {
+    loading.value = true
+    await useInst.actualizarInstrumento(
+      idIns.value,
+      nombreInst.value,
+      documentoIns.value
+    ).then(() => {
+      agregarInst.value = false
+      $q.notify({
+        message: 'Instrumento de evaluación editado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
+        timeout: 3000
+      })
+      buscarInstrumentos();
+
+    }).catch((error) => {
+      errores.value = ''
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
+
+      } else {
+        console.log(error);
+      }
     })
-    buscarInstrumentos();
+    loading.value = false
+  }
 
-  }).catch((error) => {
-    errores.value = ''
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
-
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
 }
 
 //MATERIALES
@@ -437,43 +444,67 @@ async function buscarMaterialesApoyo() {
   }
 }
 
-async function agregarMat() {
-  console.log("entro a agregar");
-  loading.value = true
-  await useMatApoyo.agregarMatApoyo({
-    nombre: nombre.value,
-    enlace: enlace.value,
-    documento: documentoMat.value,
-    guia: useGuia.guia._id
-  }).then(() => {
-    agregarMaterial.value = false
-    $q.notify({
-      message: 'Material de Apoyo agregado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
-    })
-    buscarMaterialesApoyo();
-  }).catch((error) => {
-    console.log(error);
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
+function validarMaterial() {
+  const patronURL = /(?:https?):\/\/(\w+:?\w*)?(\S+)(:\d+)?(\/|\/([\w#!:.?+=&%!\-\/]))?/;
 
-    } else if (error.response.data.error) {
+  if (!nombre.value.trim()) {
+    $q.notify({
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      position: 'top',
+      icon: 'warning',
+      timeout: 3000
+    });
+    return false; // Agregamos esta línea para detener la validación si el nombre está vacío
+  }
+
+  const enlaceTrimmed = enlace.value.trim();
+  if (enlaceTrimmed && !patronURL.test(enlaceTrimmed)) {
+    $q.notify({
+      message: 'El enlace/URL no es válido',
+      color: 'negative',
+      position: 'top',
+      icon: 'warning',
+      timeout: 3000
+    });
+    return false; // Detenemos la validación si la URL no es válida y no está vacía
+  }
+
+  return true; // Si todo está bien, permitimos la validación
+}
+
+
+async function agregarMat() {
+  if (validarMaterial() === true) {
+    loading.value = true
+    await useMatApoyo.agregarMatApoyo({
+      nombre: nombre.value,
+      enlace: enlace.value,
+      documento: documentoMat.value,
+      guia: useGuia.guia._id
+    }).then(() => {
+      agregarMaterial.value = false
       $q.notify({
-        message: 'falta archivo',
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
+        message: 'Material de Apoyo agregado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
         timeout: 3000
       })
-    } else {
+      buscarMaterialesApoyo();
+    }).catch((error) => {
       console.log(error);
-    }
-  })
-  loading.value = false
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
+
+      } else {
+        console.log(error);
+      }
+    })
+    loading.value = false
+  }
+
 }
 
 function editarMat(i) {
@@ -486,34 +517,37 @@ function editarMat(i) {
 }
 
 async function actualizarMaterial() {
-  loading.value = true
-  await useMatApoyo.actualizarMatApoyo(
-    idMat.value,
-    nombre.value,
-    enlace.value,
-    documentoMat.value
-  ).then(() => {
-    agregarMaterial.value = false
-    $q.notify({
-      message: 'Material de apoyo editado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
+  if (validarMaterial() === true) {
+    loading.value = true
+    await useMatApoyo.actualizarMatApoyo(
+      idMat.value,
+      nombre.value,
+      enlace.value,
+      documentoMat.value
+    ).then(() => {
+      agregarMaterial.value = false
+      $q.notify({
+        message: 'Material de apoyo editado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
+        timeout: 3000
+      })
+      buscarMaterialesApoyo();
+
+    }).catch((error) => {
+      errores.value = ''
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
+
+      } else {
+        console.log(error);
+      }
     })
-    buscarMaterialesApoyo();
+    loading.value = false
+  }
 
-  }).catch((error) => {
-    errores.value = ''
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
-
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
 }
 
 
@@ -523,17 +557,13 @@ async function actualizarMaterial() {
 <style scoped>
 .disabled-link {
   pointer-events: none;
-  /* Desactiva eventos de puntero (clic, hover, etc.) */
   opacity: 0.5;
-  /* Puedes ajustar la opacidad según tus preferencias */
   cursor: not-allowed;
 }
 
 .disabled-mat {
   pointer-events: none;
-  /* Desactiva eventos de puntero (clic, hover, etc.) */
   opacity: 0.5;
-  /* Puedes ajustar la opacidad según tus preferencias */
   cursor: not-allowed;
 }
 

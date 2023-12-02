@@ -156,7 +156,7 @@
                   <q-item clickable v-if="planeacionPedagogica != undefined && rol == 'gestor'">
                     <q-item-section>
                       <span @click="editarPlaneacion = true" class="material-symbols-outlined"
-                        style="font-size: 5vh; text-align: center">edit</span>
+                        style="font-size: 4.5vh; text-align: center">edit</span>
                     </q-item-section>
                   </q-item>
 
@@ -270,7 +270,7 @@
           <q-btn :disabled="loading" v-if="inf === 1" label="Agregar" @click="saveProyecto()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
           <q-btn :disabled="loading" v-if="inf === 2" label="Agregar" @click="savePlaneacionPedagogica()"
-            :style="{ backgroundColor: colorMenu, color: colorLetra }" color="secondary" />
+            :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -436,7 +436,6 @@ let planeacionPedagogica = ref(
 
 let _id = ref(useInfoPrograma.programa.desarrolloCurricular._id);
 let codigo = ref(useInfoPrograma.programa.codigo);
-console.log(usePrograma.programa);
 
 nuevaInfoInstructor(codigo.value);
 
@@ -475,75 +474,120 @@ function validar() {
   });
 }
 
+function validarHayMatriz() {
+  if (!archivo.value) {
+    $q.notify({
+      message: 'Debe adjuntar el archivo',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else return true
+}
+
+
 async function guardarMatriz() {
-  loading.value = true;
-  try {
-    const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
-    if (res.data.status === "ok") {
-      agregado.value = "Matriz de Correlación";
-      informacionPrograma(codigo.value);
-    } else {
-      console.log("no estuvo ok");
+  if (validarHayMatriz() === true) {
+    loading.value = true;
+    try {
+      const res = await useDesarrollo.postMatriz(_id.value, archivo.value);
+      if (res.data.status === "ok") {
+        agregado.value = "Matriz de Correlación";
+        informacionPrograma(codigo.value);
+      } else {
+        console.log("no estuvo ok");
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg;
+        validar();
+      } else {
+        console.log(error);
+      }
     }
-  } catch (error) {
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg;
-      validar();
-    } else {
-      console.log(error);
-    }
+    loading.value = false;
   }
-  loading.value = false;
+}
+
+function validarHayProyecto() {
+  if (!archivoProyecto.value) {
+    $q.notify({
+      message: 'Debe adjuntar el archivo',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else return true
 }
 
 async function saveProyecto() {
-  loading.value = true;
-  try {
-    const res = await useDesarrollo.putProyecto(
-      _id.value,
-      archivoProyecto.value
-    );
-    if (res.data.status === "ok") {
-      agregado.value = "Proyecto Formativo";
-      informacionPrograma(codigo.value);
-    } else {
-      console.log("no estuvo ok");
+  if (validarHayProyecto() === true) {
+    loading.value = true;
+    try {
+      const res = await useDesarrollo.putProyecto(
+        _id.value,
+        archivoProyecto.value
+      );
+      if (res.data.status === "ok") {
+        agregado.value = "Proyecto Formativo";
+        informacionPrograma(codigo.value);
+      } else {
+        console.log("no estuvo ok");
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg;
+        validar();
+      } else {
+        console.log(error);
+      }
     }
-  } catch (error) {
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg;
-      validar();
-    } else {
-      console.log(error);
-    }
+    loading.value = false;
   }
-  loading.value = false;
 }
 
+function validarHayPlaneacion() {
+  if (!archivoPlaneacion.value) {
+    $q.notify({
+      message: 'Debe adjuntar el archivo',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else return true
+}
+
+
 async function savePlaneacionPedagogica() {
-  loading.value = true;
-  try {
-    const res = await useDesarrollo.putplaneacionPedagogica(
-      _id.value,
-      archivoPlaneacion.value
-    );
+  if (validarHayPlaneacion() === true) {
+    loading.value = true;
+    try {
+      const res = await useDesarrollo.putplaneacionPedagogica(
+        _id.value,
+        archivoPlaneacion.value
+      );
 
-    if (res.data.status === "ok") {
-      agregado.value = "Planeación Pedagógica";
-      informacionPrograma(codigo.value);
+      if (res.data.status === "ok") {
+        agregado.value = "Planeación Pedagógica";
+        informacionPrograma(codigo.value);
 
-    } else {
-      console.log("no estuvo ok");
+      } else {
+        console.log("no estuvo ok");
+      }
+    } catch (error) {
+      if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg;
+        validar();
+      } else {
+        console.log(error);
+      }
     }
-  } catch (error) {
-    if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg;
-      validar();
-    } else {
-      console.log(error);
-    }
+    loading.value = false;
   }
-  loading.value = false;
+
 }
 
 async function informacionPrograma(x) {

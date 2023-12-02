@@ -81,7 +81,7 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Ciudad*" v-model="ciudad" :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))"
+            <q-select label="Ciudad*" clearable v-model="ciudad" :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))"
               emit-value map-options>
             </q-select>
           </div>
@@ -94,8 +94,8 @@
         <q-card-actions align="right">
           <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
             label="Agregar" @click="agregarC()" />
-          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else
-            label="Actualizar" @click="actualizar()" />
+          <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else label="Actualizar"
+            @click="actualizar()" />
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -191,56 +191,91 @@ function validar() {
 
 async function buscar() {
   centro.value = await useCentro.buscarCentros();
-  console.log(centro.value);
   centro.value.reverse()
 }
 
 async function buscarCiudad() {
   ciudades.value = await useCiudad.buscarCiudad();
-  console.log(ciudades.value);
+}
+
+function validarFrontend() {
+  if (!codigo.value.trim()) {
+    $q.notify({
+      message: 'El código es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!nombre.value.trim()) {
+    $q.notify({
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!direccion.value.trim()) {
+    $q.notify({
+      message: 'La dirección es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else if (!ciudad.value) {
+    $q.notify({
+      message: 'La ciudad es obligatoria',
+      color: 'negative',
+      icon: 'warning',
+      position: 'top',
+      timeout: 3000
+    })
+  } else return true
 }
 
 async function agregarC() {
-  loading.value = true
-  console.log("entro a agregar");
-  await useCentro.agregarCentro({
-    codigo: codigo.value,
-    nombre: nombre.value,
-    direccion: direccion.value,
-    ciudad: ciudad.value,
-  }).then(() => {
-    $q.notify({
-      message: 'Centro de formación agregado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
-    })
-    agregar.value = false
-    buscar();
-  }).catch((error) => {
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
+  if (validarFrontend() === true) {
+    loading.value = true
+    await useCentro.agregarCentro({
+      codigo: codigo.value,
+      nombre: nombre.value,
+      direccion: direccion.value,
+      ciudad: ciudad.value,
+    }).then(() => {
       $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
+        message: 'Centro de formación agregado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
         timeout: 3000
       })
-    } else if (error.response && error.response.data && validarVacios() === true) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
+      agregar.value = false
+      buscar();
+    }).catch((error) => {
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg
+        $q.notify({
+          message: repetida,
+          color: 'negative',
+          position: 'top',
+          icon: 'warning',
+          timeout: 3000
+        })
+      } else if (error.response && error.response.data && validarVacios() === true) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
 
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
+      } else {
+        console.log(error);
+      }
+    })
+    loading.value = false
+  }
+
 }
 
 function editarCentro(c) {
-  console.log("Entró a editar", c);
   bd.value = 0;
   id.value = c._id;
   codigo.value = c.codigo
@@ -251,46 +286,48 @@ function editarCentro(c) {
 }
 
 async function actualizar() {
-  loading.value = true
-  await useCentro.actualizarCentros(
-    id.value,
-    codigo.value,
-    nombre.value,
-    direccion.value,
-    ciudad.value,
-  ).then(() => {
-    $q.notify({
-      message: 'Centro de formación editado exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
-    })
-    agregar.value = false
-    buscar();
-  }).catch((error) => {
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
+  if (validarFrontend() === true) {
+    loading.value = true
+    await useCentro.actualizarCentros(
+      id.value,
+      codigo.value,
+      nombre.value,
+      direccion.value,
+      ciudad.value,
+    ).then(() => {
       $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
+        message: 'Centro de formación editado exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
         timeout: 3000
       })
-    } else if (error.response && error.response.data && validarVacios() === true) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
+      agregar.value = false
+      buscar();
+    }).catch((error) => {
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg
+        $q.notify({
+          message: repetida,
+          color: 'negative',
+          position: 'top',
+          icon: 'warning',
+          timeout: 3000
+        })
+      } else if (error.response && error.response.data && validarVacios() === true) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
 
-    } else {
-      console.log(error);
-    }
-  })
-  loading.value = false
+      } else {
+        console.log(error);
+      }
+    })
+    loading.value = false
+  }
+
 }
 
 async function editarEstado(centro) {
-  console.log("entre a editar estado", centro.estado);
   try {
     if (centro.estado === 1) {
       centro.estado = 0
@@ -337,4 +374,5 @@ async function editarEstado(centro) {
   #card {
     width: 100%;
   }
-}</style>
+}
+</style>

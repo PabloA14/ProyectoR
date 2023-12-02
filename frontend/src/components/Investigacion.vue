@@ -98,7 +98,8 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
+                        <q-file v-model="archivo" clearable @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -215,55 +216,90 @@ function validar() {
 
 async function buscar() {
     investigaciones.value = await useInvestigacion.buscarInvestigacion();
-    console.log(investigaciones.value);
     investigaciones.value.reverse()
 }
 
-async function agregarN() {
-    console.log("entro a agregar");
-    loading.value = true
-    await useInvestigacion.agregarInves({
-        denominacion: nombre.value,
-        descripcion: descripcion.value,
-        fecha: fecha.value,
-        documentos: archivo.value,
-        idPrograma: programaId
-    }).then(() => {
-        agregar.value = false
+function validarFrontend() {
+    if (!nombre.value.trim()) {
         $q.notify({
-            message: 'Investigación agregada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
+            message: 'El nombre es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
             timeout: 3000
         })
-        buscar();
-    }).catch((error) => {
-        console.log(error);
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    } else if (!descripcion.value.trim()) {
+        $q.notify({
+            message: 'La descripción es obligatoria',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!fecha.value) {
+        $q.notify({
+            message: 'El año es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!archivo.value) {
+        $q.notify({
+            message: 'El archivo es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else return true
+}
+
+async function agregarN() {
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useInvestigacion.agregarInves({
+            denominacion: nombre.value,
+            descripcion: descripcion.value,
+            fecha: fecha.value,
+            documentos: archivo.value,
+            idPrograma: programaId
+        }).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Investigación agregada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-
-        } else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
-
-        } else {
+            buscar();
+        }).catch((error) => {
             console.log(error);
-        }
-    })
-    loading.value = false
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+
+            } else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
+
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 
 function editarInves(i) {
-    console.log("Entró a editar", i);
     bd.value = 0;
     id.value = i._id;
     nombre.value = i.denominacion
@@ -274,45 +310,47 @@ function editarInves(i) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useInvestigacion.actualizarInves(
-        id.value,
-        nombre.value,
-        descripcion.value,
-        fecha.value,
-        archivo.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Investigación editada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-
-    }).catch((error) => {
-        errores.value = ''
-        if (error.response && error.response.data.msg) {
-            const repetida = error.response.data.msg
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useInvestigacion.actualizarInves(
+            id.value,
+            nombre.value,
+            descripcion.value,
+            fecha.value,
+            archivo.value
+        ).then(() => {
+            agregar.value = false
             $q.notify({
-                message: repetida,
-                color: 'negative',
-                position: 'top',
-                icon: 'warning',
+                message: 'Investigación editada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
                 timeout: 3000
             })
-        }
-        else if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+            buscar();
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+        }).catch((error) => {
+            errores.value = ''
+            if (error.response && error.response.data.msg) {
+                const repetida = error.response.data.msg
+                $q.notify({
+                    message: repetida,
+                    color: 'negative',
+                    position: 'top',
+                    icon: 'warning',
+                    timeout: 3000
+                })
+            }
+            else if (error.response && error.response.data && validarVacios() === true) {
+                errores.value = error.response.data.errors[0].msg
+                validar()
+
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 

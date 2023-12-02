@@ -29,7 +29,7 @@
                                 <q-item-section>
                                     <a :href="disCurri" style="text-align: center;color: black;" target="_blank">
                                         <span class="material-symbols-outlined" id="opciones"
-                                            style="font-size: 6vh; color: black">
+                                            style="font-size: 5.5vh; color: black">
                                             download
                                         </span>
                                     </a>
@@ -144,8 +144,8 @@ const useUsuario = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
 let nombre = ref(usePrograma.programa.denominacionPrograma)
 let disCurri = ref(usePrograma.programa.disCurricular)
-let programaSeleccionado = usePrograma.programa
-console.log(programaSeleccionado);
+/* let programaSeleccionado = usePrograma.programa
+console.log(programaSeleccionado); */
 
 let codigo = ref(usePrograma.programa.codigo);
 let agregar = ref(false)
@@ -170,29 +170,43 @@ function archivo(event) {
     dis.value = event.target.files[0];
 }
 
+function validarHayDiseño() {
+    if (!dis.value) {
+        $q.notify({
+            message: 'Debe adjuntar el archivo',
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+        });
+    } else return true
+}
+
 async function agregarDis() {
-    loading.value = true
-    await usePrograma.putDiseno(id.value, dis.value)
-        .then(() => {
-            agregar.value = false
-            $q.notify({
-                message: "Diseño Curricular editado exitosamente",
-                color: "green",
-                icon: "check",
-                position: "bottom",
-                timeout: 3000,
-            });
-            informacionPrograma(codigo.value)
-            router.push("/InformacionPrograma");
-        }).catch((error) => {
-            if (error.response && error.response.data) {
-                errores.value = error.response.data.errors[0].msg;
-                validar();
-            } else {
-                console.log(error);
-            }
-        })
-    loading.value = false
+    if (validarHayDiseño() === true) {
+        loading.value = true
+        await usePrograma.putDiseno(id.value, dis.value)
+            .then(() => {
+                agregar.value = false
+                $q.notify({
+                    message: "Diseño Curricular editado exitosamente",
+                    color: "green",
+                    icon: "check",
+                    position: "bottom",
+                    timeout: 3000,
+                });
+                informacionPrograma(codigo.value)
+                router.push("/InformacionPrograma");
+            }).catch((error) => {
+                if (error.response && error.response.data) {
+                    errores.value = error.response.data.errors[0].msg;
+                    validar();
+                } else {
+                    console.log(error);
+                }
+            })
+        loading.value = false
+    }
 }
 
 async function informacionPrograma(x) {
@@ -252,7 +266,6 @@ async function informacionPrograma(x) {
     display: flex;
     justify-content: center;
     align-items: center;
-
     background-color: rgba(255, 255, 255, 0.8);
 }
 </style>

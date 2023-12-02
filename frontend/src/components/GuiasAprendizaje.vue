@@ -72,7 +72,7 @@
             </div>
 
             <div class="q-mb-md">
-              <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
+              <q-file clearable v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
                 <template v-slot:prepend>
                   <q-icon name="attach_file" />
                 </template>
@@ -170,57 +170,72 @@ function vaciar() {
   archivo.value = ""
 }
 
-async function agregarN() {
-  loading.value = true
-  await usegias.agregarGuia({
-    nombre: nombre.value,
-    documento: archivo.value,
-    fase: fase.value
-
-  }).then((res) => {
-    useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id, res.data.guia._id)
-    mostrarModal.value = false
+function validarFrontend() {
+  if (!nombre.value.trim()) {
     $q.notify({
-      message: 'Guía de aprendizaje agregada exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
+      message: 'El nombre es obligatorio',
+      color: 'negative',
+      position: 'top',
+      icon: 'warning',
       timeout: 3000
     })
-    Program.value.push(res.data.guia)
-    filterGuias()
-  }).catch((error) => {
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
-      $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
-        timeout: 3000
-      })
-    } else if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
-
-    } else {
-      console.log(error);
-    }
-
-  })
-  loading.value = false
+  } else if (!archivo.value) {
+    $q.notify({
+      message: 'El archivo es obligatorio',
+      color: 'negative',
+      position: 'top',
+      icon: 'warning',
+      timeout: 3000
+    })
+  } else return true
 }
 
-/* async function buscar() {
-  try {
-    dataGuias.value = await usegias.buscarguia()
-  } catch {
-    console.error("Error al buscar Guias:");
+async function agregarN() {
+  if (validarFrontend() === true) {
+    loading.value = true
+    await usegias.agregarGuia({
+      nombre: nombre.value,
+      documento: archivo.value,
+      fase: fase.value
+
+    }).then((res) => {
+      useDesarrollo.postProyectoGuias(usePrograma.programa.desarrolloCurricular._id, res.data.guia._id)
+      mostrarModal.value = false
+      $q.notify({
+        message: 'Guía de aprendizaje agregada exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
+        timeout: 3000
+      })
+      Program.value.push(res.data.guia)
+      filterGuias()
+    }).catch((error) => {
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg
+        $q.notify({
+          message: repetida,
+          color: 'negative',
+          position: 'top',
+          icon: 'warning',
+          timeout: 3000
+        })
+      } else if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
+
+      } else {
+        console.log(error);
+      }
+
+    })
+    loading.value = false
   }
-} */
+
+}
+
 
 function editarGuia(g) {
-  console.log("Entró a editar", g);
   bd.value = 0;
   id.value = g._id;
   nombre.value = g.nombre;
@@ -229,48 +244,50 @@ function editarGuia(g) {
 }
 
 async function actualizar() {
-  loading.value = true
-  await usegias.actualizarGuia(
-    id.value,
-    nombre.value,
-    archivo.value,
-    idPrograma.value
-  ).then((res) => {
-    console.log(res);
-    mostrarModal.value = false
-    $q.notify({
-      message: 'Guía de aprendizaje editada exitosamente',
-      color: 'green',
-      icon: 'check',
-      position: 'bottom',
-      timeout: 3000
-    })
-    usePrograma.programa = res.data
-    Program.value = res.data.desarrolloCurricular.idGuias
-    console.log(Program.value);
-    filterGuias()
-  }).catch((error) => {
-    errores.value = ''
-    if (error.response && error.response.data.msg) {
-      const repetida = error.response.data.msg
+  if (validarFrontend() === true) {
+    loading.value = true
+    await usegias.actualizarGuia(
+      id.value,
+      nombre.value,
+      archivo.value,
+      idPrograma.value
+    ).then((res) => {
+      console.log(res);
+      mostrarModal.value = false
       $q.notify({
-        message: repetida,
-        color: 'negative',
-        position: 'top',
-        icon: 'warning',
+        message: 'Guía de aprendizaje editada exitosamente',
+        color: 'green',
+        icon: 'check',
+        position: 'bottom',
         timeout: 3000
       })
-    }
-    else if (error.response && error.response.data) {
-      errores.value = error.response.data.errors[0].msg
-      validar()
+      usePrograma.programa = res.data
+      Program.value = res.data.desarrolloCurricular.idGuias
+      console.log(Program.value);
+      filterGuias()
+    }).catch((error) => {
+      errores.value = ''
+      if (error.response && error.response.data.msg) {
+        const repetida = error.response.data.msg
+        $q.notify({
+          message: repetida,
+          color: 'negative',
+          position: 'top',
+          icon: 'warning',
+          timeout: 3000
+        })
+      }
+      else if (error.response && error.response.data) {
+        errores.value = error.response.data.errors[0].msg
+        validar()
 
-    } else {
-      console.log(error);
-    }
+      } else {
+        console.log(error);
+      }
 
-  })
-  loading.value = false
+    })
+    loading.value = false
+  }
 }
 
 function validar() {

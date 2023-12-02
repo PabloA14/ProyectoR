@@ -98,7 +98,8 @@
                     </div>
 
                     <div class="q-mb-md">
-                        <q-file v-model="archivo" @update:archivo-value="val => { archivo = val[0] }" label="Archivo*">
+                        <q-file v-model="archivo" clearable @update:archivo-value="val => { archivo = val[0] }"
+                            label="Archivo*">
                             <template v-slot:prepend>
                                 <q-icon name="attach_file" />
                             </template>
@@ -221,30 +222,75 @@ function validar() {
 async function buscar() {
     retros.value = await useRetroalimentacion.buscarRetroalimentacion();
     retros.value.reverse()
-    console.log(retros.value);
+}
+
+function validarFrontend() {
+    if (!nombre.value.trim()) {
+        $q.notify({
+            message: 'El nombre es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!codigoFicha.value) {
+        $q.notify({
+            message: 'El código de ficha es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    }
+    else if (!descripcion.value.trim()) {
+        $q.notify({
+            message: 'La descripción es obligatoria',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!fecha.value) {
+        $q.notify({
+            message: 'El año es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else if (!archivo.value) {
+        $q.notify({
+            message: 'El archivo es obligatorio',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
+    } else return true
 }
 
 async function agregarN() {
-    loading.value = true
-    await useRetroalimentacion.agregarRetro({
-        nombre: nombre.value,
-        codigoFicha: codigoFicha.value,
-        descripcion: descripcion.value,
-        fecha: fecha.value,
-        documentos: archivo.value,
-        programa: programaId
-    }).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Retroalimentación de Red agregada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
-    }).catch((error) => {
-        console.log(error);
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRetroalimentacion.agregarRetro({
+            nombre: nombre.value,
+            codigoFicha: codigoFicha.value,
+            descripcion: descripcion.value,
+            fecha: fecha.value,
+            documentos: archivo.value,
+            programa: programaId
+        }).then(() => {
+            agregar.value = false
+            $q.notify({
+                message: 'Retroalimentación de Red agregada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
+                timeout: 3000
+            })
+            buscar();
+        }).catch((error) => {
+            console.log(error);
         /* if (error.response && error.response.data.msg) {
             const repetida = error.response.data.msg
             $q.notify({
@@ -256,18 +302,18 @@ async function agregarN() {
             })
 
         } else  */if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 function editarInves(i) {
-    console.log("Entró a editar", i);
     bd.value = 0;
     id.value = i._id;
     nombre.value = i.nombre
@@ -278,27 +324,28 @@ function editarInves(i) {
 }
 
 async function actualizar() {
-    loading.value = true
-    await useRetroalimentacion.actualizarRetro(
-        id.value,
-        nombre.value,
-        codigoFicha.value,
-        descripcion.value,
-        fecha.value,
-        archivo.value
-    ).then(() => {
-        agregar.value = false
-        $q.notify({
-            message: 'Retroalimentación editada exitosamente',
-            color: 'green',
-            icon: 'check',
-            position: 'bottom',
-            timeout: 3000
-        })
-        buscar();
+    if (validarFrontend() === true) {
+        loading.value = true
+        await useRetroalimentacion.actualizarRetro(
+            id.value,
+            nombre.value,
+            codigoFicha.value,
+            descripcion.value,
+            fecha.value,
+            archivo.value
+        ).then(() => {
+            agregar.value = false
+            $q.notify({
+                message: 'Retroalimentación editada exitosamente',
+                color: 'green',
+                icon: 'check',
+                position: 'bottom',
+                timeout: 3000
+            })
+            buscar();
 
-    }).catch((error) => {
-        errores.value = ''
+        }).catch((error) => {
+            errores.value = ''
        /*  if (error.response && error.response.data.msg) {
             const repetida = error.response.data.msg
             $q.notify({
@@ -310,14 +357,15 @@ async function actualizar() {
             })
         }
         else  */if (error.response && error.response.data && validarVacios() === true) {
-            errores.value = error.response.data.errors[0].msg
-            validar()
+                errores.value = error.response.data.errors[0].msg
+                validar()
 
-        } else {
-            console.log(error);
-        }
-    })
-    loading.value = false
+            } else {
+                console.log(error);
+            }
+        })
+        loading.value = false
+    }
 }
 
 

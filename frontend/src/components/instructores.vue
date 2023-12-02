@@ -68,7 +68,7 @@
 
         <q-card-section style="max-height: 65vh" class="scroll" id="agregar">
           <div class="q-mb-md">
-            <q-select label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
+            <q-select clearable label="Seleccionar Instructor" v-if="instructores.length > 0" v-model="instructor"
               :options="instructores.map(i => ({ label: `${i.nombre} ${i.apellidos}`, value: i._id }))" emit-value
               map-options>
             </q-select>
@@ -140,7 +140,6 @@ let arrayInstructores = []
 const useUsuari = useUsuarioStore();
 const usePrograma = useProgramasFormacionStore();
 let programaSeleccionado = usePrograma.programa
-console.log(programaSeleccionado);
 let instructoresBd = usePrograma.instructores
 
 const columns = [
@@ -248,7 +247,6 @@ function Modeliminar() {
 }
 
 const informacionPrograma = async (x) => {
-  console.log(x);
   const res = await usePrograma.informacionPrograma(x).then((res) => {
     usuarios.value = res.data.instructores
     modalAgg.value = false

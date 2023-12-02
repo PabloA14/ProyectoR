@@ -109,7 +109,7 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Nivel de Formación*" v-model="nivel" :options="niveles.map((nivel) => ({
+            <q-select label="Nivel de Formación*" clearable v-model="nivel" :options="niveles.map((nivel) => ({
               label: nivel.denominacion,
               value: nivel._id,
             }))
@@ -118,11 +118,11 @@
           </div>
 
           <div class="q-mb-md">
-            <q-input label="Versión*" v-model="version" />
+            <q-input label="Versión*" type="number" v-model="version" />
           </div>
 
           <div class="q-mb-md" v-if="bd == 1">
-            <q-file v-model="disCurricular" @update:disCurricular-value="val => { disCurricular = val[0] }"
+            <q-file clearable v-model="disCurricular" @update:disCurricular-value="val => { disCurricular = val[0] }"
               label="Diseño Curricular*">
               <template v-slot:prepend>
                 <q-icon name="attach_file" />
@@ -218,7 +218,6 @@ const token = dataProgram.informacionToken;
 const decodedToken = decodeJWT(token);
 
 if (decodedToken) {
-  console.log("Token decodificado:", decodedToken);
   redConocimiento.value = decodedToken.redConocimiento.denominacion;
 } else {
   console.log("No se pudo decodificar el token.");
@@ -280,7 +279,6 @@ let programasFiltrados = computed(() => {
 async function buscar() {
   programas.value = await usePrograma.getProgramas();
   programas.value.reverse();
-  console.log(programas.value);
 }
 
 async function buscarNiveles() {
@@ -328,54 +326,100 @@ function validar() {
   });
 }
 
+
+function validarFrontend() {
+  if (!codigo.value) {
+    $q.notify({
+      message: 'El código es obligatorio',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    })
+  } else if (!denominacion.value.trim()) {
+    $q.notify({
+      message: 'La denominación es obligatoria',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else if (!nivel.value) {
+    $q.notify({
+      message: 'El nivel de formación es obligatorio',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else if (!version.value) {
+    $q.notify({
+      message: 'La versión es obligatoria',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else if (!disCurricular.value) {
+    $q.notify({
+      message: 'El diseño curricular es obligatorio',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else return true
+}
+
 async function agregarP() {
-  loading.value = true;
-  await usePrograma
-    .agregarProgramaFormacion({
-      codigo: codigo.value,
-      denominacionPrograma: denominacion.value,
-      nivelFormacion: nivel.value,
-      version: version.value,
-      RedConocimiento: decodedToken.redConocimiento._id,
-      disCurricular: disCurricular.value,
-    })
-    .then(() => {
-      agregar.value = false;
-      $q.notify({
-        message: "Programa de formación agregado exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: 3000,
-      });
-      buscar();
-    })
-    .catch((error) => {
-      if (error.response && error.response.data.msg) {
-        const repetida = error.response.data.msg;
+  if (validarFrontend() === true) {
+    loading.value = true;
+    await usePrograma
+      .agregarProgramaFormacion({
+        codigo: codigo.value,
+        denominacionPrograma: denominacion.value,
+        nivelFormacion: nivel.value,
+        version: version.value,
+        RedConocimiento: decodedToken.redConocimiento._id,
+        disCurricular: disCurricular.value,
+      })
+      .then(() => {
+        agregar.value = false;
         $q.notify({
-          message: repetida,
-          color: "negative",
-          position: "top",
-          icon: "warning",
+          message: "Programa de formación agregado exitosamente",
+          color: "green",
+          icon: "check",
+          position: "bottom",
           timeout: 3000,
         });
-      } else if (
-        error.response &&
-        error.response.data &&
-        validarVacios() === true
-      ) {
-        errores.value = error.response.data.errors[0].msg;
-        validar();
-      } else {
-        console.log(error);
-      }
-    });
-  loading.value = false;
+        buscar();
+      })
+      .catch((error) => {
+        if (error.response && error.response.data.msg) {
+          const repetida = error.response.data.msg;
+          $q.notify({
+            message: repetida,
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+          });
+        } else if (
+          error.response &&
+          error.response.data &&
+          validarVacios() === true
+        ) {
+          errores.value = error.response.data.errors[0].msg;
+          validar();
+        } else {
+          console.log(error);
+        }
+      });
+    loading.value = false;
+  }
 }
 
 function editarPrograma(x) {
-  console.log("Entró a editar", x);
   bd.value = 0;
   id.value = x._id;
   codigo.value = x.codigo;
@@ -385,50 +429,88 @@ function editarPrograma(x) {
   agregar.value = true;
 }
 
-async function actualizar() {
-  loading.value = true;
-  await usePrograma
-    .actualizarProgramaFormacion(
-      id.value,
-      codigo.value,
-      denominacion.value,
-      nivel.value,
-      version.value
-    )
-    .then(() => {
-      agregar.value = false;
-      $q.notify({
-        message: "Programa de formación editado exitosamente",
-        color: "green",
-        icon: "check",
-        position: "bottom",
-        timeout: 3000,
-      });
-      buscar();
+function validarFrontendEditar() {
+  if (!codigo.value) {
+    $q.notify({
+      message: 'El código es obligatorio',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
     })
-    .catch((error) => {
-      errores.value = "";
-      if (error.response && error.response.data.msg) {
-        const repetida = error.response.data.msg;
+  } else if (!denominacion.value.trim()) {
+    $q.notify({
+      message: 'La denominación es obligatoria',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else if (!nivel.value) {
+    $q.notify({
+      message: 'El nivel de formación es obligatorio',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else if (!version.value) {
+    $q.notify({
+      message: 'La versión es obligatoria',
+      color: "negative",
+      position: "top",
+      icon: "warning",
+      timeout: 3000,
+    });
+  } else return true
+}
+
+async function actualizar() {
+  if (validarFrontendEditar() === true) {
+    loading.value = true;
+    await usePrograma
+      .actualizarProgramaFormacion(
+        id.value,
+        codigo.value,
+        denominacion.value,
+        nivel.value,
+        version.value
+      )
+      .then(() => {
+        agregar.value = false;
         $q.notify({
-          message: repetida,
-          color: "negative",
-          position: "top",
-          icon: "warning",
+          message: "Programa de formación editado exitosamente",
+          color: "green",
+          icon: "check",
+          position: "bottom",
           timeout: 3000,
         });
-      } else if (
-        error.response &&
-        error.response.data &&
-        validarVacios() === true
-      ) {
-        errores.value = error.response.data.errors[0].msg;
-        validar();
-      } else {
-        console.log(error);
-      }
-    });
-  loading.value = false;
+        buscar();
+      })
+      .catch((error) => {
+        errores.value = "";
+        if (error.response && error.response.data.msg) {
+          const repetida = error.response.data.msg;
+          $q.notify({
+            message: repetida,
+            color: "negative",
+            position: "top",
+            icon: "warning",
+            timeout: 3000,
+          });
+        } else if (
+          error.response &&
+          error.response.data &&
+          validarVacios() === true
+        ) {
+          errores.value = error.response.data.errors[0].msg;
+          validar();
+        } else {
+          console.log(error);
+        }
+      });
+    loading.value = false;
+  }
 }
 
 async function editarDesarrollo(x) {
@@ -459,7 +541,6 @@ async function editarDesarrollo(x) {
 }
 
 async function editarEstado(x) {
-  console.log("entre a editar estado", x.estado);
   try {
     if (x.estado === 1) {
       x.estado = 0;
@@ -481,9 +562,7 @@ async function editarEstado(x) {
 }
 
 const informacionPrograma = async (x) => {
-  console.log("----------------");
   codigo.value = x.codigo;
-  console.log(codigo.value);
   await usePrograma.informacionPrograma(codigo.value);
   router.push("/InformacionPrograma");
 };

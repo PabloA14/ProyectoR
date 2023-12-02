@@ -58,7 +58,7 @@
                 <q-card-section style="max-height: 65vh" class="scroll">
 
                     <div class="q-mb-md">
-                        <q-select label="Seleccionar los materiales de formación" v-model="materialSeleccionado"
+                        <q-select clearable label="Seleccionar los materiales de formación" v-model="materialSeleccionado"
                             :options="material.map(mat => ({ label: mat.nombre, value: mat._id }))" emit-value map-options>
                         </q-select>
                     </div>
@@ -136,7 +136,6 @@ async function buscarMat() {
         })
 }
 
-console.log(usePrograma.programa);
 
 async function buscarMateriales() {
     const materialesActivos = await useMaterial.buscarMateriales();
@@ -147,43 +146,49 @@ function nuevo() {
     materialSeleccionado.value = ""
 }
 
-async function agregarN() {
-    loading.value = true
-    console.log("entro a agregar");
-    await usePrograma.asignarMateriales(idPrograma, materialSeleccionado.value)
-        .then(() => {
-            agregar.value = false
-            $q.notify({
-                message: 'Material de formación agregado exitosamente',
-                color: 'green',
-                icon: 'check',
-                position: 'bottom',
-                timeout: 3000
-            })
-            buscarMat()
-        }).catch((error) => {
-            if (materialSeleccionado.value === "") {
-                $q.notify({
-                    message: 'Debe seleccionar un material',
-                    color: 'negative',
-                    icon: 'warning',
-                    position: 'top',
-                    timeout: 3000
-                })
-            } else if (error.response && error.response.data.msg) {
-                const fallo = error.response.data.msg
-                $q.notify({
-                    message: fallo,
-                    color: 'negative',
-                    position: 'top',
-                    icon: 'warning',
-                    timeout: 3000
-                })
-            } else {
-                console.log(error);
-            }
+function validar() {
+    if (!materialSeleccionado.value) {
+        $q.notify({
+            message: 'Debe seleccionar un material',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
         })
-    loading.value = false
+    } else return true
+}
+
+
+async function agregarN() {
+    if (validar() === true) {
+        loading.value = true
+        await usePrograma.asignarMateriales(idPrograma, materialSeleccionado.value)
+            .then(() => {
+                agregar.value = false
+                $q.notify({
+                    message: 'Material de formación agregado exitosamente',
+                    color: 'green',
+                    icon: 'check',
+                    position: 'bottom',
+                    timeout: 3000
+                })
+                buscarMat()
+            }).catch((error) => {
+                if (error.response && error.response.data.msg) {
+                    const fallo = error.response.data.msg
+                    $q.notify({
+                        message: fallo,
+                        color: 'negative',
+                        position: 'top',
+                        icon: 'warning',
+                        timeout: 3000
+                    })
+                } else {
+                    console.log(error);
+                }
+            })
+        loading.value = false
+    }
 }
 
 </script>

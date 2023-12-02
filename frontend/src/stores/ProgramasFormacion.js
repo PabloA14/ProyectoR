@@ -65,7 +65,6 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
       let r = await axios.get(`${LinkBD}/api/programasFormacion/traer/${codigo}`)
       programa.value = r.data;
       instructores.value = r.data.instructores
-      console.log(instructores.value);
       return r
     } catch (error) {
       loading.value = true
@@ -86,8 +85,6 @@ export const useProgramasFormacionStore = defineStore("ProgramasFormacion", () =
 
   const updatedDesarrollo = async (id, desarrolloCurricular) => {
     try {
-      console.log("entro a updated Desarrollo")
-      console.log(id, desarrolloCurricular)
       const datos = await axios.put(`${LinkBD}/api/programasFormacion/editarDesarrollo/${id}`, {
         desarrolloCurricular
       });
