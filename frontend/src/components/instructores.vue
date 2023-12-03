@@ -99,7 +99,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disable="loading" v-if="instructores.length > 0" @click="agregarInstructor()"
+          <q-btn :loading="loading" v-if="instructores.length > 0" @click="agregarInstructor()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" label="Agregar" />
         </q-card-actions>
       </q-card>

@@ -69,7 +69,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" label="Agregar  "
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :loading="loading" label="Agregar  "
                         @click="agregarN()" />
                 </q-card-actions>
             </q-card>

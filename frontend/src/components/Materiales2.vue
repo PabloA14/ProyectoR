@@ -68,7 +68,7 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :disabled="loading" label="Agregar" @click="agregarN()"
+                    <q-btn :loading="loading" label="Agregar" @click="agregarN()"
                         :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                 </q-card-actions>
             </q-card>

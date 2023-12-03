@@ -82,9 +82,9 @@
           </q-card-section>
 
           <q-card-actions align="right">
-            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
+            <q-btn :loading="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
               label="Guardar" @click="agregarN" />
-            <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else
+            <q-btn :loading="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else
               label="Actualizar" @click="actualizar" />
           </q-card-actions>
         </q-card>

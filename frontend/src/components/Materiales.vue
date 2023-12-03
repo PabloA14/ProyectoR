@@ -83,9 +83,9 @@
                 <q-separator />
 
                 <q-card-actions align="right">
-                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-if="bd == 1"
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :loading="loading" v-if="bd == 1"
                         label="Agregar" @click="agregarR()" />
-                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :disabled="loading" v-else
+                    <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" :loading="loading" v-else
                         label="Actualizar" @click="actualizar()" />
                 </q-card-actions>
             </q-card>

@@ -110,7 +110,7 @@
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn :disable="loading" label="Actualizar" @click="actualizarFoto()"
+                        <q-btn :loading="loading" label="Actualizar" @click="actualizarFoto()"
                             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                     </q-card-actions>
                 </q-card>
@@ -167,7 +167,7 @@
                     <q-separator />
 
                     <q-card-actions align="right">
-                        <q-btn :disable="loading" label="Actualizar" @click="actualizar()"
+                        <q-btn :loading="loading" label="Actualizar" @click="actualizar()"
                             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                     </q-card-actions>
                 </q-card>

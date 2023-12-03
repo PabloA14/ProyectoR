@@ -163,9 +163,9 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="bd == 1" label="Guardar" @click="agregarMat"
+          <q-btn :loading="loading" v-if="bd == 1" label="Guardar" @click="agregarMat"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
-          <q-btn :disabled="loading" v-else label="Actualizar" @click="actualizarMaterial"
+          <q-btn :loading="loading" v-else label="Actualizar" @click="actualizarMaterial"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
@@ -212,9 +212,9 @@
         </q-card-section>
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
+          <q-btn :loading="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-if="bd == 1"
             label="Guardar" @click="agregarI" />
-          <q-btn :disabled="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else label="Actualizar"
+          <q-btn :loading="loading" :style="{ backgroundColor: colorMenu, color: colorLetra }" v-else label="Actualizar"
             @click="actualizarInstrumento" />
         </q-card-actions>
       </q-card>

@@ -74,7 +74,7 @@
                         <q-separator />
 
                         <q-card-actions align="right">
-                            <q-btn label="Editar" :disabled="loading" @click="agregarDis()"
+                            <q-btn label="Editar" :loading="loading" @click="agregarDis()"
                                 :style="{ backgroundColor: colorMenu, color: colorLetra }" />
                         </q-card-actions>
                     </q-card>

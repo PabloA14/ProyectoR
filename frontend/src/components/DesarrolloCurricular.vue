@@ -265,11 +265,11 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" v-if="inf === 0" label="Agregar" @click="guardarMatriz()"
+          <q-btn :loading="loading" v-if="inf === 0" label="Agregar" @click="guardarMatriz()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
-          <q-btn :disabled="loading" v-if="inf === 1" label="Agregar" @click="saveProyecto()"
+          <q-btn :loading="loading" v-if="inf === 1" label="Agregar" @click="saveProyecto()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
-          <q-btn :disabled="loading" v-if="inf === 2" label="Agregar" @click="savePlaneacionPedagogica()"
+          <q-btn :loading="loading" v-if="inf === 2" label="Agregar" @click="savePlaneacionPedagogica()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
@@ -296,7 +296,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" label="Editar" @click="guardarMatriz()"
+          <q-btn :loading="loading" label="Editar" @click="guardarMatriz()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
@@ -323,7 +323,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" label="Editar" @click="saveProyecto()"
+          <q-btn :loading="loading" label="Editar" @click="saveProyecto()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
@@ -351,7 +351,7 @@
         <q-separator />
 
         <q-card-actions align="right">
-          <q-btn :disabled="loading" label="Editar" @click="savePlaneacionPedagogica()"
+          <q-btn :loading="loading" label="Editar" @click="savePlaneacionPedagogica()"
             :style="{ backgroundColor: colorMenu, color: colorLetra }" />
         </q-card-actions>
       </q-card>
