@@ -88,7 +88,7 @@
                     style="margin-right: 25px;cursor: pointer;" />
                 </a>
 
-                <q-icon title="Editar Material" color="orange" @click="editarMat(props.row)"
+                <q-icon v-if="rol === 'instructor'" title="Editar Material" color="orange" @click="editarMat(props.row)"
                   name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
                 <a :href="props.row.documento" target="_blank" :class="{ 'disabled-mat': props.row.documento === null }">
@@ -107,7 +107,7 @@
               </template>
             </q-input>
           </template>
-          <template v-slot:top-left>
+          <template v-if="rol === 'instructor'" v-slot:top-left>
             <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar" class="q-mb-md"
               @click="
                 agregarMaterial = true;

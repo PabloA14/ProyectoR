@@ -83,7 +83,7 @@
                                 agregar = true;
                             editarUsuario(datos);" />
 
-                        <q-btn color="primary" icon="fa-solid fa-user" label="Foto de Perfil" class="q-mb-md" @click="
+                        <q-btn color="primary" icon="fa-solid fa-image" label="Foto de Perfil" class="q-mb-md" @click="
                             EditarFoto = true; seleccionarFoto(datos)" />
                     </q-card-actions>
                 </q-card>

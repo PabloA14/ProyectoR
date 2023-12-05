@@ -47,7 +47,7 @@
                             <q-spinner style="margin: 0 auto;" color="black" size="2em" :thickness="10"
                                 v-if="useUsuario.loading === true" />
                             <q-btn v-else :style="{ backgroundColor: colorMenu, color: colorLetra }" class="full-width"
-                                label="Ingresar" @click.prevent="iniciarSesion()" />
+                                label="Ingresar" type="submit" @click.prevent="iniciarSesion()" />
                         </div><br>
                     </q-form>
                 </q-card-section>
