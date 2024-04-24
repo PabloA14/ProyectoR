@@ -8,6 +8,7 @@
         </q-breadcrumbs><br>
 
         <div class="text-h4 text-center q-mb-md">Ambientes de Formación</div>
+        
 
         <div class="q-pa-md" style="width: 100%;">
             <div class="spinner-container" v-if="usePrograma.loading === true">
@@ -24,11 +25,6 @@
                     </q-input>
                 </template>
 
-                <template v-slot:body-cell-descripcion="props">
-                    <q-td :props="props" style="white-space: pre-line;">
-                        {{ props.row.descripcion }}
-                    </q-td>
-                </template>
 
                 <template v-if="rol === 'gestor'" v-slot:top-left>
                     <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add" label="Agregar"
@@ -116,7 +112,7 @@ const pagination = ref({
 
 const columns = [
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
-    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: true, field: (row) => row.descripcion },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
 ]
 

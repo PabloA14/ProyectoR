@@ -65,8 +65,12 @@
                                     <div class="text-h7 text-left q-mb-md">
                                         <b>Hoja de Vida:</b> <a :href="datos.hojaDeVida" target="_blank"
                                             style="margin-left: 5%;">
-                                            <q-icon title="Descargar" color="green" name="fa-solid fa-download" size="25px"
-                                                style="cursor: pointer" />
+                                            <q-icon color="green" name="fa-solid fa-download" size="25px"
+                                                style="cursor: pointer">
+                                                <q-tooltip>
+                                                    Descargar
+                                                </q-tooltip>
+                                            </q-icon>
                                         </a>
                                     </div>
 
@@ -116,7 +120,7 @@
                 </q-card>
             </q-dialog>
 
-            <!-- modal de Editar agregar -->
+            <!-- modal de Editar -->
 
             <q-dialog v-model="agregar" class="card">
                 <q-card id="ok">

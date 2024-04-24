@@ -58,8 +58,8 @@
                         </q-input>
                     </template>
                     <template v-slot:top-left>
-                        <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }" icon="add"
-                            label="Agregar" class="q-mb-md" @click="
+                        <q-btn v-if="rol === 'gestor'" :style="{ backgroundColor: colorMenu, color: colorLetra }"
+                            icon="add" label="Agregar" class="q-mb-md" @click="
                                 agregar = true;
                             nuevo();
                             " />
@@ -166,7 +166,7 @@ const columns = [
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
     { name: 'documento', align: 'center', label: 'Documento', field: "documentos", sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-    { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+    { name: 'opciones', align: 'center', label: "Acciones", field: 'opciones' },
 ]
 
 buscar()

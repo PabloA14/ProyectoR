@@ -44,7 +44,8 @@
                 <q-icon v-if="rol === 'gestor'" title="Editar Instrumento" color="orange" @click="editarIns(props.row)"
                   name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
-                <a :href="props.row.documento" target="_blank" :class="{ 'disabled-mat': props.row.documento === null }">
+                <a :href="props.row.documento" target="_blank"
+                  :class="{ 'disabled-mat': props.row.documento === null }">
                   <q-icon title="Descargar instrumento" color="green" name="fa-solid fa-download" size="25px"
                     style="margin-left: 10px;cursor: pointer;" />
                 </a>
@@ -91,7 +92,8 @@
                 <q-icon v-if="rol === 'instructor'" title="Editar Material" color="orange" @click="editarMat(props.row)"
                   name="fa-solid fa-pen-to-square fa-xl" size="25px" style="margin-right: 10px;cursor: pointer;" />
 
-                <a :href="props.row.documento" target="_blank" :class="{ 'disabled-mat': props.row.documento === null }">
+                <a :href="props.row.documento" target="_blank"
+                  :class="{ 'disabled-mat': props.row.documento === null }">
                   <q-icon title="Descargar material" color="green" name="fa-solid fa-download" size="25px"
                     style="margin-left: 10px;cursor: pointer;" />
                 </a>
@@ -283,12 +285,12 @@ let agregarInst = ref(false)
 
 const columnsInstrumento = [
   { name: "nombre", label: "Nombre", sortable: true, field: 'nombre', align: 'center' },
-  { name: "opciones", label: "Opciones", field: "opciones", sortable: false, align: 'center' },
+  { name: "opciones", label: "Acciones", field: "opciones", sortable: false, align: 'center' },
 ];
 
 const columnsMaterial = [
   { name: "nombre", label: "Nombre", sortable: true, field: 'nombre', align: 'center' },
-  { name: "opciones", label: "Opciones", field: "opciones", sortable: false, align: 'center' },
+  { name: "opciones", label: "Acciones", field: "opciones", sortable: false, align: 'center' },
 ];
 
 const pagination = ref({

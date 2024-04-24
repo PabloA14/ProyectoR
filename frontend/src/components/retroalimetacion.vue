@@ -14,7 +14,8 @@
             </div>
 
             <q-table v-if="useRetroalimentacion.loading === false" class="my-sticky-header-table" :separator="separator"
-                bordered :filter="filter" :rows="retroFiltradas" :columns="columns" row-key="name" :pagination="pagination">
+                bordered :filter="filter" :rows="retroFiltradas" :columns="columns" row-key="name"
+                :pagination="pagination">
                 <template v-slot:body-cell-opciones="props">
                     <q-td :props="props">
                         <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -121,7 +122,7 @@
 
     </q-page>
 </template>
-    
+
 <script setup>
 import { ref, computed, onMounted } from "vue";
 import { useRetroalimentacionStore } from "../stores/retroalimetacion"
@@ -170,7 +171,7 @@ const columns = [
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
     { name: 'documento', align: 'center', label: 'Documento', sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-    { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+    { name: 'opciones', align: 'center', label: "Acciones", field: 'opciones' },
 ]
 
 const usePrograma = useProgramasFormacionStore();

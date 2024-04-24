@@ -60,112 +60,93 @@
       </q-card>
     </q-dialog>
 
-    <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false" @mouseout="miniState = true"
-      :width="300" :breakpoint="500" bordered mini-to-overlay :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
+    <q-drawer v-model="drawer" show-if-above :mini="miniState" @mouseover="miniState = false"
+      @mouseout="miniState = true" :width="300" :breakpoint="500" bordered mini-to-overlay
+      :class="$q.dark.isActive ? 'bg-grey-9' : 'bg-grey-3'">
       <q-scroll-area class="fit" :horizontal-thumb-style="{ opacity: 0 }">
         <q-list padding>
-          <router-link v-if="rol === 'gestor' || rol === 'instructor'" to="programas"
-            style="text-decoration: none; color: black">
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon class="fi fi-sr-book-open-cover" />
-              </q-item-section>
 
-              <q-item-section> Programas de Formación </q-item-section>
-            </q-item>
-          </router-link>
+          <q-item v-if="rol === 'gestor' || rol === 'instructor'" to="programas" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon class="fi fi-sr-book-open-cover" />
+            </q-item-section>
 
-          <router-link to="redes" v-if="rol === 'administrador'" style="text-decoration: none; color: black">
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon class="fi fi-sr-head-side-brain" />
-              </q-item-section>
+            <q-item-section> Programas de Formación </q-item-section>
+          </q-item>
 
-              <q-item-section> Redes de Conocimiento </q-item-section>
-            </q-item>
-          </router-link>
+          <q-item to="redes" v-if="rol === 'administrador'" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon class="fi fi-sr-head-side-brain" />
+            </q-item-section>
+            <q-item-section> Redes de Conocimiento </q-item-section>
+          </q-item>
 
-          <router-link to="niveles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon class="fi fi-sr-chart-pyramid" />
-              </q-item-section>
+          <q-item to="niveles" v-if="rol === 'administrador'" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon class="fi fi-sr-chart-pyramid" />
+            </q-item-section>
 
-              <q-item-section> Niveles de Formación </q-item-section>
-            </q-item>
-          </router-link>
+            <q-item-section> Niveles de Formación </q-item-section>
+          </q-item>
 
-          <router-link to="centroF" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
-              <q-item-section avatar>
-                <q-icon class="fa-solid fa-building-columns" />
-              </q-item-section>
+          <q-item to="centroF" v-if="rol === 'administrador'" clickable v-ripple>
+            <q-item-section avatar>
+              <q-icon class="fa-solid fa-building-columns" />
+            </q-item-section>
 
-              <q-item-section> Centros de Formación </q-item-section>
-            </q-item>
-          </router-link>
+            <q-item-section> Centros de Formación </q-item-section>
+          </q-item>
 
-          <router-link to="ambientes" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
+            <q-item to="ambientes" v-if="rol === 'administrador'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-chart-user" />
               </q-item-section>
 
               <q-item-section> Ambientes de Formación </q-item-section>
             </q-item>
-          </router-link>
 
-          <router-link to="materiales" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
+            <q-item to="materiales" v-if="rol === 'administrador'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-pencil-paintbrush" />
               </q-item-section>
 
               <q-item-section> Materiales de Formación </q-item-section>
             </q-item>
-          </router-link>
 
-          <router-link to="usuarios" style="text-decoration: none; color: black" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
+            <q-item to="usuarios" v-if="rol === 'administrador'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-users" />
               </q-item-section>
 
               <q-item-section> Usuarios </q-item-section>
             </q-item>
-          </router-link>
 
-          <router-link to="roles" style="color: black; text-decoration: none" v-if="rol === 'administrador'">
-            <q-item clickable v-ripple>
+            <q-item to="roles" v-if="rol === 'administrador'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fi fi-sr-key" />
               </q-item-section>
 
               <q-item-section> Roles de Usuario </q-item-section>
             </q-item>
-          </router-link>
 
           <q-separator />
 
-          <router-link to="perfil" style="color: black; text-decoration: none">
-            <q-item clickable v-ripple>
+            <q-item to="perfil" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-user" />
               </q-item-section>
 
               <q-item-section>Perfil</q-item-section>
             </q-item>
-          </router-link>
 
-          <router-link v-if="rol === 'administrador'" to="colorSettings" style="color: black; text-decoration: none">
-            <q-item clickable v-ripple>
+            <q-item to="colorSettings" v-if="rol === 'administrador'" clickable v-ripple>
               <q-item-section avatar>
                 <q-icon class="fa-solid fa-gear" />
               </q-item-section>
 
               <q-item-section>Configuración</q-item-section>
             </q-item>
-          </router-link>
+         
         </q-list>
       </q-scroll-area>
     </q-drawer>
@@ -175,7 +156,7 @@
       <router-view />
     </q-page-container>
   </q-layout>
-</template> 
+</template>
 
 <script setup>
 import { useUsuarioStore } from "../stores/Usuarios.js";
@@ -209,9 +190,11 @@ const cerrarSesion = () => {
 
 function logout() {
   confirm.value = false
-  useUsuario.usuario = {}
-  useUsuario.token = ""
-  router.push("/");
+  localStorage.removeItem("usuario")
+  localStorage.removeItem("Guia")
+  localStorage.removeItem("ProgramasFormacion")
+  sessionStorage.removeItem("token")
+  router.push("/")
 }
 
 </script>

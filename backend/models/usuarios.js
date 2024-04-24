@@ -13,7 +13,7 @@ const iususarioSchema = new mongoose.Schema({
     rol: { type: mongoose.Schema.Types.ObjectId, ref: 'rolesUsuario', required: true },
     perfilProfesional: { type: String, required: true },
     estado: { type: Number, default: 1, required: true },
-    recuperacion: {type:String, default: ''},
+    recuperacion: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now }
 })
 

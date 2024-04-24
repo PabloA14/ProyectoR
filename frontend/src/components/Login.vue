@@ -31,8 +31,8 @@
                                 <q-icon name="lock" />
                             </template>
                             <template v-slot:append>
-                                <i @click="mostrarContrasena = !mostrarContrasena" style="cursor: pointer;" class="fa-solid"
-                                    :class="mostrarContrasena ? 'fa-eye' : 'fa-eye-slash'"></i>
+                                <i @click="mostrarContrasena = !mostrarContrasena" style="cursor: pointer;"
+                                    class="fa-solid" :class="mostrarContrasena ? 'fa-eye' : 'fa-eye-slash'"></i>
                             </template>
                         </q-input><br>
 
@@ -65,11 +65,10 @@
                 <q-separator inset style="height: 5px;margin-top: 5px;" :style="{ backgroundColor: colorMenu }" /><br>
 
                 <q-card-section class="q-pt-none">
-                    Ingrese su dirección de correo electrónico para
-                    restablecer su contraseña:
+                    Ingrese el correo electrónico que tenga registrado para comenzar:
 
-                    <q-input style="margin-top: 5%;" filled dense v-model="correo" autofocus @keyup.enter="prompt = false"
-                        placeholder="Correo electrónico" />
+                    <q-input style="margin-top: 5%;" filled dense v-model="correo" autofocus
+                        @keyup.enter="prompt = false" placeholder="Correo electrónico" />
                 </q-card-section>
 
                 <q-card-actions align="center">
@@ -79,7 +78,7 @@
                             v-if="useUsuario.cargando === true" />
 
                         <q-btn v-else @click="envioCorreo()" :style="{ backgroundColor: colorMenu, color: colorLetra }"
-                            label="Restablecer Contraseña" />
+                            label="Enviar Correo" />
                     </div>
 
                 </q-card-actions>
@@ -112,7 +111,7 @@ const modalVisible = ref(false);
 
 let mostrarContrasena = ref(false);
 
-let correo = ref('');
+let correo = ref('')
 
 onBeforeMount(async () => {
     await colores.traerConfiguracion()
@@ -122,6 +121,7 @@ onBeforeMount(async () => {
 
 function openModal() {
     modalVisible.value = true;
+
 }
 
 function validarFrontend() {
@@ -162,6 +162,14 @@ async function iniciarSesion() {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 ruta.value = "/home";
                 router.push(ruta.value);
+
+                $q.notify({
+                    message: 'Inicio de sesión exitoso',
+                    color: 'green',
+                    icon: 'check',
+                    position: 'bottom',
+                    timeout: 3000
+                })
             }).catch((error) => {
                 if (error.response && error.response.data.errors) {
 

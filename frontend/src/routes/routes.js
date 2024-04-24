@@ -3,7 +3,7 @@ import Header from "../components/Header.vue"
 import Home from "../components/Home.vue"
 import Usuarios from "../components/Usuarios.vue"
 import Programas from "../components/ProgramasFormacion.vue"
-import Redes from "../components/Redes.vue"
+import Redes from "../components/redes.vue"
 import Centros from "../components/Centros.vue"
 import Niveles from "../components/Niveles.vue"
 import Roles from "../components/Roles.vue"
@@ -18,7 +18,7 @@ import InfoGuia from "../components/InfoGuia.vue"
 import Ambientes2 from "../components/Ambientes2.vue"
 import Materiales2 from "../components/Materiales2.vue"
 import Retroalimetacion from "../components/retroalimetacion.vue"
-import instructores from "../components/instructores.vue"
+import Instructores from "../components/Instructores.vue"
 import proyecto from "../components/proyecto.vue"
 import Recuperar from "../components/Recuperar.vue"
 import registroCalificado from "../components/registroCalificado.vue"
@@ -29,16 +29,33 @@ import colorSettings from "../components/colorSettings.vue"
 import { useUsuarioStore } from "../stores/Usuarios.js"
 import { useUserStore } from "../almacenaje/informacion.js"
 import { createRouter, createWebHashHistory } from 'vue-router';
+import { Notify } from 'quasar'
+
 
 const auth = (to, from, next) => {
     if (checkAuth()) {
         const userUsuario = useUsuarioStore()
         const rol = userUsuario.rol
         if (!to.meta.rol.includes(rol)) {
+            Notify.create({
+                message: 'No tiene autorización para visitar esta página',
+                color: 'negative',
+                icon: 'warning',
+                position: 'top',
+                timeout: 3000
+            })
             return next({ name: 'login' })
+
         }
         next()
     } else {
+        Notify.create({
+            message: 'No tiene autorización para visitar esta página',
+            color: 'negative',
+            icon: 'warning',
+            position: 'top',
+            timeout: 3000
+        })
         return next({ name: 'login' })
     }
 }
@@ -69,7 +86,7 @@ export const routes = [
             { path: "/ambientesPrograma", component: Ambientes2, name: "ambientesPrograma", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/materialesPrograma", component: Materiales2, name: "materialesPrograma", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/retroalimentacion", component: Retroalimetacion, name: "retroalimetacion", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
-            { path: "/instructores", component: instructores, name: "instructores", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
+            { path: "/instructores", component: Instructores, name: "instructores", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/investigacion", component: Investigacion, name: "investigaciones", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/proyecto", component: proyecto, name: "proyecto", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },
             { path: "/registroCalificado", component: registroCalificado, name: "registroCalificado", beforeEnter: auth, meta: { rol: ['gestor', 'instructor'] } },

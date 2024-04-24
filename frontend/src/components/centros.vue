@@ -13,16 +13,11 @@
             <q-td :props="props">
               <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
                 style="margin-right: 10px;cursor: pointer;" @click="editarCentro(props.row)" />
-              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px;cursor: pointer;"
-                v-if="props.row.estado == 0" @click="editarEstado(props.row)" />
+              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+                style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
+                @click="editarEstado(props.row)" />
               <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;" v-else
                 @click="editarEstado(props.row)" />
-            </q-td>
-          </template>
-
-          <template v-slot:body-cell-ciudad="props">
-            <q-td :props="props">
-              {{ props.row.ciudad.nombre }}
             </q-td>
           </template>
 
@@ -81,8 +76,8 @@
           </div>
 
           <div class="q-mb-md">
-            <q-select label="Ciudad*" clearable v-model="ciudad" :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))"
-              emit-value map-options>
+            <q-select label="Ciudad*" clearable v-model="ciudad"
+              :options="ciudades.map(c => ({ label: c.nombre, value: c._id }))" emit-value map-options>
             </q-select>
           </div>
 
@@ -147,9 +142,9 @@ const columns = [
   { name: 'codigo', align: 'center', label: 'Código', field: 'codigo', sortable: true },
   { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
   { name: 'direccion', align: 'center', label: 'Dirección', field: "direccion" },
-  { name: 'ciudad', align: 'center', label: 'Ciudad', field: "ciudad" },
+  { name: 'ciudad', align: 'center', label: 'Ciudad', field: row => row.ciudad.nombre, sortable:true },
   { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-  { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+  { name: 'opciones', align: 'center', label: "Acciones", field: 'opciones' },
 ]
 
 buscar()

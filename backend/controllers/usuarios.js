@@ -345,7 +345,7 @@ const httpUsuario = {
           subject: "Solicitud de recuperación de contraseña",
           html: `<div>
   <b>Estimado usuario, haga click en el siguente enlace para comenzar la recuperación de su contraseña:</b><br>
-  <a href="${link}">${link}</a>
+  <a href="${link}" />
   <h3>SI NO SOLICITÓ ESTE SERVICIO, POR FAVOR HACER CASO OMISO A ESTE CORREO</h>
 
   </div>`

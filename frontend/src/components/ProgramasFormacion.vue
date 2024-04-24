@@ -2,7 +2,7 @@
   <div>
     <q-page class="q-pa-md">
       <div class="text-h4 text-center q-mb-md" style="text-transform: capitalize; font-weight: bold"> {{ redConocimiento
-      }}
+        }}
       </div>
 
       <div class="q-pa-md" style="width: 100%">
@@ -30,11 +30,11 @@
               </div>
 
               <div v-else>
-                <q-icon v-if="rol != 'instructor'" title="Detalle de Programa" name="fa-solid fa-eye" color="primary"
+                <q-icon v-if="rol != 'instructor'" name="fa-solid fa-eye" color="primary"
                   size="20px" style="margin-right: 25px; cursor: pointer" @click="informacionPrograma(props.row)" />
 
                 <!-- ojito instructor -->
-                <q-icon v-if="rol === 'instructor'" title="Detalle de Programa" name="fa-solid fa-eye" color="primary"
+                <q-icon v-if="rol === 'instructor'" name="fa-solid fa-eye" color="primary"
                   size="20px" style="cursor: pointer" @click="informacionPrograma(props.row)" />
 
                 <!-- editar programa -->
@@ -56,12 +56,6 @@
             <q-td :props="props">
               <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
-            </q-td>
-          </template>
-
-          <template v-slot:body-cell-nivel="props">
-            <q-td :props="props">
-              <span>{{ props.row.nivelFormacion.denominacion }}</span>
             </q-td>
           </template>
 
@@ -155,6 +149,7 @@ import { useUserStore } from "../almacenaje/informacion.js";
 import VueJwtDecode from "vue-jwt-decode";
 import { useRouter } from "vue-router";
 import { useColorStore } from "../stores/colorSetings.js";
+
 let colores = useColorStore();
 let colorMenu = ref('')
 let colorLetra = ref('')
@@ -244,7 +239,8 @@ const columns = [
     name: "nivel",
     align: "center",
     label: "Nivel de Formación",
-    field: "nivelFormacion",
+    field: (row) => row.nivelFormacion.denominacion,
+    sortable: true
   },
   {
     name: "version",
@@ -260,7 +256,7 @@ const columns = [
     field: "estado",
     sortable: true,
   },
-  { name: "opciones", align: "center", label: "Opciones", field: "opciones" },
+  { name: "opciones", align: "center", label: "Acciones", field: "opciones" },
 ];
 
 const pagination = ref({

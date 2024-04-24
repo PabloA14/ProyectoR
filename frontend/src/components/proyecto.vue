@@ -172,7 +172,7 @@ const columns = [
     { name: 'version', align: 'center', label: 'Versión', field: "version", sortable: true },
     { name: 'documento', align: 'center', label: 'Documento', sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-    { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+    { name: 'opciones', align: 'center', label: "Acciones", field: 'opciones' },
 ]
 
 buscar()

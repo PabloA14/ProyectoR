@@ -7,8 +7,9 @@
                     <q-spinner style="margin-left: 10px;" color="black" size="7em" :thickness="10" />
                 </div>
 
-                <q-table v-if="useAmbiente.loading === false" class="my-sticky-header-table" :separator="separator" bordered
-                    :filter="filter" :rows="ambiente" :columns="columns" row-key="name" :pagination="pagination">
+                <q-table v-if="useAmbiente.loading === false" class="my-sticky-header-table" :separator="separator"
+                    bordered :filter="filter" :rows="ambiente" :columns="columns" row-key="name"
+                    :pagination="pagination">
                     <template v-slot:body-cell-opciones="props">
                         <q-td :props="props">
                             <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
@@ -16,16 +17,11 @@
                             <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
                                 style="margin-left: 10px;cursor: pointer;" v-if="props.row.estado == 0"
                                 @click="editarEstado(props.row)" />
-                            <q-icon color="red" name="fa-solid fa-x" size="20px" style="margin-left: 10px;cursor: pointer;"
-                                v-else @click="editarEstado(props.row)" />
+                            <q-icon color="red" name="fa-solid fa-x" size="20px"
+                                style="margin-left: 10px;cursor: pointer;" v-else @click="editarEstado(props.row)" />
                         </q-td>
                     </template>
 
-                    <template v-slot:body-cell-centro="props">
-                        <q-td :props="props">
-                            {{ props.row.centroformacion.nombre }}
-                        </q-td>
-                    </template>
 
                     <template v-slot:body-cell-descripcion="props">
                         <q-td :props="props" style="white-space: pre-line;">
@@ -150,11 +146,11 @@ const pagination = ref({
 
 const columns = [
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
-    { name: 'centro', align: 'center', label: 'Centro de Formación', field: "centroformacion" },
+    { name: 'centro', align: 'center', label: 'Centro de Formación', field: (row) => row.centroformacion.nombre, sortable: true },
     { name: 'tipo', align: 'center', label: 'Tipo', field: "tipo", sortable: true },
-    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
+    { name: 'descripcion', align: 'center', label: 'Descripción', field: 'descripcion', sortable: false },
     { name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },
-    { name: 'opciones', align: 'center', label: "Opciones", field: 'opciones' },
+    { name: 'opciones', align: 'center', label: "Acciones", field: 'opciones' },
 ]
 
 buscar()

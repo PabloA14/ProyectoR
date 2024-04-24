@@ -11,49 +11,53 @@
           <template v-slot:body-cell-opciones="props">
             <q-td :props="props">
               <q-icon title="Detalle de Usuario" name="fa-solid fa-eye" color="primary" size="20px"
-                style="margin-right: 25px; cursor: pointer" @click="informacionUsuario(props.row)" />
-              <!-- <q-icon title="Foto de Pefil" size="30px" style="padding-right:3vh ; color: green">
-                <span class="material-symbols-outlined" @click="putImagen(props.row)">
-                  face
-                </span>
-              </q-icon> -->
+                style="margin-right: 25px; cursor: pointer" @click="informacionUsuario(props.row)">
+                <q-tooltip>
+                  Detalle de Usuario
+                </q-tooltip>
+              </q-icon>
 
-              <q-icon title="Editar Usuario" color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
-                style="margin-right: 10px; cursor: pointer" @click="editarUsuario(props.row)" />
-              <q-icon title="Cambiar Estado" color="green" name="fa-solid fa-check fa-xl" size="20px"
+
+              <q-icon color="orange" name="fa-solid fa-pen-to-square fa-xl" size="20px"
+                style="margin-right: 10px; cursor: pointer" @click="editarUsuario(props.row)">
+                <q-tooltip>
+                  Editar Usuario
+                </q-tooltip>
+              </q-icon>
+              <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
                 style="margin-left: 10px; cursor: pointer" v-if="props.row.estado == 0"
-                @click="editarEstado(props.row)" />
+                @click="editarEstado(props.row)">
+                <q-tooltip>
+                  Activar Usuario
+                </q-tooltip>
+              </q-icon>
+
               <q-icon title="Cambiar Estado" color="red" name="fa-solid fa-x" size="20px"
-                style="margin-left: 10px; cursor: pointer" v-else @click="editarEstado(props.row)" />
+                style="margin-left: 10px; cursor: pointer" v-else @click="editarEstado(props.row)">
+                <q-tooltip>
+                  Desactivar Usuario
+                </q-tooltip>
+              </q-icon>
+
             </q-td>
           </template>
 
           <template v-slot:body-cell-foto="props">
-            <q-avatar size="45px">
-              <img v-if="props.row.foto === undefined ||
-                props.row.foto === null ||
-                props.row.foto === ''
+            <q-td :props="props" class="flex-center">
+              <q-avatar size="45px">
+                <img v-if="props.row.foto === undefined ||
+                  props.row.foto === null ||
+                  props.row.foto === ''
                 " src="../imagenes/usuario.png" alt="imagenes" />
-              <img :src="props.row.foto" />
-            </q-avatar>
+                <img :src="props.row.foto" />
+              </q-avatar>
+            </q-td>
           </template>
 
           <template v-slot:body-cell-estado="props">
             <q-td :props="props">
               <span class="text-green" v-if="props.row.estado == 1">Activo</span>
               <span class="text-red" v-else>Inactivo</span>
-            </q-td>
-          </template>
-
-          <template v-slot:body-cell-redConocimiento="props">
-            <q-td :props="props">
-              <span>{{ props.row.redConocimiento.denominacion }}</span>
-            </q-td>
-          </template>
-
-          <template v-slot:body-cell-rol="props">
-            <q-td :props="props">
-              <span>{{ props.row.rol.denominacion }}</span>
             </q-td>
           </template>
 
@@ -111,7 +115,8 @@
           <div class="q-mb-md" v-if="bd === 1">
             <q-input label="Contraseña*" v-model="clave" :type="isPwd ? 'password' : 'text'">
               <template v-slot:append>
-                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer" @click="isPwd = !isPwd" />
+                <q-icon :name="isPwd ? 'visibility_off' : 'visibility'" class="cursor-pointer"
+                  @click="isPwd = !isPwd" />
               </template>
             </q-input>
           </div>
@@ -168,7 +173,7 @@
         <q-card-section class="row items-center q-pb-none">
           <q-avatar size="100px" class="q-mr-md">
             <img v-if="info.foto === undefined || info.foto == null || info.foto == ''
-              " src="../imagenes/usuario.png" alt="imagenes" />
+            " src="../imagenes/usuario.png" alt="imagenes" />
             <img v-else :src="info.foto" />
           </q-avatar>
           <div class="text-h5">{{ info.nombre }} {{ info.apellidos }}</div>
@@ -305,7 +310,6 @@ const columns = [
     align: "center",
     label: "Nombre",
     field: "nombre",
-    format: (val) => `${val}`,
     sortable: true,
   },
   {
@@ -319,9 +323,10 @@ const columns = [
     name: "redConocimiento",
     align: "center",
     label: "Red de Conocimiento",
-    field: "redConocimiento",
+    field: (row) => row.redConocimiento.denominacion,
+    sortable: true
   },
-  { name: "rol", align: "center", label: "Rol", field: "rol" },
+  { name: "rol", align: "center", label: "Rol", field: (row) => row.rol.denominacion, sortable: true },
   {
     name: "estado",
     align: "center",
@@ -329,7 +334,7 @@ const columns = [
     field: "estado",
     sortable: true,
   },
-  { name: "opciones", align: "center", label: "Opciones", field: "opciones" },
+  { name: "opciones", align: "center", label: "Acciones", field: "opciones" },
 ];
 
 const pagination = ref({
@@ -766,7 +771,6 @@ async function editarEstado(x) {
   tbody
     /* height of all previous header rows */
     scroll-margin-top: 48px
-    cursor: pointer
 </style>
 
 <style scoped>
@@ -779,7 +783,6 @@ async function editarEstado(x) {
   display: flex;
   justify-content: center;
   align-items: center;
-
   background-color: rgba(255, 255, 255, 0.8);
 }
 

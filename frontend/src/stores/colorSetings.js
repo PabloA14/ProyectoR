@@ -87,4 +87,4 @@ export const useColorStore = defineStore("Color", () => {
     };
 
 
-}, { persist: true })
+},)

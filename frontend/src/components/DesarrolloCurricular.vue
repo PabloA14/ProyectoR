@@ -13,8 +13,8 @@
             Matriz de Correlación
           </q-toolbar-title>
 
-          <q-btn flat round dense>
-            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }" label="">
+          <q-btn  flat round dense>
+            <q-btn :style="{ backgroundColor: colorMenu, color: colorLetra }">
               <q-icon name="more_vert" />
               <!-- opciones -->
               <q-menu max-height="130px">

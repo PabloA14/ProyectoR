@@ -14,9 +14,10 @@
       <q-table class="my-sticky-header-table" :filter="filter" :rows="usuarios" :columns="columns" row-key="cedula">
         <template v-slot:body-cell-opciones="props">
           <q-td :props="props">
-            <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px" style="margin-left: 10px; cursor: pointer" />
-            <q-icon color="red" name="fa-solid fa-trash-alt fa-xl" size="20px" style="margin-left: 10px; cursor: pointer"
-              @click="Modeliminar" />
+            <q-icon color="green" name="fa-solid fa-check fa-xl" size="20px"
+              style="margin-left: 10px; cursor: pointer" />
+            <q-icon color="red" name="fa-solid fa-trash-alt fa-xl" size="20px"
+              style="margin-left: 10px; cursor: pointer" @click="Modeliminar" />
           </q-td>
         </template>
 
@@ -160,7 +161,7 @@ const columns = [
   { name: "telefono", label: "Teléfono", field: "telefono", align: "center" },
   { name: "estado", label: "Estado ", field: "estado", sortable: true, align: "center" },
 
-  // { name: "opciones", label: "Opciones", field: "opciones" },
+  // { name: "opciones", label: "Acciones", field: "opciones" },
 ];
 
 async function buscar() {

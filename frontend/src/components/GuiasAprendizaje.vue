@@ -93,7 +93,7 @@
     </div>
   </q-page>
 </template>
- 
+
 <style scoped></style>
 
 
@@ -157,7 +157,7 @@ const columns = [
     field: 'nombre',
     align: 'center'
   },
-  { name: "opciones", label: "Opciones", field: "opciones", sortable: false, align: 'center' },
+  { name: "opciones", label: "Acciones", field: "opciones", sortable: false, align: 'center' },
 ];
 
 function nuevo() {
@@ -320,4 +320,3 @@ const informacionGuia = async (x) => {
   }
 }
 </style>
- 

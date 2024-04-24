@@ -1,5 +1,5 @@
 import express from "express"
-import usuarios from "./routes/ususarios.js"
+import usuarios from "./routes/usuarios.js"
 import programasFormacion from "./routes/programasFormacion.js"
 import redes from "./routes/redesConocimiento.js"
 import roles from "./routes/rolesUsuario.js"
@@ -20,8 +20,6 @@ import colores from "./routes/colorSetings.js"
 import mongoose from "mongoose"
 import cors from "cors"
 import fileUpload from "express-fileupload"
-
-
 
 class Server {
 

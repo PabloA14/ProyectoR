@@ -16,6 +16,7 @@ rejectUnauthorized: false,
 
 sendEmail.verify().then(()=>{
     console.log('Envio de email listo');
+    
 });
 
 export default sendEmail
