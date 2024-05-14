@@ -41,7 +41,6 @@ const httpUsuario = {
         const extension = hojaDeVida.name.split(".").pop();
 
         const { tempFilePath } = hojaDeVida;
-        console.log(tempFilePath);
 
         // Subir la hoja de vida a Cloudinary
         const result = await cloudinary.uploader.upload(tempFilePath, {
@@ -51,7 +50,8 @@ const httpUsuario = {
           format: extension,
         });
 
-        hojaDeVidaUrl = result.url;
+        hojaDeVidaUrl = result.url
+
       }
 
       const hashedPassword = await bcrypt.hash(clave, 10); // Hash the password
@@ -70,14 +70,34 @@ const httpUsuario = {
       });
 
       const buscar = await Usuario.findOne({ cedula: cedula });
+      const buscarCorreo = await Usuario.findOne({ correo: correo });
+
       if (buscar) {
         return res
           .status(400)
           .json({ msg: "La cédula ya se encuentra registrada", buscar });
+      } else if (buscarCorreo) {
+        return res
+          .status(400)
+          .json({ msg: "El correo ya se encuentra registrado", buscar });
       } else {
         await usuario.save();
         console.log(usuario);
-        console.log(usuario.foto);
+
+        let mailOptions = {
+          from: 'repositoriosena123@gmail.com',
+          to: usuario.correo,
+          subject: 'Bienvenido a Nuestra Plataforma',
+          text: `Hola ${usuario.nombre},\n\nHas sido registrado en nuestra plataforma. Aquí están tus credenciales:\n\nNo. de Identificación: ${usuario.cedula}\nContraseña: ${req.body.clave}\n\nPor favor, no compartas esta información con nadie.\n\nSaludos,\nEl equipo de Nuestra Plataforma`
+        };
+
+        sendEmail.sendMail(mailOptions, function (error) {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Correo enviado');
+          }
+        });
 
         res.status(200).json({ msg: "Registro exitoso", usuario });
       }
@@ -345,7 +365,7 @@ const httpUsuario = {
           subject: "Solicitud de recuperación de contraseña",
           html: `<div>
   <b>Estimado usuario, haga click en el siguente enlace para comenzar la recuperación de su contraseña:</b><br>
-  <a href="${link}" />
+  <a href="${link}">${link}</a>
   <h3>SI NO SOLICITÓ ESTE SERVICIO, POR FAVOR HACER CASO OMISO A ESTE CORREO</h>
 
   </div>`

@@ -167,7 +167,7 @@ const pagination = ref({
 const columns = [
     { name: 'nombre', align: 'center', label: 'Nombre', field: "nombre", sortable: true },
     { name: 'codigoficha', align: 'center', label: 'Código de Ficha', field: "codigoFicha", sortable: true },
-    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false },
+    { name: 'descripcion', align: 'center', label: 'Descripción', sortable: false, field: row => row.descripcion },
     { name: 'fecha', align: 'center', label: 'Año', field: "fecha", sortable: true },
     { name: 'documento', align: 'center', label: 'Documento', sortable: false },
     //{ name: 'estado', align: 'center', label: 'Estado', field: 'estado', sortable: true },

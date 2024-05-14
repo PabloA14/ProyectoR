@@ -48,6 +48,7 @@ export const useRetroalimentacionStore = defineStore("Retroalimentacion", () => 
             formData.append('descripcion', descripcion);
             formData.append('fecha', fecha);
             formData.append('documentos', documentos);
+            
 
             let datos = await axios.put(`${LinkBD}/api/retroalimentacion/${id}`, formData, {
                 headers: {
